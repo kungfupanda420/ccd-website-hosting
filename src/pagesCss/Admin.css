@@ -1,0 +1,207 @@
+.adminContainer {
+  color: var(--textColor);
+  display: flex;
+  flex-direction: column;
+  padding: 10vh 0vw;
+  position: relative;
+  margin-bottom: 3rem;
+  width: 100vw;
+  background-color: black;
+}
+
+.titleContainer {
+  margin-bottom: 2rem;
+  margin-top: 2rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.adminHeading {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 5rem;
+  margin: 0rem 0 1rem;
+  font-weight: 700;
+  color: white;
+}
+
+.newsMediaForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.newsMediaFormHeading {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  color: white;
+}
+
+
+.newsMediaInputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin: 20px 0;
+  align-items: center;
+  padding: 2rem;
+  border: 2px solid grey;
+  border-radius: 1rem;
+}
+
+.inputPair {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%; /* Adjust according to your needs */
+}
+
+.inputPair label {
+  width: 20%;
+  font-size: 1.1em;
+}
+
+.inputPair input,
+.inputPair textarea {
+  width: 100%; /* Increase this value according to your needs */
+  padding: 10px;
+  font-size: 1em;
+  border-radius: 5px;
+}
+
+.newsMediaPostButton {
+  display: inline-block;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 40px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+  align-self: flex-end;
+}
+
+.newsMediaPostButton:hover {
+  background-color: #00ff40; /* Adjust to desired hover color */
+}
+.newsMediaDeleteButton {
+  display: inline-block;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 30px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+  align-self: flex-end;
+}
+
+.newsMediaDeleteButton:hover {
+  background-color: #ff3333;
+}
+
+
+
+.activeProgramsForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: center;
+  margin-top: 2rem;
+}
+.activeProgramsContainer{
+  display: flex;
+  flex-direction: column;
+  border: 2px solid grey;
+  border-radius: 1rem;
+  padding: 2rem;
+}
+.activeProgramsForm h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  color: white;
+}
+
+.activeProgramsForm .inputPair {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%; /* Adjust according to your needs */
+  padding: 1rem;
+}
+
+.activeProgramsForm .inputPair label {
+  width: 20%;
+  font-size: 1.1em;
+}
+
+.activeProgramsForm .inputPair input,
+.activeProgramsForm .inputPair textarea {
+  width: 100%; /* Increase this value according to your needs */
+  padding: 10px;
+  font-size: 1em;
+  border-radius: 5px;
+}
+
+.activeProgramsForm .activeProgramPostButton {
+  display: inline-block;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 40px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+  align-self: flex-end;
+}
+
+.activeProgramsForm .activeProgramPostButton:hover {
+  background-color: #00ff40; /* Adjust to desired hover color */
+}
+.newsMediaDeleteInput {
+  display: inline-block;
+  width: 300px;
+  padding: 10px;
+  font-size: 1em;
+  border-radius: 5px;
+}
+
+.newsMediaDeleteButton {
+  display: inline-block;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 30px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.newsMediaDeleteButton:hover {
+  background-color: #ff3333;
+}
+
+.activeProgramDeleteInput {
+  display: inline-block;
+  width: 300px;
+  padding: 10px;
+  font-size: 1em;
+  border-radius: 5px;
+}
+
+.activeProgramDeleteButton {
+  display: inline-block;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 40px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+  align-self: flex-end;
+}
+
+.activeProgramDeleteButton:hover {
+  background-color: #ff3333;
+}

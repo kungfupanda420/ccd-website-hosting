@@ -1,0 +1,45 @@
+.loaderContainer 
+{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.load 
+{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 3px solid white;
+    animation: loader 1s linear infinite;
+    position: relative;
+}
+
+.load::before 
+{
+    content: '';
+    width: 100%;
+    border-radius: 100%;
+    height: 100%;
+    border: 6px solid rgb(0, 0, 0);
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    
+}
+
+@keyframes loader {
+    0%, 100%
+    {
+        transform: rotate(-360deg);
+    }
+    50%
+    {
+        transform: rotate(0deg);
+    }
+    100%
+    {
+        transform: rotate(360deg);
+    }
+}

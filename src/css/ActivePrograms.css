@@ -1,0 +1,255 @@
+.activeProgramContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+  }
+  
+  .activeProgramHolder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    width: 65rem;
+  }
+  
+  .activeProgramHeading {
+    font-size: 3rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    color: white;
+    align-self: flex-start;
+    margin-bottom: 2.5rem;
+  }
+  
+  .programsContainer {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+    height: 60rem;
+    overflow-y: scroll; /* vertical scrolling */
+    overflow-x: hidden; /* hide horizontal scrolling */
+  }
+  
+  .programsContainer::-webkit-scrollbar {
+    width: 8px; /* adjust as needed */
+    background-color: black;
+    
+  }
+  
+  .programsContainer::-webkit-scrollbar-thumb {
+    background-color: white;
+    border-radius: 1rem;
+    
+  }
+  .programCard {
+    border: 1.75px solid rgb(50, 50, 50);
+    border-radius: 2.25rem;
+    padding: 2rem;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  .programCard:hover {
+    background-color: rgb(20, 20, 20);
+    border: 1.75px solid rgb(52, 52, 52);
+  }
+  
+  .programCardTitle {
+    font-size: 1.5rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    color: white;
+  }
+  
+  .programCardDateShare {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    top: 10%;
+    right: 4%;
+    width: fit-content;
+  }
+  
+  .programPostDate {
+    font-size: 0.75rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    color: rgb(156, 156, 156);
+  }
+  
+  .shareIconContainer {
+    height: 1.5rem;
+    width: 1.25rem;
+    margin-left: 1rem;
+    cursor: pointer;
+  }
+  
+  .shareIcon {
+    height: 100%;
+    width: 100%;
+  }
+  
+  .programTagContainer {
+    display: flex;
+    margin-top: 0.5rem;
+  }
+  
+  .programTag {
+    background-color: #001c36;
+    margin-right: 0.5rem;
+    padding: 0.3rem 0.5rem;
+    border-radius: 0.5rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    color: #0084ff;
+  }
+  
+  .programTag span {
+    color: white;
+  }
+  
+  .programDetailsHeading {
+    font-size: 1.5rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    color: white;
+    margin-top: 1rem;
+  }
+  
+  .programDetails {
+    color: rgb(129, 129, 129);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: 'Poppins', sans-serif;
+    padding: 1rem 0rem;
+  }
+  
+  .downloadButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #252525;
+    color: white;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    margin-top: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    border: none;
+    cursor: pointer;
+  }
+  .downloadIcon {
+    height: 1rem;
+    width: 1rem;
+    margin-left: 0.5rem;
+  }
+  .programRegBtn {
+    background-color: white;
+    color: black;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    margin-top: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    border: none;
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    cursor: pointer;
+  }
+  @media (max-width: 768px) {
+    .activeProgramContainer {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        
+    }
+    .activeProgramHolder {
+      width: 100%;
+      padding: 1rem;
+      display: flex;
+    }
+  
+    .activeProgramHeading {
+      font-size: 1.75rem;
+      margin-bottom: 1.25rem;
+      white-space: nowrap;
+      align-self: center;
+      text-align: center;
+    }
+    .programsContainer{
+      height: 30rem;
+    }
+    .programCard {
+      padding: 1rem;
+      border-radius: 1rem;
+    }
+  
+    .programCardTitle {
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+    }
+  
+    .programCardDateShare {
+      flex-direction: column;
+      align-items: flex-end;
+      top: 15%;
+      right: 5%;
+    }
+  
+    .programPostDate {
+      font-size: 0.6rem;
+      margin-top: 1rem;
+    }
+  
+    .shareIconContainer {
+      height: 1rem;
+      width: 1rem;
+      margin-left: 0.5rem;
+      margin-top: -2rem;
+    }
+  
+    .programTagContainer {
+      margin-top: 0.25rem;
+    }
+  
+    .programTag {
+      margin-right: 0.25rem;
+      padding: 0.2rem 0.4rem;
+      font-size: 0.7rem;
+    }
+  
+    .programDetailsHeading {
+      font-size: 0.75rem;
+      margin-top: 0.75rem;
+    }
+  
+    .programDetails {
+      padding: 0.75rem 0rem;
+      font-size: 0.65rem;
+      overflow: auto;
+    }
+  
+    .downloadButton {
+      padding: 0.5rem 0.5rem;
+      margin-top: 0.75rem;
+      font-size: 0.6rem;
+    }
+  
+    .downloadIcon {
+      height: 0.8rem;
+      width: 0.8rem;
+      margin-left: 0.4rem;
+    }
+  
+    .programRegBtn {
+      padding: 0.5rem 0.5rem;
+      margin-top: 0.75rem;
+      font-size: 0.6rem;
+      bottom: 1rem;
+      right: 1rem;
+    }
+  }

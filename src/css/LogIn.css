@@ -1,0 +1,102 @@
+.loginContainer {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+}
+
+.AdminLogIn {
+  padding: 1rem 1.85rem;
+  border: 1px solid var(--grayBorderColor);
+  border-radius: 1.25rem;
+  width: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.AdminLogIn .mainHeading {
+  color: var(--textColor);
+  text-transform: uppercase;
+}
+.formLogIn {
+  width: 80%;
+}
+.fillBoxInput {
+  margin: 1.5rem 0;
+  position: relative;
+}
+.fillBoxInput>input  {
+  width: 100%;
+  padding: 0.8rem 0.75rem;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid var(--grayBorderColor);
+  color: white;
+  font-weight: 500;
+  font-size: 1.15rem;
+  transition:all 0.25s ease;
+}
+.fillBoxInput input:focus{
+    border-bottom: 1px solid var(--textColor);
+}
+.fillBoxInput p {
+  color: red;
+  text-align-last: right;
+  margin: 0.25rem 0.1rem;
+  display: none;
+}
+
+.fillBoxInput .eyeIcon {
+  position: absolute;
+  color: var(--grayBorderColor);
+  right: 10px;
+  top: 12px;
+}
+.loginBtn {
+  padding: 1rem 1.5rem;
+  width: 100%;
+  margin: 2rem 0;
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: none;
+  border-radius: 0.25rem;
+  background-color: var(--textColor);
+}
+
+
+/* responsive */
+
+@media screen and (max-width:1025px) {
+  .AdminLogIn
+  {
+    width: 45%;
+  }
+}
+
+@media screen and (max-width:769px) {
+  .AdminLogIn
+  {
+    width: 60%;
+  }
+}
+
+@media screen and (max-width:426px) {
+  .AdminLogIn
+  {
+    width: 90%;
+  }.formLogIn {
+  width: 90%;
+}
+.loginBtn
+{
+  font-size: 0.85rem;
+  margin: 1rem 0;
+}
+
+}

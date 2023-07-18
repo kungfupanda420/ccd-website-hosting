@@ -1,0 +1,176 @@
+.newsMediaContainer {
+    width: 100%;
+    overflow: hidden;
+    padding: 1rem;
+    margin: 5rem 0rem;
+    scrollbar-width: thin;
+    scroll-behavior: smooth;
+    scrollbar-color: #888888 #000000;
+    height: fit-content;
+    padding-top: 2rem;
+    cursor: grab;
+  }
+  .newsMediaHolder {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  
+  .newsMediaHeading {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.5rem;
+    text-align: center;
+    color: white;
+    margin: 0rem 10rem;
+    margin-left: 15rem;
+    font-weight: 700;
+  }
+  #newMeadiMobileView
+  {
+    display: none;
+  }
+  
+  .newsMediaCards {
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 1rem;
+  }
+  
+  .card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 10px;
+    border: 1px solid rgb(86, 86, 86);
+    border-radius: 1rem;
+    padding: 0.8rem;
+    height: 33rem;
+    width: 20rem;
+    background-color: #171717;
+    margin-right: 2.5rem;
+    transition: background-color 0.3s, transform 0.3s;
+  }
+  .cardImage {
+    height: 40%;
+    width: 99.99%;
+    pointer-events: none;
+    border-radius: 1rem;
+  }
+  
+  .cardTitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    text-align: center;
+    color: white;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    width: 95%;
+    height: 10%;
+    text-align: left;
+  }
+  
+  .cardSubText {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    text-align: center;
+    color: rgb(182, 182, 182);
+    font-weight: 400;
+    width: 95%;
+    height: 30%;
+    margin-top: 10%;
+    overflow: hidden;
+    text-align: left;
+  }
+  
+  .cardDate {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    text-align: center;
+    color: rgb(145, 145, 145);
+    font-weight: 400;
+    text-align: left;
+    margin-top: 10%;
+    width: 95%;
+    height: 2.55%;
+  }
+  .card:hover {
+    background-color: rgb(35, 35, 35);
+    border: 1px solid rgb(110, 110, 110);
+  }
+  
+  @media screen and (max-width: 768px) {
+    .newsMediaContainer {
+      padding: 1rem 0;
+      margin-bottom: 2rem;
+      margin-top: 0rem;
+      overflow-x: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #888888 #000000;
+      scroll-behavior: smooth;
+      
+    }
+  
+    .newsMediaHolder {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .newsMediaHeading {
+      margin: 2rem 0 1rem;
+      font-size: 1.5rem;
+    }
+    .newsMediaCards {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: scroll;
+      padding-bottom: 1rem;
+      scroll-snap-type: x mandatory;
+      scroll-margin: 0 0.5rem;
+      margin-left: auto;
+      padding-left: 1rem;
+      
+    }
+    .newsMediaCards::-webkit-scrollbar {
+      display: none;
+    }
+  
+    .card {
+      margin: 0 0.5rem;
+      height: 25rem;
+      width: 15rem;
+      scroll-snap-align: start;
+    }
+  
+    .cardTitle {
+      font-size: 0.8rem;
+      margin-top: 1rem;
+      text-align: left;
+    }
+  
+    .cardSubText {
+      font-size: 0.8rem;
+      margin-top: 1.2rem;
+      height: 8rem;
+      text-align: left;
+      
+    }
+  
+    .cardDate {
+      font-size: 0.6rem;
+      margin-top: auto;
+      text-align: left;
+    }
+  
+    /* Hide scrollbar */
+    .newsMediaContainer::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  
+
+  /* Bro when you are making responsive 
+  Keep .newMeadingHeading display as none and #newMediaMobileView as block
+  */
+  
+  
+  

@@ -1,0 +1,174 @@
+.whyRecruitContainer {
+  color: var(--textColor);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 5vh 30vw;
+  position: relative;
+  height: fit-content;
+}
+
+.whyRecruitHolder {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: fit-content;
+}
+
+.pageHeadingWhyRecruit {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 3.15rem;
+  margin: 0rem 0 1rem;
+  font-weight: 700;
+  width: 30rem;
+  margin-right: 6rem;
+}
+
+.reasonListContainer {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  margin: 1rem;
+  margin-left: 1rem;
+}
+
+.reasons {
+  height: fit-content;
+  width: 30rem;
+}
+
+.reasonContainer {
+  border: 1.75px solid rgb(36, 36, 36);
+  border-radius: 1.4rem;
+  margin: 1rem 0;
+  padding: 0rem 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 31rem;
+  position: relative;
+  transition: all 0.1s;
+  opacity: 0;
+}
+
+.reasonContainer.animated {
+  animation: reasonContainerAnimation 1s ease-in-out forwards;
+}
+
+.reasonContainer:hover {
+  background-color: white;
+ 
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.reasonContainer:hover .reasonNumber,
+.reasonContainer:hover .reasonText {
+  color: black;
+}
+
+.reasonNumber {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.35rem;
+  font-weight: 450;
+  padding: 1rem 0.5rem;
+}
+
+.reasonText {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.35rem;
+  font-weight: 400;
+  padding: 1.25rem 0.5rem;
+}
+
+.reasonContainer span {
+  position: absolute;
+  right: 0;
+  padding: 1rem;
+}
+
+@keyframes reasonContainerAnimation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.reasonContainer:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.reasonContainer:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.reasonContainer:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.reasonContainer:nth-child(4) {
+  animation-delay: 0.5s;
+}
+
+.reasonContainer:nth-child(5) {
+  animation-delay: 0.7s;
+}
+.reasonContainer:nth-child(6) {
+  animation-delay: 0.9s;
+}
+@media (max-width: 1000px) {
+  .whyRecruitContainer {
+    height: fit-content;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 0rem;
+    padding-bottom: 0rem;
+  }
+  .whyRecruitHolder {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .reasonListContainer {
+    margin: 1rem;
+    margin-left: 0rem;
+    align-items: center;
+    width: 100%;
+  }
+
+  .reasonContainer {
+    width: 75%; 
+    margin: 1rem auto;
+    padding: 0.65rem; 
+  }
+
+  .pageHeadingWhyRecruit {
+    font-size: 1.5rem; 
+    text-align: center;
+    align-self: center;
+    margin-right: 0rem;
+    width: 15rem;
+  }
+
+  .reasonNumber {
+    padding: 0.5rem 0;
+    font-size: 1rem;
+  }
+
+  .reasonText {
+    padding: 0.25rem 1rem;
+    font-size: 0.75rem; 
+  }
+  .reasons {
+    height: fit-content;
+    margin-left: 0rem;
+    width: 21rem;
+  }
+  
+
+}

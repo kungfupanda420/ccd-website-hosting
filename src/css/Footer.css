@@ -1,0 +1,124 @@
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem 1rem 6rem;
+  position: relative;
+  border-top: 1px solid var(--grayBorderColor);
+  /* border will be replace by borde-top */
+}
+
+.footerContent {
+  width: 90%;
+  display: flex;
+  justify-content: space-around;
+}
+.footerSubContent {
+  margin: 1rem 2rem;
+  color: var(--textColor);
+}
+.footerSubContent > p {
+  font-weight: bold;
+  margin: 0.85rem 0;
+  font-weight: 600;
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+}
+.footerSubContent p::after {
+  content: "";
+  position: absolute;
+  bottom: -2.5px;
+  left: 0;
+  width: 0%;
+  height: 2.5px;
+  background: var(--textColor);
+  transition: all 0.5s ease;
+}
+.footerSubContent p:hover::after {
+  content: "";
+  position: absolute;
+  bottom: -2.5px;
+  left: 0;
+  width: 100%;
+}
+
+.footerLinks a {
+  line-height: 2.5;
+  color: var(--lightTextColor);
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+
+.footerSubContent:last-child {
+  margin-left: auto;
+}
+
+.copyRight {
+  position: absolute;
+  bottom: 2rem;
+  color: var(--textColor);
+  font-family: "Poppins", sans-serif;
+  background-color: var(--grayBackgroundColor);
+  padding: 0.5rem 0.85rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  border-bottom: 1px solid var(--grayBorderColor);
+  cursor: pointer;
+}
+
+@media screen and (min-width: 769px) and (max-width: 1025px) {
+  .footerContent {
+    width: 85%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .footerSubContent {
+    margin: 1.25rem;
+  }
+  .copyRight {
+    font-size: 0.65rem;
+  }
+}
+
+@media screen and (min-width: 426px) and (max-width: 769px) {
+  .footer {
+    padding: 2rem 0 6rem;
+  }
+  .footerContent {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+  .footerSubContent {
+    margin: 1.25rem;
+    /* border: 1px solid red; */
+    padding: 0.5rem;
+  }
+  .copyRight {
+    font-size: 0.65rem;
+  }
+  .footerSubContent:last-child {
+    margin-left: 1.25rem;
+  }
+}
+
+@media screen and (max-width: 427px) {
+  .footer {
+    padding: 4rem;
+    padding-bottom: 6rem;
+  }
+  .footerContent {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+  .footerSubContent {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  .footerSubContent:last-child {
+    margin: auto;
+  }
+}

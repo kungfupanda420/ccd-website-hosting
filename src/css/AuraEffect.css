@@ -1,0 +1,26 @@
+.aura-container {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .aura-effect {
+    position: fixed;
+    width: 200px;
+    height: 200px;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-75%, -50%);
+    background: radial-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0) 70%);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  .navbar:hover .aura-effect {
+    opacity: 1;
+  }
+  @media (max-width: 1210px) {
+    .aura-effect{
+        display: none;
+    }
+  }

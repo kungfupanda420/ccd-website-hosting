@@ -1,0 +1,204 @@
+.ourTeamContainer {
+  width: 100vw;
+  padding: 6rem 6rem;
+  background-color: var(--textColor);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0 0 3rem 3rem;
+  margin: 3rem 0;
+}
+.ourTeamSubDiv {
+  width: 88%;
+}
+.ourTeamSubDiv .topHeading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.ourTeamSubDiv .dateSection {
+  margin: 0 1rem;
+  font-weight: 400;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 0.75rem;
+  padding: 0.5rem 1rem;
+}
+
+.teachersDiv {
+  padding: 3rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+/* border: 1px solid black; */
+}
+
+/* individual teacher card */
+.teacherCard {
+  padding: 0rem 1rem;
+  border-radius: 0.5rem;
+  text-align: center;
+}
+.teacherCard img {
+  width: 156px;
+  height: 156px;
+  pointer-events: none;
+}
+.teacherDetail {
+  text-align: center;
+}
+.teacherDetail p {
+  margin: 0.5rem 0;
+}
+.teacherDetail .smallHeading {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--blackTextColor);
+}
+.teacherDetail .tinyTexts {
+  font-size: 1rem;
+  color: var(--blackTextColor);
+}
+
+/* student card */
+.studentsDiv {
+  display: flex;
+  scrollbar-width: 20vw;
+  scroll-behavior: smooth;
+  scroll-snap-type: mandatory;
+  scroll-margin-block: 30vw;
+  position: relative;
+  cursor: grab;
+  overflow: hidden;
+}
+
+.innerStudentsDiv {
+  display: flex;
+}
+/* .studentsDiv::before
+{
+    content: '';
+    position: absolute;
+    background-color: rgb(255, 255, 255);
+    width: 10%;
+    height: 100%;
+    filter: blur(30px);
+    left: -40px;
+    z-index: 10;
+    top: 0;
+} */
+.studentCard {
+
+  border-radius: 0.5rem;
+  margin-right: 2.15rem;
+  padding: 1.5rem 2rem;
+}
+
+.studentCard img {
+  width: 96px;
+  height: 96px;
+  background-color: var(--grayTextColor);
+  pointer-events: none;
+  filter: grayscale(80%);
+  transition: filter 0.3s ease; /* Add transition for smooth effect */
+}
+
+.studentCard:hover img {
+  filter: none; /* Remove grayscale filter on hover */
+}
+.studentDetail {
+  text-align: center;
+}
+/* 
+.studentsDiv::-webkit-scrollbar {
+  height: 5px;
+  width: 20px;
+}
+.studentsDiv::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0.284);
+  height: 10px;
+  border-radius: 100vw;
+  margin-inline: 25vw;
+}
+.studentsDiv::-webkit-scrollbar-thumb {
+  background-color: black;
+  border-radius: 100vw;
+} */
+
+/* <div className="studentCard"><img src='/images/teachers/praveen.png' alt="" /><div className="studentDetail"><p className="smallHeading">Dr. Praveen S</p><p className="tinyTexts">Chairperson</p></div></div> */
+
+/* responsive */
+
+
+/* media queries */
+
+@media screen and (min-width: 769px) and (max-width: 1025px) {
+  .ourTeamContainer {
+    padding: 4rem 3rem;
+  }
+  .ourTeamSubDiv {
+    width: 95%;
+
+  }
+  .teachersDiv {
+    padding: 3rem 1rem;
+    display: flex;
+
+    
+  }
+
+  .teacherCard {
+    margin-right: 2rem;
+
+  }
+}
+
+@media screen and (min-width:425px) and (max-width:769px) {
+    .ourTeamContainer {
+            padding: 4rem 3rem;
+        }
+    
+        .ourTeamSubDiv {
+            width: 95%;
+    
+        }
+    
+        .teachersDiv {
+            padding: 3rem 1rem;
+            justify-content: space-around;
+        }
+    
+        .teacherCard {
+            margin-right: 2rem;
+        }
+}
+
+@media screen and (max-width:426px) {
+        .ourTeamContainer {
+                padding: 4rem 2rem;
+            }
+        
+            .ourTeamSubDiv {
+                width: 98%;
+        
+            }
+        
+            .teachersDiv {
+                padding: 1.85rem 0;
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+                justify-content:center;
+            }
+        
+            .teacherCard {
+                margin-right: 0;
+            }
+
+            .studentCard
+            {
+                margin-right: 1rem;
+                padding: 1rem;
+            }
+                 
+}

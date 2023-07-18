@@ -1,0 +1,65 @@
+.studentNavbar
+{
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.studentSubNavbar
+{
+    width: 60%;
+}
+.studentNavlinks 
+{
+    --padding: 0.85rem 1.5rem ;
+        width: 100%;
+        padding: var(--padding);
+        display: flex;
+        justify-content: space-around;
+}
+.studentNavlinks a
+{
+    background-color: rgb(20, 20, 20);
+    color: var(--textColor);
+    padding: var(--padding);
+    border-radius: 0.5rem;
+
+}
+
+
+@media screen and (min-width:769px) and (max-width:1025px) {
+    .studentSubNavbar
+    {
+        width: 75%;
+    }
+    .studentNavlinks 
+    {
+        --padding:0.65rem 1rem;
+    }
+}
+
+@media screen and (max-width:769px)  {
+    .studentSubNavbar
+    {
+        width: 85%;
+    }
+    .studentNavlinks 
+    {
+        --padding:0.65rem 0.5rem;
+    }
+}
+
+@media screen and (max-width:426px)  {
+    .studentSubNavbar
+    {
+        width: 100%;
+    }
+    .studentNavlinks 
+    {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        --padding:0.65rem;
+        text-align: center;
+    }
+}

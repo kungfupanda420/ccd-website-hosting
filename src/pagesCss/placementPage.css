@@ -1,0 +1,235 @@
+
+/* default texts */
+
+.page 
+{
+    color: var(--textColor);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 5vh 30vw ;
+}
+
+
+.pageHeading 
+{
+    font-family: 'Montserrat', sans-serif;
+    font-size: 3rem;
+    margin: 2rem 0;
+    font-weight: 600;
+
+}
+.page .smallHeading 
+{
+    font-weight: 600;
+    margin: 1rem 0 1rem;
+    text-transform: capitalize;
+}
+
+.page .tinyTexts 
+{
+    font-size: 1rem;
+    line-height: 2;
+    color: var(--lightTextColor);
+}
+.page .tinyTexts  a 
+{
+    color: var(--redColor);
+}
+
+/* steps */
+
+.stepsContent
+{
+    margin: 20vh 0;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 3rem;
+    position: relative;
+}
+.line
+{
+    position: absolute;
+    width: 2px;
+    height: 82%;
+    background-color: white;
+    top: 0;
+    left: 50%;
+    z-index: -5;
+}
+.step 
+{
+    /* width: 300px; */
+    display: flex;
+    width: 720px;
+    margin: 0rem 0 2rem;
+}
+.step:nth-of-type(odd){
+    text-align: right;
+    flex-direction: row-reverse;
+    margin-right: auto;
+    justify-content: left;
+}
+.step:nth-of-type(even){
+    text-align: left;
+        margin-left: auto;
+        justify-content: right;
+}
+.step .svgIcon 
+{
+    width: 60px;
+    height: 60px;
+    border: 1px solid var(--textColor);
+    border-radius: 50%;
+    margin:0 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--backgrounColor);
+}
+
+.step:nth-of-type(even) .svgIcon{
+    margin:0 1.8rem;
+}
+
+.stepsContent .details 
+{
+    width: 300px;
+}
+
+.stepTwoInfo 
+{
+    background-color: var(--grayBackgroundColor);
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--grayBorderColor);
+    border-radius: 1rem;
+}
+
+/* rules and regulation section */
+
+.rulesRegulationsContainer ul li
+{
+    list-style-type: disc;
+    color: var(--lightTextColor);
+    margin: 1rem 0;
+    margin-left: .8rem;
+}
+
+
+/* faqs */
+
+.faqs 
+{
+    width: 100%;
+
+}
+.questionContainer 
+{
+    border: 1px solid var(--grayBorderColor);
+    border-radius: 0.85rem;
+    margin: 1.54rem 0;
+    padding:0 1rem ;
+
+}
+.question 
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+
+.question .arrowIcon
+{
+    transform: rotate(-90deg);
+    color: white;
+    padding: 0.85rem;
+    transition: all 0.5s ease;
+}
+
+.question .arrowIconInactive
+{
+    padding: 0.85rem;
+    transition: all 0.25s ease;
+}
+
+/* internPage */
+
+.internPage .smallHeading
+{
+    margin: 2.5rem 0 1rem;
+
+}
+
+/* responsive */
+
+@media screen and (min-width:769px) and (max-width:1025px) {
+
+    .page 
+    {
+        padding: 4vh 15vw;
+       
+    }
+    .line 
+    {
+        height: 83%;
+    }
+
+}
+
+@media screen and (min-width:425px) and (max-width:769px) {
+        .page {
+                padding: 4vh 10vw;
+                
+            }
+        
+            .line {
+                height: 83%;
+            }
+}
+
+@media screen and (max-width:426px) {
+    .page {
+            padding: 4vh 5vw;
+           
+        }
+                .page .tinyTexts
+                {
+                    font-size: 0.95rem;
+                }
+        .stepsContent
+        {
+            gap: 1rem;
+        }
+        .step
+        {
+            width: 100%;
+        }
+        .step .svgIcon
+        {
+            margin: 0 1rem;
+        }
+                .step:nth-of-type(even) .svgIcon {
+                    margin: 0 1rem;
+                }
+    
+        .line {
+            height: 80%;
+            left: 11.5%;
+        }
+                .step:nth-of-type(odd) {
+                    text-align: left;
+                    flex-direction: row;
+                    justify-content: left;
+                }
+                .step:nth-of-type(even) {
+                    text-align: left;
+                    margin-left: auto;
+                    justify-content: right;
+                }
+}
+
+
+

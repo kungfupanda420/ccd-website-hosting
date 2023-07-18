@@ -1,0 +1,199 @@
+.wofComponent
+{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100vw;
+
+}
+
+.wallOfFameMainContainer
+{
+    overflow-x: hidden;
+    width: 100vw;
+}
+
+.wallOfFameMainContainer >h1 
+{
+    color: var(--textColor);
+    text-align: center;
+}
+.wallOfFameContainer
+{
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    width: 100vw;
+    cursor: grab;
+    overflow: hidden;
+
+}
+
+.wallOfFameSubContianer
+{
+    
+    height: 75%;
+    display: flex;
+    flex-wrap: nowrap;
+    
+}
+/* animations */
+.rowOne .wallOfFameSubContianer{
+    animation: loopAnimationOne 25s linear infinite;
+}
+
+.rowTwo .wallOfFameSubContianer
+{
+    animation: loopAnimationTwo 25s linear infinite;
+}
+
+/* .rowOne:hover .wallOfFameSubContianer, .rowTwo:hover .wallOfFameSubContianer
+{
+    animation-play-state: paused;
+} */
+/* keyframes */
+@keyframes loopAnimationOne {
+    from{
+        transform: translateX(50%);
+    }
+    to{
+        transform: translateX(-50%);
+    }
+
+}
+@keyframes loopAnimationTwo {
+    from{
+        transform: translateX(-50%);
+    }
+    to{
+        transform: translateX(50%);
+    }
+
+}
+
+/* student cards and details */
+.cardContainer
+{
+    color: var(--textColor);
+    width: 340px;
+    height: 280px;
+    border: 1px solid var(--grayBorderColor);
+    border-radius: 1rem;
+    background-color: #1f1f1f;
+    padding: 1rem;
+    margin: 0.85rem;
+    position: relative;
+
+}   
+.cardContainer:nth-of-type(even){
+    width:600px;
+}
+
+.studentInfoContainer 
+{
+    display: flex;
+    margin-bottom:0.85rem ;
+    align-items: center;
+}
+.studentImage
+{
+    width: 50px;
+    height: 50px;
+    background-color: #ffb031;
+    border-radius: 50%;
+    margin-right:0.85rem ;
+
+}
+
+.studentImage img 
+{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.studentDetailes .smallHeading
+{
+    font-weight: 700;
+
+}
+
+.studentPosition span 
+{
+    background-color: #2a2a2a;
+    margin: 0 .5rem 0 0;
+    border-radius: 100px;
+    font-style: italic;
+   color: #b6b6b6;
+    font-weight: 400;
+    padding: 2px 4px;
+    text-transform: uppercase;
+    font-family: poppins, sans-serif;
+    font-size: 14px;
+}
+.studentSaid
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 80%;
+
+}
+.studentSaid .smallHeading 
+{
+    color: #b6b6b6;
+}
+
+.dateAndDetails .smallHeading
+{
+    display: flex;
+    align-items: center;
+
+}
+
+.dateAndDetails a
+{
+    display: inline-block;
+    color: white;
+    margin-left: auto;
+    font-size: 1.5rem;
+    padding: 0 1rem;
+    
+}
+
+
+/* responsive */
+
+@media screen and (min-width:769px) and (max-width:1025px) {
+    .cardContainer:nth-of-type(even){
+        width: 500px;
+    } 
+}
+
+
+@media screen and (min-width:426px) and (max-width:769px) {
+    .cardContainer
+{
+    color: var(--textColor);
+    width: 280px;
+    height: 290px;
+    border: 1px solid var(--grayBorderColor);
+    border-radius: 1rem;
+    background-color: #1f1f1f;
+    padding: 1rem;
+    margin: 1rem;
+}  
+}
+
+@media screen and (max-width:426px) {
+
+    .cardContainer
+    {
+        width: 250px;
+        height: 280px;
+    }
+        .cardContainer:nth-of-type(even){
+        width: 350px;
+    } 
+}

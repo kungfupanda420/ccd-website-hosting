@@ -1,0 +1,220 @@
+.aboutContainer {
+  color: var(--textColor);
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10rem 9vw;
+  min-height: 100vh;
+}
+
+.aboutSubContainers {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  width: 100%;
+  height: fit-content;
+  position: relative;
+  grid-template-rows: repeat(2, 38vh);
+  gap: 10px;
+}
+
+.aboutSubContainers > div {
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 1px solid var(--grayBorderColor);
+  padding: 1.5rem;
+
+}
+ .aboutSubContainers > div:first-child{
+    border-radius: 0;
+    border-top-left-radius: 1.5rem;
+    border-bottom-left-radius: 1.5rem;
+  }
+  .aboutSubContainers > div:nth-child(2){
+      border-radius: 0;
+      border-top-right-radius: 1.5rem;
+  }
+  .aboutSubContainers > div:last-child{
+    border-radius: 0;
+    border-bottom-right-radius: 1.5rem;
+  }
+.imageContiners {
+  width: 100%;
+  height: 100%;
+}
+.imageContiners img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+
+ .aboutSubContainers > div:first-child .imageContiners img {
+    border-radius: 0;
+    border-top-left-radius: 1.5rem;
+    border-bottom-left-radius: 1.5rem;
+  }
+  .aboutSubContainers > div:nth-child(2) .imageContiners img{
+      border-radius: 0;
+      border-top-right-radius: 1.5rem;
+  }
+  .aboutSubContainers > div:last-child .imageContiners img{
+    border-radius: 0;
+    border-bottom-right-radius: 1.5rem;
+  }
+
+.itemOnes {
+  grid-area: 1/1/3/2;
+}
+.itemTwos {
+  grid-area: 1/2/2/3;
+}
+.itemThrees {
+  grid-area: 2/2/3/3;
+}
+
+.aboutSubContainers > div .contentDivs {
+  width: 100%;
+  padding: 1.25rem;
+  transform: translateY(calc(-30% - 1rem));
+  transition: all 0.65s ease;
+  background: linear-gradient(rgba(64, 64, 64, 0), black, black);
+}
+
+.aboutSubContainers > div .contentDivs .mainHeading {
+  margin: 0 0 1rem;
+}
+.aboutSubContainers > div:hover .contentDivs {
+  transform: translateY(-100%);
+}
+.aboutSubContainers > div .contentDivs .hide {
+  display: none;
+}
+
+.knowMoreBtn {
+  text-decoration: underline;
+  color: skyblue;
+  margin-top: 0.35rem;
+}
+
+/* small laptop view */
+
+@media screen and (min-width: 769px) and (max-width: 1025px) {
+    .aboutContainer
+    {
+        padding: 5rem 15vw;
+    }
+  .aboutSubContainers > div .contentDivs{
+     transform: translateY(calc(-30%));
+  }
+  .addVerticalFlow {
+    height: 100%;
+    overflow-y: scroll;
+  }
+
+  .addVerticalFlow::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* tab mode */
+@media screen and (min-width:426px) and (max-width: 769px) {
+    .aboutContainer
+    {
+        padding: 5rem 10vw;
+    }
+    .aboutSubContainers
+    {
+          grid-template-rows: repeat(2, 35vh);
+    }
+     .aboutSubContainers > div
+     {
+        padding: 0.5rem;
+     }
+  .aboutSubContainers > div .contentDivs{
+     transform: translateY(calc(-30% - 0.5rem));
+  }
+
+  .addVerticalFlow {
+    height: 100%;
+    overflow-y: scroll;
+  }
+
+  .addVerticalFlow::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* mobile view */
+@media screen and (max-width: 426px) {
+    .aboutContainer
+    {
+        padding: 2rem;
+    }
+  .aboutSubContainers {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .aboutSubContainers > div {
+    border-radius: 0.5rem;
+    overflow: hidden;
+    height: 280px;
+    margin: 0.75rem 0;
+    padding: 0.85rem;
+  }
+
+  .aboutSubContainers > div:first-child{
+    border-radius: 0;
+    border-top-left-radius: 1.5rem;
+    border-top-right-radius: 1.5rem;
+  }
+  .aboutSubContainers > div:nth-child(2){
+    border-radius: 0;
+  }
+  .aboutSubContainers > div:last-child{
+    border-radius: 0;
+        border-bottom-left-radius: 1.5rem;
+    border-bottom-right-radius: 1.5rem;
+  }
+    .aboutSubContainers > div .contentDivs{
+     transform: translateY(calc(-27% ));
+  }
+   .aboutSubContainers > div:first-child .imageContiners img {
+    border-radius: 0;
+    border-top-left-radius: 1.5rem;
+    border-top-right-radius: 1.5rem;
+  }
+  .aboutSubContainers > div:nth-child(2) .imageContiners img{
+      border-radius: 0;
+  }
+  .aboutSubContainers > div:last-child .imageContiners img{
+    border-radius: 0;
+       border-bottom-left-radius: 1.5rem;
+    border-bottom-right-radius: 1.5rem;
+  }
+  .contentDivs {
+    transition: all 0.2s ease;
+    padding: 1rem;
+  }
+  .aboutSubContainers > div .contentDivs .mainHeading {
+    margin: 0 0 1.5rem;
+  }
+  .addVerticalFlow {
+    height: 80%;
+    overflow-y: scroll;
+  }
+
+  .addVerticalFlow::-webkit-scrollbar {
+    display: none;
+  }
+
+      .aboutSubContainers > div .contentDivs{
+     transform: translateY(calc(-27% ));
+  }
+
+}
+
+@media screen and (max-width:376px) {
+    
+}
