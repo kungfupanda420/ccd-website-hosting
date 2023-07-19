@@ -25,7 +25,7 @@ const Placement = lazy(() => import('./pages/Placement'))
 const Intern = lazy(() => import('./pages/Intern'))
 const Login = lazy(() => import('./components/Login'))
 const Admin = lazy(() => import('./pages/Admin') )
-const NotFound = lazy(() => import('./pages/NotFound'))
+
 
 
 function App() {
@@ -62,7 +62,7 @@ function App() {
           </Route>
           <Route path='/login' element={<Login/>} />
           <Route path='/admin@nitc' element={<Admin/>} />
-          <Route path='*' element={<NotFound/>} />
+         
       </Routes>
       </Suspense>
       <Footer/>
