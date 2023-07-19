@@ -21,13 +21,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 mountRoutes(app); // Routing
 
 // Serve static files from the React build
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, '../build')));
 
 // Your other API routes or middleware can be defined here
 
 // Send the React app for all other routes
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  res.sendFile(path.join(__dirname, '../build', 'index.html'));
 });
 
 // catch 404 and forward to error handler
