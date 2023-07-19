@@ -13,8 +13,8 @@ const clubInfo=[
     },
         {
         clubName:"GDSC Club",
-        clubInfoTwoLines:"GDSC club at nitc is a community group for students who are interested in learning and applying Google developer technologies. The club is part of the Google Developer Student Clubs (GDSC) program, which aims to empower student developers in universities to impact their student communities through technology. ",
-        clubInfoMore:"The club organizes events, workshops, and projects on topics such as Android App Development, Google Cloud, Flutter, and more. The club also helps students to build solutions for real local or global issues using Google technologies. The club is led by a GDSC lead, who is a student with foundational knowledge about software development and passion for leading a community of developers.",
+        clubInfoTwoLines:"GDSC club at nitc is a community group for students who are interested in learning and applying Google developer technologies. The club is part of the Google Developer Student Clubs (GDSC) program, ",
+        clubInfoMore:" which aims to empower student developers in universities to impact their student communities through technology. The club organizes events, workshops, and projects on topics such as Android App Development, Google Cloud, Flutter, and more. The club also helps students to build solutions for real local or global issues using Google technologies. The club is led by a GDSC lead, who is a student with foundational knowledge about software development and passion for leading a community of developers.",
         clubImageOne:"/images/aboutpage/rigOne.jpg",
         clubImageTwo:"/images/aboutpage/rigTwo.jpg",
         clubImageThree:"/images/aboutpage/rigOne.jpg"
