@@ -21,7 +21,7 @@ const NotFound = lazy (() => import('./pages/NotFound'))
 
 function App() {
   return (
-    <div className='Home'>
+    <div className='Home'> 
         <AnimatedCursor
         trailingSpeed={8}
         outerSize = {36}
