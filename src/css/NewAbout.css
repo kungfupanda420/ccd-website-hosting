@@ -47,8 +47,13 @@
   height: 100%;
   object-fit: cover;
   border-radius: 0.5rem;
+  transition: all 0.5s ease;
+    filter: grayscale(1);
 }
-
+.imageContiners img:hover 
+{
+  filter: grayscale(0.25);
+}
  .aboutSubContainers > div:first-child .imageContiners img {
     border-radius: 0;
     border-top-left-radius: 1.5rem;
