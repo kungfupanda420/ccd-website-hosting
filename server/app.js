@@ -8,6 +8,17 @@ var mountRoutes = require('./routes/index');
 
 var app = express();
 
+// Serve static files from the React build
+app.use(express.static(path.join(__dirname, 'build')));
+
+// Your other API routes or middleware can be defined here
+
+// Send the React app for all other routes
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
