@@ -3,15 +3,6 @@ import React, {lazy, Suspense} from 'react';
 
 import Footer from './components/Footer';
 import Navbar from './components/Navbar'
-// import Home from './components/Home';
-// import PlacementStatics from './components/PlacementStatics';
-// import Form from './components/Form';
-// import Login from './components/Login';
-// import NewAbout from './components/NewAbout';
-// import ForStudent from './components/ForStudent';
-// import Admin from './pages/Admin';
-// import Placement from './pages/Placement';
-// import Intern from './pages/Intern'
 import { Routes, Route } from 'react-router-dom';
 import AnimatedCursor from "react-animated-cursor"
 import Loader from './pages/Loader';
@@ -25,8 +16,8 @@ const Placement = lazy(() => import('./pages/Placement'))
 const Intern = lazy(() => import('./pages/Intern'))
 const Login = lazy(() => import('./components/Login'))
 const Admin = lazy(() => import('./pages/Admin') )
-
-
+const ForRecruiter = lazy( ()=> import('./components/ForRecruiter'))
+const NotFound = lazy (() => import('./pages/NotFound'))
 
 function App() {
   return (
@@ -54,7 +45,7 @@ function App() {
           <Route path='/' element={<Home/>} />
           <Route path='/about' element={<NewAbout/>} />
           <Route path='/placement' element={<PlacementStatics/>} />
-          <Route path='/recruiter' element={<Form/>} />
+          <Route path='/recruiter' element={<ForRecruiter/>} />
           <Route path='/forstudents' element={<ForStudent/>} >
             <Route index element={<Intern/>} />
             <Route  path='internships' element={<Intern/>} />
@@ -62,7 +53,7 @@ function App() {
           </Route>
           <Route path='/login' element={<Login/>} />
           <Route path='/admin@nitc' element={<Admin/>} />
-         
+         <Route path='*' element={<NotFound/>} />
       </Routes>
       </Suspense>
       <Footer/>
@@ -71,3 +62,22 @@ function App() {
 }
 
 export default App;
+
+
+
+
+
+
+
+
+
+
+// import Home from './components/Home';
+// import PlacementStatics from './components/PlacementStatics';
+// import Form from './components/Form';
+// import Login from './components/Login';
+// import NewAbout from './components/NewAbout';
+// import ForStudent from './components/ForStudent';
+// import Admin from './pages/Admin';
+// import Placement from './pages/Placement';
+// import Intern from './pages/Intern'
