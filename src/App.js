@@ -8,9 +8,8 @@ import AnimatedCursor from "react-animated-cursor"
 import Loader from './pages/Loader';
 
 const Home = lazy(() => import('./components/Home'));
-const NewAbout = lazy(() => import('./components/NewAbout'));
+const AboutRoute = lazy(() => import('./components/AboutRoute'))
 const PlacementStatics = lazy(() => import('./components/PlacementStatics'));
-const Form = lazy(() =>  import('./components/Form'))
 const ForStudent = lazy(() =>import('./components/ForStudent'))
 const Placement = lazy(() => import('./pages/Placement'))
 const Intern = lazy(() => import('./pages/Intern'))
@@ -43,7 +42,7 @@ function App() {
       <Suspense fallback={<Loader/>} >
         <Routes>
           <Route path='/' element={<Home/>} />
-          <Route path='/about' element={<NewAbout/>} />
+          <Route path='/about' element={<AboutRoute/>} />
           <Route path='/placement' element={<PlacementStatics/>} />
           <Route path='/recruiter' element={<ForRecruiter/>} />
           <Route path='/forstudents' element={<ForStudent/>} >
