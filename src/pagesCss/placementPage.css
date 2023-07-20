@@ -9,6 +9,8 @@
     align-items: center;
     flex-direction: column;
     padding: 5vh 30vw ;
+    width: 100vw;
+    overflow-x: hidden;
 }
 
 
@@ -232,4 +234,46 @@
 }
 
 
+@media screen and (max-width:376px) {
+                .page .tinyTexts
+                {
+                    font-size: 0.85rem;
+                }
+
+        .stepTwoInfo 
+        {
+            padding: 0.5rem;
+        }
+
+
+}
+
+
+@media screen and (max-width:321px) {
+                .page .tinyTexts
+                {
+                    font-size: 0.75rem;
+                }
+
+        .stepTwoInfo 
+        {
+            padding: 0.5rem;
+        }
+        .step .svgIcon 
+{
+    width: 40px;
+    height: 40px;
+        margin:0 1rem;
+}
+ .line {
+            height: 82.5%;
+            left: 11.5%;
+        }
+
+.stepsContent .details 
+{
+    width: 240px;
+    height: 100%;
+}
+}
 
