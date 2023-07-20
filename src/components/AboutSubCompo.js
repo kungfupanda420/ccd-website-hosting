@@ -10,7 +10,7 @@ function AboutSubCompo(props) {
         setShowTwo(!showTwo)
     }
 
-    const {clubName, clubInfoTwoLines, clubInfoMore} = props.clubContent
+    const {clubName, clubInfoTwoLines, clubInfoMore, clubImageOne,clubImageTwo,clubImageThree} = props.clubContent
 
     
   return (
@@ -19,7 +19,7 @@ function AboutSubCompo(props) {
         <div className="aboutSubContainers">
             <div className="itemOnes">
                   <div className="imageContiners">
-                        <img src="/images/aboutpage/rigOne.jpg" alt="" />
+                        <img src={clubImageOne} alt="" />
                     </div>
 
                     <div className={show ? "contentDivs addVerticalFlow" : "contentDivs" }>
@@ -37,7 +37,7 @@ function AboutSubCompo(props) {
             </div>
             <div className="itemTwos">
                   <div className="imageContiners">
-                        <img src="/images/aboutpage/rigTwo.jpg" alt="" />
+                        <img src={clubImageTwo} alt="" />
                     </div>
                       {/* <div className={showOne ? "contentDivs addVerticalFlow" : "contentDivs" }>
                         <h1 className='mainHeading'>
@@ -52,7 +52,7 @@ function AboutSubCompo(props) {
             </div>
             <div className="itemThrees">
                   <div className="imageContiners">
-                        <img src="/images/about.png" alt="" />
+                        <img src={clubImageThree} alt="" />
                     </div>
                        {/* <div className={showTwo ? "contentDivs addVerticalFlow" : "contentDivs" }>
                         <h1 className='mainHeading'>
