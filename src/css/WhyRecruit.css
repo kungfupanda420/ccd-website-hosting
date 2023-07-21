@@ -133,6 +133,14 @@
     align-items: center;
     width: 100%;
   }
+  .pageHeadingWhyRecruit {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5rem; /* Adjust the font size to fit better on mobile devices */
+    text-align: center; /* Center the heading */
+    align-self: center;
+    margin: 1.5rem 0; /* Add some margin to improve spacing */
+    width: auto; /* Remove fixed width to make it automatically adjust */
+  }
 
   .reasonListContainer {
     margin: 1rem;
