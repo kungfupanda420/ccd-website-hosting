@@ -53,7 +53,8 @@
 @media screen and (max-width:426px) {
     .heroSection
     {
-        background-position-x: -450px;
+        background-position-x: 50%;
+        height: 50vh;
     }
     .heroHeading {
             width: 70%;
