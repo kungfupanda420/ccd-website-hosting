@@ -248,16 +248,16 @@ const CompaniesLogo = [
   },
 
   {
+    companyName: "",
+    svg: "",
+  },
+  {
+    companyName: "",
+    svg: "",
+  },
+  {
     companyName: "Suzuki",
     svg: <SiSuzuki />,
-  },
-  {
-    companyName: "",
-    svg: "",
-  },
-  {
-    companyName: "",
-    svg: "",
   },
 
   {
@@ -282,7 +282,7 @@ const CompaniesLogo = [
     svg: "",
   },
   {
-    companyName: "Texas",
+    companyName: "Texas Instruments",
     svg: <GiTexas />,
   },
   {

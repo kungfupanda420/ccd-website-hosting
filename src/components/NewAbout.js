@@ -25,7 +25,7 @@ function NewAbout() {
                             About us
                         </h1>
                         <p className='smallHeading'>
-                            The Center for Career Development (CCD) at NIT Calicut is dedicated to providing comprehensive career guidance, training, and placement support to students.<span className={show? 'show' :'hide'} >Our mission is to empower students with the skills, knowledge, and opportunities necessary to succeed in their chosen careers. We offer personalized counseling, industry connections, and a range of workshops and training programs to enhance employability skills. Our goal is to bridge the gap between academia and industry, ensuring students have access to internships, industrial training, and placement opportunities. At CCD, we are committed to nurturing well-rounded professionals who are equipped for the challenges of the ever-evolving job market.</span>
+                            The Centre for Career Development (CCD) at NIT Calicut is dedicated to providing comprehensive career guidance, training, and placement support to students. <span className={show? 'show' :'hide'} >Our mission is to empower students with the skills, knowledge and opportunities necessary to succeed in their chosen careers. We offer personalized counselling, industry connections and a range of workshops and training programmes to enhance employability skills. Our goal is to bridge the gap between academia and industry, ensuring students have access to internships, industrial training, and placement opportunities. At CCD, we are committed to nurturing well-rounded professionals who are equipped for the challenges of the ever-evolving job market.</span>
                         </p>
                         
                          <p className='smallHeading knowMoreBtn' onClick={() => setShow(!show)} >{show ? "Show Less" : "Know More"}</p>
@@ -40,7 +40,7 @@ function NewAbout() {
                            Mission
                         </h1>
                         <p className='smallHeading'>
-                            Liaison with talent acquisition teams of industries, consultant firms and research organisations for placement and internship opportunities.<span className={showOne? 'show' :'hide'} >Collaborate with alumni to facilitate exploration of career options for students.Enhance the skill sets of students through training programmes so as to make them career-ready.</span>
+                            Liaison with talent acquisition teams of industries, consultant firms and research organisations for placement and internship opportunities. <span className={showOne? 'show' :'hide'} >Collaborate with alumni to facilitate exploration of career options for students. Enhance the skill set of students through training programmes so as to make them career-ready.</span>
                         </p>
                         
                         <p className='smallHeading knowMoreBtn' onClick={() => setShowOne(!showOne)} >{showOne ? "Show Less" : "Know More"}</p>
