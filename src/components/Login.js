@@ -26,7 +26,7 @@ function Login() {
     }).then(response => {
       if (response.status === 200) {
         // Login successful, redirect to admin page
-        window.location.href = "/admin@nitc";
+        window.location.href = "/admin@CCD_nitc123";
       } else if (response.status === 401) {
         // Login failed, show error message
         throw new Error('Invalid credentials');

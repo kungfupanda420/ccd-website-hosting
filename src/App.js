@@ -57,7 +57,7 @@ function App() {
             <Route path='placements' element={<Placement/>} />
           </Route>
           <Route path='/login' element={<Login/>} />
-          <Route path='/admin@nitc' element={<Admin/>} />
+          <Route path='/admin@CCD_nitc123' element={<Admin/>} />
          <Route path='*' element={<NotFound/>} />
       </Routes>
       </Suspense>

@@ -17,7 +17,7 @@ function NewAbout() {
         <div className="aboutSubContainers">
             <div className="itemOnes">
                   <div className="imageContiners">
-                        <img src="/images/about.png" alt="" />
+                        <img src="/images/aboutpage/aboutus.png" alt="" />
                     </div>
 
                     <div className={show ? "contentDivs addVerticalFlow" : "contentDivs" }>
@@ -33,7 +33,7 @@ function NewAbout() {
             </div>
             <div className="itemTwos">
                   <div className="imageContiners">
-                        <img src="/images/about.png" alt="" />
+                        <img src="/images/aboutpage/mission.png" alt="" />
                     </div>
                       <div className={showOne ? "contentDivs addVerticalFlow" : "contentDivs" }>
                         <h1 className='mainHeading'>
@@ -48,7 +48,7 @@ function NewAbout() {
             </div>
             <div className="itemThrees">
                   <div className="imageContiners">
-                        <img src="/images/about.png" alt="" />
+                        <img src="/images/aboutpage/vision.png" alt="" />
                     </div>
                        <div className={showTwo ? "contentDivs addVerticalFlow" : "contentDivs" }>
                         <h1 className='mainHeading'>
