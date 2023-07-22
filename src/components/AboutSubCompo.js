@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-
+import '../css/NewAbout.css'
 function AboutSubCompo(props) {
     const [show, setShow] = useState(false)
     const [showOne, setShowOne] = useState(false)
@@ -14,7 +14,7 @@ function AboutSubCompo(props) {
 
     
   return (
-    <div>
+    <div className='clubsDivContainers'>
          <div className='aboutContainer'  >
         <div className="aboutSubContainers">
             <div className="itemOnes">

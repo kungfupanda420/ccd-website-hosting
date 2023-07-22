@@ -6,6 +6,17 @@
   align-items: center;
   padding: 10rem 9vw;
   min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* clubs aboutContainers */
+
+.clubsDivContainers .aboutContainer
+{
+  height: 70vh;
+  overflow: hidden;
+  padding: 3rem 9vw;
+  /* border: 1px solid white; */
 }
 
 .aboutSubContainers {
@@ -16,6 +27,7 @@
   position: relative;
   grid-template-rows: repeat(2, 38vh);
   gap: 10px;
+   /* border: 1px solid white; */
 }
 
 .aboutSubContainers > div {
@@ -154,8 +166,16 @@
 @media screen and (max-width: 426px) {
     .aboutContainer
     {
-        padding: 2rem;
+        
+        padding: 5rem 2rem;
     }
+    .clubsDivContainers .aboutContainer
+{
+  height: 100%;
+  border-bottom: 0.25px solid rgb(42, 42, 42);
+  padding: 2rem;
+}
+
   .aboutSubContainers {
     display: flex;
     flex-direction: column;
