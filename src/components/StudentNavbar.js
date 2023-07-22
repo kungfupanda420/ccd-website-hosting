@@ -8,7 +8,7 @@ function StudentNavbar() {
          <ul className='studentNavlinks smallHeading'>
             <NavLink to='internships'>Internship</NavLink>
             <NavLink to='placements'>Placements</NavLink>
-            <NavLink>Internship Oppertunity</NavLink>
+            <NavLink>Internship Opportunity</NavLink>
             <NavLink>Carrer Development Program</NavLink>
         </ul>
        </div>
