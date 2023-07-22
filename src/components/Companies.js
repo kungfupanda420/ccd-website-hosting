@@ -6,15 +6,17 @@ import {
   SiCisco,
   SiSap,
   SiIntel,
+  SiAccenture,
+  SiTata,
+  SiSuzuki
 
 } from "react-icons/si";
 
   // SiQualcomm,
   // SiSamsung,
   // SiBarclays,
-  // SiSuzuki,
-  // SiAccenture,
-  // SiTata,
+  // ,
+  // ,
   // SiMercedes,
   // SiFord,
   // SiRelianceindustrieslimited,
@@ -50,9 +52,9 @@ const CompaniesLogo = [
     ),
   },
    {
-    companyName: "",
+    companyName: "Tata",
     svg: (
-     ""
+     <SiTata/>
     ),
   },
 {
@@ -74,9 +76,9 @@ const CompaniesLogo = [
     ),
   },
  {
-    companyName: "",
+    companyName: "Accenture",
     svg: (
-     ""
+     <SiAccenture/>
     ),
   },
    {
@@ -353,14 +355,15 @@ const CompaniesLogo = [
     ),
   },
 
-   {
-    companyName: "",
-    svg: (
-     ""
-    ),
-  },
+ 
  
    {
+    companyName: "Suzuki",
+    svg: (
+     <SiSuzuki/>
+    ),
+  },
+    {
     companyName: "",
     svg: (
      ""
