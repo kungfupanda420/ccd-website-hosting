@@ -506,7 +506,7 @@ function Companies() {
 
   const animation = useAnimation();
   const { ref, inView } = useInView({
-    threshold: 0.25,
+    threshold: 0.5,
   });
 
   useEffect(() => {
