@@ -1,9 +1,8 @@
 import './App.css';
-import React, {lazy, Suspense} from 'react';
-
+import React, {lazy, Suspense, useEffect} from 'react';
 import Footer from './components/Footer';
 import Navbar from './components/Navbar'
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import AnimatedCursor from "react-animated-cursor"
 import Loader from './pages/Loader';
 
@@ -19,6 +18,11 @@ const ForRecruiter = lazy( ()=> import('./components/ForRecruiter'))
 const NotFound = lazy (() => import('./pages/NotFound'))
 
 function App() {
+  const {pathname} = useLocation();
+  useEffect(() => {
+    window.scrollTo({top:0, behavior:"smooth"})
+  }, [pathname])
+  
   return (
     <div className='Home'> 
         <AnimatedCursor
@@ -39,8 +43,10 @@ function App() {
         }}
       />
       <Navbar/>
+      
       <Suspense fallback={<Loader/>} >
         <Routes>
+          
           <Route path='/' element={<Home/>} />
           <Route path='/about' element={<AboutRoute/>} />
           <Route path='/placement' element={<PlacementStatics/>} />
