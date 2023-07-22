@@ -70,22 +70,6 @@ const WhyRecruit = () => {
                 <div className="reasonText">
                   {output.reason}
                 </div>
-                <span className="arrowIconInactive">
-                  <svg
-                    width="12.5"
-                    height="12.5"
-                    viewBox="0 0 10 10"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M0.272008 0.75735L8.75729 9.24263M8.75729 9.24263V0.75735M8.75729 9.24263H0.272008"
-                      stroke="white"
-                      strokeOpacity="0.5"
-                      strokeWidth="0.72"
-                    />
-                  </svg>
-                </span>
               </div>
             ))}
           </div>

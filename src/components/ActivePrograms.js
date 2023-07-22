@@ -29,7 +29,7 @@ const ActivePrograms = () => {
   return (
     <div className="activeProgramContainer">
       <div className="activeProgramHolder">
-        <h3 className="activeProgramHeading">Active Programs</h3>
+        <h3 className="activeProgramHeading">Active Programmes</h3>
         <div className="programsContainer">
           {programsData.map((program, index) => (
             <div className="programCard" key={index}>

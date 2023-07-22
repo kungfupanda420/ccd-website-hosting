@@ -182,10 +182,10 @@
   }
   
   .messageContainer pre {
-    font-family: "Courier New", Courier, monospace;
+    font-family: 'Montserrat', sans-serif;
     white-space: pre-wrap;
     padding: 10px;
-    color: #9e9e9e;
+    color: white;
   }
   
   @keyframes spin {
