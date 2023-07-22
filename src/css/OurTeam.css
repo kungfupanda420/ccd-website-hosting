@@ -38,11 +38,17 @@
   padding: 0rem 1rem;
   border-radius: 0.5rem;
   text-align: center;
+  
 }
 .teacherCard img {
   width: 156px;
   height: 156px;
   pointer-events: none;
+  transform: all 0.3s ease;
+  filter: grayscale(0);
+}
+.teacherCard img:hover{
+  filter: grayscale(0);
 }
 .teacherDetail {
   text-align: center;
