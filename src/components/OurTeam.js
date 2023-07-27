@@ -58,7 +58,7 @@ function OurTeam() {
            dragConstraints={{right:0, left:-width }}
            className="innerStudentsDiv">
               {studentData.map((student, index) => (
-                <div  className="studentCard active"  >
+                <div  className="studentCard active" >
                   <img src={student.image} alt="" />
                   <div className="studentDetail">
                     <p className="smallHeading">{student.name}</p>

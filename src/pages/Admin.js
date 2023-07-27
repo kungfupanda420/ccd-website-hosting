@@ -58,6 +58,7 @@ function Admin() {
         method: 'POST',
         body: formData,
       });
+      window.location.reload();
       const data = await response.json();
       console.log(data);
     } catch (error) {
