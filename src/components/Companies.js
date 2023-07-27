@@ -505,27 +505,39 @@ function Companies() {
   //use in view hoook
 
   const animation = useAnimation();
+  const svgAnimation = useAnimation();
   const { ref, inView } = useInView({
-    threshold: 0.25,
+    threshold: 0.35,
   });
 
   useEffect(() => {
     if (inView) {
       animation.start({
-        scale: 1,
-        opacity: 1,
         transition: {
-          duration:2,
+          duration:1.5,
           type: "spring",
           stiffness: 260,
-          staggerChildren:1
+          staggerChildren:10
         },
       });
+
+      svgAnimation.start({
+            scale: 1,
+        opacity: 1,
+        transition: {
+          type: "spring",
+          stiffness: 260,
+          staggerChildren:0.04
+        },
+      })
     } else {
-      animation.start({
-        scale: 0.25,
-        opacity: 0.15,
-      });
+      svgAnimation.start({
+        scale:0.25,
+        opacity:0.25,
+        transition:{
+          duration:0.5
+        }
+      })
     }
   });
 
@@ -538,18 +550,22 @@ function Companies() {
     >
       <div className="backgroundHover" ref={cursor} style={cursorStyling}></div>
 
-      <div className="gridContainer">
+      <motion.div animate={animation} className="gridContainer">
         {CompaniesLogo.map((item, index) => (
-          <div className="item">
-            <motion.div animate={animation}>{item.svg}</motion.div>
+          <motion.div className="item">
+            <motion.div 
+            animate={svgAnimation}
+            transition={{delayChildren:0.1*index}}
+            >{item.svg}
+            </motion.div>
             {item.companyName != "" ? (
               <span className="companyName tinyTexts">{item.companyName}</span>
             ) : (
               ""
             )}
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
       <div className="headingCompany">
         <h1 className="mainHeading">
           Recruiting
