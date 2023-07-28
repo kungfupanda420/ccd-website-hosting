@@ -50,9 +50,6 @@
   font-weight: 400;
 }
 
-.footerSubContent:last-child {
-  margin-left: auto;
-}
 
 .copyRight {
   position: absolute;

@@ -41,16 +41,7 @@ function Footer(){
                     </ul>
                    </div>
 
-                   <div className="footerSubContent">
-                     <p className='footerTitle'>Website Team</p>
-                    <ul className='footerLinks '>
-                       <li><a href="!#">Design</a></li>
-                       <li><a href="!#">Development</a></li>
-                    </ul>
-                   </div>
                 </div>
-
-                <p className='tinyHeading copyRight'>Designed & Built at NIT Calicut</p>
             </div>
         </>
     )
