@@ -543,7 +543,7 @@ function Companies() {
             <motion.div 
             variants={popUpVariants}
             initial="hidden"
-            custom={Math.random()*100}
+            custom={index}
             whileInView="visible"
          >
               {item.svg}
