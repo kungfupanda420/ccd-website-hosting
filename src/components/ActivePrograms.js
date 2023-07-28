@@ -56,7 +56,7 @@ const ActivePrograms = () => {
                 Download Brochure
                 <img className="downloadIcon" src="images/downloadIco.png" alt="Download Icon" />
               </button>
-              <button className="programRegBtn">Register</button>
+              {/*<button className="programRegBtn">Register</button>*/}
             </div>
           ))}
         </div>
