@@ -12,17 +12,6 @@ import {
   SiSuzuki,
 } from "react-icons/si";
 
-// SiQualcomm,
-// SiSamsung,
-// SiBarclays,
-// ,
-// ,
-// SiMercedes,
-// SiFord,
-// SiRelianceindustrieslimited,
-// SiPaytm,
-//FaUber,
-//BsGoogle,
 
 import { FaAtlassian, FaSalesforce } from "react-icons/fa";
 
@@ -478,6 +467,9 @@ const CompaniesLogo = [
   },
 ];
 
+
+//main componenet starts here
+
 function Companies() {
   const [moment, setMoment] = useState({
     x: 0,
@@ -503,45 +495,59 @@ function Companies() {
   };
 
   //use in view hoook
+  const animation = useAnimation()
+  const [inViewRef, inView] = useInView({threshold:0.15})
 
-  const animation = useAnimation();
-  const { ref, inView } = useInView({
-    threshold: 0.5,
-  });
+  const popUpVariants ={
+    hidden:{
+      scale:0.05,
+      opacity:0.25
+    },
+    visible: (index)=>({
+      scale:1, 
+      opacity:1,
+      transition:{
+        duration:5,
+        delay:0.25,
+        delayChildren: 2*index,
+        type:"spring",
+        stiffness:100,
+        staggerChildren:10*index
+      }
+    })
+  }
 
   useEffect(() => {
-    if (inView) {
-      animation.start({
-        scale: 1,
-        opacity: 1,
-        transition: {
-          duration:2,
-          type: "spring",
-          stiffness: 260,
-          staggerChildren:1
-        },
-      });
-    } else {
-      animation.start({
-        scale: 0.25,
-        opacity: 0.15,
-      });
+    if(inView){
+      animation.start("visible")
     }
-  });
+    else{
+      animation.start('hidden')
+    }
+  }, [animation, inView])
 
   return (
     <div
-      ref={ref}
+    ref={inViewRef}
       className="companiesContainer"
       onMouseOver={handleMouseOVer}
       onMouseLeave={handleMouseLeave}
     >
       <div className="backgroundHover" ref={cursor} style={cursorStyling}></div>
 
-      <div className="gridContainer">
+      <motion.div className="gridContainer">
         {CompaniesLogo.map((item, index) => (
-          <div className="item">
-            <motion.div animate={animation}>{item.svg}</motion.div>
+          <div 
+          
+          className="item">
+            <motion.div 
+            variants={popUpVariants}
+            initial="hidden"
+            custom={index}
+            whileInView="visible"
+         >
+              {item.svg}
+            </motion.div>
             {item.companyName != "" ? (
               <span className="companyName tinyTexts">{item.companyName}</span>
             ) : (
@@ -549,7 +555,7 @@ function Companies() {
             )}
           </div>
         ))}
-      </div>
+      </motion.div>
       <div className="headingCompany">
         <h1 className="mainHeading">
           Recruiting
@@ -561,6 +567,7 @@ function Companies() {
 }
 
 export default Companies;
+
 
 //  useEffect(() => {
 //    const mouseMove = e => {
@@ -576,3 +583,19 @@ export default Companies;
 //     cursor.current.addEventListener('mousemove', mouseMove)
 //    }
 //   }, [])
+
+
+
+
+
+// SiQualcomm,
+// SiSamsung,
+// SiBarclays,
+// ,
+// ,
+// SiMercedes,
+// SiFord,
+// SiRelianceindustrieslimited,
+// SiPaytm,
+//FaUber,
+//BsGoogle,
