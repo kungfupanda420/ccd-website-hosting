@@ -24,7 +24,7 @@
     font-size: 3rem;
     font-weight: 700;
     width: fit-content;
-    margin-bottom: 2rem;
+    margin-bottom: 0rem;
   }
   
   .form {
@@ -37,12 +37,14 @@
   .inputContainer {
     position: relative;
     margin-bottom: 1rem;
-    margin-top: 0.5rem;
+    margin-top: 0rem;
+    width:75%;
   }
   
   .inputContainer label {
     font-family: 'Montserrat', sans-serif;
     font-size: 1.25rem;
+    width: fit-content;
     font-weight: 600;
   }
   
@@ -84,7 +86,7 @@
   }
   
   button[type="submit"] {
-    padding: 0.85rem 1.5rem;
+    padding: 0.85rem 2rem;
     background-color: gray;
     color: white;
     border: none;
