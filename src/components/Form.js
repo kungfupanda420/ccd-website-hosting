@@ -5,11 +5,13 @@ const Form = () => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [queriesComments, setQueriesComments] = useState("");
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [nameError, setNameError] = useState(false);
   const [phoneError, setPhoneError] = useState(false);
   const [emailError, setEmailError] = useState(false);
+  const [queriesCommentsError, setQueriesCommentsError] = useState(false);
   const [serverMessage, setServerMessage] = useState("");
   const formRef = useRef(null);
 
@@ -24,8 +26,9 @@ const Form = () => {
     const isNameValid = validateName();
     const isPhoneValid = validatePhone();
     const isEmailValid = validateEmail();
+    const isQueriesCommentsValid = validateQueriesComments();
 
-    if (!isNameValid || !isPhoneValid || !isEmailValid) {
+    if (!isNameValid || !isPhoneValid || !isEmailValid || !isQueriesCommentsValid) {
       return;
     }
 
@@ -35,6 +38,7 @@ const Form = () => {
       name: name,
       phone: phone,
       email: email,
+      queriesComments: queriesComments,
     };
 
     try {
@@ -51,6 +55,7 @@ const Form = () => {
       setName("");
       setPhone("");
       setEmail("");
+      setQueriesComments("");
       formRef.current.reset();
       setServerMessage(data); // Update the server message state with the response
     } catch (error) {
@@ -84,6 +89,12 @@ const Form = () => {
     const regex = /^\S+@\S+\.\S+$/;
     const isValid = regex.test(email);
     setEmailError(!isValid);
+    return isValid;
+  };
+
+  const validateQueriesComments = () => {
+    const isValid = queriesComments.trim() !== "";
+    setQueriesCommentsError(!isValid);
     return isValid;
   };
 
@@ -135,6 +146,19 @@ const Form = () => {
             />
             {emailError && <span className="errorText">Invalid email</span>}
           </div>
+          <div className={`inputContainer ${queriesCommentsError ? "error" : ""}`}>
+            <label htmlFor="queriesComments">Queries/Comments</label>
+            <input
+              type="text"
+              id="queriesComments"
+              name="queriesComments"
+              placeholder="Your Queries or Comments"
+              value={queriesComments}
+              onChange={(event) => setQueriesComments(event.target.value)}
+              onBlur={validateQueriesComments}
+            />
+            {queriesCommentsError && <span className="errorText">Cannot be empty</span>}
+          </div>
           <div className="formSubmitContainer">
             <div className="checkboxContainer">
               <input
@@ -158,7 +182,7 @@ const Form = () => {
                   Submitting
                 </>
               ) : (
-                "Recruit Now"
+                " Submit "
               )}
             </button>
           </div>
