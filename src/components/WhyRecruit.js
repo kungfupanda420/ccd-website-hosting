@@ -13,7 +13,7 @@ const WhyRecruit = () => {
 
   const handleDownload = () => {
     const downloadLink = document.createElement('a');
-    downloadLink.href = '/documents/Placement Brochure 2023.pdf';
+    downloadLink.href = '/documents/Brochure_Centre for Career Development_NIT Calicut.pdf';
     downloadLink.download = 'Placement Brochure 2023.pdf';
     downloadLink.click();
   };
