@@ -89,7 +89,7 @@ const PlacementStatics = () => {
                 </h1>
                 <h2 className='statPlus'>+</h2>
               </div>
-              <p className='statText'>Students Placed</p>
+              <p className='statText'>Placements</p>
             </div>
             <div className='verticalLine'></div>
             {/* Companies Visited */}
