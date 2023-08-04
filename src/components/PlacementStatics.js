@@ -34,7 +34,7 @@ const PlacementStatics = () => {
   };
 
   const [endNumbers, setEndNumbers] = useState({
-    studentsPlaced: 0,
+    Placements: 0,
     companiesVisited: 0,
     totalOffers: 0,
     highestPackage: 0,
@@ -85,7 +85,7 @@ const PlacementStatics = () => {
             <div className='eachStatContainer'>
               <div className='statValue'>
                 <h1 className='statNumber'>
-                  <RunningNumbers endNumber={endNumbers.studentsPlaced} />
+                  <RunningNumbers endNumber={endNumbers.Placements} />
                 </h1>
                 <h2 className='statPlus'>+</h2>
               </div>
