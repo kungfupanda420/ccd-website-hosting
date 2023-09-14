@@ -13,7 +13,7 @@ const WhyRecruit = () => {
 
   const handleDownload = () => {
     const downloadLink = document.createElement('a');
-    downloadLink.href = '/documents/Brochure_Centre for Career Development_NIT Calicut.pdf';
+    downloadLink.href = '/documents/Placement Brochure 2023.pdf';
     downloadLink.download = 'Placement Brochure 2023.pdf';
     downloadLink.click();
   };
@@ -39,7 +39,7 @@ const WhyRecruit = () => {
         <div className='whyRecruitTitleContainer'>
           <h1 className='pageHeadingWhyRecruit'>Why Recruit from NIT Calicut?</h1>
           <div className='whiteButton'onClick={handleDownload}>
-            <h1 className='buttonText'>Courses Offered</h1>
+            <h1 className='buttonText'>Placement Brochure</h1>
             <svg
               className='arrow'
               width='10'
