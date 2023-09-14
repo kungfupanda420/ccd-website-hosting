@@ -43,6 +43,9 @@ const Navbar = () => {
             </ul>
             <ul className="rightList">
               {/*<NavLink to="/blogs" className="navLink">Blog</NavLink>*/}
+              <NavLink to="https://nitc.ac.in/" className="navLink" onClick={closeMobileMenu}>
+                Nit Calicut
+              </NavLink>
               <NavLink to="/login" className="navLink" onClick={closeMobileMenu}>
                 Login
               </NavLink>
