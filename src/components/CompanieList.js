@@ -1,6 +1,6 @@
 import '../css/CompaniesList.css'
 import {NavLink} from 'react-router-dom'
-const CList = ['Accenture', 'Amazon', 'AmericanExpress', 'Arcesium', 'Atkins', 'Axis', 'Bank', 'BajajAutoLimited', 'Barclays','BIS', 'Bosch Rexroth (India)', 'Caterpillar', 'CISCO', 'Cummins India', 'D. E. Shaw', 'Decimal Point Analytics', 'Deutsche India', 'Enerzinx', 'ExxonMobil Services & Technology', 'Ford Motors', 'GE Healthcare', 'GE Research', 'Goldman Sachs', 'IBM','Infineon', 'Inquizity Pvt Ltd', 'Tata Motors', 'John Deere', 'Kalliyath TMT', 'KLA Tencor Software India', 'MathWorks India', 'NATPAC', 'Oracle', 'Procter & Gamble', 'Qualcomm', 'Reliance Industries.', 'RS Group', 'Salesforce']
+const CList = ['Accenture', 'Amazon', 'AmericanExpress', 'Arcesium', 'Atkins', 'Axis Bank', 'BajajAutoLimited', 'Barclays','BIS', 'Bosch Rexroth (India)', 'Caterpillar', 'CISCO', 'Cummins India', 'D. E. Shaw', 'Decimal Point Analytics', 'Deutsche India', 'Enerzinx', 'ExxonMobil Services & Technology', 'Ford Motors', 'GE Healthcare', 'GE Research', 'Goldman Sachs', 'IBM','Infineon', 'Inquizity Pvt Ltd', 'Tata Motors', 'John Deere', 'Kalliyath TMT', 'KLA Tencor Software India', 'MathWorks India', 'NATPAC', 'Oracle', 'Procter & Gamble', 'Qualcomm', 'Reliance Industries.', 'RS Group', 'Salesforce']
 
 
 function CompaniesList(){

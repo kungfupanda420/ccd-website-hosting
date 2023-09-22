@@ -47,6 +47,7 @@
 {
     font-weight: normal;
     font-family: "Montserrat", sans-serif;
+    font-size: 14px;
 }
 
 /* media queries */
@@ -63,6 +64,15 @@
         text-align: center;
         grid-template-columns: repeat(2,1fr);
     }
+        .comapaniesListContainer
+    {
+        gap: 15px;
+    }
+    .comapaniesListContainer li 
+{
+    font-size: 12px;
+
+}
     
 }
 
@@ -71,6 +81,7 @@
     {
         padding: 5rem 15vw;
     }
+
 }
 
 @media screen and (min-width:426px) and (max-width:769px) {
@@ -84,5 +95,14 @@
         gap: 10px;
  
     }
+        .comapaniesListContainer
+    {
+        gap: 20px;
+    }
+    .comapaniesListContainer li 
+{
+    font-size: 12px;
+
+}
 }
 

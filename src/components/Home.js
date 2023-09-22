@@ -16,10 +16,8 @@ function Home(){
         <>
       <Hero/>
       <NewAbout/>
-      {/* <About/> */}
       <WhyRecruit/>
       <PlacementStatics/>
-      {/* <Companies/> */}
       <CompaniesList/>
       <NewsMedia/>
       <OurTeam/>
