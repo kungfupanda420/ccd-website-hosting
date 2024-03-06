@@ -6,9 +6,8 @@ import Form from "./Form"
 import NewsMedia from "./NewsMedia"
 import ActivePrograms from "../components/ActivePrograms";
 // import WoFame from "./WoFame"
-// import Companies from "./Companies"
+import Companies from "./Companies"
 import NewAbout from "./NewAbout"
-import CompaniesList from "./CompanieList"
 
 
 function Home(){
@@ -16,9 +15,10 @@ function Home(){
         <>
       <Hero/>
       <NewAbout/>
+      {/* <About/> */}
       <WhyRecruit/>
       <PlacementStatics/>
-      <CompaniesList/>
+      <Companies/>
       <NewsMedia/>
       <OurTeam/>
       <ActivePrograms/>
