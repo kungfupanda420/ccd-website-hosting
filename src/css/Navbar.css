@@ -31,10 +31,7 @@
   backdrop-filter: blur(10px);
   mix-blend-mode: difference;
 }
-.navbarModified 
-{
-  mix-blend-mode: normal;
-}
+
 .navbarLogo {
   display: flex;
   align-items: center;
@@ -103,14 +100,6 @@
   font-size: 1rem;
   padding: 0 1rem;
   font-weight: 500;
-}
-.navLinks ul .navLinkModified
-{
-    color: black;
-      font-weight: 700;
-    font-size: 1rem;
-    padding: 0 1rem;
-    font-weight: 500;
 }
 
 .navbar .menuHamburger {

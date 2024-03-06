@@ -25,7 +25,6 @@ function OurTeam() {
   }, []);
   useEffect(() => {
     setWidth(studentContainer.current.scrollWidth - studentContainer.current.offsetWidth);
-
   })
 
   return (
