@@ -1,6 +1,7 @@
-.heroSection 
+/* .heroSection 
 {
-    background: url('/public/images/test.png');
+    background: url('/public/images/nitc2.webp');
+
     width: 100vw;
     height: 100vh;
     background-repeat: no-repeat;
@@ -9,11 +10,38 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+} */
+.heroSection {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: url('/public/images/nitc2.webp') no-repeat center center/cover;
 }
+
+.heroSection::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);     
+    z-index: 1;
+}
+
+.heroSection * {
+    position: relative;
+    z-index: 2;
+}
+
 .heroHeading 
 {
     font-size: 4rem;
-    color: var(--textColor);
+    color: white;
     font-family: 'Montserrat', sans-serif;
     width: 60%;
     text-align: center;
@@ -22,7 +50,7 @@
 .heroSubHeading {
     margin-top: 2rem;
     font-size: 2rem;
-    color: var(--textColor);
+    color: white;
     font-family: 'Montserrat', sans-serif;
     width: 50%;
     text-align: center;

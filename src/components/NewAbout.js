@@ -1,5 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import '../css/NewAbout.css'
+import AOS from "aos";
+import "aos/dist/aos.css";
 function NewAbout() {
 
     const [show, setShow] = useState(false)
@@ -10,11 +12,14 @@ function NewAbout() {
         setShowOne(!showOne)
         setShowTwo(!showTwo)
     }
-
+    useEffect(() => {
+        AOS.init({duration: 1600});
+      }, []);
   return (
-    <div className='aboutContainer'>
+    
+    <div className='aboutContainer' data-aos="zoom-in">
 
-        <div className="aboutSubContainers">
+        <div className="aboutSubContainers" >
             <div className="itemOnes">
                   <div className="imageContiners">
                         <img src="/images/aboutpage/aboutus.png" alt="" />

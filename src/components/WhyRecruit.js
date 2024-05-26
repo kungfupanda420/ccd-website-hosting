@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import '../css/WhyRecruit.css';
-
+import AOS from "aos";
+import "aos/dist/aos.css";
 const WhyRecruit = () => {
   const [reasonData, setReasonData] = useState([]);
 
@@ -31,9 +32,11 @@ const WhyRecruit = () => {
 
     fetchData();
   }, []);
-
+  useEffect(() => {
+    AOS.init({duration: 1000});
+  }, []);
   return (
-    <div className='whyRecruitContainer' ref={ref}>
+    <div className='whyRecruitContainer' ref={ref} data-aos="zoom-in">
       <div className='whyRecruitHolder'>
         {/* Title and button */}
         <div className='whyRecruitTitleContainer'>

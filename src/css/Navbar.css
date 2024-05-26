@@ -1,3 +1,9 @@
+:root{
+  --tc:white;
+}
+[data-theme="light"]{
+  --tc:black;
+}
 .navbar::before {
   content: '';
   position: absolute;
@@ -29,7 +35,7 @@
   background-color: rgba(255, 255, 255, 0.07);
     -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(10px);
-  mix-blend-mode: difference;
+  /* mix-blend-mode: difference; */
 }
 
 .navbarLogo {
@@ -95,7 +101,7 @@
 }
 
 .navLinks ul .navLink {
-  color: white;
+  color: var(--tc);
   font-weight: 700;
   font-size: 1rem;
   padding: 0 1rem;

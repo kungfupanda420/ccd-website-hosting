@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import '../css/PlacementStatics.css';
 import { useInView } from 'react-intersection-observer';
-
+import AOS from "aos";
+import "aos/dist/aos.css";
 const RunningNumbers = ({ endNumber }) => {
   const [count, setCount] = useState(0);
 
@@ -51,10 +52,12 @@ const PlacementStatics = () => {
       fetchData();
     }
   }, [inView]);
-
+  useEffect(() => {
+    AOS.init({duration: 1000});
+  }, []);
   return (
     <>
-      <div className='placementStaticContainer'>
+      <div className='placementStaticContainer' data-aos="zoom-in">
         <div className='placementStaticHolder' ref={ref}>
           {/* Title and button */}
           <div className='titleAndButtonContainer'>

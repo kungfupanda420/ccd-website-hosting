@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 import React, { useState } from 'react';
 import '../css/Navbar.css';
 import AuraEffect from './AuraEffect';
-
+import DarkMode from '../DarkMode/DarkMode';
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -41,6 +41,7 @@ const Navbar = () => {
                 For Students
               </NavLink>
             </ul>
+            <DarkMode />
             <ul className="rightList">
               {/*<NavLink to="/blogs" className="navLink">Blog</NavLink>*/}
               <NavLink to="https://nitc.ac.in/" className="navLink" onClick={closeMobileMenu}>

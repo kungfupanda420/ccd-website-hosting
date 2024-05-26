@@ -1,3 +1,11 @@
+:root{
+  --formBg:black;
+  --formTxt:white;
+}
+[data-theme="light"]{
+  --formBg:white;
+  --formTxt:black;
+}
 .formContainer {
     color: var(--textColor);
     display: flex;
@@ -46,6 +54,7 @@
     font-size: 1.25rem;
     width: fit-content;
     font-weight: 600;
+    
   }
   
 .form  input[type="text"] {
@@ -57,16 +66,17 @@
     font-family: 'Montserrat', sans-serif;
     font-size: 1rem;
     color: #fff;
+    
   }
   
   .inputContainer input[type="text"] {
     width: 100%;
     padding: 1.25rem 10rem 1.25rem 1.5rem;
-    background-color: black;
-    color: white;
+    background-color: var(--formBg);
+    color: var(--formTxt);
     border: 1px solid #4f4f4f;
     border-radius: 1.5rem;
- 
+    
   }
   
   .inputContainer input[type="text"]::placeholder {

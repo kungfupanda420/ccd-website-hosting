@@ -1,5 +1,12 @@
+:root{
+  --borderCol: black;
+}
+[data-theme="light"]{
+  --borderCol: rgba(1,89,170,255);
+}
 .aboutContainer {
-  color: var(--textColor);
+  /* color: var(--textColor); */
+  color: white;
   width: 100vw;
   display: flex;
   justify-content: center;
@@ -7,6 +14,7 @@
   padding: 10rem 9vw;
   min-height: 100vh;
   overflow-x: hidden;
+  
 }
 
 /* clubs aboutContainers */
@@ -27,6 +35,7 @@
   position: relative;
   grid-template-rows: repeat(2, 38vh);
   gap: 10px;
+  
    /* border: 1px solid white; */
 }
 
@@ -35,7 +44,7 @@
   overflow: hidden;
   border: 1px solid var(--grayBorderColor);
   padding: 1.5rem;
-
+  background-color: var(--borderCol);
 }
  .aboutSubContainers > div:first-child{
     border-radius: 0;

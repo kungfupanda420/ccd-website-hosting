@@ -5,7 +5,7 @@ import Navbar from './components/Navbar'
 import { Routes, Route, useLocation } from 'react-router-dom';
 import AnimatedCursor from "react-animated-cursor"
 import Loader from './pages/Loader';
-
+// import DarkMode from './DarkMode/DarkMode';
 const Home = lazy(() => import('./components/Home'));
 const AboutRoute = lazy(() => import('./components/AboutRoute'))
 const PlacementStatics = lazy(() => import('./components/PlacementStatics'));
@@ -42,6 +42,7 @@ function App() {
           mixBlendMode:"difference"
         }}
       />
+      {/* <DarkMode/> */}
       <Navbar/>
       
       <Suspense fallback={<Loader/>} >

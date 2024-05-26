@@ -1,6 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import "../pagesCss/placementPage.css";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 function PlacementPathCompo() {
+  useEffect(() => {
+    AOS.init({duration: 1000});
+  }, []);
   return (
         <div className="page">
          <div className="pageContent">
@@ -30,7 +36,7 @@ function PlacementPathCompo() {
         <div className="line"></div>
 
         {/* step 1 */}
-        <div className="step">
+        <div className="step" data-aos="fade-left">
           <div className="svgIcon">
             <svg
               width="24"
@@ -57,7 +63,7 @@ function PlacementPathCompo() {
 
         {/* step2 */}
 
-        <div className="step">
+        <div className="step" data-aos="fade-right">
           <div className="svgIcon">
             <svg
               width="24"
@@ -89,7 +95,7 @@ function PlacementPathCompo() {
         </div>
 
         {/* step 3 */}
-        <div className="step">
+        <div className="step" data-aos="fade-left">
           <div className="svgIcon">
             <svg
               width="24"
@@ -115,7 +121,7 @@ function PlacementPathCompo() {
         </div>
 
         {/* step 4 */}
-        <div className="step">
+        <div className="step" data-aos="fade-right">
           <div className="svgIcon">
             <svg
               width="24"
@@ -143,7 +149,7 @@ function PlacementPathCompo() {
 
         {/* step 5 */}
 
-        <div className="step">
+        <div className="step" data-aos="fade-left">
           <div className="svgIcon">
             <svg
               width="24"
@@ -176,7 +182,7 @@ function PlacementPathCompo() {
 
         {/* step 6 */}
 
-        <div className="step">
+        <div className="step" data-aos="fade-right">
           <div className="svgIcon">
             <svg
               width="24"
@@ -214,7 +220,7 @@ function PlacementPathCompo() {
 
         {/* step 7 */}
 
-        <div className="step">
+        <div className="step" data-aos="fade-left">
           <div className="svgIcon">
             <svg
               width="24"

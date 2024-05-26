@@ -8,20 +8,20 @@ function Footer(){
                 <div className="footerContent smallHeading">
                    <div className="footerSubContent">
                      <p className='footerTitle'>Resources</p>
-                    <ul className='footerLinks '>
+                        <ul className='footerLinks '>
                        <li><a href="https://nitc.ac.in/" rel="noreferrer" target='_blank'>NIT Calicut</a></li>
                        <li><a href="https://www.linkedin.com/company/ieee-sb-nitc/?originalSubdomain=in" rel="noreferrer" target='_blank'>IEEE NIT Calicut</a></li>
                        <li><a href="!#">Clubs NIT Calicut</a></li>
                     </ul>
                    </div>
 
-                    <div className="footerSubContent">
+                    {/* <div className="footerSubContent">
                      <p className='footerTitle'>Terms</p>
                     <ul className='footerLinks'>
                         <li><NavLink>Privacy Policy</NavLink></li>
                         <li><NavLink>Cookies</NavLink></li>
                     </ul>
-                   </div>
+                   </div> */}
 
                     <div className="footerSubContent">
                      <p className='footerTitle'>Contact</p>
@@ -37,7 +37,7 @@ function Footer(){
                     <ul className='footerLinks '>
                        <li><a href="https://www.linkedin.com/company/training-placement-cell-nit-calicut/?originalSubdomain=in" rel="noreferrer" target='_blank'>LinkedIn</a></li>
                        <li><a href="https://instagram.com/ccd.nitc?igshid=NTc4MTIwNjQ2YQ==" rel="noreferrer" target='_blank'>Instagram</a></li>
-                       <li><a href="!#">Facebook</a></li>
+                       {/* <li><a href="!#">Facebook</a></li> */}
                     </ul>
                    </div>
 

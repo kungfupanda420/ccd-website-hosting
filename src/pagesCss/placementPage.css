@@ -1,6 +1,11 @@
 
 /* default texts */
-
+:root{
+    --lineCol:white;
+}
+[data-theme="light"]{
+    --lineCol:black;
+}
 .page 
 {
     color: var(--textColor);
@@ -55,7 +60,7 @@
     position: absolute;
     width: 2px;
     height: 82%;
-    background-color: white;
+    background-color: var(--lineCol);
     top: 0;
     left: 50%;
     z-index: -5;
@@ -276,4 +281,3 @@
     height: 100%;
 }
 }
-

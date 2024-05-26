@@ -1,3 +1,9 @@
+:root{
+    --bkgCol:#151515;
+}
+[data-theme="light"]{
+    --bkgCol:rgba(1,89,170,255);
+}
 .placementStaticContainer {
     color: var(--textColor);
     display: flex;
@@ -8,7 +14,9 @@
     margin-bottom: 3rem;
     width: 100vw;
 }
-
+.runningStatContainer{
+    color:white;
+}
 .titleAndButtonContainer {
     align-self: flex-start;
     margin-bottom: 2rem;
@@ -31,6 +39,12 @@
     border-radius: 2rem;
     width: fit-content;
     cursor: pointer;
+    transition: background-color 0.3s ease,border 0.3s ease;; 
+}
+
+.whiteButton:hover {
+    background-color: black;
+    border: 2px solid white;
 }
 
 .buttonText {
@@ -39,16 +53,27 @@
     font-size: 1rem;
     font-weight: 560;
     padding: 0rem 0.6rem;
+    transition: color 0.3s ease; 
 }
+
+.whiteButton:hover .buttonText {
+    color: white;
+}
+
 
 .arrow {
     width: 1rem;
+    transition: stroke 0.3s ease; 
+}
+
+.whiteButton:hover .arrow path {
+    stroke: white;
 }
 
 /* Running Stats */
 
 .runningStatContainer {
-    background-color: #151515;
+    background-color: var(--bkgCol);
     position: relative;
     display: flex;
     flex-direction: row;
