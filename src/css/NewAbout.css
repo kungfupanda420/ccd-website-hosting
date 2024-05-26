@@ -2,7 +2,7 @@
   --borderCol: black;
 }
 [data-theme="light"]{
-  --borderCol: rgba(1,89,170,255);
+  --borderCol: rgb(194,204,219);
 }
 .aboutContainer {
   /* color: var(--textColor); */

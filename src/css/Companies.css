@@ -10,7 +10,8 @@
 .headingCompany
 {
     position: absolute;
-    background:radial-gradient(rgb(0, 0, 0),rgb(0, 0, 0), rgba(0, 0, 0, 0.206));
+    /* rgb(194,204,219) */
+    background:radial-gradient(rgb(194,204,219),rgb(194,204,219), rgb(194,204,219,0.206));
     padding: 5vh 10vw;
     color: var(--textColor);
     top: 45%;
