@@ -1,3 +1,4 @@
+:roo
 .companiesContainer
 {
     width: 100vw;
@@ -75,7 +76,7 @@
 {
     filter: opacity(0.4);
     transition: all 0.25s linear;
-    color: white;
+    color: rgba(1,89,170,255);
     width: 50px;
     height: 40px;
     /* size: 100px; */
@@ -85,7 +86,7 @@
 {
     opacity: 0.5;
     transition: all 0.25s linear;
-    color: white;
+    color: rgba(1,89,170,255);
     width: 40px;
     filter: saturate(0);
     mix-blend-mode: screen;
