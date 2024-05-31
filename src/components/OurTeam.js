@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import "../css/OurTeam.css";
-
+import AOS from "aos";
+import "aos/dist/aos.css";
 function OurTeam() {
   const [teacherData, setTeacherData] = useState([]);
   const [studentData, setStudentData] = useState([]);
@@ -26,10 +27,12 @@ function OurTeam() {
   useEffect(() => {
     setWidth(studentContainer.current.scrollWidth - studentContainer.current.offsetWidth);
   })
-
+  useEffect(() => {
+    AOS.init({duration: 1600});
+  }, []);
   return (
     <>
-    <div className="ourTeamContainer">
+    <div className="ourTeamContainer" data-aos="zoom-in">
       <div className="ourTeamSubDiv">
         <div className="topHeading">
           <h1 className="mainHeading">Our Team </h1>

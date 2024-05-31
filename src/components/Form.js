@@ -1,6 +1,7 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef,useEffect } from "react";
 import "../css/Form.css";
-
+import AOS from "aos";
+import "aos/dist/aos.css";
 const Form = () => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -97,9 +98,11 @@ const Form = () => {
     setQueriesCommentsError(!isValid);
     return isValid;
   };
-
+  useEffect(() => {
+    AOS.init({duration: 1600});
+  }, []);
   return (
-    <div className="formContainer">
+    <div className="formContainer" data-aos="zoom-in">
       <div className="formHolder">
         {/* Title */}
         <div className="whyRecruitTitleContainer">

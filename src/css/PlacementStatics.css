@@ -34,7 +34,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    background-color: white;
+    background-color: var(--textColor);
     padding: 1rem;
     border-radius: 2rem;
     width: fit-content;
@@ -43,12 +43,12 @@
 }
 
 .whiteButton:hover {
-    background-color: black;
-    border: 2px solid white;
+    background-color: var(--backgrounColor);
+    box-shadow:var(--btnShadow);
 }
 
 .buttonText {
-    color: black;
+    color: var(--blackTextColor);
     font-family: 'Montserrat', sans-serif;
     font-size: 1rem;
     font-weight: 560;
@@ -57,17 +57,18 @@
 }
 
 .whiteButton:hover .buttonText {
-    color: white;
+    color: var(--textColor);
 }
 
 
 .arrow {
     width: 1rem;
     transition: stroke 0.3s ease; 
+    stroke: var(--blackTextColor);
 }
 
 .whiteButton:hover .arrow path {
-    stroke: white;
+    stroke: var(--textColor);
 }
 
 /* Running Stats */
@@ -137,7 +138,7 @@
     font-weight: 400;
     white-space: nowrap;
     padding: 0.75rem;
-    color: rgb(129, 129, 129);
+    color: var(--statTextColor);
 }
 
 

@@ -11,6 +11,9 @@
 .ourTeamSubDiv {
   width: 92%;
 }
+.ourTeamContainer .mainHeading {
+  color: var(--blackTextColor);
+}
 .ourTeamSubDiv .topHeading {
   display: flex;
   justify-content: center;

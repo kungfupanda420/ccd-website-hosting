@@ -18,7 +18,7 @@
     font-size: 3rem;
     font-family: 'Montserrat', sans-serif;
     font-weight: 500;
-    color: white;
+    color: var(--textColor);
     align-self: flex-start;
     margin-bottom: 2.5rem;
   }
@@ -34,7 +34,7 @@
   
   .programsContainer::-webkit-scrollbar {
     width: 8px; /* adjust as needed */
-    background-color: black;
+    background-color: var(--textColor);
     
   }
   

@@ -53,7 +53,7 @@ const WhyRecruit = () => {
             >
               <path
                 d='M0.272008 0.75735L8.75729 9.24263M8.75729 9.24263V0.75735M8.75729 9.24263H0.272008'
-                stroke='black'
+                // stroke='black'
                 strokeOpacity='1'
                 strokeWidth='1'
               />

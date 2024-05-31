@@ -1,4 +1,10 @@
-:roo
+:root {
+    --backgroundGradient: radial-gradient(rgb(0, 0, 0), rgb(0, 0, 0), rgba(0, 0, 0, 0.206));
+}
+
+[data-theme="light"] {
+    --backgroundGradient: radial-gradient(rgb(224, 236, 255), rgb(224, 236, 255), rgb(224, 236, 255,0.206));
+}
 .companiesContainer
 {
     width: 100vw;
@@ -11,8 +17,7 @@
 .headingCompany
 {
     position: absolute;
-    /* rgb(194,204,219) */
-    background:radial-gradient(rgb(194,204,219),rgb(194,204,219), rgb(194,204,219,0.206));
+    background:var(--backgroundGradient);
     padding: 5vh 10vw;
     color: var(--textColor);
     top: 45%;
@@ -76,7 +81,7 @@
 {
     filter: opacity(0.4);
     transition: all 0.25s linear;
-    color: rgba(1,89,170,255);
+    color: white;
     width: 50px;
     height: 40px;
     /* size: 100px; */
@@ -86,7 +91,7 @@
 {
     opacity: 0.5;
     transition: all 0.25s linear;
-    color: rgba(1,89,170,255);
+    color: white;
     width: 40px;
     filter: saturate(0);
     mix-blend-mode: screen;
