@@ -4,11 +4,14 @@
   "private": true,
   "proxy": "http://localhost:5000",
   "dependencies": {
+    "@coreui/coreui": "^5.0.2",
+    "@coreui/react": "^5.1.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "aos": "^2.3.4",
     "framer-motion": "^10.12.16",
+    "mdb-react-ui-kit": "^8.0.0",
     "react": "^18.2.0",
     "react-animated-cursor": "^2.7.0",
     "react-dom": "^18.2.0",
@@ -17,14 +20,21 @@
     "react-intersection-observer-hook": "^2.1.1",
     "react-router-dom": "^6.12.0",
     "react-scripts": "5.0.1",
+<<<<<<< HEAD
     "styled-components": "^6.1.11",
+=======
+    "react-slick": "^0.30.2",
+>>>>>>> 124f80efa8be09d6b83141587f72f0c1e2d3381f
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start:frontend": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "start:backend" :"node ./server/bin/www",
+    "start": "concurrently \"npm run start:frontend\" \"npm run start:backend\""
+
   },
   "eslintConfig": {
     "extends": [
@@ -43,5 +53,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   }
 }

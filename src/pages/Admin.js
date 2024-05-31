@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import '../pagesCss/Admin.css';
 import NewsMedia from "../components/NewsMedia";
 import ActivePrograms from "../components/ActivePrograms";
+import Queries from '../components/Queries';
 
 function Admin() {
   const [news_img, setNewsImg] = useState('');
@@ -109,6 +110,7 @@ function Admin() {
           </div>
           {/* News Media */}
           <div className='newsMediaForm'>
+            <Queries/>
             <NewsMedia />
             <div className='newsMediaInputContainer'>
               <h1>POST NEWS MEDIA</h1>

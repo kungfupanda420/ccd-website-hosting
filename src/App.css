@@ -81,6 +81,8 @@ body::-webkit-scrollbar-thumb{
   font-weight: 700;
   font-size: 3rem;
   line-height: 4.5rem;
+  padding-bottom: 2rem;
+  padding-left: 1rem;
 }
 
 .mediumHeading

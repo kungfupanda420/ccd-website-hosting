@@ -12,38 +12,50 @@
     align-items: center;
 } */
 .heroSection {
-    position: relative;
+    position: absolute;
+    top: 0;
     width: 100vw;
     height: 100vh;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: url('/public/images/nitc2.webp') no-repeat center center/cover;
+    /* background: url('/public/images/nitc2.webp') no-repeat center center/cover; */
+}
+.heroFull{
+    height: 100vh;
+    width: 100vw;
+    position: relative;
 }
 
-.heroSection::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);     
-    z-index: 1;
-}
+
 
 .heroSection * {
     position: relative;
     z-index: 2;
 }
+.heroText{
+    padding: 1rem;
+    display: inline-block;
+    width: auto;
+    background-image: linear-gradient(rgb(36, 33, 236), rgb(0, 81, 255));
+  background-size: 100% 10px;
+  background-repeat: no-repeat;
+  background-position: 0% 100%;
+   transition: background-size .7s, background-position .5s ease-in-out;
+
+}
+.heroText:hover {
+    background-size: 100% 100%;
+    background-position: 100% 0%;
+    transition: background-position .7s, background-size .5s ease-in-out;
+  }
 
 .heroHeading 
-{
+{   
     font-size: 4rem;
     color: white;
     font-family: 'Montserrat', sans-serif;
-    width: 60%;
+
     text-align: center;
     font-weight: 600;
 }
@@ -52,10 +64,44 @@
     font-size: 2rem;
     color: white;
     font-family: 'Montserrat', sans-serif;
-    width: 50%;
     text-align: center;
     font-weight: 500;
 }
+
+.head1{
+    animation: showup 5s;
+}
+.rest1{
+    width:0px;
+  animation: reveal 5s;
+  /* margin-left:-200vw; */
+  animation: slidein 9s ;
+}
+
+
+@keyframes showup {
+    0% {opacity:0;}
+    20% {opacity:0.5;}
+    50% {opacity:1;}
+    80% {opacity:0.5;}
+    100% {opacity:1;}
+}
+
+@keyframes slidein {
+    0% { margin-left:-300vw; }
+    20% { margin-left:-300vw; }
+    35% { margin-left:0vw; }
+    100% { margin-left:0vw; }
+}
+
+@keyframes reveal {
+    0% {opacity:0;width:0px;}
+    20% {opacity:1;width:0px;}
+    30% {width:200vw;}
+    80% {opacity:1;}
+    100% {opacity:0;width:200vw;}
+}
+
 
 /* media queries medium laptop */
 
