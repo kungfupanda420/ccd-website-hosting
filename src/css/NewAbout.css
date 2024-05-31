@@ -104,13 +104,17 @@
   padding: 1.25rem;
   transform: translateY(calc(-30% - 1rem));
   transition: all 0.65s ease;
-  background: linear-gradient(rgba(64, 64, 64, 0), black, black);
+  
 }
 
 .aboutSubContainers > div .contentDivs .mainHeading {
-  margin: 0 0 1rem;
+  margin: -0.5rem 0 1rem;
 }
+
+
 .aboutSubContainers > div:hover .contentDivs {
+  background: linear-gradient(rgba(64, 64, 64, 0), black, black);
+  transition: transform 0.8s ease-in-out;
   transform: translateY(-100%);
 }
 .aboutSubContainers > div .contentDivs .hide {

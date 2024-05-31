@@ -17,6 +17,7 @@ const Admin = lazy(() => import('./pages/Admin') )
 const ForRecruiter = lazy( ()=> import('./components/ForRecruiter'))
 const NotFound = lazy (() => import('./pages/NotFound'))
 
+
 function App() {
   const {pathname} = useLocation();
   useEffect(() => {
