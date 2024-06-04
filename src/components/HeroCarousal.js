@@ -11,12 +11,12 @@ export default function HeroCarousal() {
   }, [slideIndex]);
 
   const plusSlides = (n) => {
-    setSlideIndex((prevIndex) => prevIndex + n);
+    setSlideIndex(slideIndex+ n);
   };
 
-  const currentSlide = (n) => {
-    setSlideIndex(n);
-  };
+  // const currentSlide = (n) => {
+  //   setSlideIndex(n);
+  // };
 
   const showSlides = (n) => {
     let i;
@@ -35,9 +35,15 @@ export default function HeroCarousal() {
       // dotsRef.current[slideIndex - 1].className += ' active';
     }
   };
-
-  setInterval(() => {
+  let i = 1;
+  const intervalId = setInterval(() => {
+  if (i < 2) {
+    i++;
+    console.log(i);
     plusSlides(1);
+  } else {
+    clearInterval(intervalId);
+  }
   }, 8000);
 
   return (
@@ -45,35 +51,35 @@ export default function HeroCarousal() {
       <div className="slideshow-container">
         <div className="mySlides" ref={(el) => (slidesRef.current[0] = el)}>
           <img src="images/aboutpage/about.png" className='fade' style={{ 
-  position: 'absolute', 
-  top: 0, 
-  left: 0, 
-  width: '100%', 
-  height: '100%', 
-  objectFit: 'cover' 
-}} alt="Slide 1" />
+            position: 'absolute', 
+            top: 0, 
+            left: 0, 
+            width: '100%', 
+            height: '100%', 
+            objectFit: 'cover' 
+          }} alt="Slide 1" />
         </div>
 
         <div className="mySlides" ref={(el) => (slidesRef.current[1] = el)}>
           <img src="images/aboutpage/aerounwiredOne.png" className='fade' style={{ 
-  position: 'absolute', 
-  top: 0, 
-  left: 0, 
-  width: '100%', 
-  height: '100%', 
-  objectFit: 'cover' 
-}} alt="Slide 2" />
+            position: 'absolute', 
+            top: 0, 
+            left: 0, 
+            width: '100%', 
+            height: '100%', 
+            objectFit: 'cover' 
+          }} alt="Slide 2" />
         </div>
 
         <div className="mySlides" ref={(el) => (slidesRef.current[2] = el)}>
           <img src="images/aboutpage/aerounwiredTwo.png" className='fade' style={{ 
-  position: 'absolute', 
-  top: 0, 
-  left: 0, 
-  width: '100%', 
-  height: '100%', 
-  objectFit: 'cover' 
-}} alt="Slide 3" />
+            position: 'absolute', 
+            top: 0, 
+            left: 0, 
+            width: '100%', 
+            height: '100%', 
+            objectFit: 'cover' 
+          }} alt="Slide 3" />
         </div>
 
         <a className="prev" onClick={() => plusSlides(-1)}>❮</a>
