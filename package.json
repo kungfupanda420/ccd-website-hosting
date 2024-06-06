@@ -10,10 +10,12 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "aos": "^2.3.4",
+    "bootstrap": "^5.3.3",
     "framer-motion": "^10.12.16",
     "mdb-react-ui-kit": "^8.0.0",
     "react": "^18.2.0",
     "react-animated-cursor": "^2.7.0",
+    "react-bootstrap": "^2.10.2",
     "react-dom": "^18.2.0",
     "react-icons": "^4.9.0",
     "react-intersection-observer": "^9.4.4",
@@ -28,9 +30,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start:backend" :"node ./server/bin/www",
+    "start:backend": "node ./server/bin/www",
     "start": "concurrently \"npm run start:frontend\" \"npm run start:backend\""
-
   },
   "eslintConfig": {
     "extends": [
