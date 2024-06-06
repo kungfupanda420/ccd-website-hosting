@@ -3,7 +3,8 @@ import { motion } from 'framer-motion';
 import { useRef } from 'react';
 
 import '../css/NewsMedia.css';
-
+import AOS from "aos";
+import "aos/dist/aos.css";
 export const NewsMedia = () => {
   const [width, setWidth] = useState();
   const newMediaContainer = React.useRef();
@@ -28,6 +29,12 @@ export const NewsMedia = () => {
 
   useEffect(() => {
     setWidth(newMediaContainer.current.scrollWidth - newMediaContainer.current.offsetWidth);
+<<<<<<< HEAD
+  });
+  useEffect(() => {
+    AOS.init({duration: 1600});
+  }, []);
+=======
   },[]);
 
   const handleCarouselMove = (direction) => {
@@ -49,9 +56,10 @@ export const NewsMedia = () => {
     };
   };
 
+>>>>>>> 124f80efa8be09d6b83141587f72f0c1e2d3381f
   return (
     <>
-      <div className="newsMediaHeading" id="newMeadiMobileView">
+      <div className="newsMediaHeading" id="newMeadiMobileView" data-aos="zoom-in">
         News/Media
       </div>
       <div ref={newMediaContainer} className="newsMediaContainer" whileTap={{ cursor: 'pointer' }}>

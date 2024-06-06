@@ -1,10 +1,15 @@
 import '../css/Footer.css'
 import { NavLink } from 'react-router-dom'
-
+import  { useEffect } from 'react';
+import AOS from "aos";
+import "aos/dist/aos.css";
 function Footer(){
+    useEffect(() => {
+        AOS.init({duration: 1600});
+      }, []);
     return(
         <>
-            <div className="footer">
+            <div className="footer" data-aos="zoom-in">
                 <div className="footerContent smallHeading">
                    <div className="footerSubContent">
                      <p className='footerTitle'>Resources</p>

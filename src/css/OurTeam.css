@@ -26,6 +26,9 @@ body {
 .ourTeamSubDiv {
   width: 92%;
 }
+.ourTeamContainer .mainHeading {
+  color: var(--blackTextColor);
+}
 
 .nft{
   max-width: 300px;

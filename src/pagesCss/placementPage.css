@@ -2,9 +2,11 @@
 /* default texts */
 :root{
     --lineCol:white;
+    --iconBg: black;
 }
 [data-theme="light"]{
-    --lineCol:black;
+    --lineCol:rgba(1,89,170,255);
+    --iconBg: rgba(1,89,170,255);
 }
 .page 
 {
@@ -95,7 +97,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--backgrounColor);
+    background-color: var(--iconBg);
 }
 
 .step:nth-of-type(even) .svgIcon{

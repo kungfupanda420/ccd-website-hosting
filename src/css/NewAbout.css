@@ -1,8 +1,10 @@
 :root{
   --borderCol: black;
+  --graySc:grayscale(1);
 }
 [data-theme="light"]{
-  --borderCol: rgb(194,204,219);
+  --borderCol: rgb(224, 236, 255);
+  --graySc:grayscale(0);
 }
 .aboutContainer {
   /* color: var(--textColor); */
@@ -69,7 +71,7 @@
   object-fit: cover;
   border-radius: 0.5rem;
   transition: all 0.5s ease;
-    filter: grayscale(1);
+  filter: var(--graySc);
 }
 .imageContiners img:hover 
 {

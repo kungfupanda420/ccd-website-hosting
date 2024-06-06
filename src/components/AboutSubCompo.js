@@ -1,5 +1,7 @@
-import React, {useState} from 'react'
+import React, {useState,useEffect} from 'react'
 import '../css/NewAbout.css'
+import AOS from "aos";
+import "aos/dist/aos.css";
 function AboutSubCompo(props) {
     const [show, setShow] = useState(false)
     const [showOne, setShowOne] = useState(false)
@@ -12,9 +14,11 @@ function AboutSubCompo(props) {
 
     const {clubName, clubInfoTwoLines, clubInfoMore, clubImageOne,clubImageTwo,clubImageThree} = props.clubContent
 
-    
+    useEffect(() => {
+        AOS.init({duration: 1600});
+      }, []);
   return (
-    <div className='clubsDivContainers'>
+    <div className='clubsDivContainers' data-aos="zoom-in">
          <div className='aboutContainer'  >
         <div className="aboutSubContainers">
             <div className="itemOnes">
