@@ -22,7 +22,7 @@ function OurTeam() {
       });
 
     // Calculate width
-    
+
   }, []);
   useEffect(() => {
     setWidth(studentContainer.current.scrollWidth - studentContainer.current.offsetWidth);
@@ -32,9 +32,9 @@ function OurTeam() {
   }, []);
   return (
     <>
-    <div className="ourTeamContainer" data-aos="zoom-in">
-      <div className="ourTeamSubDiv">
-        <div className="topHeading">
+      <div className="ourTeamContainer">
+        <div className="ourTeamSubDiv">
+          {/* <div className="topHeading">
           <h1 className="mainHeading">Our Team </h1>
        
         </div>
@@ -43,7 +43,7 @@ function OurTeam() {
               teacherData.map((person, index) => (
                   
               <div className="teacherCard">
-              <img src={person.image} alt="" />
+              <img src={person.image} alt="" //>
               <div className="teacherDetail">
                   <p className="smallHeading">{person.name}</p>
                   <p className="tinyTexts">{person.position}</p>
@@ -52,28 +52,60 @@ function OurTeam() {
               ))
           } 
           
-        </div>
-        {/* student div */}
-        <motion.div ref={studentContainer} whileTap={{cursor:"grabbing"}} className="studentsDiv" >
-          <motion.div
-           drag = 'x' 
-           dragMomentum={true} 
-           dragConstraints={{right:0, left:-width }}
-           className="innerStudentsDiv">
-              {studentData.map((student, index) => (
-                <div  className="studentCard active" >
-                  <img src={student.image} alt="" />
-                  <div className="studentDetail">
-                    <p className="smallHeading">{student.name}</p>
-                    <p className="tinyTexts">{student.position}</p>
+        </div> */}
+          <h3 class="section-head-text">
+            Meet Our Team
+          </h3>
+          <div class="responsive-container-block outer-container">
+
+            <div class="responsive-container-block">
+              {
+                teacherData.map((person, index) => (
+                  <div class="nft">
+                    <div class='main'>
+                      <img class='tokenImage' src={person.image} alt="image" />
+                      <h2>{person.name}</h2>
+                      <p class='description'>{person.position}</p>
+                      <hr />
+                    </div>
                   </div>
-                </div>
-              ))}
-          </motion.div>
-        </motion.div>
+                ))
+              }
+
+           </div>
+              <h4 className="spochead">SPOCs</h4>
+            {/* student div */}
+            <div ref={studentContainer} className="studentsDiv" >
+              <div
+                className="innerStudentsDiv">
+                {studentData.map((student, index) => (
+                  <div className="studentCard active" >
+                    <img src={student.image} alt="" />
+                    <div className="studentDetail">
+                      <p className="smallHeading">{student.name}</p>
+                      <p className="tinyTexts">{student.position}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* <Card className="eachstudent" style={{ width: '18rem',padding:'1rem' }}>
+              <Card.Img variant="top" src="images/our_team/students/ayush.png" />
+              <Card.Body>
+                <Card.Title>Ayush Gupta</Card.Title>
+                <Card.Text>
+                  Chemical Engineering
+                </Card.Text>
+              </Card.Body>
+            </Card> */}
+
+
+
+        </div>
       </div>
-    </div>
-  </>
+    </>
   );
 }
 

@@ -1,3 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700;800&amp;display=swap');
+
+*,
+*:before,
+*:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
 .ourTeamContainer {
   width: 100vw;
   padding: 6rem 6rem;
@@ -8,12 +22,90 @@
   border-radius: 0 0 3rem 3rem;
   margin: 3rem 0;
 }
+
 .ourTeamSubDiv {
   width: 92%;
 }
-.ourTeamContainer .mainHeading {
-  color: var(--blackTextColor);
+
+.nft{
+  max-width: 300px;
+  margin: 5rem auto;
+  border: 1px solid #ffffff22;
+  background-color: #e7e8e9;
+  background: linear-gradient(112deg, rgb(238, 238, 238) 0%, rgba(117, 117, 117, 0.5) 100%);
+   box-shadow: 2px 2px 15px 3px #00000088;
+  border-radius: .7rem;
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  overflow: hidden;
+  transition: .5s all;
+
+  hr{
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #88888855;
+    margin-top: 0;
+  }
+
+
+
+  .main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 2rem;
+    gap: 0.5rem;
+  }  
+
+    .tokenImage{
+      border-radius: 4rem;
+      max-width: 100%;
+      height: 250px;
+      object-fit: cover;
+      
+    }
+    .description{
+      margin: .5rem ;
+      color: #2a292b;
+    }
+
+  
+  ::before{
+    position: fixed;
+    content: "";
+    box-shadow: 0 0 100px 40px #ffffff08;
+    top: -10%;
+    left: -100%;
+    transform: rotate(-45deg);
+    height: 60rem;
+    transition: .7s all;
+  }
+  &:hover{
+    border: 1px solid #ffffff44;
+    box-shadow: 0 7px 30px 10px #000000aa;
+    transform: scale(1.015);
+    filter: brightness(1.1);
+    ::before{
+      filter: brightness(.5);
+      top: -100%;
+      left: 200%;
+    }
+  }
 }
+
+.bg{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  h1{
+    font-size: 20rem;
+    filter: opacity(0.5);
+  }
+}
+
+/*
 .ourTeamSubDiv .topHeading {
   display: flex;
   justify-content: center;
@@ -29,14 +121,15 @@
 
 .teachersDiv {
   padding: 3rem 1.5rem;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-/* border: 1px solid black; */
+   
 }
 
-/* individual teacher card */
+TEACHERS CARD 
 .teacherCard {
   padding: 0rem 1rem;
   border-radius: 0.5rem;
@@ -51,7 +144,7 @@
   border-radius: 1.75rem;
 }
 .teacherCard img:hover  {
-  filter: none; /* Remove grayscale filter on hover */
+  filter: none; 
 }
 .teacherDetail {
   text-align: center;
@@ -68,6 +161,7 @@
   font-size: 1rem;
   color: var(--blackTextColor);
 }
+*/
 
 /* student card */
 .studentsDiv {
@@ -83,24 +177,28 @@
 
 .innerStudentsDiv {
   display: flex;
+    flex-wrap: wrap;
+    /* align-items: center; */
+    justify-content: center;
 }
-/* .studentsDiv::before
-{
-    content: '';
-    position: absolute;
-    background-color: rgb(255, 255, 255);
-    width: 10%;
-    height: 100%;
-    filter: blur(30px);
-    left: -40px;
-    z-index: 10;
-    top: 0;
-} */
-.studentCard {
 
-  border-radius: 0.5rem;
+
+.studentCard {
+  /* border-radius: 0.5rem;
   margin-right: 2.15rem;
   padding: 1.5rem 2rem;
+  width: 24vw;
+  height: 35vh;
+  display: ruby; */
+  border-radius: 0.5rem; 
+  margin-right: 2.15rem; 
+  /* padding: 1.5rem 2rem; */ 
+  width: 20vw; 
+  height: 15rem; 
+  display: flex; 
+  flex-direction: row; 
+  justify-content: flex-start; 
+  align-items: stretch;
 }
 
 .studentCard img {
@@ -116,7 +214,7 @@
   filter: none; /* Remove grayscale filter on hover */
 }
 .studentDetail {
-  text-align: center;
+  /* text-align: center; */
   padding: 1rem;
 }
 /* 
@@ -136,13 +234,92 @@
 } */
 
 /* <div className="studentCard"><img src='/images/teachers/praveen.png' alt="" /><div className="studentDetail"><p className="smallHeading">Dr. Praveen S</p><p className="tinyTexts">Chairperson</p></div></div> */
+.spochead{
+  margin: 2rem;
+  line-height: 2rem;
+  font-size: larger;
+}
+
+.responsive-cell-block {
+  min-height: 75px;
+}
+
+.responsive-container-block {
+  min-height: 75px;
+  height: fit-content;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 0px;
+  margin-right: auto;
+  margin-bottom: 0px;
+  margin-left: auto;
+  justify-content: space-evenly;
+  font-family: system-ui;
+}
+
+.outer-container {
+  padding-top: 10px;
+  padding-right: 30px;
+  padding-bottom: 10px;
+  padding-left: 30px;
+  background-color: rgb(244, 252, 255);
+  border-radius: 2rem;
+}
+
+.inner-container {
+  max-width: 1320px;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+  margin-right: auto;
+  margin-bottom: 50px;
+  margin-left: auto;
+}
+
+.section-head-text {
+  margin-top: 0px;
+  margin-right: 0px;
+  margin-bottom: 1rem;
+  margin-left: 0px;
+  text-align: center;
+  font-size: 35px;
+  font-weight: 700;
+  line-height: 48px;
+  color: rgb(223, 226, 226);
+  margin: 0 0 20px 0;
+  text-transform: uppercase;
+}
+
+.section-subhead-text {
+  font-size: 25px;
+  color: rgb(153, 153, 153);
+  line-height: 35px;
+  max-width: 470px;
+  text-align: center;
+  margin-top: 0px;
+  margin-right: 0px;
+  margin-bottom: 60px;
+  margin-left: 0px;
+}
+
+
 
 /* responsive */
 
 
 /* media queries */
+@media (max-width: 500px) {
+  .outer-container {
+    padding: 10px 20px 10px 20px;
+  }
 
-@media screen and (min-width: 769px) and (max-width: 1025px) {
+  .section-head-text {
+    text-align: center;
+  }
+}
+
+@media screen and (min-width: 769px) and (max-width: 1180px) {
   .ourTeamContainer {
     padding: 4rem 3rem;
   }
@@ -153,7 +330,7 @@
   .teachersDiv {
     padding: 3rem 1rem;
     display: flex;
-
+    
     
   }
 
@@ -212,3 +389,172 @@
             }
                  
 }
+
+@media (max-width:1400px) {
+  .studentCard{
+    border-radius: 0.5rem;
+margin-left: 1rem;
+margin-right: 1rem;
+width: 20vw;
+height: 15rem;
+display: flex;
+flex-direction: column;
+justify-content: flex-start;
+align-items: center;
+  }
+}
+
+@media (max-width: 1024px) {
+  .wk-ipadp-1 {
+    width: 8.333333%;
+  }
+
+  .wk-ipadp-2 {
+    width: 16.666667%;
+  }
+
+  .wk-ipadp-3 {
+    width: 35%;
+  }
+
+  .wk-ipadp-4 {
+    width: 33.333333%;
+  }
+
+  .wk-ipadp-5 {
+    width: 41.666667%;
+  }
+
+  .wk-ipadp-6 {
+    width: 50%;
+  }
+
+  .wk-ipadp-7 {
+    width: 58.333333%;
+  }
+
+  .wk-ipadp-8 {
+    width: 66.666667%;
+  }
+
+  .wk-ipadp-9 {
+    width: 75%;
+  }
+
+  .wk-ipadp-10 {
+    width: 83.333333%;
+  }
+
+  .wk-ipadp-11 {
+    width: 91.666667%;
+  }
+
+  .wk-ipadp-12 {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .wk-tab-1 {
+    width: 8.333333%;
+  }
+
+  .wk-tab-2 {
+    width: 16.666667%;
+  }
+
+  .wk-tab-3 {
+    width: 25%;
+  }
+
+  .wk-tab-4 {
+    width: 33.333333%;
+  }
+
+  .wk-tab-5 {
+    width: 41.666667%;
+  }
+
+  .wk-tab-6 {
+    width: 50%;
+  }
+
+  .wk-tab-7 {
+    width: 58.333333%;
+  }
+
+  .wk-tab-8 {
+    width: 66.666667%;
+  }
+
+  .wk-tab-9 {
+    width: 75%;
+  }
+
+  .wk-tab-10 {
+    width: 83.333333%;
+  }
+
+  .wk-tab-11 {
+    width: 91.666667%;
+  }
+
+  .wk-tab-12 {
+    width: 100%;
+  }
+}
+
+@media (max-width: 500px) {
+  .wk-mobile-1 {
+    width: 8.333333%;
+  }
+
+  .wk-mobile-2 {
+    width: 16.666667%;
+  }
+
+  .wk-mobile-3 {
+    width: 25%;
+  }
+
+  .wk-mobile-4 {
+    width: 33.333333%;
+  }
+
+  .wk-mobile-5 {
+    width: 41.666667%;
+  }
+
+  .wk-mobile-6 {
+    width: 50%;
+  }
+
+  .wk-mobile-7 {
+    width: 58.333333%;
+  }
+
+  .wk-mobile-8 {
+    width: 66.666667%;
+  }
+
+  .wk-mobile-9 {
+    width: 75%;
+  }
+
+  .wk-mobile-10 {
+    width: 83.333333%;
+  }
+
+  .wk-mobile-11 {
+    width: 91.666667%;
+  }
+
+  .wk-mobile-12 {
+    width: 100%;
+  }
+}
+
+
+
+
+

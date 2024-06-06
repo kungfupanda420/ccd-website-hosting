@@ -5,6 +5,7 @@ import Navbar from './components/Navbar'
 import { Routes, Route, useLocation } from 'react-router-dom';
 import AnimatedCursor from "react-animated-cursor"
 import Loader from './pages/Loader';
+import FaqStudents from './pages/FaqStudents';
 // import DarkMode from './DarkMode/DarkMode';
 const Home = lazy(() => import('./components/Home'));
 const AboutRoute = lazy(() => import('./components/AboutRoute'))
@@ -55,8 +56,9 @@ function App() {
           <Route path='/recruiter' element={<ForRecruiter/>} />
           <Route path='/forstudents' element={<ForStudent/>} >
             <Route index element={<Intern/>} />
-            <Route  path='internships' element={<Intern/>} />
+            <Route path='internships' element={<Intern/>} />
             <Route path='placements' element={<Placement/>} />
+            <Route path='faqdata' element={<FaqStudents/>} />
           </Route>
           <Route path='/login' element={<Login/>} />
           <Route path='/admin@CCD_nitc123' element={<Admin/>} />

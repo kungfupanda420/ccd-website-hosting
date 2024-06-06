@@ -24,7 +24,7 @@
 .pageHeading 
 {
     font-family: 'Montserrat', sans-serif;
-    font-size: 3rem;
+    font-size: 4rem;
     margin: 2rem 0;
     font-weight: 600;
 
@@ -39,6 +39,8 @@
 .page .tinyTexts 
 {
     font-size: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 2rem;
     line-height: 2;
     color: var(--lightTextColor);
 }

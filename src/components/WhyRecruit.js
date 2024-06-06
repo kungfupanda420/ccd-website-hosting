@@ -43,21 +43,23 @@ const WhyRecruit = () => {
           <h1 className='pageHeadingWhyRecruit'>Why Recruit from NIT Calicut?</h1>
           <div className='whiteButton'onClick={handleDownload}>
             <h1 className='buttonText'>Placement Brochure</h1>
+            
             <svg
-              className='arrow'
-              width='10'
-              height='10'
-              viewBox='0 0 0 10'
-              fill='none'
-              xmlns='http://www.w3.org/2000/svg'
-            >
-              <path
-                d='M0.272008 0.75735L8.75729 9.24263M8.75729 9.24263V0.75735M8.75729 9.24263H0.272008'
-                // stroke='black'
-                strokeOpacity='1'
-                strokeWidth='1'
-              />
-            </svg>
+                className='arrow'
+                width='10'
+                height='10'
+                viewBox='0 0 10 10'
+                fill='none'
+                xmlns='http://www.w3.org/2000/svg'
+              >
+                <path
+                  d='M0.272008 0.75735L8.75729 9.24263M8.75729 9.24263V0.75735M8.75729 9.24263H0.272008'
+                  stroke='black'
+                  strokeOpacity='1'
+                  strokeWidth='0.65'
+                />
+              </svg>
+              
           </div>
         </div>
         <div className='reasonListContainer'>
