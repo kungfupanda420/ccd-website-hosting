@@ -4,9 +4,9 @@
     overflow: hidden;
     padding: 1rem;
     margin: 5rem 0rem;
-    scrollbar-width: thin;
+
     scroll-behavior: smooth;
-    scrollbar-color: #888888 #000000;
+
     height: fit-content;
     padding-top: 2rem;
     cursor: grab;
@@ -102,7 +102,7 @@
     width: 100%;
     padding-block: 16px 32px;
     margin: 16px 48px;
-    overflow-x: auto;
+    overflow-x: scroll;
     display: flex;
     width: 100%;
     gap: 8px;
@@ -112,23 +112,22 @@
     scroll-behavior: smooth;
   }
   
-
   .carousel-container::-webkit-scrollbar {
     height: 14px;
-    width: calc(100% - 48px);
+    width: calc(100% - 100px);
   }
   
   .carousel-container::-webkit-scrollbar-track {
-    background: #0a6afa99;
+    background: rgba(1,89,170,255);
   }
   
   .carousel-container::-webkit-scrollbar-thumb {
     background: #29AB87;
   }
   
-  .carousel-container::-webkit-scrollbar-track-piece:start {
+  /* .carousel-container::-webkit-scrollbar-track-piece:start {
     background: #29AB87;
-  }
+  } */
 
   .carousel-slide {
     flex: 1 0 30%;

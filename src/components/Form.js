@@ -1,14 +1,16 @@
-import React, { useState, useRef,useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "../css/Form.css";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { TiTick } from "react-icons/ti";
+
 const Form = () => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [queriesComments, setQueriesComments] = useState("");
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState("false");
   const [nameError, setNameError] = useState(false);
   const [phoneError, setPhoneError] = useState(false);
   const [emailError, setEmailError] = useState(false);
@@ -33,7 +35,7 @@ const Form = () => {
       return;
     }
 
-    setIsSubmitting(true);
+    setIsSubmitting("done");
 
     const formData = {
       name: name,
@@ -61,9 +63,10 @@ const Form = () => {
       setServerMessage(data); // Update the server message state with the response
     } catch (error) {
       console.error(error);
+      setIsSubmitting("false");
     } finally {
       setTimeout(() => {
-        setIsSubmitting(false);
+        setIsSubmitting("done");
       }, 2000);
     }
   };
@@ -99,7 +102,7 @@ const Form = () => {
     return isValid;
   };
   useEffect(() => {
-    AOS.init({duration: 1600});
+    AOS.init({ duration: 1600 });
   }, []);
   return (
     <div className="formContainer" data-aos="zoom-in">
@@ -176,16 +179,18 @@ const Form = () => {
             </div>
             <button
               type="submit"
-              className={isCheckboxChecked ? "activeButton" : ""}
-              disabled={!isCheckboxChecked || isSubmitting}
+              className={(isCheckboxChecked ? "activeButton" : "")}
+              disabled={!isCheckboxChecked || isSubmitting==="true"}
             >
-              {isSubmitting ? (
+              {isSubmitting==="true" ? (
                 <>
                   <span className="loadingSpinner" />
                   Submitting
                 </>
-              ) : (
-                " Submit "
+              ) : isSubmitting==="done"?(
+                  <TiTick size={30} color="#90f990"/>
+              ):(
+                <span>Submit</span>
               )}
             </button>
           </div>

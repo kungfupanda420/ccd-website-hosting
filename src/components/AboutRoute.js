@@ -1,6 +1,8 @@
 import React, {useState} from 'react'
 import NewAbout from './NewAbout'
 import AboutSubCompo from './AboutSubCompo'
+import '../css/AboutRoute.css'
+// import AluminiTest from './AluminiTest'
 
 const clubInfo=[
     {
@@ -62,13 +64,15 @@ function AboutRoute() {
 
   return (
     <div>
+      
         <NewAbout/>
-
+      <div className='clubhead'><span>Clubs in NIT Calicut</span></div>
        {
         clubInfo.map((item, index) => (
             <AboutSubCompo clubContent = {item} />
         ))
        }
+       {/* <AluminiTest/> */}
 
     </div>
   )

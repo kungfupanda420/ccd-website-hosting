@@ -18,7 +18,7 @@ function Home(){
       {/* <About/> */}
       <WhyRecruit/>
       <PlacementStatics/>
-      <Companies/>
+      {/* <Companies/> */}
       <NewCompanies/>
       <NewsMedia/>
       <OurTeam/>
