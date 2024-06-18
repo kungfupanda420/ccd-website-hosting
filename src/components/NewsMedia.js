@@ -35,8 +35,7 @@ export const NewsMedia = () => {
   useEffect(() => {
     AOS.init({duration: 1600});
   }, []);
-=======
-  },[]);
+
 
   const handleCarouselMove = (direction) => {
     return () => {
@@ -57,7 +56,6 @@ export const NewsMedia = () => {
     };
   };
 
->>>>>>> 124f80efa8be09d6b83141587f72f0c1e2d3381f
   return (
     <>
       <div className="newsMediaHeading" id="newMeadiMobileView" data-aos="zoom-in">
