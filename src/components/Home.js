@@ -9,14 +9,16 @@ import ActivePrograms from "../components/ActivePrograms";
 import Companies from "./Companies"
 import NewAbout from "./NewAbout"
 import NewCompanies from "./NewCompanies"
-
+import Roadmap from "./Roadmap"
 function Home(){
     return(
         <>
+      
       <Hero/>
       <NewAbout/>
       {/* <About/> */}
       <WhyRecruit/>
+      <Roadmap/>
       <PlacementStatics/>
       <Companies/>
       <NewCompanies/>

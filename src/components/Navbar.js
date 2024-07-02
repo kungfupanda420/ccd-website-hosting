@@ -20,7 +20,7 @@ const Navbar = () => {
         <nav className="navbar">
           <AuraEffect />
           <NavLink to="/" className="navbarLogo">
-            <img src="/images/navbar_logo.png" className='navbarLogo' alt="Center for Career Development" />
+            <img  src="/images/navbar_logo.png" className='navbarLogo' alt="Center for Career Development" />
           </NavLink>
 
           <div className={`navLinks ${isMobileMenuOpen ? 'mobile-menu' : ''}`}>

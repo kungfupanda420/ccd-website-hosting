@@ -1,9 +1,12 @@
 :root {
   --tc: white;
+  /* --logo: url('/images/navbar_logo.png') */
+  /* --logo_light: url('/images/navbar_logo_light_mode.png') */
 }
 
 [data-theme="light"] {
   --tc: rgba(1, 89, 170, 255);
+  
 }
 
 .navbar::before {
@@ -47,6 +50,7 @@
 .navbarLogo img {
   height: 2.5rem;
   width: 100%;
+  /* content: url('/images/navbar_logo_light_mode.png'); */
 }
 
 .navLinks {

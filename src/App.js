@@ -17,7 +17,7 @@ const Login = lazy(() => import('./components/Login'))
 const Admin = lazy(() => import('./pages/Admin') )
 const ForRecruiter = lazy( ()=> import('./components/ForRecruiter'))
 const NotFound = lazy (() => import('./pages/NotFound'))
-
+const Roadmap = lazy(() => import('./components/Roadmap'))
 
 function App() {
   const {pathname} = useLocation();
@@ -51,6 +51,7 @@ function App() {
         <Routes>
           
           <Route path='/' element={<Home/>} />
+          
           <Route path='/about' element={<AboutRoute/>} />
           <Route path='/placement' element={<PlacementStatics/>} />
           <Route path='/recruiter' element={<ForRecruiter/>} />
@@ -59,10 +60,12 @@ function App() {
             <Route path='internships' element={<Intern/>} />
             <Route path='placements' element={<Placement/>} />
             <Route path='faqdata' element={<FaqStudents/>} />
+
           </Route>
           <Route path='/login' element={<Login/>} />
           <Route path='/admin@CCD_nitc123' element={<Admin/>} />
          <Route path='*' element={<NotFound/>} />
+         
       </Routes>
       </Suspense>
       <Footer/>
