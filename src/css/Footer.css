@@ -50,6 +50,18 @@
   font-weight: 400;
 }
 
+.linkedin:hover{
+  transition: color 0.3s ease-in-out;
+  color: #179be2;
+  filter: brightness(1.5);
+  cursor: pointer;
+}
+
+.insta:hover{
+  transition: color 0.3s ease-in-out;
+  color: #f23ef8;
+  filter: brightness(1.5);
+}
 
 .copyRight {
   position: absolute;

@@ -114,11 +114,16 @@
   button[type="submit"]:enabled {
     background-color: var(--subButtonBg);
     color: var(--blackTextColor);
+    transition: transform 0.5s ease-out, color 0.5s ease-in;
     cursor: pointer;
   }
   button[type="submit"]:enabled:hover {
-    background-color: var(--ButtonBgHover);
+    /* background-color: var(--ButtonBgHover); */
+    filter:saturate(2);
+    transform: scale3d(1.1, 1.1, 1);
+    
     color: var(--blackTextColor);
+    cursor: pointer;
   }
   button[type="submit"].disabledButton {
     background-color: gray;
@@ -192,6 +197,7 @@
     animation: spin 1s linear infinite;
     margin-left: 5px;
   }
+
   .messageContainer {
     margin-top: 20px;
     max-width: 30rem;
@@ -204,6 +210,8 @@
     color: white;
   }
   
+
+
   @keyframes spin {
     to {
       transform: rotate(360deg);

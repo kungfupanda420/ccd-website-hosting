@@ -20,7 +20,7 @@ function Home(){
       <WhyRecruit/>
       <Roadmap/>
       <PlacementStatics/>
-      <Companies/>
+      {/* <Companies/> */}
       <NewCompanies/>
       <NewsMedia/>
       <OurTeam/>

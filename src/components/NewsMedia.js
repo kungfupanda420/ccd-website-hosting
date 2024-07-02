@@ -31,11 +31,11 @@ export const NewsMedia = () => {
     setWidth(newMediaContainer.current.scrollWidth - newMediaContainer.current.offsetWidth);
 
   });
+  
   useEffect(() => {
     AOS.init({duration: 1600});
   }, []);
 
-  
 
   const handleCarouselMove = (direction) => {
     return () => {
@@ -55,7 +55,6 @@ export const NewsMedia = () => {
       });
     };
   };
-
 
   return (
     <>
