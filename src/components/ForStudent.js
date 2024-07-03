@@ -5,8 +5,8 @@ import { Outlet } from 'react-router-dom'
 // <<<<<<< HEAD
 import Roadmap from './Roadmap'
 // =======
-import AluminiTest from './AluminiTest'
 // >>>>>>> 4519c835e43dd15c0b74400daa244433996b0474
+import AluminiTest from './AluminiTest'
 function ForStudent() {
   return (
     <div className='forStudentContainer'>

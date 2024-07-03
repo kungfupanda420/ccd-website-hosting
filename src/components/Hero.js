@@ -8,7 +8,6 @@ const Hero = () => {
         <div className="heroFull">
         <HeroCarousal />
             <div className="heroSection">
-            
                 <div className="heroText">
                     <h1 className="heroHeading">
                     <span className='head1'>C</span><span className='rest1'>ENTRE FOR </span>

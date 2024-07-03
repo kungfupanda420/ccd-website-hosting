@@ -1,259 +1,282 @@
+[data-theme='light']{
+--cardCol:rgba(1,89,170,255);
+}
+
 .newsMediaContainer {
   position: relative;
-    width: 95%;
-    overflow: hidden;
-    padding: 1rem;
-    margin: 5rem 0rem;
+  width: 95%;
+  overflow: hidden;
+  padding: 1rem;
+  margin: 5rem 0rem;
 
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
 
-    height: fit-content;
-    padding-top: 2rem;
-    cursor: grab;
-  }
-  .newsMediaHolder {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-  }
-  
-  .newsMediaHeading {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 2.5rem;
-    text-align: center;
-    color: var(--textColor);
-    margin: 0rem 10rem;
-    margin-left: 15rem;
-    font-weight: 700;
-  }
-  #newMeadiMobileView
-  {
-    display: none;
-  }
-  
-  .newsMediaCards {
-    display: flex;
-    flex-direction: row;
-    padding-bottom: 1rem;
-  }
-  
-  .card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-right: 10px;
-    border: 1px solid rgb(86, 86, 86);
-    border-radius: 1rem;
-    padding: 0.8rem;
-    height: 33rem;
-    width: 20rem;
-    background-color: #171717;
-    margin-right: 2.5rem;
-    transition: background-color 0.3s, transform 0.3s;
-  }
-  .cardImage {
-    height: 40%;
-    width: 99.99%;
-    pointer-events: none;
-    border-radius: 1rem;
-  }
-  
-  .cardTitle {
-    font-family: 'Inter', sans-serif;
-    font-size: 1rem;
-    text-align: center;
-    color: white;
-    font-weight: 600;
-    margin-top: 1.5rem;
-    width: 95%;
-    height: 10%;
-    text-align: left;
-  }
-  
-  .cardSubText {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1rem;
-    text-align: center;
-    color: rgb(182, 182, 182);
-    font-weight: 400;
-    width: 95%;
-    height: 30%;
-    margin-top: 10%;
-    overflow: hidden;
-    text-align: left;
-  }
-  
-  .cardDate {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.75rem;
-    text-align: center;
-    color: rgb(145, 145, 145);
-    font-weight: 400;
-    text-align: left;
-    margin-top: 10%;
-    width: 95%;
-    height: 2.55%;
-  }
-  .card:hover {
-    background-color: rgb(35, 35, 35);
-    border: 1px solid rgb(110, 110, 110);
-  }
-  .carousel-container {
-    width: 100%;
-    padding-block: 16px 32px;
-    margin: 16px 48px;
-    overflow-x: scroll;
-    display: flex;
-    width: 100%;
-    gap: 8px;
-    align-items: center;
-    scroll-snap-type: x mandatory;
-    flex-flow: row nowrap;
-    scroll-behavior: smooth;
-  }
-  
-  .carousel-container::-webkit-scrollbar {
-    height: 14px;
-    width: calc(100% - 100px);
-  }
-  
-  .carousel-container::-webkit-scrollbar-track {
-    background: rgba(1,89,170,255);
-  }
-  
-  .carousel-container::-webkit-scrollbar-thumb {
-    background: #29AB87;
-  }
-  
-  /* .carousel-container::-webkit-scrollbar-track-piece:start {
+  height: fit-content;
+  padding-top: 2rem;
+  cursor: grab;
+}
+
+.newsMediaHolder {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+/* .newsMediaDiv{
+  position: relative;
+}
+
+.newsMediaDiv::before{
+  content: "";
+  position: absolute;
+  top: -15%;
+  left: 0;
+  width: 100%;
+  height: 7rem;
+  background: linear-gradient(white, #f0f0f0, #d9d9d9, #bfbfbf, #a6a6a6, #8c8c8c, #737373, #595959, #404040, black);
+  z-index: 2;
+  display: block;
+
+} */
+
+.newsMediaHeading {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.5rem;
+  text-align: center;
+  color: var(--textColor);
+  margin: 0rem 10rem;
+  margin-left: 15rem;
+  font-weight: 700;
+}
+
+#newMeadiMobileView {
+  display: none;
+}
+
+.newsMediaCards {
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 1rem;
+}
+
+.cardNews {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 10px;
+  /* border: 1px solid rgb(86, 86, 86); */
+  border-radius: 1rem;
+  padding: 0.8rem;
+  height: 33rem;
+  width: 20rem;
+  background-color: var(--cardCol);
+  color: var(--textColor);
+  margin-right: 2.5rem;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.cardImage {
+  height: 40%;
+  width: 99.99%;
+  pointer-events: none;
+  border-radius: 1rem;
+}
+
+.cardTitle {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  color: white;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  width: 95%;
+  height: 10%;
+  text-align: left;
+}
+
+.cardSubText {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  text-align: justify;
+  color: rgb(218, 217, 253);
+  font-weight: 400;
+  width: 95%;
+  height: 30%;
+  margin-top: 10%;
+  overflow: hidden;
+}
+
+.cardDate {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  text-align: center;
+  color: rgb(145, 145, 145);
+  font-weight: 400;
+  text-align: left;
+  margin-top: 10%;
+  width: 95%;
+  height: 2.55%;
+}
+
+.cardNews:hover {
+  background-color: rgb(35, 35, 35);
+  border: 1px solid rgb(110, 110, 110);
+}
+
+.carousel-container {
+  width: 100%;
+  padding-block: 16px 32px;
+  margin: 16px 48px;
+  overflow-x: scroll;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  scroll-snap-type: x mandatory;
+  flex-flow: row nowrap;
+  scroll-behavior: smooth;
+}
+
+.carousel-container::-webkit-scrollbar {
+  height: 14px;
+  width: calc(100% - 100px);
+}
+
+.carousel-container::-webkit-scrollbar-track {
+  background: rgba(1, 89, 170, 255);
+}
+
+.carousel-container::-webkit-scrollbar-thumb {
+  background: white;
+}
+
+/* .carousel-container::-webkit-scrollbar-track-piece:start {
     background: #29AB87;
   } */
 
-  .carousel-slide {
-    flex: 1 0 30%;
-    aspect-ratio: 1;
-    flex-flow: column nowrap;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    scroll-snap-align: center;
+.carousel-slide {
+  flex: 1 0 30%;
+  aspect-ratio: 1;
+  flex-flow: column nowrap;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  scroll-snap-align: center;
+}
+
+.carousel-arrow {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  top: 0;
+  bottom: 64px;
+  margin-block: auto;
+  height: fit-content;
+  width: 48px;
+  border-radius: 50%;
+  background-color: white;
+  border: none;
+  font-size: 3rem;
+  padding: 0;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 100ms;
+}
+
+.carousel-arrow:hover,
+.carousel-arrow:focus {
+  opacity: 1;
+}
+
+.carousel-arrow--prev {
+  left: 35%;
+}
+
+.carousel-arrow--next {
+  right: 0;
+}
+
+
+@media screen and (max-width: 1500px) {
+  .newsMediaContainer {
+    padding: 1rem 1rem;
+    margin-bottom: 2rem;
+    margin-top: 0rem;
+    margin-left: 2rem;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #888888 #000000;
+    scroll-behavior: smooth;
+
   }
 
-  .carousel-arrow {
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    top: 0;
-    bottom: 64px;
-    margin-block: auto;
-    height: fit-content;
-    width: 48px;
-    border-radius: 50%;
-    background-color: white;
-    border: none;
-    font-size: 3rem;
-    padding: 0;
-    cursor: pointer;
-    opacity: 0.5;
-    transition: opacity 100ms;
-  }
-  
-  .carousel-arrow:hover,
-  .carousel-arrow:focus {
-    opacity: 1;
-  }
-  
   .carousel-arrow--prev {
-    left: 35%;
+    left: 0%;
   }
-  
+
   .carousel-arrow--next {
     right: 0;
   }
-  
 
-  @media screen and (max-width: 1500px) {
-    .newsMediaContainer {
-      padding: 1rem 1rem;
-      margin-bottom: 2rem;
-      margin-top: 0rem;
-      margin-left: 2rem;
-      overflow-x: auto;
-      scrollbar-width: thin;
-      scrollbar-color: #888888 #000000;
-      scroll-behavior: smooth;
-      
-    }
-
-    .carousel-arrow--prev {
-      left: 0%;
-    }
-    
-    .carousel-arrow--next {
-      right: 0;
-    }
-  
-    .newsMediaHolder {
-      flex-direction: column;
-      align-items: center;
-    }
-  
-    .newsMediaHeading {
-      margin: 2rem 0 1rem;
-      font-size: 1.5rem;
-    }
-    .newsMediaCards {
-      display: flex;
-      flex-wrap: nowrap;
-      overflow-x: scroll;
-      padding-bottom: 1rem;
-      scroll-snap-type: x mandatory;
-      scroll-margin: 0 0.5rem;
-      margin-left: auto;
-      padding-left: 1rem;
-      
-    }
-    .newsMediaCards::-webkit-scrollbar {
-      display: none;
-    }
-  
-    .card {
-      margin: 0 0.5rem;
-      height: 25rem;
-      width: 15rem;
-      scroll-snap-align: start;
-    }
-  
-    .cardTitle {
-      font-size: 0.8rem;
-      margin-top: 1rem;
-      text-align: left;
-    }
-  
-    .cardSubText {
-      font-size: 0.8rem;
-      margin-top: 1.2rem;
-      height: 8rem;
-      text-align: left;
-      
-    }
-  
-    .cardDate {
-      font-size: 0.6rem;
-      margin-top: auto;
-      text-align: left;
-    }
-  
-    /* Hide scrollbar */
-    .newsMediaContainer::-webkit-scrollbar {
-      display: none;
-    }
+  .newsMediaHolder {
+    flex-direction: column;
+    align-items: center;
   }
-  
 
-  /* Bro when you are making responsive 
+  .newsMediaHeading {
+    margin: 2rem 0 1rem;
+    font-size: 1.5rem;
+  }
+
+  .newsMediaCards {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: scroll;
+    padding-bottom: 1rem;
+    scroll-snap-type: x mandatory;
+    scroll-margin: 0 0.5rem;
+    margin-left: auto;
+    padding-left: 1rem;
+
+  }
+
+  .newsMediaCards::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cardNews {
+    margin: 0 0.5rem;
+    height: 25rem;
+    width: 15rem;
+    scroll-snap-align: start;
+    background-color: var();
+  }
+
+  .cardTitle {
+    font-size: 0.8rem;
+    margin-top: 1rem;
+    text-align: left;
+  }
+
+  .cardSubText {
+    font-size: 0.8rem;
+    margin-top: 1.2rem;
+    height: 8rem;
+    text-align: left;
+
+  }
+
+  .cardDate {
+    font-size: 0.6rem;
+    margin-top: auto;
+    text-align: left;
+  }
+
+  /* Hide scrollbar */
+  .newsMediaContainer::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+
+/* Bro when you are making responsive 
   Keep .newMeadingHeading display as none and #newMediaMobileView as block
   */
-  
-  
-  

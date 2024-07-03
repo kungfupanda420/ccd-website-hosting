@@ -18,7 +18,6 @@ router.get('/why-recruit',async function(req, res, next) {
 router.get('/placement-stats',async function(req, res, next) {
 
     const rawStatData = await db.query('SELECT * FROM placement_stats')
-    
     const statsData = rawStatData.rows.reduce((acc, { name, value }) => {
       acc[name] = value;
       return acc;

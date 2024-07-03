@@ -27,11 +27,16 @@ sans-serif; */
   --subButtonBg: #ffffff;
   --statTextColor: rgb(194, 191, 191);
   --navBarBg:rgba(0, 0, 0, 0.564);
-  --btnShadow: 0 4px 8px rgba(255, 255, 255, 0.5)
+  --btnShadow: 0 4px 8px rgba(255, 255, 255, 0.5);
+  --newCompBack:#ffffff;
+  --activePgm:#000000;
+
 }
+
 [data-theme="light"]
 {
   --backgrounColor: rgb(224, 236, 255);
+  --newCompBack:rgb(224, 236, 255);
   --textColor: rgba(1,89,170,255);
   --btnBg: #000000;
   --grayBackgroundColor: rgba(0, 0, 0, 0.1);
@@ -42,8 +47,11 @@ sans-serif; */
   --subButtonBg: rgba(1,89,170,255);
   --statTextColor: rgb(225, 224, 224);
   --navBarBg:rgba(255, 255, 255, 0.564);
-  --btnShadow: 0 4px 8px rgba(0, 0, 0, 0.5)
+  --btnShadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  /* --activePgm:rgba(1,89,170,255); */
+  --activePgm:#FFF;
 }
+
 *{
   transition: all 0.3s ease-in-out;
 }

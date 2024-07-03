@@ -3,6 +3,7 @@ import { useRef, useState, useEffect } from "react";
 import "../css/OurTeam.css";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { FaLinkedin } from "react-icons/fa6";
 function OurTeam() {
   const [teacherData, setTeacherData] = useState([]);
   const [studentData, setStudentData] = useState([]);
@@ -67,15 +68,17 @@ function OurTeam() {
                       <h2>{person.name}</h2>
                       <p class='description'>{person.position}</p>
                       <hr />
+                      <h2><FaLinkedin/></h2>
                     </div>
                   </div>
                 ))
               }
 
            </div>
-              <h4 className="spochead">SPOCs</h4>
+              
             {/* student div */}
             <div ref={studentContainer} className="studentsDiv" >
+            <h4 className="spochead">SPOCs</h4>
               <div
                 className="innerStudentsDiv">
                 {studentData.map((student, index) => (

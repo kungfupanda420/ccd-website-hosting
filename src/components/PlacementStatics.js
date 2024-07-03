@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import '../css/PlacementStatics.css';
 import { useInView } from 'react-intersection-observer';
 import AOS from "aos";
 import "aos/dist/aos.css";
+import OurRecruiters from './OurRecruiters';
+
+
 const RunningNumbers = ({ endNumber }) => {
   const [count, setCount] = useState(0);
 
@@ -22,6 +26,7 @@ const RunningNumbers = ({ endNumber }) => {
 };
 
 const PlacementStatics = () => {
+  const location = useLocation();
   const [ref, inView] = useInView({
     triggerOnce: true,
     rootMargin: '0px 0px -40% 0px', // Ensures the trigger fires only once
@@ -56,6 +61,7 @@ const PlacementStatics = () => {
     AOS.init({duration: 1000});
   }, []);
   return (
+    
     <>
       <div className='placementStaticContainer' data-aos="zoom-in">
         <div className='placementStaticHolder' ref={ref}>
@@ -129,7 +135,10 @@ const PlacementStatics = () => {
             </div>
           </div>
         </div>
+      {location.pathname === '/placement' && <OurRecruiters />
+      }
       </div>
+      
     </>
   );
 };

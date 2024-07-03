@@ -6,7 +6,6 @@ const router = new Router()
 router.get('/',async function(req, res, next) {
     
     const teacherData = await db.query('SELECT * FROM teachers')
-
     const studentData = await db.query('SELECT * FROM students')
 
     const responseData = {

@@ -1,0 +1,38 @@
+.recruiter-head {
+  margin: 2rem;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.card-company {
+  width: 300px;
+  height: 220px;
+  background-color: rgb(255, 255, 255);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 30px;
+  gap: 13px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.062);
+}
+
+.company-name {
+  font-size: 1.2em;
+  font-weight: 800;
+  color: rgb(26, 26, 26);
+}
+
+.company-logo {
+  text-align: center;
+  object-fit: scale-down; /* Scale the image to fit while maintaining aspect ratio */
+  aspect-ratio: 4;
+  height: 60px;
+}
+.companies{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-gap: 10px;
+}

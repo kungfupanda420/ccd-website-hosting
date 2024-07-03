@@ -11,6 +11,9 @@
     justify-content: center;
     align-items: center;
 } */
+
+@import url(https://db.onlinewebfonts.com/c/b52804ac57ef6e90d2826a6b0f111133?family=Integral+CF+Bold);
+@import url(https://db.onlinewebfonts.com/c/f1fcc5aed1e20fc0cdb9f8a7573625bd?family=Integral+CF+Regular);
 .heroSection {
     position: absolute;
     top: 0;
@@ -21,7 +24,8 @@
     align-items: center;
     /* background: url('/public/images/nitc2.webp') no-repeat center center/cover; */
 }
-.heroFull{
+
+.heroFull {
     height: 100vh;
     width: 100vw;
     position: relative;
@@ -33,81 +37,137 @@
     position: relative;
     z-index: 2;
 }
-.heroText{
+
+.heroText {
     padding: 1rem;
     display: inline-block;
     width: auto;
     background-image: linear-gradient(rgb(36, 33, 236), rgb(0, 81, 255));
-  background-size: 100% 10px;
-  background-repeat: no-repeat;
-  background-position: 0% 100%;
-   transition: background-size .7s, background-position .5s ease-in-out;
+    background-size: 100% 10px;
+    background-repeat: no-repeat;
+    background-position: 0% 100%;
+    transition: background-size .7s, background-position .5s ease-in-out;
+    font-family: "Integral CF Regular";
 
 }
+
 .heroText:hover {
     background-size: 100% 100%;
     background-position: 100% 0%;
     transition: background-position .7s, background-size .5s ease-in-out;
-  }
+}
 
-.heroHeading 
-{   
+.heroHeading {
     font-size: 4rem;
     color: white;
-    font-family: 'Montserrat', sans-serif;
-
+    /* font-family: 'Montserrat', sans-serif; */
+    margin: auto;
     text-align: center;
     font-weight: 600;
 }
+
 .heroSubHeading {
     margin-top: 2rem;
     font-size: 2rem;
     color: white;
-    font-family: 'Montserrat', sans-serif;
+    /* font-family: 'Montserrat', sans-serif; */
     text-align: center;
     font-weight: 500;
+    animation: sizeup 3s;
 }
 
-.head1{
+.head1 {
     animation: showup 5s;
 }
-.rest1{
-    width:0px;
-  animation: reveal 5s;
-  /* margin-left:-200vw; */
-  animation: slidein 9s ;
+
+.rest1 {
+    width: 0px;
+    animation: reveal 5s;
+    /* margin-left:-200vw; */
+    animation: slidein 9s;
 }
 
+@keyframes sizeup {
+    0% {
+        font-size: 7rem;
+    }
+
+    100% {
+        font-size: 2rem;
+    }
+
+}
 
 @keyframes showup {
-    0% {opacity:0;}
-    20% {opacity:0.5;}
-    50% {opacity:1;}
-    80% {opacity:0.5;}
-    100% {opacity:1;}
+    0% {
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    80% {
+        opacity: 0.5;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }
 
 @keyframes slidein {
-    0% { margin-left:-300vw; }
-    20% { margin-left:-300vw; }
-    35% { margin-left:0vw; }
-    100% { margin-left:0vw; }
+    0% {
+        margin-left: -300vw;
+    }
+
+    20% {
+        margin-left: -300vw;
+    }
+
+    35% {
+        margin-left: 0vw;
+    }
+
+    100% {
+        margin-left: 0vw;
+    }
 }
 
 @keyframes reveal {
-    0% {opacity:0;width:0px;}
-    20% {opacity:1;width:0px;}
-    30% {width:200vw;}
-    80% {opacity:1;}
-    100% {opacity:0;width:200vw;}
+    0% {
+        opacity: 0;
+        width: 0px;
+    }
+
+    20% {
+        opacity: 1;
+        width: 0px;
+    }
+
+    30% {
+        width: 200vw;
+    }
+
+    80% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        width: 200vw;
+    }
 }
 
 
 /* media queries medium laptop */
 
 @media screen and (min-width:769px) and (max-width:1025px) {
-    .heroHeading 
-    {
+    .heroHeading {
         width: 70%;
     }
 }
@@ -115,29 +175,29 @@
 /* tablets  */
 
 @media screen and (min-width:426px) and (max-width:769px) {
-    .heroHeading
-    {
+    .heroHeading {
         width: 80%;
         font-size: 3rem;
     }
-  
+
 }
 
 /* large mobile size */
 @media screen and (max-width:426px) {
-    .heroSection
-    {
+    .heroSection {
         background-position-x: -450px;
     }
+
     .heroHeading {
-            width: 70%;
-            font-size: 1.5rem;
-        }
+        width: 70%;
+        font-size: 1.5rem;
+    }
+
     .heroSubHeading {
         width: 100%;
         font-size: 1.45rem;
         margin-top: 1rem;
         font-weight: 400;
     }
-        
+
 }

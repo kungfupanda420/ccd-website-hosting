@@ -31,6 +31,10 @@ table {
     background-color: rgb(237 238 242);
   }
   
+  tbody button{
+    padding: 5px;
+  }
+
   tfoot th {
     text-align: right;
   }

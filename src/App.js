@@ -34,8 +34,8 @@ function App() {
         innerScale ={0.8      }
         outerScale={1}
         innerStyle = {{
-          backgroundColor: 'white',
-          mixBlendMode:"difference"
+          backgroundColor: 'blue',
+          mixBlendMode:"exclusion"
           
         }}
         outerStyle={{
