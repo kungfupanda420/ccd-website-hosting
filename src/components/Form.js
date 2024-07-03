@@ -104,6 +104,7 @@ const Form = () => {
   useEffect(() => {
     AOS.init({ duration: 1600 });
   }, []);
+  
   return (
     <div className="formContainer" data-aos="zoom-in">
       <div className="formHolder">

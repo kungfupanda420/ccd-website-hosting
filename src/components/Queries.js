@@ -5,9 +5,11 @@ import { useState } from 'react';
 const Queries = () => {
   const [queriesData, setQueriesData] = useState([]);
 
-    const getQueries = async () => {
+    const getQueries = async()=>{
       try {
+        
         const response = await fetch('/api/active-program/queries');
+        
         if (response.ok) {
           const data = await response.json();
           console.log(data);
@@ -23,7 +25,28 @@ const Queries = () => {
     useEffect(() => {
       getQueries();
     },[]);
-  
+
+    const changeStatus = async (id) => {
+      try {
+        console.log('got id', id);
+        const response = await fetch(`/api/submit/status/${id}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data);
+        } else {
+          const errorData = await response.json();
+          console.log('Error updating query status:', errorData);
+        }
+      } catch (error) {
+        console.error('Error updating query status:', error);
+      }
+    };
+    
     return (
     <>
     <table>
@@ -33,6 +56,8 @@ const Queries = () => {
       <th scope="col">Phone</th>
       <th scope="col">Email</th>
       <th scope="col">Query</th>
+      <th scope="col">Status</th>
+      <th scope="col">.</th>
     </tr>
   </thead>
   <tbody>
@@ -42,6 +67,8 @@ const Queries = () => {
       <td>{query.phone}</td>
       <td>{query.email}</td>
       <td>{query.queriescomments}</td>
+      <td>{query.status}</td>
+      <td><button onClick={(e)=>{e.preventDefault();changeStatus(query.id)}}>Complete</button></td>
     </tr>
     ))}
   </tbody>

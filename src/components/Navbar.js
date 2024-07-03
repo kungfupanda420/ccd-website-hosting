@@ -44,7 +44,7 @@ const Navbar = () => {
             <DarkMode />
             <ul className="rightList">
               {/*<NavLink to="/blogs" className="navLink">Blog</NavLink>*/}
-              <NavLink to="https://nitc.ac.in/" className="navLink" onClick={closeMobileMenu}>
+              <NavLink to="https://nitc.ac.in/" target='_blank' className="navLink" onClick={closeMobileMenu}>
                 Nit Calicut
               </NavLink>
               <NavLink to="/login" className="navLink" onClick={closeMobileMenu}>

@@ -57,6 +57,22 @@ function App() {
             ))}
           </MarqueeGroup2>
         </Marquee>
+        <Marquee>
+          <MarqueeGroup>
+            {row1.map((el) => (
+              <ImageGroup>
+                <Image src={el} />
+              </ImageGroup>
+            ))}
+          </MarqueeGroup>
+          <MarqueeGroup>
+            {row1.map((el) => (
+              <ImageGroup>
+                <Image src={el} />
+              </ImageGroup>
+            ))}
+          </MarqueeGroup>
+        </Marquee>
       </Wrapper>
     </AppContainer>
   );
@@ -66,19 +82,19 @@ export default App;
 
 const AppContainer = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: 40rem;
   color: #000000;
-
+  background-color:var(--newCompBack);
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 `;
 
 const Wrapper = styled.div`
   width: 100%;
   height: fit-content;
-
   display: flex;
   align-items: center;
   justify-content: center;
@@ -95,17 +111,16 @@ const Text = styled.div`
 const Note = styled.div`
   font-size: 18px;
   font-weight: 200;
-  margin-bottom: 40px;
+  margin-bottom: 10px;
   color: #7c8e9a;
 `;
 
 const Marquee = styled.div`
   display: flex;
   width: 85%;
-
+  height: 8rem;
   overflow: hidden;
   user-select: none;
-
   mask-image: linear-gradient(
     to right,
     hsl(0 0% 0% / 0),
@@ -125,12 +140,12 @@ const scrollX = keyframes`
 `;
 
 const common = css`
-  flex-shrink: 0;
+  flex-shrink: 1;
   display: flex;
   align-items: center;
   justify-content: space-around;
   white-space: nowrap;
-  width: 100%;
+      width: 285%;
   animation: ${scrollX} 30s linear infinite;
 `;
 
@@ -145,19 +160,16 @@ const MarqueeGroup2 = styled.div`
 
 const ImageGroup = styled.div`
   display: grid;
-  place-items: center;
-  width: clamp(10rem, 1rem + 40vmin, 30rem);
-  padding: calc(clamp(10rem, 1rem + 30vmin, 30rem) /10);
+  // width: clamp(10rem, 1rem + 40vmin, 30rem);
+  // padding: calc(clamp(10rem, 1rem + 30vmin, 30rem) /10);
+  width:18rem;
 `;
 
 const Image = styled.img`
   object-fit: contain;
-//   width: auto;
-//   height: 8rem;
-    width: 100%;
-    height:100%;
-  
+  width: 9rem;
+  height:100%;  
   aspect-ratio: 16/9;
-  padding: 5px 20px;
+  // padding: 5px;
 //   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 `;

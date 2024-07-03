@@ -58,6 +58,7 @@ export const NewsMedia = () => {
 
   return (
     <>
+    <div className='newsMediaDiv'>
       <div className="newsMediaHeading" id="newMeadiMobileView" data-aos="zoom-in">
         News/Media
       </div>
@@ -70,7 +71,7 @@ export const NewsMedia = () => {
           <button className="carousel-arrow carousel-arrow--prev" onClick={handleCarouselMove(0)}>&#8249;
           </button>
             {cardData.map((card, index) => (
-              <div className="card carousel-slide" key={index} ref={slideRef}>
+              <div className="cardNews carousel-slide" key={index} ref={slideRef}>
                 <img className="cardImage" src={card.img} alt="card img" />
                 <div className="cardTitle">{card.title}</div>
                 <div className="cardSubText">{card.subtext}</div>
@@ -83,6 +84,7 @@ export const NewsMedia = () => {
         </div>
       <button className="carousel-arrow carousel-arrow--next" onClick={handleCarouselMove(1)}>&#8250;
         </button>
+        </div>
         </div>
     </>
   );
