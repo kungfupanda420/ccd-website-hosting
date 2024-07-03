@@ -13,6 +13,7 @@ import NewCompanies from "./NewCompanies"
 function Home(){
     return(
         <>
+      
       <Hero/>
       <NewAbout/>
       {/* <About/> */}
