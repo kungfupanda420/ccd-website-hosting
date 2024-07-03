@@ -23,8 +23,8 @@ function App() {
   return (
     <AppContainer>
       <Wrapper>
-        <Text>With Great Outcomes.</Text>
-        <Note>Our customers have gotten offers from awesome companies.</Note>
+        <Text>Our Previous Recruiters</Text>
+        {/* <Note>Our customers have gotten offers from awesome companies.</Note> */}
         <Marquee>
           <MarqueeGroup>
             {row1.map((el) => (
@@ -86,13 +86,15 @@ const Wrapper = styled.div`
 `;
 
 const Text = styled.div`
-  font-size: 35px;
+  font-family: "Poppins", sans-serif;
+  color:var(--textColor);
+  font-size: 6vh;
   font-weight: 500;
   margin-bottom: 10px;
-  color: #02203c;
 `;
 
 const Note = styled.div`
+
   font-size: 18px;
   font-weight: 200;
   margin-bottom: 40px;
@@ -158,6 +160,6 @@ const Image = styled.img`
     height:100%;
   
   aspect-ratio: 16/9;
-  padding: 5px 20px;
+  padding: 1vh 3vh;
 //   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 `;
