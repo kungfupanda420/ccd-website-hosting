@@ -1,23 +1,11 @@
 import { NavLink } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import '../css/Navbar.css';
 import AuraEffect from './AuraEffect';
 import DarkMode from '../DarkMode/DarkMode';
 
-const Navbar = () => {
+const Navbar = ({ isDarkMode, onToggleTheme }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  useEffect(() => {
-    const theme = localStorage.getItem("theme");
-    if (theme === "dark") {
-      setIsDarkMode(true);
-      document.querySelector("body").setAttribute("data-theme", "dark");
-    } else {
-      setIsDarkMode(false);
-      document.querySelector("body").setAttribute("data-theme", "light");
-    }
-  }, []);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -27,17 +15,6 @@ const Navbar = () => {
     setIsMobileMenuOpen(false);
   };
 
-  const handleToggleTheme = (isDarkMode) => {
-    setIsDarkMode(isDarkMode);
-    if (isDarkMode) {
-      document.querySelector("body").setAttribute("data-theme", "dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.querySelector("body").setAttribute("data-theme", "light");
-      localStorage.setItem("theme", "light");
-    }
-  };
-
   return (
     <>
       <div className="aura-container">
@@ -45,9 +22,9 @@ const Navbar = () => {
           <AuraEffect />
           <NavLink to="/" className="navbarLogo">
             <img
-                src={isDarkMode ? "/images/navbar_logo.png" : "/images/navbar_logo_light_mode.png"}
-                alt="Center for Career Development"
-                className='navbarLogo'
+              src={isDarkMode ? "/images/navbar_logo.png" : "/images/navbar_logo_light_mode.png"}
+              alt="Center for Career Development"
+              className='navbarLogo'
             />
           </NavLink>
 
@@ -69,7 +46,7 @@ const Navbar = () => {
                 For Students
               </NavLink>
             </ul>
-            <DarkMode isDarkMode={isDarkMode} onToggleTheme={handleToggleTheme} />
+            <DarkMode isDarkMode={isDarkMode} onToggleTheme={onToggleTheme} />
             <ul className="rightList">
               <NavLink to="https://nitc.ac.in/" className="navLink" onClick={closeMobileMenu}>
                 Nit Calicut

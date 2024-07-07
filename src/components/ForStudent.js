@@ -1,21 +1,19 @@
-import React from 'react'
-import StudentNavbar from './StudentNavbar'
-import '../css/ForStudent.css'
-import { Outlet } from 'react-router-dom'
-// <<<<<<< HEAD
-import Roadmap from './Roadmap'
-// =======
-// >>>>>>> 4519c835e43dd15c0b74400daa244433996b0474
-import AluminiTest from './AluminiTest'
-function ForStudent() {
+import React from 'react';
+import StudentNavbar from './StudentNavbar';
+import '../css/ForStudent.css';
+import { Outlet } from 'react-router-dom';
+import Roadmap from './Roadmap';
+import AluminiTest from './AluminiTest';
+
+const ForStudent = ({ isDarkMode, onToggleTheme }) => {
   return (
     <div className='forStudentContainer'>
-        <StudentNavbar/>
-        <Roadmap/>
-        <Outlet/>
-        <AluminiTest/>
+      <StudentNavbar />
+      <Roadmap isDarkMode={isDarkMode} onToggleTheme={onToggleTheme} />
+      <Outlet />
+      <AluminiTest />
     </div>
-  )
-}
+  );
+};
 
-export default ForStudent
+export default ForStudent;

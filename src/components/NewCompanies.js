@@ -7,39 +7,39 @@ import texas from "../company/TexasInstruments-Logo.svg.png";
 import oracle from "../company/Oracle.png";
 import deshaw from "../company/deshaw.png";
 import lt from "../company/lt.png";
-import nvidia from "../company/nvidialogo.png";
-import salesforce from "../company/Salesforce-logo.webp";
+import nvidia from "../company/nvidialogo-removebg-preview.png";
+import salesforce from "../company/SalesforceFinal.png";
 
 import samsung from "../company/Samsung_Logo.svg.png";
-import deloitte from "../company/deloitte.png";
+import deloitte from "../company/DeloitteFinal.png";
 import barclays from "../company/Barclays-Logo-768x432.png";
 import cisco from "../company/cisco.png";
 import wabtec from "../company/Wabtec_Logo.svg.png";
 import bajaj from "../company/bajaj.png";
 import tcs from "../company/tcs.png";
-import suzuki from "../company/suzuki.png";
+import suzuki from "../company/suzuki-removebg-preview.png";
 import tvs from "../company/tvs.png";
 import sap from "../company/sap.svg.png";
 
 import accenture from "../company/Accenture.svg.png";
 import federal from "../company/Federal_Bank_Logo.png";
-import ampere from "../company/Ampere-Logo.png";
+import ampere from "../company/Ampere-Logo-removebg-preview.png";
 import siemens from "../company/siemens.png";
-import wabco from "../company/wabco-vector-logo.png";
+import wabco from "../company/wabco-vector-logo-removebg-preview.png";
 import tata from "../company/Tata_Power_Logo.png";
 import benz from "../company/Mercedes-Benz_logo.svg.png";
 import amd from "../company/AMD.png";
 import hdfc from "../company/hdfc.png";
 import intel from "../company/Intel-Logo.png";
 
-import ibm from "../company/ibm.png";
-import jpmorgan from "../company/jp.png";
+import ibm from "../company/IBMFinal.png";
+import jpmorgan from "../company/JPFinal.png";
 import ford from "../company/ford.png";
 import bp from "../company/bpcl.jpg";
 import reliance from "../company/reliance.png";
 import hp from "../company/hp.png";
 import ge from "../company/ge.png";
-import paytm from "../company/paytm.png";
+import paytm from "../company/paytm-removebg-preview.png";
 import be from "../company/Bharat_Electronics_Limited-Logo.wine.png";
 import uber from "../company/Uber.png";
 import discovery from "../company/Discovery-Channel-Logo.png";
@@ -47,22 +47,13 @@ import discovery from "../company/Discovery-Channel-Logo.png";
 const App = () => {
   const row1 = [
     goldmannsachs,atlasian,qualcomm,texas,oracle,deshaw,lt,
-    // "https://assets.algoexpert.io/spas/main/prod/g523bdeb478-prod/dist/images/7ae42bac3b34999c0db3.png",
-    // "https://assets.algoexpert.io/spas/main/prod/g523bdeb478-prod/dist/images/b2bd91d7b87b2181ca45.png",
-    // "https://assets.algoexpert.io/spas/main/prod/g523bdeb478-prod/dist/images/6591cdc0702b32310306.png",
-    // "https://assets.algoexpert.io/spas/main/prod/g523bdeb478-prod/dist/images/3b7d9f4b073deb6a9b74.png",
-    // "https://assets.algoexpert.io/spas/main/prod/g523bdeb478-prod/dist/images/3cd767dea94a85078ca4.png",
+    
     "https://assets.algoexpert.io/spas/main/prod/g523bdeb478-prod/dist/images/a2b3c3709ffedce2a22a.png",
     nvidia,salesforce
   ];
 
   const row2 = [
-    // "https://assets.algoexpert.io/spas/main/prod/g523bdeb478-prod/dist/images/6c585c33ca6c71c79bb7.png",
-    // "https://assets.algoexpert.io/spas/main/prod/g523bdeb478-prod/dist/images/9dd55e54b5a28658bf4e.png",
-    // "https://assets.algoexpert.io/spas/main/prod/g523bdeb478-prod/dist/images/0384060dcbf73b6a707c.png",
-    // "https://assets.algoexpert.io/spas/main/prod/g523bdeb478-prod/dist/images/35e044b3354aaa0caed5.png",
-    // "https://assets.algoexpert.io/spas/main/prod/g523bdeb478-prod/dist/images/f50ae7cbf6cc805bdadc.png",
-    // "https://assets.algoexpert.io/spas/main/prod/g523bdeb478-prod/dist/images/6c585c33ca6c71c79bb7.png",
+    
     samsung,deloitte,barclays,cisco,wabtec,bajaj,tcs,suzuki,tvs,sap
   ];
   const row3 = [
@@ -170,7 +161,7 @@ const Wrapper = styled.div`
 
 const Text = styled.div`
   font-family: "Poppins", sans-serif;
-  color:var(--textColor);
+  color:var(--textColor2);
   font-size: 6vh;
   font-weight: 500;
   margin-bottom: 10px;

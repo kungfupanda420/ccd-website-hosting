@@ -6,7 +6,9 @@ a {
 a:hover {
     transition: all 0.5s ease-in-out;
 }
-  
+.aboutsubHeading{
+  color:var(--textColor)
+}
 .we-are-block {
     display: flex;
     flex-direction: column;
@@ -31,7 +33,7 @@ a:hover {
   
   #about-us-section{
 
-    background: #0c4c91;
+    background: var(--textColor);
     width: 100%;
     height: 50%;
     display: flex;
@@ -136,7 +138,7 @@ a:hover {
   }
   
   .about-us-info h2 {
-    color: white;
+    color: var(--blackTextColor);
     font-size: 40pt;
     text-align: right;
   }
@@ -148,7 +150,7 @@ a:hover {
   }
   
   .about-us-info p {
-    color: white;
+    color: var(--blackTextColor);
     font-size: 14pt;
     text-align: right;
   }
@@ -160,18 +162,19 @@ a:hover {
   }
   
   .about-us-info a {
-    background-color: white;
-    color: #0c4c91;
+    background-color: var(--backgrounColor);
+    color: var(--textColor);
     width: 180px;
     text-align: center;
     padding: 15px 0px 15px 0px;
     font-size: 14pt;
     box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+    border-radius: 2rem;
   }
   
   .about-us-info a:hover {
-    background: #404140;
-    color: white;
+    background: var(--subButtonBg);
+    color: var(--blackTextColor);
     box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
     transform: translateY(10px);
   }
@@ -331,7 +334,7 @@ a:hover {
   .card-inner {
     width: 36rem;
     height: 25rem;
-    background: rgba(255,255,255,.05);
+    background: rgba(255, 255, 255, 0.05);
     box-shadow: 0 0 10px rgba(0,0,0,0.25);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
@@ -341,6 +344,7 @@ a:hover {
     p{
       text-align: justify;
       margin-top: 2px;
+      color: var(--textColor);
     }
 
     font-family: monospace;

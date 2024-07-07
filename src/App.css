@@ -30,7 +30,9 @@ sans-serif; */
   --btnShadow: 0 4px 8px rgba(255, 255, 255, 0.5);
   --newCompBack:#ffffff;
   --activePgm:#000000;
-
+  --depFont: white;
+  --depBullet: white;
+  --textColor2: #000000;
 }
 
 [data-theme="light"]
@@ -50,6 +52,9 @@ sans-serif; */
   --btnShadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   /* --activePgm:rgba(1,89,170,255); */
   --activePgm:#FFF;
+  --depFont: #246;
+  --depBullet: #48b;
+  --textColor2: rgba(1,89,170,255);
 }
 
 *{
