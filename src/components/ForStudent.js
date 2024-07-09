@@ -9,7 +9,7 @@ const ForStudent = ({ isDarkMode, onToggleTheme }) => {
   return (
     <div className='forStudentContainer'>
       <StudentNavbar />
-      
+      <Roadmap isDarkMode={isDarkMode} onToggleTheme={onToggleTheme} />
       <Outlet />
       {/* <AluminiTest /> */}
     </div>
