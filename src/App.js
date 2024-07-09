@@ -6,6 +6,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import AnimatedCursor from "react-animated-cursor";
 import Loader from './pages/Loader';
 import FaqStudents from './pages/FaqStudents';
+import Roadmap from './components/Roadmap';
 
 const Home = lazy(() => import('./components/Home'));
 const AboutRoute = lazy(() => import('./components/AboutRoute'));
@@ -76,7 +77,7 @@ function App() {
             <Route path='internships' element={<Intern />} />
             <Route path='placements' element={<Placement />} />
             <Route path='faqdata' element={<FaqStudents />} />
-            <Route path='roadmap' element={<Roadmap/>} />
+            <Route path='roadmap' element={<Roadmap isDarkMode={isDarkMode} onToggleTheme={onToggleTheme} />} />
           </Route>
           <Route path='/login' element={<Login />} />
           <Route path='/admin@CCD_nitc123' element={<Admin />} />
