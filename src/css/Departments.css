@@ -2,7 +2,7 @@
 
 .todo {
     font-family: Raleway, sans-serif;
-    color: #246;
+    color: var(--depFont);
 	padding: 3em 1em;
 	/* width: 100%; */
     max-width: 60vw;
@@ -13,6 +13,7 @@
 
 h1 {
 	margin: 3px 0;
+	/* color: var(--textColor); */
 }
 
 .todo ul {
@@ -22,7 +23,7 @@ h1 {
 
 	::marker {
 		content: ">";
-		color: #48b;
+		color: var(--depBullet);
 	}
     ul{
         margin-left: 2rem;

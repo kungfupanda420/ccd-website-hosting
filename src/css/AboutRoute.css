@@ -2,8 +2,8 @@
 
 .clubhead span{
     --s: 0.1em;
-    --c: #2c4bff;
-    color: #0000;
+    --c: var(--textColor);
+    color: var(--textColor);
     padding-bottom: var(--s);
     background:
         linear-gradient(90deg, var(--c) 50%, #000 0) calc(100% - var(--_p, 0%))/200% 100%,

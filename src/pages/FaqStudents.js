@@ -1,8 +1,9 @@
 
 import '../pagesCss/placementPage.css'
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import faqData from "./faqData";
-
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const FaqStudents = () => {
   const [viewAnswer, setViewAnswer] = useState(-1)
@@ -12,10 +13,13 @@ const FaqStudents = () => {
     }
     setViewAnswer(prev => prev = index)
   }
+  useEffect(() => {
+    AOS.init({duration: 1600});
+  }, []);
   return (
     <>
     <div className="page">
-    <div className="faqs">
+    <div className="faqs" data-aos="zoom-in">
         <h1 className="pageHeading">FaQ</h1>
         {faqData.map((output, index) => 
         (

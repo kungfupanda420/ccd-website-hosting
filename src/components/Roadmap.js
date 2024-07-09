@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../css/Roadmap.css";
 import { ReactComponent as IconCloseCircleOutline } from "../icons/close-circle-outline.svg"; // Import the SVG as a React component
-
-const Roadmap = () => {
+import { ReactComponent as IconCloseCircleOutlineDark } from '../icons/close-circle-outline_dark.svg';
+import AOS from "aos";
+import "aos/dist/aos.css";
+const Roadmap = ({ isDarkMode, onToggleTheme }) => {
   const [clickedItem, setClickedItem] = useState(null);
 
   const handleItemClick = (index) => {
@@ -12,9 +14,11 @@ const Roadmap = () => {
   const handleCloseClick = () => {
     setClickedItem(null);
   };
-
+  useEffect(() => {
+    AOS.init({duration: 1600});
+  }, []);
   return (
-    <div className="roadmap">
+    <div className="roadmap" data-aos="zoom-in">
       <h1 className="title">Path to Placement</h1>
       <div className="roadmap-container">
         <svg
@@ -25,13 +29,13 @@ const Roadmap = () => {
         >
           <path
             d="M-50 10 C30 30, 70 30, 50 50 S100 70, 150 90"
-            stroke="black"
+            stroke={isDarkMode?"grey":"black"}
             strokeWidth="5"
             fill="none"
           />
           <path
             d="M-50 10 C30 30, 70 30, 50 50 S100 70, 150 90"
-            stroke="white"
+            stroke={isDarkMode?"black":"white"}
             strokeWidth="1"
             strokeDasharray="5,5"
             fill="none"
@@ -57,7 +61,9 @@ const Roadmap = () => {
         </svg>
         {clickedItem === 1 && (
           <div className="centered-description">
-            <button className="close-btn" onClick={handleCloseClick}><IconCloseCircleOutline /></button>
+            <button className="close-btn" onClick={handleCloseClick}>
+              {isDarkMode ? <IconCloseCircleOutlineDark /> : <IconCloseCircleOutline />}
+            </button>
             1. Excel Academically and Choose Relevant Courses<br/>
             Maintain a strong GPA: Consistently perform well in your studies, as academic excellence is a key criterion for many recruiters. Aim to keep your GPA high, especially in courses related to your desired field.<br/>
             Enroll in relevant coursework: Select courses that align with your career goals. This not only builds your expertise but also signals your commitment to potential employers. Participate actively and strive for excellence in these classes.
@@ -65,7 +71,9 @@ const Roadmap = () => {
         )}
         {clickedItem === 2 && (
           <div className="centered-description">
-            <button className="close-btn" onClick={handleCloseClick}><IconCloseCircleOutline /></button>
+            <button className="close-btn" onClick={handleCloseClick}>
+              {isDarkMode ? <IconCloseCircleOutlineDark /> : <IconCloseCircleOutline />}
+            </button>
             2. Build Technical and Soft Skills through Practical Experience<br/>
             Technical skills development: Gain proficiency in the tools and technologies pertinent to your field.<br/>
             Soft skills enhancement: Cultivate essential soft skills such as communication, teamwork, and problem-solving. Engage in extracurricular activities, student organizations, and group projects to hone these abilities.<br/>
@@ -75,7 +83,9 @@ const Roadmap = () => {
         )}
         {clickedItem === 3 && (
           <div className="centered-description">
-            <button className="close-btn" onClick={handleCloseClick}><IconCloseCircleOutline /></button>
+            <button className="close-btn" onClick={handleCloseClick}>
+              {isDarkMode ? <IconCloseCircleOutlineDark /> : <IconCloseCircleOutline />}
+            </button>
             3. Prepare Thoroughly for Interviews<br/>
             Craft a compelling resume: Develop a resume that highlight your skills, experiences, and accomplishments. Tailor these documents to each position you apply for, emphasizing your most relevant qualifications.<br/>
             Practice interview skills: Prepare for both technical and behavioral interview questions. Engage in mock interviews to gain confidence and receive feedback. Use resources like coding platforms, interview preparation websites, and campus career services to refine your responses.
@@ -83,7 +93,9 @@ const Roadmap = () => {
         )}
         {clickedItem === 4 && (
           <div className="centered-description">
-            <button className="close-btn" onClick={handleCloseClick}><IconCloseCircleOutline /></button>
+            <button className="close-btn" onClick={handleCloseClick}>
+              {isDarkMode ? <IconCloseCircleOutlineDark /> : <IconCloseCircleOutline />}
+            </button>
             4. Register and Apply Strategically<br/>
             Register on placement portals: Sign up on platforms GENSKILL to stay informed about job opportunities and recruitment drives.<br/>
             Thoroughly review job descriptions: Carefully read and understand the job descriptions to ensure you meet the qualifications and requirements. Tailor your applications to highlight how your skills and experiences align with the job.<br/>

@@ -1,18 +1,13 @@
 import "../pagesCss/placementPage.css";
 import PlacementPathCompo from "./PlacementPathCompo";
 import faqData from "./faqData";
-import { useState } from "react";
-
+import { useState,useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 const Placement = () => {
-  // const [viewAnswer, setViewAnswer] = useState(-1)
-
-
-  // function handleViewAnswer(index){
-  //   if(viewAnswer === index) {
-  //     return setViewAnswer(-1)
-  //   }
-  //   setViewAnswer(prev => prev = index)
-  // }
+  useEffect(() => {
+    AOS.init({duration: 1600});
+  }, []);
 
 
   return (
@@ -23,7 +18,7 @@ const Placement = () => {
      
       {/* rules and regulations */}
 
-      <div className="rulesRegulationsContainer">
+      <div className="rulesRegulationsContainer" data-aos="zoom-in">
         <h1 className="pageHeading">Rules & Regulations</h1>
         <ul>
           <li>
