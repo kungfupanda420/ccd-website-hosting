@@ -14,6 +14,7 @@
 
 @import url(https://db.onlinewebfonts.com/c/b52804ac57ef6e90d2826a6b0f111133?family=Integral+CF+Bold);
 @import url(https://db.onlinewebfonts.com/c/f1fcc5aed1e20fc0cdb9f8a7573625bd?family=Integral+CF+Regular);
+
 .heroSection {
     position: absolute;
     top: 0;
@@ -47,7 +48,7 @@
     background-repeat: no-repeat;
     background-position: 0% 100%;
     transition: background-size .7s, background-position .5s ease-in-out;
-    font-family: "Integral CF Regular";
+    font-family: "Integral CF Regular" !important;
 
 }
 

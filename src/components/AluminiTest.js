@@ -12,7 +12,7 @@ const AluminiTest = () => {
 
     return (
         <>
-        <h1 className='aluminihead'>Alumini Testimonials</h1>
+        <h1 className='aluminihead'>Recruiter Testimonials</h1>
             <Swiper navigation={true} modules={[Navigation]} className="mySwiper">
                 <SwiperSlide>
                     <div class="testimonial">
