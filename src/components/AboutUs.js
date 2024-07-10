@@ -1,6 +1,6 @@
 import React from 'react'
 import '../css/AboutUs.css'
-
+import Facilities from './Facilities'
 function AboutUs() {
     return (
         <>
@@ -38,6 +38,7 @@ function AboutUs() {
 
             </div>
             </div>
+            <Facilities />
         </>
     )
 }
