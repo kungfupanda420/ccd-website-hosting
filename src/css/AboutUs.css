@@ -353,10 +353,10 @@ a:hover {
   }
   
   .card:hover {
-    transform: scale(1.04) rotate(1deg);
+    transform: scale(1.04);
   }
   
-  .circle {
+  /* .circle {
     width: 100px;
     height: 100px;
     background: radial-gradient(#0045a0, #539cef);
@@ -374,7 +374,7 @@ a:hover {
     bottom: -25px;
     right: -25px;
     animation-name: move-down1;
-  }
+  } 
   
   @keyframes move-up6 {
     to {
@@ -387,3 +387,5 @@ a:hover {
       transform: translateY(10px);
     }
   }
+
+  */

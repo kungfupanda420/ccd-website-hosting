@@ -1,9 +1,10 @@
-import React, {useState} from 'react'
+import React from 'react'
 import NewAbout from './NewAbout'
 import AboutSubCompo from './AboutSubCompo'
 import '../css/AboutRoute.css'
 import AboutUs from './AboutUs'
 import Departments from './Departments'
+import CulturalClubs from './CulturalClubs'
 // import AluminiTest from './AluminiTest'
 
 const clubInfo=[
@@ -69,13 +70,18 @@ function AboutRoute() {
         <NewAbout/>
         <AboutUs/>
         <Departments/>
-      <div className='clubhead'><span>Clubs in NIT Calicut</span></div>
+      <div className='clubhead'>
+        <span>Technical Clubs At NIT Calicut</span>
+      </div>
        {
         clubInfo.map((item, index) => (
             <AboutSubCompo clubContent = {item} />
         ))
        }
-
+       <div style={{marginTop:'0'}} className='clubhead'>
+        <span>Cultural Clubs At NIT Calicut</span>
+      </div>
+       <CulturalClubs/>
     </div>
   )
 }

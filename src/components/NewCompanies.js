@@ -47,8 +47,6 @@ import discovery from "../company/Discovery-Channel-Logo.png";
 const App = () => {
   const row1 = [
     goldmannsachs,atlasian,qualcomm,texas,oracle,deshaw,lt,
-    
-    "https://assets.algoexpert.io/spas/main/prod/g523bdeb478-prod/dist/images/a2b3c3709ffedce2a22a.png",
     nvidia,salesforce
   ];
 
@@ -65,7 +63,7 @@ const App = () => {
   return (
     <AppContainer>
       <Wrapper>
-        <Text>Our Previous Recruiters</Text>
+        <Text>Our Top Recruiters</Text>
         {/* <Note>Our customers have gotten offers from awesome companies.</Note> */}
         <Marquee>
           <MarqueeGroup>
@@ -140,7 +138,7 @@ export default App;
 
 const AppContainer = styled.div`
   width: 100vw;
-  height: 40rem;
+  height: 45rem;
   color: #000000;
   background-color:var(--newCompBack);
   position: relative;
@@ -162,9 +160,9 @@ const Wrapper = styled.div`
 const Text = styled.div`
   font-family: "Poppins", sans-serif;
   color:var(--textColor2);
-  font-size: 6vh;
+  font-size: 4.5vh;
   font-weight: 500;
-  margin-bottom: 10px;
+  margin-bottom: 30px;
 `;
 
 const Note = styled.div`
@@ -206,7 +204,7 @@ const common = css`
   justify-content: space-around;
   white-space: nowrap;
       width: 285%;
-  animation: ${scrollX} 30s linear infinite;
+  animation: ${scrollX} 60s linear infinite;
 `;
 
 const MarqueeGroup = styled.div`

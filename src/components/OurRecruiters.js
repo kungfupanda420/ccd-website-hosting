@@ -4,8 +4,7 @@ import '../css/OurRecruiters.css'
 function OurRecruiters(){
 
   const images = require.context('../../public/images/companies_logo', false,  /\.(png|jpe?g|svg)$/);
-  const imageList = images.keys().map((imageFileName) => {
-    console.log(imageFileName);
+  const imageList = images.keys().map((imageFileName)=>{
     return images(imageFileName);
   });
 
@@ -16,12 +15,13 @@ function OurRecruiters(){
         {imageList.map((imageSrc, index) => (
           <div className="card-company" key={index}>
             <img src={imageSrc} className="company-logo" alt="Company Logo" />
-            <p className="company-name">Company</p>
+            {/* <p className="company-name">Company</p> */}
           </div>
         ))}
       </div>
     </>
   )
+
 }
 
 export default OurRecruiters

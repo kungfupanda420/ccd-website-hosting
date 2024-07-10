@@ -20,9 +20,11 @@
 }
 
 .clubhead{
-    display: block;
-    margin: auto;
+    /* display: block; */
+    /* margin: auto; */
+    margin-top: 6rem;
     text-align: center;
+    font-family: 'Poppins', sans-serif;
 }
 
 .clubhead:hover {

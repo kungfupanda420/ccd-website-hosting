@@ -55,8 +55,7 @@ function App() {
         innerScale={0.8}
         outerScale={1}
         innerStyle={{
-          backgroundColor: 'blue',
-          mixBlendMode: "exclusion"
+          backgroundColor: 'rgba(1,89,170,255)'
         }}
         outerStyle={{
           border: '2px solid white',

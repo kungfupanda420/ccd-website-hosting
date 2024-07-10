@@ -33,6 +33,7 @@ sans-serif; */
   --depFont: white;
   --depBullet: white;
   --textColor2: #000000;
+  
 }
 
 [data-theme="light"]
@@ -41,7 +42,7 @@ sans-serif; */
   --newCompBack:rgb(224, 236, 255);
   --textColor: rgba(1,89,170,255);
   --btnBg: #000000;
-  --grayBackgroundColor: rgba(0, 0, 0, 0.1);
+  --grayBackgroundColor:rgb(188 188 188 / 10%);
   --grayBorderColor:rgba(0, 0, 0, 0.3);
   --lightTextColor: #00000095;
   --redColor:rgb(129, 175, 255);
@@ -50,11 +51,11 @@ sans-serif; */
   --statTextColor: rgb(225, 224, 224);
   --navBarBg:rgba(255, 255, 255, 0.564);
   --btnShadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-  /* --activePgm:rgba(1,89,170,255); */
   --activePgm:#FFF;
   --depFont: #246;
   --depBullet: #48b;
   --textColor2: rgba(1,89,170,255);
+  --pgmGray:rgb(129, 129, 129);
 }
 
 *{

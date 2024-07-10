@@ -90,6 +90,7 @@
 
 .arrow {
   transition: transform 0.5s ease;
+  stroke: var(--blackTextColor);
 }
 
 .whiteButton:hover .arrow {

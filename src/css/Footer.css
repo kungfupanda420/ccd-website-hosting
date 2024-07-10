@@ -13,10 +13,12 @@
   display: flex;
   justify-content: center;
 }
+
 .footerSubContent {
   margin: 1rem 2rem;
   color: var(--textColor);
 }
+
 .footerSubContent > p {
   font-weight: bold;
   margin: 0.85rem 0;
@@ -48,6 +50,25 @@
   color: var(--lightTextColor);
   font-size: 0.85rem;
   font-weight: 400;
+  position: relative;
+}
+
+.footerLinks a::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 1px;
+  bottom: -1px;
+  left: 0;
+  background-color:var(--textColor);
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+
+.footerLinks a:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
 }
 
 .linkedin:hover{

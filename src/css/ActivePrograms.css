@@ -47,7 +47,8 @@
   }
   .programCard {
     /* border: 1.75px solid rgb(50, 50, 50); */
-    background-color: var(--activePgm);
+    /* activepgm */
+    background-color: white;
     border-radius: 2.25rem;
     padding: 2rem;
     margin-bottom: 1rem;
@@ -58,6 +59,10 @@
     background-color: rgba(1,89,170,255);;
     border: 1.75px solid rgb(52, 52, 52);
     color: white;
+    .programDetails{
+      color: white;
+    
+    }
   }
   
   .programCardTitle {
@@ -126,7 +131,7 @@
   }
   
   .programDetails {
-    color: rgb(129, 129, 129);
+    color: var(--pgmGray);
     overflow: hidden;
     text-overflow: ellipsis;
     font-family: 'Poppins', sans-serif;

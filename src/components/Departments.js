@@ -5,28 +5,39 @@ const Departments = () => {
     return (
     <>
         <div class="todo">
-            <h1>Our Departments and Programs</h1>
+            <h1>Programmes Offered</h1>
                  
                     <ul>
-                        <li>Departments</li>
+                        <li>B.Tech</li>
                         <ul>
-                            <li>Chemical</li>
+                            <li>Electrical and Electronics Engineering</li>
+                            <li>Mechanical Engineering</li>
                             <li>Computer Science and Engineering</li>
-                            <li>ECE</li>
-                            <li>EEE</li>
-                            <li>ME</li>
-                            <li>Civil</li>
+                            <li>Civil Engineering</li>
+                            <li>Electronics and Communication Engineering</li>
+                            <li>Engineering Physics</li>
+                            <li>Material Science and Engineering</li>
+                            <li>Chemical Engineering</li>
+                            <li>Production Engineering</li>
+                            <li>Biotechnology</li>
                         </ul>
-                        <li>Programs</li>
+                        <li>B.Arch</li>
                         <ul>
-                            <li>Btech CSE</li>
-                            <li>Btech ECE</li>
-                            <li>Btech EEE</li>
-                            <li>Mtech CSE</li>
-                            <li>Mtech CSE</li>
-                            <li>PhD</li>
+                            <li>Bachelor of Architecture</li>
                         </ul>
-                        
+                        <li>M.Tech</li>
+                        <ul>
+                            <li>Civil Engineering</li>
+                            <li>Electronics and Communication Engineering</li>
+                            <li>Electrical Engineering</li>
+                            <li>Computer Science and Engineering</li>
+                            <li>Material Science and Engineering</li>
+                            <li>Mechanical Engineering</li>
+                            <li>Chemical Engineering</li>
+                        </ul>
+                        <li>Master of Business Administration (MBA)</li>
+                        <li>Master of Planning (Urban Planning)</li>
+                        <li>Master of Science (M.Sc) [Chemistry,Physics,Mathematics]</li>
                     </ul>
             </div>
     </>

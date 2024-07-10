@@ -8,9 +8,7 @@
   overflow: hidden;
   padding: 1rem;
   margin: 5rem 0rem;
-
   scroll-behavior: smooth;
-
   height: fit-content;
   padding-top: 2rem;
   cursor: grab;
@@ -21,23 +19,6 @@
   flex-direction: row;
   align-items: center;
 }
-
-/* .newsMediaDiv{
-  position: relative;
-}
-
-.newsMediaDiv::before{
-  content: "";
-  position: absolute;
-  top: -15%;
-  left: 0;
-  width: 100%;
-  height: 7rem;
-  background: linear-gradient(white, #f0f0f0, #d9d9d9, #bfbfbf, #a6a6a6, #8c8c8c, #737373, #595959, #404040, black);
-  z-index: 2;
-  display: block;
-
-} */
 
 .newsMediaHeading {
   font-family: 'Montserrat', sans-serif;
@@ -67,8 +48,8 @@
   /* border: 1px solid rgb(86, 86, 86); */
   border-radius: 1rem;
   padding: 0.8rem;
-  height: 33rem;
-  width: 20rem;
+  height: 39rem;
+  width: 26rem;
   background-color: var(--cardCol);
   color: var(--textColor);
   margin-right: 2.5rem;
@@ -76,7 +57,7 @@
 }
 
 .cardImage {
-  height: 40%;
+  height: 13rem;
   width: 99.99%;
   pointer-events: none;
   border-radius: 1rem;
@@ -100,9 +81,9 @@
   color: rgb(218, 217, 253);
   font-weight: 400;
   width: 95%;
-  height: 30%;
-  margin-top: 10%;
-  overflow: hidden;
+  height: 14rem;
+  margin-top: 1rem;
+  /* overflow: hidden; */
 }
 
 .cardDate {
@@ -167,7 +148,7 @@
   display: flex;
   justify-content: center;
   top: 0;
-  bottom: 64px;
+  bottom:0;
   margin-block: auto;
   height: fit-content;
   width: 48px;
@@ -187,7 +168,7 @@
 }
 
 .carousel-arrow--prev {
-  left: 35%;
+  left: 40rem;
 }
 
 .carousel-arrow--next {
@@ -214,6 +195,19 @@
 
   .carousel-arrow--next {
     right: 0;
+  }
+
+  .carousel-container::-webkit-scrollbar {
+    height: 14px;
+    width: calc(100% - 100px);
+  }
+  
+  .carousel-container::-webkit-scrollbar-track {
+    background: rgba(1, 89, 170, 255);
+  }
+  
+  .carousel-container::-webkit-scrollbar-thumb {
+    background: white;
   }
 
   .newsMediaHolder {
@@ -244,10 +238,9 @@
 
   .cardNews {
     margin: 0 0.5rem;
-    height: 25rem;
-    width: 15rem;
+    height: 37rem;
+    width: 21rem;
     scroll-snap-align: start;
-    background-color: var();
   }
 
   .cardTitle {

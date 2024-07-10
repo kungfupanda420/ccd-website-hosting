@@ -3,15 +3,13 @@ import StudentNavbar from './StudentNavbar';
 import '../css/ForStudent.css';
 import { Outlet } from 'react-router-dom';
 import Roadmap from './Roadmap';
-import AluminiTest from './AluminiTest';
 
-const ForStudent = ({ isDarkMode, onToggleTheme }) => {
+const ForStudent = () => {
   return (
     <div className='forStudentContainer'>
       <StudentNavbar />
-      <Roadmap isDarkMode={isDarkMode} onToggleTheme={onToggleTheme} />
+      {/* <Roadmap isDarkMode={isDarkMode} onToggleTheme={onToggleTheme} /> */}
       <Outlet />
-      {/* <AluminiTest /> */}
     </div>
   );
 };

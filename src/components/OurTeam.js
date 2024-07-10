@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import "../css/OurTeam.css";
 import AOS from "aos";
@@ -25,9 +24,9 @@ function OurTeam() {
     // Calculate width
 
   }, []);
-  useEffect(() => {
-    setWidth(studentContainer.current.scrollWidth - studentContainer.current.offsetWidth);
-  })
+  // useEffect(() => {
+  //   setWidth(studentContainer.current.scrollWidth - studentContainer.current.offsetWidth);
+  // })
   useEffect(() => {
     AOS.init({duration: 1600});
   }, []);
@@ -92,6 +91,51 @@ function OurTeam() {
                 ))}
               </div>
             </div>
+
+            <div ref={studentContainer} className="studentsDiv" >
+            <h4 className="spochead">INTERNs</h4>
+              <div
+                className="innerInternDiv">
+                
+                  <div className="internCard" >
+                    <img src="images/our_team/students/ayush.png" alt="" />
+                    <div className="studentDetail">
+                      <p className="smallHeading">Intern Student</p>
+                    </div>
+                  </div>
+                  <div className="internCard" >
+                    <img src="images/our_team/students/ayush.png" alt="" />
+                    <div className="studentDetail">
+                      <p className="smallHeading">Intern Student</p>
+                    </div>
+                  </div>
+                  <div className="internCard" >
+                    <img src="images/our_team/students/ayush.png" alt="" />
+                    <div className="studentDetail">
+                      <p className="smallHeading">Intern Student</p>
+                    </div>
+                  </div>
+                  <div className="internCard" >
+                    <img src="images/our_team/students/ayush.png" alt="" />
+                    <div className="studentDetail">
+                      <p className="smallHeading">Intern Student</p>
+                    </div>
+                  </div>
+                  <div className="internCard" >
+                    <img src="images/our_team/students/ayush.png" alt="" />
+                    <div className="studentDetail">
+                      <p className="smallHeading">Intern Student</p>
+                    </div>
+                  </div>
+                  <div className="internCard" >
+                    <img src="images/our_team/students/ayush.png" alt="" />
+                    <div className="studentDetail">
+                      <p className="smallHeading">Intern Student</p>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
           </div>
 
           {/* <Card className="eachstudent" style={{ width: '18rem',padding:'1rem' }}>
@@ -104,9 +148,8 @@ function OurTeam() {
               </Card.Body>
             </Card> */}
 
-
-
         </div>
+        
       </div>
     </>
   );
