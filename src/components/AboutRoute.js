@@ -51,7 +51,7 @@ const clubInfo=[
     },
 
       {
-        clubName:"Team AEROUNWIRED",
+        clubName:"AEROUNWIRED",
         clubInfoTwoLines:"AeroUnwired is an aero-modelling club, a branch of Club Unwired, found by students of NITC who aspired to harness the knowledge",
         clubInfoMore:"of flight. Inspired by the magnificent creatures with wings and technical aspects of the same, this club puts effort to build aircrafts and study the science of flight. The club offers knowledge to those who seek and invest their time in innovation. With a classical workspace to work & supportive faculty members and seniors, this club welcomes all those who wish to learn.",
         clubImageOne:"/images/aboutpage/aerounwiredTwo.png",

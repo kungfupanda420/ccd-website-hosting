@@ -7,7 +7,6 @@ import AnimatedCursor from "react-animated-cursor";
 import Loader from './pages/Loader';
 import FaqStudents from './pages/FaqStudents';
 import Roadmap from './components/Roadmap';
-
 const Home = lazy(() => import('./components/Home'));
 const AboutRoute = lazy(() => import('./components/AboutRoute'));
 const PlacementStatics = lazy(() => import('./components/PlacementStatics'));
@@ -72,9 +71,9 @@ function App() {
           <Route path='/placement' element={<PlacementStatics />} />
           <Route path='/recruiter' element={<ForRecruiter />} />
           <Route path='/forstudents' element={<ForStudent isDarkMode={isDarkMode} onToggleTheme={handleToggleTheme} />}>
-            <Route index element={<Intern />} />
+            <Route index element={<Roadmap isDarkMode={isDarkMode} onToggleTheme={handleToggleTheme} />}/>
             <Route path='internships' element={<Intern />} />
-            <Route path='placements' element={<Placement />} />
+            {/* <Route path='placements' element={<Placement />} /> */}
             <Route path='faqdata' element={<FaqStudents />} />
             <Route path='roadmap' element={<Roadmap isDarkMode={isDarkMode} onToggleTheme={handleToggleTheme} />} />
           </Route>
