@@ -11,7 +11,7 @@ const ForStudent = ({ isDarkMode, onToggleTheme }) => {
       <StudentNavbar />
       <Roadmap isDarkMode={isDarkMode} onToggleTheme={onToggleTheme} />
       <Outlet />
-      <AluminiTest />
+      {/* <AluminiTest /> */}
     </div>
   );
 };
