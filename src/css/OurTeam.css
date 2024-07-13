@@ -33,12 +33,7 @@ body {
   overflow: hidden;
   transition: .5s all;
 
-  hr {
-    width: 100%;
-    border: none;
-    border-bottom: 1px solid #88888855;
-    margin-top: 0;
-  }
+  
 
   .main {
     display: flex;
@@ -90,6 +85,13 @@ body {
   }
 }
 
+.nft hr {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #88888855;
+  margin-top: 0;
+}
+
 .bg {
   position: fixed;
   top: 50%;
@@ -112,6 +114,7 @@ body {
   position: relative;
   overflow: hidden;
   flex-direction: column;
+  width: 100%;
 }
 
 .innerStudentsDiv {
@@ -157,6 +160,8 @@ body {
   /* grid-template-columns: repeat(6, 1fr); */
   /* grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); */
   padding-bottom: 1rem 0;
+  place-items: center;
+  
 }
 
 .internCard {
@@ -364,12 +369,24 @@ body {
     display: grid;
     grid-template-columns: auto auto auto;
   }
+  .innerInternDiv {
+    display: grid;
+    grid-template-columns: auto auto auto;
+  }
 }
 
 @media screen and (min-width:400px) and (max-width: 643px){
   .innerStudentsDiv {
     display: grid;
     grid-template-columns: auto auto;
+  }
+  .innerInternDiv {
+    display: grid;
+    grid-template-columns: auto auto;
+  }
+  .internCard{
+    width: 9rem;
+    height: 9rem;
   }
 }
 

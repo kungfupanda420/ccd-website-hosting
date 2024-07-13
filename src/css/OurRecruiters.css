@@ -36,4 +36,17 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   grid-gap: 10px;
+  /* position: relative; */
+}
+
+.pageDownBtn{
+  position: sticky;
+  bottom: 15px;
+  left: 100%;
+  margin-top: 5rem;
+  margin-right: -9%;
+}
+
+.buttonText:hover{
+  content: 'Download';
 }

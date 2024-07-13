@@ -1,6 +1,7 @@
 .roadmap {
   text-align: center;
   font-family: 'Poppins', sans-serif;
+  margin-top: 2rem;
 }
 .title{
   color: var(--textColor);

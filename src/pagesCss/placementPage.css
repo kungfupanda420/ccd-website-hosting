@@ -32,6 +32,7 @@
 .page .smallHeading 
 {
     font-weight: 600;
+    font-size: 1.5rem;
     margin: 1rem 0 1rem;
     text-transform: capitalize;
 }
@@ -43,6 +44,7 @@
     padding-bottom: 2rem;
     line-height: 2;
     color: var(--lightTextColor);
+    text-align: justify;
 }
 .page .tinyTexts  a 
 {
@@ -172,6 +174,13 @@
 {
     margin: 2.5rem 0 1rem;
 
+}
+
+.genskillButtons{
+    display: flex;
+    gap: 1rem;
+    margin: 1rem 0;
+    
 }
 
 /* responsive */

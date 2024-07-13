@@ -11,6 +11,7 @@ sans-serif; */
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+
 }
 
 :root 
@@ -33,6 +34,7 @@ sans-serif; */
   --depFont: white;
   --depBullet: white;
   --textColor2: #000000;
+  --stuNav:white;
   
 }
 
@@ -56,6 +58,7 @@ sans-serif; */
   --depBullet: #48b;
   --textColor2: rgba(1,89,170,255);
   --pgmGray:rgb(129, 129, 129);
+  --stuNav:rgba(1,89,170,255);
 }
 
 *{
@@ -137,6 +140,48 @@ a
 li{
   list-style-type: none;
 }
+
+
+.whiteButton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: var(--textColor);
+  padding: 1rem;
+  border-radius: 2rem;
+  width: fit-content;
+  cursor: pointer;
+  transition: background-color 0.3s ease,border 0.3s ease;; 
+}
+
+.whiteButton:hover {
+  background-color: var(--backgrounColor);
+  box-shadow:var(--btnShadow);
+}
+
+.buttonText {
+  color: var(--blackTextColor);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 560;
+  padding: 0rem 0.6rem;
+  transition: color 0.3s ease; 
+}
+
+.whiteButton:hover .buttonText {
+  color: var(--textColor);
+}
+
+/* .arrow {
+  width: 1rem;
+  transition: stroke 0.3s ease; 
+  stroke: var(--blackTextColor);
+}
+
+.whiteButton:hover .arrow path {
+  stroke: var(--textColor);
+} */
+
 
 
 @media screen and (min-width:769px) and (max-width:1025px) {

@@ -73,7 +73,7 @@ function App() {
           <Route path='/forstudents' element={<ForStudent isDarkMode={isDarkMode} onToggleTheme={handleToggleTheme} />}>
             <Route index element={<Roadmap isDarkMode={isDarkMode} onToggleTheme={handleToggleTheme} />}/>
             <Route path='internships' element={<Intern />} />
-            {/* <Route path='placements' element={<Placement />} /> */}
+            <Route path='placements' element={<Placement />} />
             <Route path='faqdata' element={<FaqStudents />} />
             <Route path='roadmap' element={<Roadmap isDarkMode={isDarkMode} onToggleTheme={handleToggleTheme} />} />
           </Route>

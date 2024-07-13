@@ -8,7 +8,7 @@ const clubInfo = [
         clubLogo: "images/club_logo/cm.png"
     },
     {
-        clubName: "Industry and Planning Forum",
+        clubName: "Industrial and Planning Forum",
         clubLogo: "images/club_logo/ipf.png"
     },
     {
@@ -20,19 +20,19 @@ const clubInfo = [
         clubLogo: "images/club_logo/hvg.jpg"
     },
     {
-        clubName: "Club Musica",
+        clubName: "Dance and Dramatics",
         clubLogo: "images/club_logo/dnd.jpg"
     },
     {
-        clubName: "Club Dramatica",
+        clubName: "Indian Cultural Association",
         clubLogo: "images/club_logo/ica.png"
     },
     {
-        clubName: "Club Artista",
+        clubName: "Enquire Quiz Club",
         clubLogo: "images/club_logo/enquire.jpeg"
     },
     {
-        clubName: "Club Cinematica",
+        clubName: "Literary and Debating Club",
         clubLogo: "images/club_logo/lnd.png"
     },
     {

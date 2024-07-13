@@ -8,7 +8,7 @@
     text-align: center;
     font-size: 18px;
     background:transparent;
-
+    height: 35rem !important;
     display: flex !important;
     justify-content: center;
     align-items: center !important;
@@ -28,6 +28,7 @@
     padding: 30px 30px 50px;
     margin: 100px 15px 160px;
     position: relative;
+    font-family: 'Poppins', sans-serif;
   }
   
   .testimonial .icon {
@@ -84,7 +85,14 @@
   .aluminihead{
     text-align: center;
     font-size: 2rem;
-    
+    font-family: 'Poppins', sans-serif;
     margin-bottom: -20px;
     opacity: 0.6;
+  }
+
+  @media screen and (max-width: 768px) {
+    .swiper-slide{
+      height: 59rem !important;
+    }
+    
   }

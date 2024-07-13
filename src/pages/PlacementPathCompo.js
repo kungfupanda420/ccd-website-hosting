@@ -12,7 +12,7 @@ function PlacementPathCompo() {
       <div className="pageContent" >
         <h1 className="pageHeading" data-aos="zoom-in">Placements</h1>
         <p className="smallHeading" data-aos="zoom-in">
-          How to <span>REGISTER</span>
+          How to <span>Register</span>
         </p>
 
         <p className="tinyTexts" data-aos="zoom-in">
@@ -35,18 +35,18 @@ function PlacementPathCompo() {
           students to build their resume in an incremental way. Students may
           refer the following resources for familiarity and e-support. <br />
           Resource: <br />
-          <a href=" https://genskill.com/" target="_blank" rel="noreferrer">
-            {" "}
-            https://genskill.com/
-          </a>{" "}
-          <br />
+          <div className="genskillButtons">
+          <a href=" https://genskill.com/" className="whiteButton" target="_blank" rel="noreferrer">
+           <span className="buttonText">GenSkill</span> 
+          </a>
           <a
             href="https://app.genskill.com/documentation/videos/"
-            target="_blank"
+            target="_blank" className="whiteButton" 
             rel="noreferrer"
           >
-            https://app.genskill.com/documentation/videos/
+             <span className="buttonText">Demo Videos</span> 
           </a>
+          </div>
         </p>
 
         <p className="smallHeading" data-aos="zoom-in">Placement Process</p>

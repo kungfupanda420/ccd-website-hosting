@@ -29,7 +29,13 @@
     color: var(--textColor);
     padding: var(--padding);
     border-radius: 0.5rem;
-    border-color:rgb(0, 0, 149) ;
+    border-color:rgb(0, 0, 149);
+
+    &:hover
+    {
+        background-color: var(--stuNav);
+        color: var(--bgCol);
+    }
 }
 
 

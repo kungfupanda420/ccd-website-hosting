@@ -57,9 +57,11 @@ const PlacementStatics = () => {
       fetchData();
     }
   }, [inView]);
+
   useEffect(() => {
     AOS.init({duration: 1000});
   }, []);
+  
   return (
     
     <>
@@ -135,8 +137,9 @@ const PlacementStatics = () => {
             </div>
           </div>
         </div>
-      {location.pathname === '/placement' && <OurRecruiters />
-      }
+      {location.pathname === '/placement' && 
+      <><OurRecruiters />
+      </>}
       </div>
       
     </>
