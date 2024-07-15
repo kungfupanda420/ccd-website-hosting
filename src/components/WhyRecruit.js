@@ -14,8 +14,8 @@ const WhyRecruit = () => {
 
   const handleDownload = () => {
     const downloadLink = document.createElement('a');
-    downloadLink.href = '/documents/Placement Brochure 2023.pdf';
-    downloadLink.download = 'Placement Brochure 2023.pdf';
+    downloadLink.href = '/documents/placement_brochure_2024.pdf';
+    downloadLink.download = 'Placement Brochure 2024.pdf';
     downloadLink.click();
   };
 

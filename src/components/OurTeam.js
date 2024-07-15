@@ -8,7 +8,11 @@ function OurTeam() {
   const [studentData, setStudentData] = useState([]);
   const [width, setWidth] = useState();
   const studentContainer = useRef();
-
+  const links=['https://www.linkedin.com/in/psankaran',
+    'https://www.linkedin.com/in/vijayaraj-k-505a4947',
+    'https://www.linkedin.com/in/prateek-negi-92971164',
+    'https://www.linkedin.com/in/manju-mahipalan-05159743'
+  ]
   useEffect(() => {
     // Fetch data from the server API
     fetch("/api/our-team")
@@ -67,7 +71,7 @@ function OurTeam() {
                       <h2>{person.name}</h2>
                       <p class='description'>{person.position}</p>
                       <hr />
-                      <h2><FaLinkedin/></h2>
+                      <h2><a href={links[index]} target="_blank" style={{textDecoration:'none'}}><FaLinkedin/></a></h2> 
                     </div>
                   </div>
                 ))
