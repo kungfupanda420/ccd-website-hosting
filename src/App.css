@@ -11,6 +11,7 @@ sans-serif; */
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+
 }
 
 :root 
@@ -24,8 +25,45 @@ sans-serif; */
   --redColor:rgb(255, 129, 129);
   --blackTextColor:#000000;
   --scrobarWidth:12px;
+  --subButtonBg: #ffffff;
+  --statTextColor: rgb(194, 191, 191);
+  --navBarBg:rgba(0, 0, 0, 0.564);
+  --btnShadow: 0 4px 8px rgba(255, 255, 255, 0.5);
+  --newCompBack:#ffffff;
+  --activePgm:#000000;
+  --depFont: white;
+  --depBullet: white;
+  --textColor2: #000000;
+  --stuNav:white;
+  
 }
 
+[data-theme="light"]
+{
+  --backgrounColor: rgb(224, 236, 255);
+  --newCompBack:rgb(224, 236, 255);
+  --textColor: rgba(1,89,170,255);
+  --btnBg: #000000;
+  --grayBackgroundColor:rgb(188 188 188 / 10%);
+  --grayBorderColor:rgba(0, 0, 0, 0.3);
+  --lightTextColor: #00000095;
+  --redColor:rgb(129, 175, 255);
+  --blackTextColor:#FFFFFF;
+  --subButtonBg: rgba(1,89,170,255);
+  --statTextColor: rgb(225, 224, 224);
+  --navBarBg:rgba(255, 255, 255, 0.564);
+  --btnShadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  --activePgm:#FFF;
+  --depFont: #246;
+  --depBullet: #48b;
+  --textColor2: rgba(1,89,170,255);
+  --pgmGray:rgb(129, 129, 129);
+  --stuNav:rgba(1,89,170,255);
+}
+
+*{
+  transition: all 0.3s ease-in-out;
+}
 body 
 {
   background: var(--backgrounColor);
@@ -60,6 +98,8 @@ body::-webkit-scrollbar-thumb{
   font-weight: 700;
   font-size: 3rem;
   line-height: 4.5rem;
+  padding-bottom: 2rem;
+  padding-left: 1rem;
 }
 
 .mediumHeading
@@ -100,6 +140,48 @@ a
 li{
   list-style-type: none;
 }
+
+
+.whiteButton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: var(--textColor);
+  padding: 1rem;
+  border-radius: 2rem;
+  width: fit-content;
+  cursor: pointer;
+  transition: background-color 0.3s ease,border 0.3s ease;; 
+}
+
+.whiteButton:hover {
+  background-color: var(--backgrounColor);
+  box-shadow:var(--btnShadow);
+}
+
+.buttonText {
+  color: var(--blackTextColor);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 560;
+  padding: 0rem 0.6rem;
+  transition: color 0.3s ease; 
+}
+
+.whiteButton:hover .buttonText {
+  color: var(--textColor);
+}
+
+/* .arrow {
+  width: 1rem;
+  transition: stroke 0.3s ease; 
+  stroke: var(--blackTextColor);
+}
+
+.whiteButton:hover .arrow path {
+  stroke: var(--textColor);
+} */
+
 
 
 @media screen and (min-width:769px) and (max-width:1025px) {

@@ -1,5 +1,14 @@
+:root{
+  --borderCol: black;
+  --graySc:grayscale(1);
+}
+[data-theme="light"]{
+  --borderCol: rgb(224, 236, 255);
+  --graySc:grayscale(0);
+}
 .aboutContainer {
-  color: var(--textColor);
+  /* color: var(--textColor); */
+  color: white;
   width: 100vw;
   display: flex;
   justify-content: center;
@@ -7,6 +16,7 @@
   padding: 10rem 9vw;
   min-height: 100vh;
   overflow-x: hidden;
+  
 }
 
 /* clubs aboutContainers */
@@ -27,6 +37,7 @@
   position: relative;
   grid-template-rows: repeat(2, 38vh);
   gap: 10px;
+  
    /* border: 1px solid white; */
 }
 
@@ -35,7 +46,7 @@
   overflow: hidden;
   border: 1px solid var(--grayBorderColor);
   padding: 1.5rem;
-
+  background-color: var(--borderCol);
 }
  .aboutSubContainers > div:first-child{
     border-radius: 0;
@@ -60,7 +71,7 @@
   object-fit: cover;
   border-radius: 0.5rem;
   transition: all 0.5s ease;
-    filter: grayscale(1);
+  filter: var(--graySc);
 }
 .imageContiners img:hover 
 {
@@ -95,13 +106,17 @@
   padding: 1.25rem;
   transform: translateY(calc(-30% - 1rem));
   transition: all 0.65s ease;
-  background: linear-gradient(rgba(64, 64, 64, 0), black, black);
+  
 }
 
 .aboutSubContainers > div .contentDivs .mainHeading {
-  margin: 0 0 1rem;
+  margin: -0.5rem 0 1rem;
 }
+
+
 .aboutSubContainers > div:hover .contentDivs {
+  background: linear-gradient(rgba(64, 64, 64, 0), black, black);
+  transition: transform 0.8s ease-in-out;
   transform: translateY(-100%);
 }
 .aboutSubContainers > div .contentDivs .hide {

@@ -11,12 +11,14 @@
 .footerContent {
   width: 90%;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
 }
+
 .footerSubContent {
   margin: 1rem 2rem;
   color: var(--textColor);
 }
+
 .footerSubContent > p {
   font-weight: bold;
   margin: 0.85rem 0;
@@ -48,8 +50,47 @@
   color: var(--lightTextColor);
   font-size: 0.85rem;
   font-weight: 400;
+  position: relative;
 }
 
+.footerLinks a::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 1px;
+  bottom: -1px;
+  left: 0;
+  background-color:var(--textColor);
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+
+.footerLinks a:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+.linkedin:hover{
+  transition: color 0.3s ease-in-out;
+  color: #179be2;
+  cursor: pointer;
+}
+
+.insta:hover{
+  transition: color 0.3s ease-in-out;
+  color: #f23ef8;
+  filter: brightness(1.5);
+}
+
+.footercontact{
+  display: flex;
+  align-items: flex-start;
+}
+
+.links{
+  display: flex;
+}
 
 .copyRight {
   position: absolute;
@@ -64,6 +105,19 @@
   cursor: pointer;
 }
 
+.location:hover .pin{
+  animation: vibrate 0.3s infinite;
+  color: #00c90a;
+}
+
+@keyframes vibrate {
+  0% { transform: rotate(0deg);}
+  25% { transform: rotate(10deg);}
+  50% { transform: rotate(0deg); }
+  75% { transform: rotate(-10deg); }
+  100% { transform: rotate(0deg); }
+}
+
 @media screen and (min-width: 769px) and (max-width: 1025px) {
   .footerContent {
     width: 85%;
@@ -76,6 +130,10 @@
   .copyRight {
     font-size: 0.65rem;
   }
+}
+
+@media screen and (min-width: 1220px) {
+  
 }
 
 @media screen and (min-width: 426px) and (max-width: 769px) {

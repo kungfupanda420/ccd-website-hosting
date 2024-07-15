@@ -1,22 +1,57 @@
-import React from 'react'
+import React, { useEffect } from "react";
 import "../pagesCss/placementPage.css";
-function PlacementPathCompo() {
-  return (
-        <div className="page">
-         <div className="pageContent">
-        <h1 className="pageHeading">Placements</h1>
-        <p className="smallHeading">How to <span>REGISTER</span></p>
+import AOS from "aos";
+import "aos/dist/aos.css";
 
-        <p className="tinyTexts">
-          The CCD notifies registration schedule for the placement and internship drive in an academic year. According to the schedule, interested students in the graduating batch and Internship batch may register. For the seamless conduct of the placement and internship campaigns, CCD avails the services of an online portal named Genskill, which is developed by a firm founded by our alumni. Recruiters, students and TPOs are provided with distinct logins in Genskill. The companies have to register in the Genskill portal and submit the Job Notification Form (JNF) for participating in the placement campaign and Internship Notification Form (INF) for participating in the Internship campaign. Companies will be able to post JNF /INF, see the list of applicants, and mark the final selections in Genskill. It is mandatory for all students who are interested to participate in the placement and internship campaigns to register in the Genskill portal and join the relevant campaign. The Genskill App will display the status of the application of the student. The portal also helps students to build their resume in an incremental way. Students may refer the following resources for familiarity and e-support.  <br />
-          Resource: <br /> 
-          <a href=" https://genskill.com/" target='_blank' rel='noreferrer' > https://genskill.com/</a> <br /> 
-          <a href="https://app.genskill.com/documentation/videos/" target='_blank' rel='noreferrer' >https://app.genskill.com/documentation/videos/</a>
+function PlacementPathCompo() {
+  useEffect(() => {
+    AOS.init({ duration: 1000 });
+  }, []);
+  return (
+    <div className="page" >
+      <div className="pageContent" >
+        <h1 className="pageHeading" data-aos="zoom-in">Placements</h1>
+        <p className="smallHeading" data-aos="zoom-in">
+          How to <span>Register</span>
         </p>
 
-        <p className="smallHeading">Placement Process</p>
+        <p className="tinyTexts" data-aos="zoom-in">
+          The CCD notifies registration schedule for the placement and
+          internship drive in an academic year. According to the schedule,
+          interested students in the graduating batch and Internship batch may
+          register. For the seamless conduct of the placement and internship
+          campaigns, CCD avails the services of an online portal named Genskill,
+          which is developed by a firm founded by our alumni. Recruiters,
+          students and TPOs are provided with distinct logins in Genskill. The
+          companies have to register in the Genskill portal and submit the Job
+          Notification Form (JNF) for participating in the placement campaign
+          and Internship Notification Form (INF) for participating in the
+          Internship campaign. Companies will be able to post JNF /INF, see the
+          list of applicants, and mark the final selections in Genskill. It is
+          mandatory for all students who are interested to participate in the
+          placement and internship campaigns to register in the Genskill portal
+          and join the relevant campaign. The Genskill App will display the
+          status of the application of the student. The portal also helps
+          students to build their resume in an incremental way. Students may
+          refer the following resources for familiarity and e-support. <br />
+          Resource: <br />
+          <div className="genskillButtons">
+          <a href=" https://genskill.com/" className="whiteButton" target="_blank" rel="noreferrer">
+           <span className="buttonText">GenSkill</span> 
+          </a>
+          <a
+            href="https://app.genskill.com/documentation/videos/"
+            target="_blank" className="whiteButton" 
+            rel="noreferrer"
+          >
+             <span className="buttonText">Demo Videos</span> 
+          </a>
+          </div>
+        </p>
 
-        <p className="tinyTexts">
+        <p className="smallHeading" data-aos="zoom-in">Placement Process</p>
+
+        <p className="tinyTexts" data-aos="zoom-in">
           The CCD notifies registration schedule for the placement and
           internship drive in an academic year. According to the schedule,
         </p>
@@ -30,13 +65,13 @@ function PlacementPathCompo() {
         <div className="line"></div>
 
         {/* step 1 */}
-        <div className="step">
+        <div className="step" data-aos="fade-left">
           <div className="svgIcon">
             <svg
               width="24"
               height="24"
               viewBox="0 0 24 24"
-              fill="none"
+              fill="black"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
@@ -57,7 +92,7 @@ function PlacementPathCompo() {
 
         {/* step2 */}
 
-        <div className="step">
+        <div className="step" data-aos="fade-right">
           <div className="svgIcon">
             <svg
               width="24"
@@ -89,7 +124,7 @@ function PlacementPathCompo() {
         </div>
 
         {/* step 3 */}
-        <div className="step">
+        <div className="step" data-aos="fade-left">
           <div className="svgIcon">
             <svg
               width="24"
@@ -115,7 +150,7 @@ function PlacementPathCompo() {
         </div>
 
         {/* step 4 */}
-        <div className="step">
+        <div className="step" data-aos="fade-right">
           <div className="svgIcon">
             <svg
               width="24"
@@ -143,7 +178,7 @@ function PlacementPathCompo() {
 
         {/* step 5 */}
 
-        <div className="step">
+        <div className="step" data-aos="fade-left">
           <div className="svgIcon">
             <svg
               width="24"
@@ -176,7 +211,7 @@ function PlacementPathCompo() {
 
         {/* step 6 */}
 
-        <div className="step">
+        <div className="step" data-aos="fade-right">
           <div className="svgIcon">
             <svg
               width="24"
@@ -214,7 +249,7 @@ function PlacementPathCompo() {
 
         {/* step 7 */}
 
-        <div className="step">
+        <div className="step" data-aos="fade-left">
           <div className="svgIcon">
             <svg
               width="24"
@@ -258,7 +293,7 @@ function PlacementPathCompo() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default PlacementPathCompo
+export default PlacementPathCompo;

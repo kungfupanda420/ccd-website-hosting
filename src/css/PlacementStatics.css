@@ -1,14 +1,22 @@
+:root{
+    --bkgCol:#151515;
+}
+[data-theme="light"]{
+    --bkgCol:rgba(1,89,170,255);
+}
 .placementStaticContainer {
     color: var(--textColor);
     display: flex;
     flex-direction: column;
     padding: 10vh 15vw;
     position: relative;
-    margin-top: 5rem;
     margin-bottom: 3rem;
     width: 100vw;
+    font-family: 'Montserrat', sans-serif;
 }
-
+.runningStatContainer{
+    color:white;
+}
 .titleAndButtonContainer {
     align-self: flex-start;
     margin-bottom: 2rem;
@@ -26,33 +34,52 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    background-color: white;
+    background-color: var(--textColor);
     padding: 1rem;
     border-radius: 2rem;
     width: fit-content;
     cursor: pointer;
+    transition: background-color 0.3s ease,border 0.3s ease;; 
+}
+
+.whiteButton:hover {
+    background-color: var(--backgrounColor);
+    box-shadow:var(--btnShadow);
 }
 
 .buttonText {
-    color: black;
+    color: var(--blackTextColor);
     font-family: 'Montserrat', sans-serif;
     font-size: 1rem;
     font-weight: 560;
     padding: 0rem 0.6rem;
+    transition: color 0.3s ease; 
 }
+
+.whiteButton:hover .buttonText {
+    color: var(--textColor);
+}
+
 
 .arrow {
     width: 1rem;
+    transition: stroke 0.3s ease; 
+    stroke: var(--blackTextColor);
+}
+
+.whiteButton:hover .arrow path {
+    stroke: var(--textColor);
 }
 
 /* Running Stats */
 
 .runningStatContainer {
-    background-color: #151515;
+    background-color: var(--bkgCol);
     position: relative;
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: space-around;
     padding: 2.5rem 1.5rem;
     border-radius: 1.5rem;
     align-self: flex-start;
@@ -112,7 +139,7 @@
     font-weight: 400;
     white-space: nowrap;
     padding: 0.75rem;
-    color: rgb(129, 129, 129);
+    color: var(--statTextColor);
 }
 
 

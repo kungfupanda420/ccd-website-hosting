@@ -8,17 +8,19 @@ import ActivePrograms from "../components/ActivePrograms";
 // import WoFame from "./WoFame"
 import Companies from "./Companies"
 import NewAbout from "./NewAbout"
-
+import NewCompanies from "./NewCompanies"
 
 function Home(){
     return(
         <>
+      
       <Hero/>
       <NewAbout/>
       {/* <About/> */}
       <WhyRecruit/>
       <PlacementStatics/>
-      <Companies/>
+      {/* <Companies/> */}
+      <NewCompanies/>
       <NewsMedia/>
       <OurTeam/>
       <ActivePrograms/>

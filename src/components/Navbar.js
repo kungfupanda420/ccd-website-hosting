@@ -2,8 +2,9 @@ import { NavLink } from 'react-router-dom';
 import React, { useState } from 'react';
 import '../css/Navbar.css';
 import AuraEffect from './AuraEffect';
+import DarkMode from '../DarkMode/DarkMode';
 
-const Navbar = () => {
+const Navbar = ({ isDarkMode, onToggleTheme }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
@@ -20,7 +21,11 @@ const Navbar = () => {
         <nav className="navbar">
           <AuraEffect />
           <NavLink to="/" className="navbarLogo">
-            <img src="/images/navbar_logo.png" alt="Center for Career Development" />
+            <img
+              src={isDarkMode ? "/images/navbar_logo.png" : "/images/navbar_logo_light_mode.png"}
+              alt="Center for Career Development"
+              className='navbarLogo'
+            />
           </NavLink>
 
           <div className={`navLinks ${isMobileMenuOpen ? 'mobile-menu' : ''}`}>
@@ -41,9 +46,9 @@ const Navbar = () => {
                 For Students
               </NavLink>
             </ul>
+            <DarkMode isDarkMode={isDarkMode} onToggleTheme={onToggleTheme} />
             <ul className="rightList">
-              {/*<NavLink to="/blogs" className="navLink">Blog</NavLink>*/}
-              <NavLink to="https://nitc.ac.in/" className="navLink" onClick={closeMobileMenu}>
+              <NavLink to="https://nitc.ac.in/" target='_blank' className="navLink" onClick={closeMobileMenu}>
                 Nit Calicut
               </NavLink>
               <NavLink to="/login" className="navLink" onClick={closeMobileMenu}>

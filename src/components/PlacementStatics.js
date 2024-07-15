@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import '../css/PlacementStatics.css';
 import { useInView } from 'react-intersection-observer';
+import AOS from "aos";
+import "aos/dist/aos.css";
+import OurRecruiters from './OurRecruiters';
+
 
 const RunningNumbers = ({ endNumber }) => {
   const [count, setCount] = useState(0);
@@ -21,6 +26,7 @@ const RunningNumbers = ({ endNumber }) => {
 };
 
 const PlacementStatics = () => {
+  const location = useLocation();
   const [ref, inView] = useInView({
     triggerOnce: true,
     rootMargin: '0px 0px -40% 0px', // Ensures the trigger fires only once
@@ -52,9 +58,14 @@ const PlacementStatics = () => {
     }
   }, [inView]);
 
+  useEffect(() => {
+    AOS.init({duration: 1000});
+  }, []);
+  
   return (
+    
     <>
-      <div className='placementStaticContainer'>
+      <div className='placementStaticContainer' data-aos="zoom-in">
         <div className='placementStaticHolder' ref={ref}>
           {/* Title and button */}
           <div className='titleAndButtonContainer'>
@@ -71,7 +82,7 @@ const PlacementStatics = () => {
               >
                 <path
                   d='M0.272008 0.75735L8.75729 9.24263M8.75729 9.24263V0.75735M8.75729 9.24263H0.272008'
-                  stroke='black'
+                  // stroke='black'
                   strokeOpacity='1'
                   strokeWidth='0.65'
                 />
@@ -126,7 +137,11 @@ const PlacementStatics = () => {
             </div>
           </div>
         </div>
+      {location.pathname === '/placement' && 
+      <><OurRecruiters />
+      </>}
       </div>
+      
     </>
   );
 };

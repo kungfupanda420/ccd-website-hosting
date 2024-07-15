@@ -25,6 +25,12 @@ router.get('/', async (req, res) => {
   res.status(200).send(programsData.rows);
 });
 
+router.get('/queries', async (req, res) => {
+  const queriesData = await db.query('SELECT * FROM queries');
+  console.log(queriesData.rows);
+  res.status(200).send(queriesData.rows);
+});
+
 router.post('/', upload.single('pdf'), async function (req, res, next) {
   try {
     const { title, tags, details } = req.body;

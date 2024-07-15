@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../css/ActivePrograms.css';
-
+import AOS from "aos";
+import "aos/dist/aos.css";
 const ActivePrograms = () => {
   const [programsData, setProgramsData] = useState([]);
 
@@ -25,9 +26,11 @@ const ActivePrograms = () => {
   const programHandleDownload = (document) => {
     window.open(document, '_blank');
   };
-
+  useEffect(() => {
+    AOS.init({duration: 1600});
+  }, []);
   return (
-    <div className="activeProgramContainer">
+    <div className="activeProgramContainer" data-aos="zoom-in">
       <div className="activeProgramHolder">
         <h3 className="activeProgramHeading">Active Programmes</h3>
         <div className="programsContainer">

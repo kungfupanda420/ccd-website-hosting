@@ -1,0 +1,35 @@
+.clubLogo{
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 1rem 1rem 0 0 ;
+    /* padding-bottom: 0.5rem; */
+
+}
+
+.clubCardItem{
+    margin: 1rem;
+    /* padding: 1rem; */
+    border: 1px solid #000;
+    border-radius: 1rem;
+    width: 14rem;
+
+    &:hover{
+        transform: scale(1.05);
+    }
+}
+
+.clubCardItemName{
+    padding: 0.5rem;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+}
+
+.clubCard{
+    padding: 5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
+    place-items: center;
+}
+

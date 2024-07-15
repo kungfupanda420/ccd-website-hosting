@@ -20,7 +20,8 @@ import { BsAmd, BsNvidia } from "react-icons/bs";
 import { GrOracle } from "react-icons/gr";
 
 import { GiTexas } from "react-icons/gi";
-
+import AOS from "aos";
+import "aos/dist/aos.css";
 const CompaniesLogo = [
   {
     companyName: "",
@@ -525,13 +526,16 @@ function Companies() {
       animation.start('hidden')
     }
   }, [animation, inView])
-
+  useEffect(() => {
+    AOS.init({duration: 1000});
+  }, []);
   return (
     <div
     ref={inViewRef}
       className="companiesContainer"
       onMouseOver={handleMouseOVer}
       onMouseLeave={handleMouseLeave}
+      data-aos="zoom-in"
     >
       <div className="backgroundHover" ref={cursor} style={cursorStyling}></div>
 

@@ -1,3 +1,9 @@
+:root{
+    --bgCol:rgb(20, 20, 20);
+}
+[data-theme="light"]{
+    --bgCol:white;
+}
 .studentNavbar
 {
     width: 100vw;
@@ -19,11 +25,17 @@
 }
 .studentNavlinks a
 {
-    background-color: rgb(20, 20, 20);
+    background-color: var(--bgCol);
     color: var(--textColor);
     padding: var(--padding);
     border-radius: 0.5rem;
+    border-color:rgb(0, 0, 149);
 
+    &:hover
+    {
+        background-color: var(--stuNav);
+        color: var(--bgCol);
+    }
 }
 
 

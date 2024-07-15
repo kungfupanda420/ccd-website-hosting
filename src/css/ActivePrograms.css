@@ -1,3 +1,4 @@
+
 .activeProgramContainer {
     display: flex;
     flex-direction: row;
@@ -18,7 +19,7 @@
     font-size: 3rem;
     font-family: 'Montserrat', sans-serif;
     font-weight: 500;
-    color: white;
+    color: var(--textColor);
     align-self: flex-start;
     margin-bottom: 2.5rem;
   }
@@ -34,32 +35,42 @@
   
   .programsContainer::-webkit-scrollbar {
     width: 8px; /* adjust as needed */
-    background-color: black;
+    background-color: var(--textColor);
+    
     
   }
   
   .programsContainer::-webkit-scrollbar-thumb {
     background-color: white;
     border-radius: 1rem;
-    
+    margin-left: 2px;
   }
   .programCard {
-    border: 1.75px solid rgb(50, 50, 50);
+    /* border: 1.75px solid rgb(50, 50, 50); */
+    /* activepgm */
+    background-color: white;
     border-radius: 2.25rem;
     padding: 2rem;
     margin-bottom: 1rem;
     position: relative;
+    
   }
   .programCard:hover {
-    background-color: rgb(20, 20, 20);
+    background-color: rgba(1,89,170,255);;
     border: 1.75px solid rgb(52, 52, 52);
+    color: white;
+    .programDetails{
+      color: white;
+    
+    }
   }
   
   .programCardTitle {
     font-size: 1.5rem;
     font-family: 'Montserrat', sans-serif;
     font-weight: 500;
-    color: white;
+    
+    
   }
   
   .programCardDateShare {
@@ -84,6 +95,7 @@
     width: 1.25rem;
     margin-left: 1rem;
     cursor: pointer;
+    color:var(--blackTextColor);
   }
   
   .shareIcon {
@@ -114,12 +126,12 @@
     font-size: 1.5rem;
     font-family: 'Montserrat', sans-serif;
     font-weight: 500;
-    color: white;
+    /* color: black; */
     margin-top: 1rem;
   }
   
   .programDetails {
-    color: rgb(129, 129, 129);
+    color: var(--pgmGray);
     overflow: hidden;
     text-overflow: ellipsis;
     font-family: 'Poppins', sans-serif;

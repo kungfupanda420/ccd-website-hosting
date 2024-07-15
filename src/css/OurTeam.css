@@ -1,6 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700;800&amp;display=swap');
+
+[data-theme='light']{
+  --headColor:rgb(255, 255, 255);
+}
+
+body {
+  margin: 0;
+}
+
 .ourTeamContainer {
   width: 100vw;
-  padding: 6rem 6rem;
+  padding: 4rem 6rem;
   background-color: var(--textColor);
   display: flex;
   justify-content: center;
@@ -8,62 +18,90 @@
   border-radius: 0 0 3rem 3rem;
   margin: 3rem 0;
 }
+
 .ourTeamSubDiv {
   width: 92%;
 }
-.ourTeamSubDiv .topHeading {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.ourTeamSubDiv .dateSection {
-  margin: 0 1rem;
-  font-weight: 400;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 0.75rem;
-  padding: 0.5rem 1rem;
-}
 
-.teachersDiv {
-  padding: 3rem 1.5rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-/* border: 1px solid black; */
-}
+.nft {
+  max-width: 300px;
+  margin: 5rem auto;
+  /* border: 5px solid var(--textColor); */
+  background-color: rgb(255, 255, 255);
+  box-shadow: 3px 3px 8px 3px rgba(214, 214, 214, 0.5);
+  border-radius: 2rem;
+  overflow: hidden;
+  transition: .5s all;
 
-/* individual teacher card */
-.teacherCard {
-  padding: 0rem 1rem;
-  border-radius: 0.5rem;
-  text-align: center;
   
+
+  .main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 2rem;
+    gap: 0.5rem;
+    h2{
+      text-align: center;
+      font-size: 1.4rem;
+    }
+  }
+
+  .tokenImage {
+    border-radius: 100%;
+    max-width: 100%;
+    height: 200px;
+    object-fit: scale-down;
+
+  }
+
+  .description {
+    margin: .5rem;
+    color: #2a292b;
+  }
+
+
+  ::before {
+    position: fixed;
+    content: "";
+    box-shadow: 0 0 100px 40px #ffffff08;
+    top: -10%;
+    left: -100%;
+    transform: rotate(-45deg);
+    height: 60rem;
+    transition: .7s all;
+  }
+
+  &:hover {
+    box-shadow: none;
+    transform: scale(1.015);
+    background-color: rgb(224, 236, 255);
+    ::before {
+      filter: brightness(.5);
+      top: -100%;
+      left: 200%;
+    }
+  }
 }
-.teacherCard img {
-  width: 156px;
-  height: 156px;
-  filter: grayscale(100%);
-  transition: filter 0.3s ease;
-  border-radius: 1.75rem;
+
+.nft hr {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #88888855;
+  margin-top: 0;
 }
-.teacherCard img:hover  {
-  filter: none; /* Remove grayscale filter on hover */
-}
-.teacherDetail {
-  text-align: center;
-}
-.teacherDetail p {
-  margin: 0.5rem 0;
-}
-.teacherDetail .smallHeading {
-  font-size: 1.25rem;
-  font-weight: 500;
-  color: var(--blackTextColor);
-}
-.teacherDetail .tinyTexts {
-  font-size: 1rem;
-  color: var(--blackTextColor);
+
+.bg {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  h1 {
+    font-size: 20rem;
+    filter: opacity(0.5);
+  }
 }
 
 /* student card */
@@ -74,30 +112,31 @@
   scroll-snap-type: mandatory;
   scroll-margin-block: 30vw;
   position: relative;
-  cursor: grab;
   overflow: hidden;
+  flex-direction: column;
+  width: 100%;
 }
 
 .innerStudentsDiv {
-  display: flex;
+  /*display: flex;
+    flex-wrap: wrap;
+     align-items: center; 
+    justify-content: center;*/
+  display: grid;
+  grid-template-columns: auto auto auto auto;
 }
-/* .studentsDiv::before
-{
-    content: '';
-    position: absolute;
-    background-color: rgb(255, 255, 255);
-    width: 10%;
-    height: 100%;
-    filter: blur(30px);
-    left: -40px;
-    z-index: 10;
-    top: 0;
-} */
-.studentCard {
 
+
+
+.studentCard {
   border-radius: 0.5rem;
-  margin-right: 2.15rem;
-  padding: 1.5rem 2rem;
+  /* padding: 1.5rem 2rem; */
+  width: 22rem;
+  height: 15rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .studentCard img {
@@ -106,52 +145,154 @@
   background-color: var(--grayTextColor);
   pointer-events: none;
   filter: grayscale(80%);
-  transition: filter 0.3s ease; /* Add transition for smooth effect */
+  transition: filter 0.3s ease;
+  /* Add transition for smooth effect */
 }
 
 .studentCard:hover img {
-  filter: none; /* Remove grayscale filter on hover */
+  filter: none;
+  /* Remove grayscale filter on hover */
 }
+
+.innerInternDiv {
+  display: grid;
+  grid-template-columns:auto auto auto;
+  /* grid-template-columns: repeat(6, 1fr); */
+  /* grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); */
+  padding-bottom: 1rem 0;
+  place-items: center;
+  
+}
+
+.internCard {
+  border-radius: 0.5rem;
+  /* padding: 1.5rem 2rem; */
+  width: 13rem;
+  height: 11rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.internCard img {
+  width: 96px;
+  height: 96px;
+  background-color: var(--grayTextColor);
+  pointer-events: none;
+  filter: grayscale(80%);
+  transition: filter 0.3s ease;
+  /* Add transition for smooth effect */
+}
+
+.internCard:hover img {
+  filter: none;
+  /* Remove grayscale filter on hover */
+}
+
 .studentDetail {
   text-align: center;
   padding: 1rem;
 }
-/* 
-.studentsDiv::-webkit-scrollbar {
-  height: 5px;
-  width: 20px;
-}
-.studentsDiv::-webkit-scrollbar-track {
-  background-color: rgba(0, 0, 0, 0.284);
-  height: 10px;
-  border-radius: 100vw;
-  margin-inline: 25vw;
-}
-.studentsDiv::-webkit-scrollbar-thumb {
-  background-color: black;
-  border-radius: 100vw;
-} */
 
-/* <div className="studentCard"><img src='/images/teachers/praveen.png' alt="" /><div className="studentDetail"><p className="smallHeading">Dr. Praveen S</p><p className="tinyTexts">Chairperson</p></div></div> */
+.spochead {
+  margin: 1.5rem auto;
+  line-height: 2rem;
+  font-size: xx-large;
+  width: 4rem;
+}
+
+.responsive-cell-block {
+  min-height: 75px;
+}
+
+.responsive-container-block {
+  min-height: 75px;
+  height: fit-content;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 0px;
+  margin-right: auto;
+  margin-bottom: 0px;
+  margin-left: auto;
+  justify-content: space-evenly;
+  font-family: system-ui;
+}
+
+.outer-container {
+  padding-top: 10px;
+  padding-right: 30px;
+  padding-bottom: 10px;
+  padding-left: 30px;
+  background-color: rgb(244, 252, 255);
+  border-radius: 2rem;
+}
+
+.inner-container {
+  max-width: 1320px;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+  margin-right: auto;
+  margin-bottom: 50px;
+  margin-left: auto;
+}
+
+.section-head-text {
+  margin-top: 0px;
+  margin-right: 0px;
+  margin-bottom: 4rem;
+  margin-left: 0px;
+  text-align: center;
+  font-size: 35px;
+  font-weight: 700;
+  line-height: 48px;
+  color: var(--headColor);
+  /* margin: 0 0 20px 0; */
+  text-transform: uppercase;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.section-subhead-text {
+  font-size: 25px;
+  color: rgb(153, 153, 153);
+  line-height: 35px;
+  max-width: 470px;
+  text-align: center;
+  margin-top: 0px;
+  margin-right: 0px;
+  margin-bottom: 60px;
+  margin-left: 0px;
+}
 
 /* responsive */
-
-
 /* media queries */
+@media (max-width: 500px) {
+  .outer-container {
+    padding: 10px 20px 10px 20px;
+  }
 
-@media screen and (min-width: 769px) and (max-width: 1025px) {
+  .section-head-text {
+    text-align: center;
+  }
+}
+
+@media screen and (min-width: 769px) and (max-width: 1180px) {
   .ourTeamContainer {
     padding: 4rem 3rem;
   }
+
   .ourTeamSubDiv {
     width: 95%;
 
   }
+
   .teachersDiv {
     padding: 3rem 1rem;
     display: flex;
 
-    
+
   }
 
   .teacherCard {
@@ -161,51 +302,140 @@
 }
 
 @media screen and (min-width:425px) and (max-width:769px) {
-    .ourTeamContainer {
-            padding: 4rem 3rem;
-        }
-    
-        .ourTeamSubDiv {
-            width: 95%;
-    
-        }
-    
-        .teachersDiv {
-            padding: 3rem 1rem;
-            justify-content: space-around;
-        }
-    
-        .teacherCard {
-            margin-right: 2rem;
-        }
+  .ourTeamContainer {
+    padding: 4rem 3rem;
+  }
+
+  .ourTeamSubDiv {
+    width: 95%;
+
+  }
+
+  .teachersDiv {
+    padding: 3rem 1rem;
+    justify-content: space-around;
+  }
+
+  .teacherCard {
+    margin-right: 2rem;
+  }
 }
 
 @media screen and (max-width:426px) {
-        .ourTeamContainer {
-                padding: 4rem 2rem;
-            }
-        
-            .ourTeamSubDiv {
-                width: 98%;
-        
-            }
-        
-            .teachersDiv {
-                padding: 1.85rem 0;
-                display: flex;
-                align-items: center;
-                flex-direction: column;
-                justify-content:center;
-            }
-        
-            .teacherCard {
-                margin-right: 0;
-            }
+  .ourTeamContainer {
+    padding: 4rem 2rem;
+  }
 
-            .studentCard
-            {
-                margin-right: 1rem;
-                padding: 1rem;
-            }
-                 
+  .ourTeamSubDiv {
+    width: 98%;
+
+  }
+
+  .teachersDiv {
+    padding: 1.85rem 0;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .teacherCard {
+    margin-right: 0;
+  }
+
+  .studentCard {
+    margin-right: 1rem;
+    padding: 1rem;
+  }
+
 }
+
+@media (max-width:1400px) {
+  .studentCard {
+    border-radius: 0.5rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    width: 20vw;
+    height: 15rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+  }
+}
+
+@media screen and (min-width:425px) and (max-width: 1675px) {
+  .innerStudentsDiv {
+    display: grid;
+    grid-template-columns: auto auto auto;
+  }
+  .innerInternDiv {
+    display: grid;
+    grid-template-columns: auto auto auto;
+  }
+}
+
+@media screen and (min-width:400px) and (max-width: 643px){
+  .innerStudentsDiv {
+    display: grid;
+    grid-template-columns: auto auto;
+  }
+  .innerInternDiv {
+    display: grid;
+    grid-template-columns: auto auto;
+  }
+  .internCard{
+    width: 9rem;
+    height: 9rem;
+  }
+}
+
+/* @media (max-width: 500px) {
+   .wk-mobile-1 {
+    width: 8.333333%;
+  }
+
+  .wk-mobile-2 {
+    width: 16.666667%;
+  }
+
+  .wk-mobile-3 {
+    width: 25%;
+  }
+
+  .wk-mobile-4 {
+    width: 33.333333%;
+  }
+
+  .wk-mobile-5 {
+    width: 41.666667%;
+  }
+
+  .wk-mobile-6 {
+    width: 50%;
+  }
+
+  .wk-mobile-7 {
+    width: 58.333333%;
+  }
+
+  .wk-mobile-8 {
+    width: 66.666667%;
+  }
+
+  .wk-mobile-9 {
+    width: 75%;
+  }
+
+  .wk-mobile-10 {
+    width: 83.333333%;
+  }
+
+  .wk-mobile-11 {
+    width: 91.666667%;
+  }
+
+  .wk-mobile-12 {
+    width: 100%;
+  } 
+} */

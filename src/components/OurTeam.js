@@ -1,13 +1,18 @@
-import { motion } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import "../css/OurTeam.css";
-
+import AOS from "aos";
+import "aos/dist/aos.css";
+import { FaLinkedin } from "react-icons/fa6";
 function OurTeam() {
   const [teacherData, setTeacherData] = useState([]);
   const [studentData, setStudentData] = useState([]);
   const [width, setWidth] = useState();
   const studentContainer = useRef();
-
+  const links=['https://www.linkedin.com/in/psankaran',
+    'https://www.linkedin.com/in/vijayaraj-k-505a4947',
+    'https://www.linkedin.com/in/prateek-negi-92971164',
+    'https://www.linkedin.com/in/manju-mahipalan-05159743'
+  ]
   useEffect(() => {
     // Fetch data from the server API
     fetch("/api/our-team")
@@ -21,17 +26,19 @@ function OurTeam() {
       });
 
     // Calculate width
-    
-  }, []);
-  useEffect(() => {
-    setWidth(studentContainer.current.scrollWidth - studentContainer.current.offsetWidth);
-  })
 
+  }, []);
+  // useEffect(() => {
+  //   setWidth(studentContainer.current.scrollWidth - studentContainer.current.offsetWidth);
+  // })
+  useEffect(() => {
+    AOS.init({duration: 1600});
+  }, []);
   return (
     <>
-    <div className="ourTeamContainer">
-      <div className="ourTeamSubDiv">
-        <div className="topHeading">
+      <div className="ourTeamContainer">
+        <div className="ourTeamSubDiv">
+          {/* <div className="topHeading">
           <h1 className="mainHeading">Our Team </h1>
        
         </div>
@@ -40,7 +47,7 @@ function OurTeam() {
               teacherData.map((person, index) => (
                   
               <div className="teacherCard">
-              <img src={person.image} alt="" />
+              <img src={person.image} alt="" //>
               <div className="teacherDetail">
                   <p className="smallHeading">{person.name}</p>
                   <p className="tinyTexts">{person.position}</p>
@@ -49,28 +56,106 @@ function OurTeam() {
               ))
           } 
           
-        </div>
-        {/* student div */}
-        <motion.div ref={studentContainer} whileTap={{cursor:"grabbing"}} className="studentsDiv" >
-          <motion.div
-           drag = 'x' 
-           dragMomentum={true} 
-           dragConstraints={{right:0, left:-width }}
-           className="innerStudentsDiv">
-              {studentData.map((student, index) => (
-                <div  className="studentCard active" >
-                  <img src={student.image} alt="" />
-                  <div className="studentDetail">
-                    <p className="smallHeading">{student.name}</p>
-                    <p className="tinyTexts">{student.position}</p>
+        </div> */}
+          <h3 class="section-head-text">
+            Meet Our Team
+          </h3>
+          <div class="responsive-container-block outer-container">
+
+            <div class="responsive-container-block">
+              {
+                teacherData.map((person, index) => (
+                  <div class="nft">
+                    <div class='main'>
+                      <img class='tokenImage' src={person.image} alt="image" />
+                      <h2>{person.name}</h2>
+                      <p class='description'>{person.position}</p>
+                      <hr />
+                      <h2><a href={links[index]} target="_blank" style={{textDecoration:'none'}}><FaLinkedin/></a></h2> 
+                    </div>
                   </div>
-                </div>
-              ))}
-          </motion.div>
-        </motion.div>
+                ))
+              }
+
+           </div>
+              
+            {/* student div */}
+            <div ref={studentContainer} className="studentsDiv" >
+            <h4 className="spochead">SPOCs</h4>
+              <div
+                className="innerStudentsDiv">
+                {studentData.map((student, index) => (
+                  <div className="studentCard active" >
+                    <img src={student.image} alt="" />
+                    <div className="studentDetail">
+                      <p className="smallHeading">{student.name}</p>
+                      <p className="tinyTexts">{student.position}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div ref={studentContainer} className="studentsDiv" >
+            <h4 className="spochead">INTERNs</h4>
+              <div
+                className="innerInternDiv">
+                
+                  <div className="internCard" >
+                    <img src="images/our_team/students/ayush.png" alt="" />
+                    <div className="studentDetail">
+                      <p className="smallHeading">Intern Student</p>
+                    </div>
+                  </div>
+                  <div className="internCard" >
+                    <img src="images/our_team/students/ayush.png" alt="" />
+                    <div className="studentDetail">
+                      <p className="smallHeading">Intern Student</p>
+                    </div>
+                  </div>
+                  <div className="internCard" >
+                    <img src="images/our_team/students/ayush.png" alt="" />
+                    <div className="studentDetail">
+                      <p className="smallHeading">Intern Student</p>
+                    </div>
+                  </div>
+                  <div className="internCard" >
+                    <img src="images/our_team/students/ayush.png" alt="" />
+                    <div className="studentDetail">
+                      <p className="smallHeading">Intern Student</p>
+                    </div>
+                  </div>
+                  <div className="internCard" >
+                    <img src="images/our_team/students/ayush.png" alt="" />
+                    <div className="studentDetail">
+                      <p className="smallHeading">Intern Student</p>
+                    </div>
+                  </div>
+                  <div className="internCard" >
+                    <img src="images/our_team/students/ayush.png" alt="" />
+                    <div className="studentDetail">
+                      <p className="smallHeading">Intern Student</p>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+          </div>
+
+          {/* <Card className="eachstudent" style={{ width: '18rem',padding:'1rem' }}>
+              <Card.Img variant="top" src="images/our_team/students/ayush.png" />
+              <Card.Body>
+                <Card.Title>Ayush Gupta</Card.Title>
+                <Card.Text>
+                  Chemical Engineering
+                </Card.Text>
+              </Card.Body>
+            </Card> */}
+
+        </div>
+        
       </div>
-    </div>
-  </>
+    </>
   );
 }
 

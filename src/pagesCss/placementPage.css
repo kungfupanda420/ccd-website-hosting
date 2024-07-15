@@ -1,6 +1,13 @@
 
 /* default texts */
-
+:root{
+    --lineCol:white;
+    --iconBg: black;
+}
+[data-theme="light"]{
+    --lineCol:rgba(1,89,170,255);
+    --iconBg: rgba(1,89,170,255);
+}
 .page 
 {
     color: var(--textColor);
@@ -17,7 +24,7 @@
 .pageHeading 
 {
     font-family: 'Montserrat', sans-serif;
-    font-size: 3rem;
+    font-size: 4rem;
     margin: 2rem 0;
     font-weight: 600;
 
@@ -25,6 +32,7 @@
 .page .smallHeading 
 {
     font-weight: 600;
+    font-size: 1.5rem;
     margin: 1rem 0 1rem;
     text-transform: capitalize;
 }
@@ -32,8 +40,11 @@
 .page .tinyTexts 
 {
     font-size: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 2rem;
     line-height: 2;
     color: var(--lightTextColor);
+    text-align: justify;
 }
 .page .tinyTexts  a 
 {
@@ -55,7 +66,7 @@
     position: absolute;
     width: 2px;
     height: 82%;
-    background-color: white;
+    background-color: var(--lineCol);
     top: 0;
     left: 50%;
     z-index: -5;
@@ -88,7 +99,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--backgrounColor);
+    background-color: var(--iconBg);
 }
 
 .step:nth-of-type(even) .svgIcon{
@@ -163,6 +174,13 @@
 {
     margin: 2.5rem 0 1rem;
 
+}
+
+.genskillButtons{
+    display: flex;
+    gap: 1rem;
+    margin: 1rem 0;
+    
 }
 
 /* responsive */
@@ -276,4 +294,3 @@
     height: 100%;
 }
 }
-
