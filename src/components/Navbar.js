@@ -48,7 +48,7 @@ const Navbar = ({ isDarkMode, onToggleTheme }) => {
             </ul>
             <DarkMode isDarkMode={isDarkMode} onToggleTheme={onToggleTheme} />
             <ul className="rightList">
-              <NavLink to="https://nitc.ac.in/" className="navLink" onClick={closeMobileMenu}>
+              <NavLink to="https://nitc.ac.in/" target='_blank' className="navLink" onClick={closeMobileMenu}>
                 Nit Calicut
               </NavLink>
               <NavLink to="/login" className="navLink" onClick={closeMobileMenu}>
