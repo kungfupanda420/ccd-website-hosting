@@ -2,7 +2,7 @@
   color: var(--textColor);
   display: flex;
   flex-direction: column;
-  padding: 10vh 0vw;
+  padding-left: 10vh;
   position: relative;
   margin-bottom: 3rem;
   width: 100vw;
