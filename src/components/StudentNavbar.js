@@ -7,8 +7,8 @@ function StudentNavbar() {
       <div className="studentSubNavbar">
         <ul className='studentNavlinks smallHeading'>
           <NavLink to='roadmap'>Path to Placement</NavLink>
-          <NavLink to='internships'>Internship</NavLink>
-          <NavLink to='placements'>Placements</NavLink>
+          <NavLink to='internships'>Internship/ Placements</NavLink>
+          {/* <NavLink to='placements'>Placements</NavLink> */}
           <NavLink to='faqdata'>FAQs</NavLink>
 
           {/* <NavLink>Internship Opportunity</NavLink>
