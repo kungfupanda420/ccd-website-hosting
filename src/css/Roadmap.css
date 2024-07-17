@@ -3,7 +3,11 @@
   font-family: 'Poppins', sans-serif;
   margin-top: 2rem;
 }
-.title{
+.step0 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 30vw;
+}
+.title {
   color: var(--textColor);
 }
 .roadmap-container {
@@ -12,54 +16,50 @@
   height: 100vh;
   margin: 0 auto;
 }
-
 .road-svg {
   width: 100%;
   height: 100%;
 }
-
 .roadmap-item {
   position: absolute;
   z-index: 0;
   cursor: pointer;
   transition: all 0.3s ease;
 }
-
 .roadmap-item:hover {
   filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 1));
-  /* transform: scale(0.9); */
 }
-.centered-description {
+.description {
   font-family: 'Poppins', sans-serif;
-  font-size: 1.5vh;
+  font-size: 2vh;
   text-align: left;
   background-color: var(--textColor);
   color: var(--blackTextColor);
   border-radius: 0.3vh;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  position: absolute;
   z-index: 1;
   overflow: visible;
   transition: opacity 0.3s ease;
-  padding: 5vh;
+  max-width: 40vw;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  
 }
-
+.desText{
+  margin: 5vh 5vh 5vh 5vh;
+}
+.desText span {
+  font-weight: bold;
+}
 .close-btn {
   background: none;
   border: none;
   cursor: pointer;
   position: absolute;
   top: 1vh;
-  right: 1vh;
+  /* right: 1vh; */
   width: 2em;
   height: 2em;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
+  padding: -5;
 }
-
