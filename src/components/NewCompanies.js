@@ -209,11 +209,21 @@ const common = css`
 
 const MarqueeGroup = styled.div`
   ${common}
+  @media (max-width: 768px) {
+    &:nth-of-type(2) {
+      display: none;
+    }
+  }
 `;
 const MarqueeGroup2 = styled.div`
   ${common}
   animation-direction: reverse;
   animation-delay: -3s;
+  @media (max-width: 768px) {
+    &:nth-of-type(2) {
+      display: none;
+    }
+  }
 `;
 
 const ImageGroup = styled.div`
