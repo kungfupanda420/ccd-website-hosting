@@ -168,7 +168,7 @@
 }
 
 .carousel-arrow--prev {
-  left: 40rem;
+  left: 35rem;
 }
 
 .carousel-arrow--next {
@@ -181,7 +181,7 @@
     padding: 1rem 1rem;
     margin-bottom: 2rem;
     margin-top: 0rem;
-    margin-left: 2rem;
+    margin-left: 1rem;
     overflow-x: auto;
     scrollbar-width: thin;
     scrollbar-color: #888888 #000000;

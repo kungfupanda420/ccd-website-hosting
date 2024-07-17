@@ -33,3 +33,10 @@
     place-items: center;
 }
 
+@media screen and (max-width: 425px){
+    .clubCard{
+        grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    }
+    
+}
+

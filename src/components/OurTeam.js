@@ -28,9 +28,7 @@ function OurTeam() {
     // Calculate width
 
   }, []);
-  // useEffect(() => {
-  //   setWidth(studentContainer.current.scrollWidth - studentContainer.current.offsetWidth);
-  // })
+ 
   useEffect(() => {
     AOS.init({duration: 1600});
   }, []);
@@ -84,12 +82,12 @@ function OurTeam() {
             <h4 className="spochead">SPOCs</h4>
               <div
                 className="innerStudentsDiv">
-                {studentData.map((student, index) => (
+                {studentData.filter((person,index)=>person.position==='SPOCS').map((student, index) => (
                   <div className="studentCard active" >
                     <img src={student.image} alt="" />
                     <div className="studentDetail">
                       <p className="smallHeading">{student.name}</p>
-                      <p className="tinyTexts">{student.position}</p>
+                      <p className="tinyTexts">SPOC</p>
                     </div>
                   </div>
                 ))}
@@ -100,43 +98,14 @@ function OurTeam() {
             <h4 className="spochead">INTERNs</h4>
               <div
                 className="innerInternDiv">
-                
+                {studentData.filter((person,index)=>person.position==='INTERN').map((student, index) => (
                   <div className="internCard" >
-                    <img src="images/our_team/students/ayush.png" alt="" />
+                    <img src={student.image} alt="" />
                     <div className="studentDetail">
-                      <p className="smallHeading">Intern Student</p>
+                      <p className="smallHeading">{student.name}</p>
                     </div>
                   </div>
-                  <div className="internCard" >
-                    <img src="images/our_team/students/ayush.png" alt="" />
-                    <div className="studentDetail">
-                      <p className="smallHeading">Intern Student</p>
-                    </div>
-                  </div>
-                  <div className="internCard" >
-                    <img src="images/our_team/students/ayush.png" alt="" />
-                    <div className="studentDetail">
-                      <p className="smallHeading">Intern Student</p>
-                    </div>
-                  </div>
-                  <div className="internCard" >
-                    <img src="images/our_team/students/ayush.png" alt="" />
-                    <div className="studentDetail">
-                      <p className="smallHeading">Intern Student</p>
-                    </div>
-                  </div>
-                  <div className="internCard" >
-                    <img src="images/our_team/students/ayush.png" alt="" />
-                    <div className="studentDetail">
-                      <p className="smallHeading">Intern Student</p>
-                    </div>
-                  </div>
-                  <div className="internCard" >
-                    <img src="images/our_team/students/ayush.png" alt="" />
-                    <div className="studentDetail">
-                      <p className="smallHeading">Intern Student</p>
-                    </div>
-                  </div>
+                  ))}
                   
               </div>
             </div>

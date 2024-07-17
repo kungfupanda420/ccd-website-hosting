@@ -65,11 +65,12 @@ export const NewsMedia = () => {
       <div ref={newMediaContainer} className="newsMediaContainer" whileTap={{ cursor: 'pointer' }}>
         
           <div drag="x" className="newsMediaHolder " dragConstraints={{ right: 0, left: -width }} dragMomentum={false} >
-          <div className="newsMediaHeading">News/Media</div>
+          <div className="newsMediaHeading">News & Media</div>
           
           <div className="newsMediaCards carousel-container" ref={carouselRef}>
           <button className="carousel-arrow carousel-arrow--prev" onClick={handleCarouselMove(0)}>&#8249;
           </button>
+          
             {cardData.map((card, index) => (
               <div className="cardNews carousel-slide" key={index} ref={slideRef}>
                 <img className="cardImage" src={card.img} alt="card img" />
