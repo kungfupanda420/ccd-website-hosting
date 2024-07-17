@@ -87,7 +87,7 @@ function AboutRoute() {
             <AboutSubCompo clubContent = {item} />
         ))
        }
-       <div style={{marginTop:'0'}} className='clubhead'>
+       <div style={{marginTop:'0rem'}} className='clubhead'>
         <span>Cultural Clubs At NIT Calicut</span>
       </div>
        <CulturalClubs/>

@@ -124,6 +124,8 @@ body {
     justify-content: center;*/
   display: grid;
   grid-template-columns: auto auto auto auto;
+  /* grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); */
+  justify-content: space-between;
 }
 
 
@@ -146,6 +148,7 @@ body {
   pointer-events: none;
   filter: grayscale(80%);
   transition: filter 0.3s ease;
+  border-radius: 1rem;
   /* Add transition for smooth effect */
 }
 
@@ -156,8 +159,8 @@ body {
 
 .innerInternDiv {
   display: grid;
-  grid-template-columns:auto auto auto;
-  /* grid-template-columns: repeat(6, 1fr); */
+  /* grid-template-columns:auto auto auto; */
+  grid-template-columns: repeat(3, 1fr);
   /* grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); */
   padding-bottom: 1rem 0;
   place-items: center;
@@ -182,6 +185,7 @@ body {
   pointer-events: none;
   filter: grayscale(80%);
   transition: filter 0.3s ease;
+  border-radius: 1rem;
   /* Add transition for smooth effect */
 }
 
@@ -199,7 +203,7 @@ body {
   margin: 1.5rem auto;
   line-height: 2rem;
   font-size: xx-large;
-  width: 4rem;
+  /* width: 8rem; */
 }
 
 .responsive-cell-block {
@@ -375,7 +379,7 @@ body {
   }
 }
 
-@media screen and (min-width:400px) and (max-width: 643px){
+@media screen and (min-width:200px) and (max-width: 643px){
   .innerStudentsDiv {
     display: grid;
     grid-template-columns: auto auto;
@@ -385,57 +389,8 @@ body {
     grid-template-columns: auto auto;
   }
   .internCard{
-    width: 9rem;
+    width: 8rem;
     height: 9rem;
   }
+  
 }
-
-/* @media (max-width: 500px) {
-   .wk-mobile-1 {
-    width: 8.333333%;
-  }
-
-  .wk-mobile-2 {
-    width: 16.666667%;
-  }
-
-  .wk-mobile-3 {
-    width: 25%;
-  }
-
-  .wk-mobile-4 {
-    width: 33.333333%;
-  }
-
-  .wk-mobile-5 {
-    width: 41.666667%;
-  }
-
-  .wk-mobile-6 {
-    width: 50%;
-  }
-
-  .wk-mobile-7 {
-    width: 58.333333%;
-  }
-
-  .wk-mobile-8 {
-    width: 66.666667%;
-  }
-
-  .wk-mobile-9 {
-    width: 75%;
-  }
-
-  .wk-mobile-10 {
-    width: 83.333333%;
-  }
-
-  .wk-mobile-11 {
-    width: 91.666667%;
-  }
-
-  .wk-mobile-12 {
-    width: 100%;
-  } 
-} */

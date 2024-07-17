@@ -15,11 +15,10 @@ export default function HeroCarousal() {
         cancelOnInteraction={false}
         interval={4000}
         bullets={false}
-        
       >
-        <div style={{ height: '100vh' }} data-src="images/aboutpage/aerounwiredTwo.png" />
-        <div style={{ height: '100vh' }} data-src="images/aboutpage/aerounwiredOne.png" />
-        <div style={{ height: '100vh' }} data-src="images/aboutpage/aerounwiredTwo.png" />
+        <div style={{height:'100vh'}} data-src="images/aboutpage/aerounwiredTwo.png" />
+        <div style={{height:'100vh'}} data-src="images/aboutpage/aerounwiredOne.png" />
+        <div style={{height:'100vh'}} data-src="images/aboutpage/aerounwiredTwo.png" />
       </AutoplaySlider>
 
     </>

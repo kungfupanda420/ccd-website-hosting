@@ -110,7 +110,7 @@
 }
 
 .aboutSubContainers > div .contentDivs .mainHeading {
-  margin: -0.5rem 0 1rem;
+  margin: -4.5rem -23px 3rem;
 }
 
 
@@ -250,7 +250,7 @@
   }
 
       .aboutSubContainers > div .contentDivs{
-     transform: translateY(calc(-27% ));
+     transform: translateY(calc(-33% ));
   }
 
 }

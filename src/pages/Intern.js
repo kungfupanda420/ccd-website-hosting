@@ -42,8 +42,20 @@ function Intern(){
         <p className="tinyTexts" data-aos="zoom-in" >
           The CCD notifies registration schedule for the placement and internship drive in an academic year. According to the schedule, interested students in the graduating batch and Internship batch may register. For the seamless conduct of the placement and internship campaigns, CCD avails the services of an online portal named Genskill, which is developed by a firm founded by our alumni. Recruiters, students and TPOs are provided with distinct logins in Genskill. The companies have to register in the Genskill portal and submit the Job Notification Form (JNF) for participating in the placement campaign and Internship Notification Form (INF) for participating in the Internship campaign. Companies will be able to post JNF /INF, see the list of applicants, and mark the final selections in Genskill. It is mandatory for all students who are interested to participate in the placement and internship campaigns to register in the Genskill portal and join the relevant campaign. The Genskill App will display the status of the application of the student. The portal also helps students to build their resume in an incremental way. Students may refer the following resources for familiarity and e-support.  <br />
           Resource: <br /> 
-          <a href=" https://genskill.com/" target='_blank' rel='noreferrer' > https://genskill.com/</a> <br /> 
-          <a href="https://app.genskill.com/documentation/videos/" target='_blank' rel='noreferrer' >https://app.genskill.com/documentation/videos/</a>
+          {/* <a href=" https://genskill.com/" target='_blank' rel='noreferrer' > https://genskill.com/</a> <br /> 
+          <a href="https://app.genskill.com/documentation/videos/" target='_blank' rel='noreferrer' >https://app.genskill.com/documentation/videos/</a> */}
+          <div className="genskillButtons">
+          <a href=" https://genskill.com/" className="whiteButton" target="_blank" rel="noreferrer">
+           <span className="buttonText">GenSkill</span> 
+          </a>
+          <a
+            href="https://app.genskill.com/documentation/videos/"
+            target="_blank" className="whiteButton" 
+            rel="noreferrer"
+          >
+             <span className="buttonText">Demo Videos</span> 
+          </a>
+          </div>
         </p>
       </div>
 

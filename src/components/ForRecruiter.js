@@ -9,7 +9,7 @@ function ForRecruiter() {
   return (
     <div className='forRecruiterContainer'>
         <PlacementPathCompo/>
-        {/* <AluminiTest/> */}
+        <AluminiTest/>
         <Form/>
     </div>
   )
