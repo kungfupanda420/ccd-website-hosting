@@ -30,6 +30,9 @@ sans-serif; */
   --navBarBg:rgba(0, 0, 0, 0.564);
   --btnShadow: 0 4px 8px rgba(255, 255, 255, 0.5);
   --newCompBack:#ffffff;
+  --pgmGray:rgb(129, 129, 129);
+  --pgmTextHover:rgb(129, 129, 129);
+  --pgmBgHover: rgb(144, 144, 144);
   --activePgm:#000000;
   --depFont: white;
   --depBullet: white;
@@ -57,8 +60,10 @@ sans-serif; */
   --depFont: #246;
   --depBullet: #48b;
   --textColor2: rgba(1,89,170,255);
-  --pgmGray:rgb(129, 129, 129);
+  --pgmGray: rgba(1,89,170,255);
+  --pgmTextHover: white;
   --stuNav:rgba(1,89,170,255);
+  --pgmBgHover: rgba(1,89,170,255);
 }
 
 *{

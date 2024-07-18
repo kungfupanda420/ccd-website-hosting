@@ -56,23 +56,48 @@
     
   }
   .programCard:hover {
-    background-color: rgba(1,89,170,255);;
+    background-color: var(--pgmBgHover);
     border: 1.75px solid rgb(52, 52, 52);
     color: white;
     .programDetails{
       color: white;
     
     }
+    .programDetailsHeading{
+      color: var(--pgmTextHover);
+    }
+    .programCardTitle {
+      color: var(--pgmTextHover);
+    }
+    .programCardTitle {
+      color: white
+    }
+    .programDetailsHeading{
+      color: white;
+    }
+    .downloadButton{
+      background-color: white;
+      color: var(--pgmGray);
+    
+    }
+    .programTag{
+      background-color: white;
+      color: var(--pgmGray);
+    
+    }
+    .programPostDate{
+      color: white;
+    
+    }
   }
   
   .programCardTitle {
+    color: var(--pgmGray);
     font-size: 1.5rem;
     font-family: 'Montserrat', sans-serif;
     font-weight: 500;
-    
-    
   }
-  
+
   .programCardDateShare {
     display: flex;
     justify-content: space-between;
@@ -109,13 +134,13 @@
   }
   
   .programTag {
-    background-color: #001c36;
+    background-color: var(--pgmGray);
     margin-right: 0.5rem;
     padding: 0.3rem 0.5rem;
     border-radius: 0.5rem;
     font-family: 'Montserrat', sans-serif;
     font-size: 0.85rem;
-    color: #0084ff;
+    color: white;
   }
   
   .programTag span {
@@ -123,6 +148,7 @@
   }
   
   .programDetailsHeading {
+    color: var(--pgmGray);
     font-size: 1.5rem;
     font-family: 'Montserrat', sans-serif;
     font-weight: 500;
@@ -142,7 +168,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #252525;
+    background-color: var(--pgmGray);
     color: white;
     padding: 0.75rem 1rem;
     border-radius: 0.5rem;
@@ -235,6 +261,7 @@
     }
   
     .programDetailsHeading {
+      color: var(--pgmText);
       font-size: 0.75rem;
       margin-top: 0.75rem;
     }
