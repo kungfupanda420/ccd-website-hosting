@@ -129,7 +129,7 @@
 .reasonContainer:nth-child(6) {
   animation-delay: 0.5s;
 }
-@media (max-width: 1000px) {
+@media (max-width: 1115px) {
   .whyRecruitContainer {
     height: fit-content;
     align-items: center;

@@ -1,5 +1,5 @@
 .recruiter-head {
-  margin: 4rem;
+  margin: 4rem auto;
   font-size: 2rem;
   text-align: center;
 }
@@ -32,7 +32,7 @@
   height: 135px;
 }
 
-.companies {
+.companiesAll {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   grid-gap: 10px;
@@ -50,4 +50,20 @@
 
 .buttonText:hover{
   content: 'Download';
+}
+
+@media screen and (max-width:350px) {
+  .card-company{
+    width: 200px;
+  }
+}
+
+@media screen and (max-width:860px) {
+  .card-company{
+    width: 200px;
+  }
+  .companiesAll{
+    grid-template-columns: repeat(auto-fill, minmax(243px, 1fr));
+
+  }
 }

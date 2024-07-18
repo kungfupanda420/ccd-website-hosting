@@ -73,6 +73,10 @@ body {
     margin-right: 2rem;
   }
   
+  .ranks{
+    color: var(--textColor);
+  }
+
   /* Responsive design */
   
   @media screen and (min-width:1025px) and (max-width:1441px) {

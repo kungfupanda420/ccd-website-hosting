@@ -21,7 +21,7 @@ function OurRecruiters() {
   return (
     <>
       <h1 className='recruiter-head'>Our Past Recruiters</h1>
-      <div className='companies'>
+      <div className='companiesAll'>
         {imageList.map((imageSrc, index) => (
           <div className="card-company" key={index}>
             <img src={imageSrc} className="company-logo" alt="Company Logo" />

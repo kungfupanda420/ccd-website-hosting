@@ -65,7 +65,7 @@ const PlacementStatics = () => {
   return (
     
     <>
-      <div className='placementStaticContainer' data-aos="zoom-in">
+      <div className='placementStaticContainer1' data-aos="zoom-in">
         <div className='placementStaticHolder' ref={ref}>
           {/* Title and button */}
           <div className='titleAndButtonContainer'>

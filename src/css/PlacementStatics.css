@@ -4,7 +4,7 @@
 [data-theme="light"]{
     --bkgCol:rgba(1,89,170,255);
 }
-.placementStaticContainer {
+.placementStaticContainer1 {
     color: var(--textColor);
     display: flex;
     flex-direction: column;
@@ -39,7 +39,7 @@
     border-radius: 2rem;
     width: fit-content;
     cursor: pointer;
-    transition: background-color 0.3s ease,border 0.3s ease;; 
+    transition: background-color 0.3s ease, border 0.3s ease;
 }
 
 .whiteButton:hover {
