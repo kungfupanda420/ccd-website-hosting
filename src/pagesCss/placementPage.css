@@ -24,7 +24,7 @@
 .pageHeading 
 {
     font-family: 'Montserrat', sans-serif;
-    font-size: 4rem;
+    font-size: 3rem;
     margin: 2rem 0;
     font-weight: 600;
 
@@ -32,7 +32,6 @@
 .page .smallHeading 
 {
     font-weight: 600;
-    font-size: 1.5rem;
     margin: 1rem 0 1rem;
     text-transform: capitalize;
 }
@@ -40,11 +39,8 @@
 .page .tinyTexts 
 {
     font-size: 1rem;
-    padding-top: 0.5rem;
-    padding-bottom: 2rem;
     line-height: 2;
     color: var(--lightTextColor);
-    text-align: justify;
 }
 .page .tinyTexts  a 
 {
@@ -175,14 +171,15 @@
     margin: 2.5rem 0 1rem;
 
 }
-
 .genskillButtons{
     display: flex;
     gap: 1rem;
     margin: 1rem 0;
     
 }
-
+.pageContent{
+    max-width: 94vw;
+}
 /* responsive */
 
 @media screen and (min-width:769px) and (max-width:1025px) {
@@ -207,10 +204,50 @@
         
             .line {
                 height: 83%;
+                left: 11.5%;
             }
+            .pageHeading 
+            {
+                
+                font-size: 5vh;
+                
+            
+            }
+            .stepsContent
+        {
+            gap: 1rem;
+        }
+        .step
+        {
+            width: 100%;
+        }
+        .step .svgIcon
+        {
+            margin: 0 1rem;
+        }
+                .step:nth-of-type(even) .svgIcon {
+                    margin: 0 1rem;
+                }
+                .step:nth-of-type(odd) {
+                    text-align: left;
+                    flex-direction: row;
+                    justify-content: left;
+                }
+                .step:nth-of-type(even) {
+                    text-align: left;
+                    margin-left: auto;
+                    justify-content: right;
+                }
 }
 
 @media screen and (max-width:426px) {
+    .pageHeading 
+            {
+                
+                font-size: 8vw;
+                
+            
+            }
     .page {
             padding: 4vh 5vw;
            
@@ -253,21 +290,40 @@
 
 
 @media screen and (max-width:376px) {
+    /* .pageContent{
+        padding: 0.5vh 0;
+    } */
+    .pageHeading 
+            {
+                
+                font-size: 7vw;
+            }
                 .page .tinyTexts
                 {
-                    font-size: 0.85rem;
+                    /* font-size: 0.85rem; */
+                    font-size: 2vh;
                 }
 
         .stepTwoInfo 
         {
             padding: 0.5rem;
         }
-
+        .page {
+            padding: 4vh 5vw;
+           
+        }
 
 }
 
 
 @media screen and (max-width:321px) {
+    .pageHeading 
+            {
+                
+                font-size: 7vw;
+                
+            
+            }
                 .page .tinyTexts
                 {
                     font-size: 0.75rem;
