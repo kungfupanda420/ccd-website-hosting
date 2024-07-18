@@ -35,6 +35,8 @@ sans-serif; */
   --depBullet: white;
   --textColor2: #000000;
   --stuNav:white;
+  --headColor:black;
+  --nameColor:black;
   
 }
 
@@ -59,6 +61,8 @@ sans-serif; */
   --textColor2: rgba(1,89,170,255);
   --pgmGray:rgb(129, 129, 129);
   --stuNav:rgba(1,89,170,255);
+  --headColor:rgb(255, 255, 255);
+  --nameColor:rgba(1, 89, 170, 255);
 }
 
 *{

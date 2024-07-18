@@ -24,6 +24,7 @@
     text-align: center;
     font-family: 'Montserrat', sans-serif;
     font-weight: 500;
+    color: var(--textColor);
 }
 
 .clubCard{

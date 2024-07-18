@@ -2,6 +2,11 @@
 
 [data-theme='light']{
   --headColor:rgb(255, 255, 255);
+  --nameColor:rgba(1, 89, 170, 255);
+}
+:root{
+  --headColor:black;
+  --nameColor:black;
 }
 
 body {
@@ -56,7 +61,7 @@ body {
 
   }
 
-  .description {
+  .description1 {
     margin: .5rem;
     color: #2a292b;
   }
@@ -204,6 +209,7 @@ body {
   line-height: 2rem;
   font-size: xx-large;
   /* width: 8rem; */
+  color:var(--nameColor);
 }
 
 .responsive-cell-block {

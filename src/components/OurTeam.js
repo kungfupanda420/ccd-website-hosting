@@ -66,8 +66,8 @@ function OurTeam() {
                   <div class="nft">
                     <div class='main'>
                       <img class='tokenImage' src={person.image} alt="image" />
-                      <h2>{person.name}</h2>
-                      <p class='description'>{person.position}</p>
+                      <h2 style={{color:'var(--nameColor)'}}>{person.name}</h2>
+                      <p class='description1'>{person.position}</p>
                       <hr />
                       <h2><a href={links[index]} target="_blank" style={{textDecoration:'none'}}><FaLinkedin/></a></h2> 
                     </div>
@@ -86,8 +86,8 @@ function OurTeam() {
                   <div className="studentCard active" >
                     <img src={student.image} alt="" />
                     <div className="studentDetail">
-                      <p className="smallHeading">{student.name}</p>
-                      <p className="tinyTexts">SPOC</p>
+                      <p style={{color:'var(--nameColor)'}} className="smallHeading">{student.name}</p>
+                      <p style={{color:'var(--nameColor)'}} className="tinyTexts">SPOC</p>
                     </div>
                   </div>
                 ))}
@@ -102,7 +102,7 @@ function OurTeam() {
                   <div className="internCard" >
                     <img src={student.image} alt="" />
                     <div className="studentDetail">
-                      <p className="smallHeading">{student.name}</p>
+                      <p style={{color:'var(--nameColor)'}} className="smallHeading">{student.name}</p>
                     </div>
                   </div>
                   ))}
