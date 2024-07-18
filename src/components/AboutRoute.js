@@ -61,11 +61,11 @@ const clubInfo=[
 
     {
       clubName:"IEEE",
-      clubInfoTwoLines:"AeroUnwired is an aero-modelling club, a branch of Club Unwired, found by students of NITC who aspired to harness the knowledge",
-      clubInfoMore:"of flight. Inspired by the magnificent creatures with wings and technical aspects of the same, this club puts effort to build aircrafts and study the science of flight. The club offers knowledge to those who seek and invest their time in innovation. With a classical workspace to work & supportive faculty members and seniors, this club welcomes all those who wish to learn.",
-      clubImageOne:"/images/aboutpage/aerounwiredTwo.png",
-      clubImageTwo:"/images/aboutpage/aerounwiredOne.png",
-      clubImageThree:"/images/aboutpage/aerounwiredTwo.png",
+      clubInfoTwoLines:"A group of enthusiastic students who are passionate about technology and innovation. Our aim is to foster technical skills, knowledge sharing, and professional development among our members.",
+      clubInfoMore:"Through various events, workshops, and projects, we strive to create a vibrant community that encourages collaboration and learning in the field of engineering. Join us and become a part of our journey towards exploring and shaping the future of technology!",
+      clubImageOne:"/images/aboutpage/ieee1.jpeg",
+      clubImageTwo:"/images/aboutpage/ieee2.jpeg",
+      clubImageThree:"/images/aboutpage/ieee3.jpeg",
   },
 
 
