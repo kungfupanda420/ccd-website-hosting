@@ -4,13 +4,13 @@ import { FaDownload } from "react-icons/fa6";
 
 
 function OurRecruiters() {
-  const showBtn = (e) => {
-    const buttonText = document.querySelector('.buttonText')
-    buttonText.innerText = 'Download Brochure'
-  }
-  const hideBtn = (e) => {
-    e.target.innerText = ''
-  }
+  // const showBtn = (e) => {
+  //   const buttonText = document.querySelector('.buttonText')
+  //   buttonText.innerText = 'Download Brochure'
+  // }
+  // const hideBtn = (e) => {
+  //   e.target.innerText = ''
+  // }
   const [hover, setHover] = useState(false);
   const images = require.context('../../public/images/companies_logo', false, /\.(png|jpe?g|svg)$/);
   const imageList = images.keys().map((imageFileName) => {

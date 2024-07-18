@@ -10,7 +10,7 @@ function StudentNavbar() {
           <NavLink to='internships'>Internship/ Placements</NavLink>
           {/* <NavLink to='placements'>Placements</NavLink> */}
           <NavLink to='faqdata'>FAQs</NavLink>
-
+          <NavLink to='preptips'>Prep Tips</NavLink>
           {/* <NavLink>Internship Opportunity</NavLink>
             <NavLink>Career Development Program</NavLink> */}
         </ul>
