@@ -16,9 +16,14 @@ export default function HeroCarousal() {
         interval={4000}
         bullets={false}
       >
-        <div style={{height:'100vh'}} data-src="images/aboutpage/aerounwiredTwo.png" />
-        <div style={{height:'100vh'}} data-src="images/aboutpage/aerounwiredOne.png" />
-        <div style={{height:'100vh'}} data-src="images/aboutpage/aerounwiredTwo.png" />
+        <div style={{height:'100vh'}} data-src="images/heroimages/1.png" />
+        <div style={{height:'100vh'}} data-src="images/heroimages/2.png" />
+        <div style={{height:'100vh'}} data-src="images/heroimages/3.png" />
+        <div style={{height:'100vh'}} data-src="images/heroimages/4.png" />
+        <div style={{height:'100vh'}} data-src="images/heroimages/5.png" />
+        <div style={{height:'100vh'}} data-src="images/heroimages/6.png" />
+        <div style={{height:'100vh'}} data-src="images/heroimages/7.png" />
+        <div style={{height:'100vh'}} data-src="images/heroimages/8.png" />
       </AutoplaySlider>
 
     </>

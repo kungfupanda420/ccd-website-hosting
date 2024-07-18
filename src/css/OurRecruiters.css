@@ -45,6 +45,7 @@
   left: 100%;
   margin-top: 5rem;
   margin-right: -9%;
+  transition: all 0.8s ease;
 }
 
 .buttonText:hover{

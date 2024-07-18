@@ -20,14 +20,14 @@ h1 {
 .todo ul {
 	padding-inline-start: 0.5em;
 	font-weight: 800;
-    font-style: oblique;
+    /* font-style: oblique; */
 	word-wrap: break-word;
 	::marker {
 		content: ">";
 		color: var(--depBullet);
 	}
     ul{
-        margin-left: 2rem;
+        margin-left: 3rem;
         font-weight: 400;
         font-style: normal;
     }
