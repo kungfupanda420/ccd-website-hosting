@@ -10,12 +10,14 @@ const Rankings = () => {
 
   return (
     <div className="Rankings">
-      {/* <header className="header"> */}
-        {/* <h1>College Name</h1> */}
-      {/* </header> */}
+      {/* <header className="header">
+        <h1>College Name</h1>
+      </header> */}
       <div className="placementStaticContainer">
+      <div className='ranks'><h1>NIRF Rankings</h1></div>
         <div className='runningStatContainer1'>
-          {/* Architecture */}
+         
+         
           <div className='eachStatContainer'>
             <div className='statValue'>
               <h1 className='statNumber1'>{endNumbers.Architecture}</h1>

@@ -1,5 +1,5 @@
 import React from 'react'
-import NewAbout from './NewAbout'
+// import NewAbout from './NewAbout'
 import AboutSubCompo from './AboutSubCompo'
 import '../css/AboutRoute.css'
 import AboutUs from './AboutUs'
