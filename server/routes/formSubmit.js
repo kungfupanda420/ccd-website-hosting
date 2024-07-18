@@ -1,38 +1,64 @@
 var express = require('express');
 var router = express.Router();
-// var nodemailer = require('nodemailer');
-const db=require('../db/index');
+var nodemailer = require('nodemailer');
+const db = require('../db/index');
 
-router.post('/',async function(req, res) {
- try{
-  let { name,phone,email,queriesComments } = req.body;
-  console.log(name,phone,email,queriesComments);
-  phone=phone.toString();
+router.post('/', async function (req, res) {
+  try {
+    let { name, phone, email, queriesComments } = req.body;
+    console.log(name, phone, email, queriesComments);
+    phone = phone.toString();
 
-  const newObject = {
-    name: name,
-    phone: phone,
-    email: email,
-    queriesComments: queriesComments,
-  };
-  const query = {
-    text: 'INSERT INTO queries (name, phone, email, queriescomments) VALUES ($1, $2, $3, $4)',
-    values: [newObject.name, newObject.phone, newObject.email, newObject.queriesComments],
-  };
+    const newObject = {
+      name: name,
+      phone: phone,
+      email: email,
+      queriesComments: queriesComments,
+    };
+    const query = {
+      text: 'INSERT INTO queries (name, phone, email, queriescomments) VALUES ($1, $2, $3, $4)',
+      values: [newObject.name, newObject.phone, newObject.email, newObject.queriesComments],
+    };
 
-  await db.query(query);
-  console.log(newObject);
-  const errmessage = `Dear ${name},\n\nThank you for considering our college for recruiting opportunities. We have received your submission and are thrilled to have the opportunity to collaborate with you. Our team will review your details and reach out to you soon to discuss further steps. We appreciate your interest and look forward to the possibility of building a fruitful partnership.\n\nBest regards,\nCentre For Career Development\nNIT Calicut`;
-  res.send(errmessage);
-}
-catch (error) {
-  console.error(error);
-  res.status(500).send('Internal Server Error: ' + error.message);
-}
+    await db.query(query);
+    console.log(newObject);
+    const errmessage = `Dear ${name},\n\nThank you for considering our college for recruiting opportunities. We have received your submission and are thrilled to have the opportunity to collaborate with you. Our team will review your details and reach out to you soon to discuss further steps. We appreciate your interest and look forward to the possibility of building a fruitful partnership.\n\nBest regards,\nCentre For Career Development\nNIT Calicut`;
+
+    let transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'ccdwebsitenitc@gmail.com',
+        pass: 'wubl fghw xqwc oaxr'
+      }
+    });
+    let mailOptions = {
+      from: newObject.email, // Sender address
+      to: 'ccd@nitc.ac.in', // List of recipients
+      subject: `Website Query from ${newObject.name}`, // Subject line
+      text: newObject.queriesComments, // Plain text body
+      html: `Name : ${newObject.name} 
+      <br> Email : ${newObject.email}
+      <br>Phone number : ${newObject.phone} <br>
+      Query : ${newObject.queriesComments}` // HTML body
+    };
+
+    // Send email
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        return console.log(`Error: ${error}`);
+      }
+      console.log(`Message Sent: ${info.response}`);
+    });
+    res.send(errmessage);
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error: ' + error.message);
+  }
 
 });
 
-router.patch('/status/:id', async function(req, res) {
+router.patch('/status/:id', async function (req, res) {
   try {
     let id = req.params.id;
     id.toString();
@@ -42,7 +68,7 @@ router.patch('/status/:id', async function(req, res) {
       values: ['done', id],
     };
     await db.query(query);
-    console.log('Query status updated ',id);
+    console.log('Query status updated ', id);
     res.status(200).send('Query status updated');
   } catch (error) {
     console.error(error);
