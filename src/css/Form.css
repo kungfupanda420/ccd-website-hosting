@@ -201,13 +201,14 @@
   .messageContainer {
     margin-top: 20px;
     max-width: 30rem;
+    
   }
   
   .messageContainer pre {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Poppins', sans-serif;
     white-space: pre-wrap;
     padding: 10px;
-    color: white;
+    color: var(--textColor);
   }
   
 

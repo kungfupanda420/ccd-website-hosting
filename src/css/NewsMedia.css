@@ -122,7 +122,7 @@
 }
 
 .carousel-container::-webkit-scrollbar-track {
-  background: rgba(1, 89, 170, 255);
+  background: var(--cardCol);
 }
 
 .carousel-container::-webkit-scrollbar-thumb {
@@ -134,7 +134,7 @@
   } */
 
 .carousel-slide {
-  flex: 1 0 30%;
+  /* flex: 1 0 30%; */
   aspect-ratio: 1;
   flex-flow: column nowrap;
   display: flex;
@@ -210,10 +210,7 @@
     background: white;
   }
 
-  .newsMediaHolder {
-    flex-direction: column;
-    align-items: center;
-  }
+  
 
   .newsMediaHeading {
     margin: 2rem 0 1rem;
@@ -269,6 +266,21 @@
   }
 }
 
+@media screen and (max-width:500px) {
+  .cardNews {
+    margin: 0 0.5rem;
+    height: 37rem;
+    width: 20rem;
+    scroll-snap-align: start;
+}
+}
+
+@media screen and (max-width:1500px) {
+  .newsMediaHolder {
+    flex-direction: column;
+    align-items: center;
+  }
+}
 
 /* Bro when you are making responsive 
   Keep .newMeadingHeading display as none and #newMediaMobileView as block
