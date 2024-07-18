@@ -9,7 +9,7 @@ import ActivePrograms from "../components/ActivePrograms";
 // import Companies from "./Companies"
 import NewAbout from "./NewAbout"
 import NewCompanies from "./NewCompanies"
-
+import Rankings from "./Rankings"
 function Home(){
     return(
         <>
@@ -18,6 +18,7 @@ function Home(){
       <NewAbout/>
       {/* <About/> */}
       <WhyRecruit/>
+      <Rankings/>
       <PlacementStatics/>
       {/* <Companies/> */}
       <NewCompanies/>
