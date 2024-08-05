@@ -166,7 +166,18 @@
   .aboutSubContainers > div .contentDivs{
      transform: translateY(calc(-30% - 0.5rem));
   }
-
+  .aboutSubContainers {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .aboutSubContainers > div {
+    border-radius: 0.5rem;
+    overflow: hidden;
+    height: 280px;
+    margin: 0.75rem 0;
+    padding: 0.85rem;
+  }
   .addVerticalFlow {
     height: 100%;
     overflow-y: scroll;
@@ -217,9 +228,9 @@
         border-bottom-left-radius: 1.5rem;
     border-bottom-right-radius: 1.5rem;
   }
-    .aboutSubContainers > div .contentDivs{
+    /* .aboutSubContainers > div .contentDivs{
      transform: translateY(calc(-27% ));
-  }
+  } */
    .aboutSubContainers > div:first-child .imageContiners img {
     border-radius: 0;
     border-top-left-radius: 1.5rem;
@@ -233,10 +244,10 @@
        border-bottom-left-radius: 1.5rem;
     border-bottom-right-radius: 1.5rem;
   }
-  .contentDivs {
+  /* .contentDivs {
     transition: all 0.2s ease;
     padding: 1rem;
-  }
+  } */
   .aboutSubContainers > div .contentDivs .mainHeading {
     margin: 0 0 1.5rem;
   }
@@ -249,9 +260,9 @@
     display: none;
   }
 
-      .aboutSubContainers > div .contentDivs{
+      /* .aboutSubContainers > div .contentDivs{
      transform: translateY(calc(-33% ));
-  }
+  } */
 
 }
 
