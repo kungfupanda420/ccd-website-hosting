@@ -32,7 +32,7 @@ router.post('/', async function (req, res) {
       }
     });
     let mailOptions = {
-      from: newObject.email, // Sender address
+      from: 'ccdwebsitenitc@gmail.com', // Sender address
       to: 'ccd@nitc.ac.in', // List of recipients
       subject: `Website Query from ${newObject.name}`, // Subject line
       text: newObject.queriesComments, // Plain text body
