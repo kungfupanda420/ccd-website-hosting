@@ -3,9 +3,9 @@ import '../css/Rankings.css';
 
 const Rankings = () => {
   const endNumbers = {
-    Architecture: 2,
-    Innovation: 8,
-    Engineering: 23
+    Architecture: 3,
+    Innovation: 31,
+    Engineering: 25
   };
 
   return (
