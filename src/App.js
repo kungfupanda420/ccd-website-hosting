@@ -23,7 +23,10 @@ const Login = lazy(() => import('./components/Login'));
 const Admin = lazy(() => import('./pages/Admin'));
 const ForRecruiter = lazy(() => import('./components/ForRecruiter'));
 const NotFound = lazy(() => import('./pages/NotFound'));
-
+// import Temp2 from './components/Temp2';
+// import Temp from './components/Temp';
+// const Temp=lazy(()=>import('./components/Temp'));
+const Temp2=lazy(()=>import('./components/Temp2'));
 function App() {
   const { pathname } = useLocation();
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -87,6 +90,8 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/admin@CCD_nitc123' element={<Admin />} />
           <Route path='*' element={<NotFound />} />
+          {/* <Route path='/' element={<Temp/>} /> */}
+          <Route path='/dashboard' element={<Temp2/>} />
         </Routes>
       </Suspense>
       <Footer />
