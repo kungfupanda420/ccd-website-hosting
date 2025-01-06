@@ -3,8 +3,8 @@ import WhyRecruit from "./WhyRecruit"
 import PlacementStatics from "./PlacementStatics"
 import OurTeam from "./OurTeam"
 import Form from "./Form"
-import NewsMedia from "./NewsMedia"
-import ActivePrograms from "../components/ActivePrograms";
+// import NewsMedia from "./NewsMedia"
+// import ActivePrograms from "../components/ActivePrograms";
 // import WoFame from "./WoFame"
 // import Companies from "./Companies"
 import NewAbout from "./NewAbout"
@@ -22,9 +22,9 @@ function Home(){
       <PlacementStatics/>
       {/* <Companies/> */}
       <NewCompanies/>
-      <NewsMedia/>
+      {/* <NewsMedia/> */}
       <OurTeam/>
-      <ActivePrograms/>
+      {/* <ActivePrograms/> */}
       <Form/>
         </>
     )
