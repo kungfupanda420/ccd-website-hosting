@@ -150,14 +150,14 @@ function OurTeam() {
       linkedin: "https://www.linkedin.com/in/arunbte/",
     },
     {
-      name: "Dr. C. S. Suchand",
+      name: "Dr. C. S. Suchand Sangeeth",
       position: "Vice Chairperson",
       image: "/images/our_team/teachers/suchand.jpg",
       linkedin: "https://www.linkedin.com/in/suchand-sangeeth-c-s-440a301a/",
     },
     
     {
-      name: "Dr. Nujoom Sageer",
+      name: "Dr. Nujoom Sageer Karat",
       position: "Vice Chairperson",
       image: "/images/our_team/teachers/nujoom.jpg",
       linkedin: "https://www.linkedin.com/in/nujoom-sageer-k-845a4375/",
@@ -171,41 +171,41 @@ function OurTeam() {
   ];
 
   const studentData = [
-    {
-      name: "Praneeth Emandi",
-      position: "INTERN",
-      image: "images/our_team/students/praneeth2.jpg",
-    },
-    {
-      name: "Advaith Girish",
-      position: "INTERN",
-      image: "images/our_team/students/advaith.png",
-    },
-    {
-      name: "Hari Govind",
-      position: "INTERN",
-      image: "images/our_team/students/harigovind.png",
-    },
+    // {
+    //   name: "Praneeth Emandi",
+    //   position: "INTERN",
+    //   image: "images/our_team/students/praneeth2.jpg",
+    // },
+    // {
+    //   name: "Advaith Girish",
+    //   position: "INTERN",
+    //   image: "images/our_team/students/advaith.png",
+    // },
+    // {
+    //   name: "Hari Govind",
+    //   position: "INTERN",
+    //   image: "images/our_team/students/harigovind.png",
+    // },
     {
       name: "Hari",
       position: "SPOCS",
       image: "images/our_team/students/hari.png",
     },
-    {
-      name: "Talib",
-      position: "INTERN",
-      image: "images/our_team/students/talib.png",
-    },
-    {
-      name: "Sujin",
-      position: "INTERN",
-      image: "images/our_team/students/sujin.png",
-    },
-    {
-      name: "Gethin",
-      position: "INTERN",
-      image: "images/our_team/students/gethin.png",
-    },
+    // {
+    //   name: "Talib",
+    //   position: "INTERN",
+    //   image: "images/our_team/students/talib.png",
+    // },
+    // {
+    //   name: "Sujin",
+    //   position: "INTERN",
+    //   image: "images/our_team/students/sujin.png",
+    // },
+    // {
+    //   name: "Gethin",
+    //   position: "INTERN",
+    //   image: "images/our_team/students/gethin.png",
+    // },
     {
       name: "Kedar Kamath",
       position: "SPOCS",
@@ -301,7 +301,7 @@ function OurTeam() {
 
             {/* Students Interns Section */}
             <div className="studentsDiv">
-              <h4 className="spochead">INTERNs</h4>
+              {/* <h4 className="spochead">INTERNs</h4> */}
               <div className="innerInternDiv">
                 {studentData
                   .filter((person) => person.position === "INTERN")

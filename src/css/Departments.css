@@ -16,7 +16,9 @@ h1 {
 	margin: 3px 0;
 	/* color: var(--textColor); */
 }
-
+.todo ul li a{
+	color: var(--depBullet);
+}
 .todo ul {
 	padding-inline-start: 0.5em;
 	font-weight: 800;
