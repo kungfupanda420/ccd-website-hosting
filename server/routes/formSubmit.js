@@ -15,6 +15,7 @@ router.post('/', async function (req, res) {
       email: email,
       queriesComments: queriesComments,
     };
+    
     const query = {
       text: 'INSERT INTO queries (name, phone, email, queriescomments) VALUES ($1, $2, $3, $4)',
       values: [newObject.name, newObject.phone, newObject.email, newObject.queriesComments],

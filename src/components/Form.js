@@ -3,6 +3,8 @@ import "../css/Form.css";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { TiTick } from "react-icons/ti";
+import emailjs from "emailjs-com";
+
 
 const Form = () => {
   const [name, setName] = useState("");
@@ -44,6 +46,28 @@ const Form = () => {
       queriesComments: queriesComments,
     };
 
+    // const sendEmail = (e) => {
+    // e.preventDefault();
+
+    emailjs
+      .send(
+        "service_wowdjmb", // Replace with your Service ID
+        "template_f0en92r", // Replace with your Template ID
+        formData,
+        "wmCoYZRVHZOR8p8EE" // Replace with your Public Key
+      )
+      .then(
+        (response) => {
+          console.log("SUCCESS!", response.status, response.text);
+          alert("Email sent successfully!");
+        },
+        (error) => {
+          console.log("FAILED...", error);
+          alert("Failed to send email.");
+        }
+      );
+    // };
+
     try {
       const response = await fetch("/api/submit", {
         method: "POST",
@@ -53,7 +77,8 @@ const Form = () => {
         body: JSON.stringify(formData),
       });
 
-      const data = await response.text();
+      //const data = await response.text();
+      const data=""
       console.log(data); // Log the response from the server
       setName("");
       setPhone("");
@@ -104,7 +129,7 @@ const Form = () => {
   useEffect(() => {
     AOS.init({ duration: 1600 });
   }, []);
-  
+
   return (
     <div className="formContainer" data-aos="zoom-in">
       <div className="formHolder">
@@ -181,16 +206,16 @@ const Form = () => {
             <button
               type="submit"
               className={(isCheckboxChecked ? "activeButton" : "")}
-              disabled={!isCheckboxChecked || isSubmitting==="true"}
+              disabled={!isCheckboxChecked || isSubmitting === "true"}
             >
-              {isSubmitting==="true" ? (
+              {isSubmitting === "true" ? (
                 <>
                   <span className="loadingSpinner" />
                   Submitting
                 </>
-              ) : isSubmitting==="done"?(
-                  <TiTick size={30} color="#90f990"/>
-              ):(
+              ) : isSubmitting === "done" ? (
+                <TiTick size={30} color="#90f990" />
+              ) : (
                 <span>Submit</span>
               )}
             </button>
