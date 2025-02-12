@@ -13,7 +13,7 @@ function AboutUs() {
                     <div class="about-us-info">
                         <h2>About Us</h2>
                         <p style={{ fontSize: '1rem', textAlign: 'justify' }}>The Centre for Career Development (CCD) at NIT Calicut is dedicated to providing comprehensive career guidance, training, and placement support to students. Our mission is to empower students with the skills, knowledge and opportunities necessary to succeed in their chosen careers. We offer personalized counselling, industry connections and a range of workshops and training programmes to enhance employability skills. Our goal is to bridge the gap between academia and industry, ensuring students have access to internships, industrial training, and placement opportunities. At CCD, we are committed to nurturing well-rounded professionals who are equipped for the challenges of the ever-evolving job market.</p>
-                        <a href="documents/placement_brochure_2024.pdf" download='NIT Calicut Brochure 2024' title="About Us Button">ABOUT NITC</a>
+                        {/* <a href="documents/placement_brochure_2024.pdf" download='NIT Calicut Brochure 2024' title="About Us Button">ABOUT NITC</a> */}
                     </div>
                 </div>
 
