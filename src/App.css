@@ -109,6 +109,7 @@ body::-webkit-scrollbar-thumb{
   line-height: 4.5rem;
   padding-bottom: 2rem;
   padding-left: 1rem;
+  margin-top: 1.5rem;
 }
 
 .mediumHeading
