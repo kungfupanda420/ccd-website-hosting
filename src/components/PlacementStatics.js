@@ -157,6 +157,7 @@ const PlacementStatics = () => {
               <p className='statText'>Highest Package</p>
             </div>
           </div>
+         
           <h6 className='mainHeading'>Previous Year Placement Statistics</h6>
           <div className='Prev'>
             <div className='whiteButton' onClick={handleDownload2}>
