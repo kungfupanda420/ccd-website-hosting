@@ -27,6 +27,7 @@ const NotFound = lazy(() => import('./pages/NotFound'));
 // import Temp from './components/Temp';
 // const Temp=lazy(()=>import('./components/Temp'));
 const Temp2=lazy(()=>import('./components/Temp2'));
+const MentorFilter = lazy(() => import('./components/MentorFilter'));
 function App() {
   const { pathname } = useLocation();
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -92,6 +93,7 @@ function App() {
           <Route path='*' element={<NotFound />} />
           {/* <Route path='/' element={<Temp/>} /> */}
           <Route path='/dashboard' element={<Temp2/>} />
+          <Route path='/sip' element={<MentorFilter />} />
         </Routes>
       </Suspense>
       <Footer />
