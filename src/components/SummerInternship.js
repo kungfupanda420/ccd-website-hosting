@@ -356,7 +356,7 @@ function SummerInternship() {
                                     <option key={index} value={project}>{project}</option>
                                 ))}
                             </select>
-                        </div>
+                        </div >
                         <div className="form-group">
                             <label htmlFor="projectPreference3">Project Preference 3</label>
                             <select id="projectPreference3" name="projectPreference3" value={formData.projectPreference3} onChange={handleChange}>
