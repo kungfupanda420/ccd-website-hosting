@@ -1,3 +1,15 @@
+:root{
+  --formBg:black;
+  --formTxt:white;
+
+}
+[data-theme="light"]{
+  --formBg:white;
+  --formTxt:black;
+}
+*{
+    font-family: 'Montserrat', sans-serif;
+}
 header {
     background-color: #f8f9fa;
     padding: 20px;
@@ -8,7 +20,7 @@ header {
 header h1 {
     margin: 0;
     font-size: 2.5em;
-    color: #343a40;
+    color: #ff0000;
 }
 
 header p {
@@ -24,7 +36,7 @@ section {
 
 section h2 {
     font-size: 2em;
-    color: #343a40;
+    color: #3c556d;
 }
 
 section p {
@@ -67,7 +79,7 @@ section p {
 
 .form-section h2 {
     font-size: 1.5em;
-    color: #343a40;
+    color: var(--textColor2);
     margin-bottom: 10px;
 }
 
@@ -78,7 +90,7 @@ section p {
 .form-group label {
     display: block;
     font-size: 1em;
-    color: #495057;
+    color: var(--formText);
     margin-bottom: 5px;
 }
 
@@ -122,7 +134,7 @@ section p {
     padding: 10px 20px;
     font-size: 1em;
     color: #ffffff;
-    background-color: #007bff;
+    background-color: var(--formBg);
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -146,6 +158,7 @@ section p {
     border: 1px solid #dee2e6;
     border-radius: 4px;
     margin-right: 5px;
+    color: var(--textColor2);
 }
 
 .progress-step:last-child {
@@ -153,7 +166,183 @@ section p {
 }
 
 .progress-step.active {
-    background-color: #007bff;
+    background-color: var(--textColor2);
     color: #ffffff;
     font-weight: bold;
 }
+.wrap{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1vw;
+}
+.prev-button {
+    padding: 0.5vw;
+    font-size: 1em;
+    color: #ffffff;
+    background-color: var(--textColor2);
+    border: none;
+    border-radius: 0.7vw;
+    cursor: pointer;
+    
+}
+.next-button {
+    padding: 0.5vw;
+    font-size: 1em;
+    color: #ffffff;
+    background-color: var(--textColor2);
+    border: none;
+    border-radius: 0.7vw;
+    cursor: pointer;
+}
+/* .projectPref{
+    color: var(--textColor);
+}
+.name{
+    color: var(--textColor);
+}
+.duration{
+    padding-right: 1vw;
+} */
+/* Main Container */
+.mentor-filter-container {
+    max-width: 800px;
+    margin: auto;
+    padding: 24px;
+    background: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    border: 1px solid #ddd;
+  }
+  
+  /* Title */
+  .title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 16px;
+  }
+  
+  /* Form Group */
+  .form-group {
+    margin-bottom: 16px;
+  }
+  
+  .form-group label {
+    font-weight: 600;
+    color: #555;
+    display: block;
+    margin-bottom: 8px;
+  }
+  
+  /* Select Dropdown */
+  .form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+  }
+  
+  /* Checkbox Grid */
+  .checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  
+  .checkbox-label {
+    display: flex;
+    align-items: center; /* Ensures proper alignment */
+    gap: 8px; /* Adds small space between checkbox and text */
+    background: #f3f3f3;
+    padding: 10px;
+    border-radius: 6px;
+    width: fit-content;
+  }
+  
+  .checkbox-label input {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .checkbox-text {
+    white-space: nowrap; /* Prevents text from wrapping */
+    padding-left: 1vw;
+  }
+  
+  .checkbox-label span{
+    padding-left: 1vw;
+  }
+  /* Apply Filter Button */
+  .apply-button {
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    background: var(--textColor2);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .apply-button:hover {
+    background: #0056b3;
+  }
+  
+  .apply-button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+  
+  /* Results Section */
+  .results-container {
+    margin-top: 24px;
+  }
+  
+  .subtitle {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 12px;
+  }
+  
+  /* Table Styles */
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  .mentor-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+    background: white;
+  }
+  
+  .mentor-table th,
+  .mentor-table td {
+    padding: 12px;
+    border: 1px solid #ccc;
+    text-align: left;
+  }
+  
+  .mentor-table th {
+    background: #007bff;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .even-row {
+    background: #f8f9fa;
+  }
+  
+  .odd-row {
+    background: white;
+  }
+  
+  .mentor-table tr:hover {
+    background: #e2e6ea;
+    transition: 0.3s;
+  }
+  

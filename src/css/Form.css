@@ -7,7 +7,7 @@
   --formTxt:black;
 }
 .formContainer {
-    color: var(--textColor);
+    color: var(--formText);
     display: flex;
     justify-content: center;
     align-items: center;
