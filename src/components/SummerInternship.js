@@ -1,26 +1,38 @@
-import React, { useState } from 'react';
-import '../css/SummerInternship.css';
+import React, { useState } from "react";
+import "../css/SummerInternship.css";
 import axios from "axios";
 
 const departments = [
-  "Chemical Engineering", "Chemistry", "Civil Engineering", "Management Studies",
-  "Electronics & Communication Engineering", "Electrical Engineering", 
-  "Materials Science and Engineering", "Mathematics", "Mechanical Engineering",
-  "Architecture and Planning", "Physics", "Humanities, Arts and Social Sciences",
-  "Computer Science & Engineering"
+  "Chemical Engineering",
+  "Chemistry",
+  "Civil Engineering",
+  "Management Studies",
+  "Electronics & Communication Engineering",
+  "Electrical Engineering",
+  "Materials Science and Engineering",
+  "Mathematics",
+  "Mechanical Engineering",
+  "Architecture and Planning",
+  "Physics",
+  "Humanities, Arts and Social Sciences",
+  "Computer Science & Engineering",
 ];
 
 const durations = ["1", "2", "Any"];
 const modes = ["Offline", "Hybrid", "Online"];
 function SummerInternship() {
-    const [selectedDepartment, setSelectedDepartment] = useState("");
+  const [selectedDepartment, setSelectedDepartment] = useState("");
   const [selectedDurations, setSelectedDurations] = useState([]);
   const [selectedModes, setSelectedModes] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
 
   const handleCheckboxChange = (value, list, setList) => {
-    setList(list.includes(value) ? list.filter(item => item !== value) : [...list, value]);
+    setList(
+      list.includes(value)
+        ? list.filter((item) => item !== value)
+        : [...list, value]
+    );
   };
 
   const applyFilter = async () => {
@@ -42,90 +54,108 @@ function SummerInternship() {
       setSelectedRows(updatedSelection);
     }
   };
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        phone: "",
-        institution: "",
-        program: "",
-        department: "",
-        year: "",
-        cgpa: "",
-        projectPreference1: "",
-        projectPreference2: "",
-        projectPreference3: "",
-        resume: null,
-        statement: "",
-        agreeToTerms: false,
-        cgpa10: "",
-        board10: "",
-        cgpa12: "",
-        board12: "",
-        currentSemesterCgpa: "",
-        dateOfBirth: "",
-        permanentAddress: "",
-        state: "",
-        guardianName: "",
-        relation: "",
-        guardianPhone: "",
-        instituteLocation: "",
-        instituteState: "",
-        bonafide: null,
-        tenthMarksheet: null,
-        twelfthMarksheet: null,
-        idCard: null,
-        photo: null,
-    });
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    institution: "",
+    program: "",
+    department: "",
+    year: "",
+    cgpa: "",
+    projectPreference1: "",
+    projectPreference2: "",
+    projectPreference3: "",
+    resume: null,
+    statement: "",
+    agreeToTerms: false,
+    cgpa10: "",
+    board10: "",
+    cgpa12: "",
+    board12: "",
+    currentSemesterCgpa: "",
+    dateOfBirth: "",
+    permanentAddress: "",
+    state: "",
+    guardianName: "",
+    relation: "",
+    guardianPhone: "",
+    instituteLocation: "",
+    instituteState: "",
+    bonafide: null,
+    tenthMarksheet: null,
+    twelfthMarksheet: null,
+    idCard: null,
+    photo: null,
+  });
 
-    const [errors, setErrors] = useState({});
-    const [currentStep, setCurrentStep] = useState(1);
+  const [errors, setErrors] = useState({});
+  const [currentStep, setCurrentStep] = useState(1);
 
-    const handleChange = (e) => {
-        const { name, value, type, checked, files } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: type === "checkbox" ? checked : type === "file" ? files[0] : value,
-        }));
-    };
+  const handleChange = (e) => {
+    const { name, value, type, checked, files } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]:
+        type === "checkbox" ? checked : type === "file" ? files[0] : value,
+    }));
+  };
 
-    const validateForm = () => {
-        const newErrors = {};
+  const validateForm = () => {
+    const newErrors = {};
 
-        // Step 1: Personal Information
-        if (currentStep === 1) {
-            if (!formData.name.trim()) newErrors.name = "Name is required";
-            if (!formData.email.trim()) newErrors.email = "Email is required";
-            else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Email is invalid";
-            if (!formData.phone.trim()) newErrors.phone = "Phone number is required";
-            else if (!/^\d{10}$/.test(formData.phone)) newErrors.phone = "Phone number must be 10 digits";
-            if (!formData.dateOfBirth) newErrors.dateOfBirth = "Date of Birth is required";
-            if (!formData.permanentAddress.trim()) newErrors.permanentAddress = "Permanent Address is required";
-            if (!formData.state.trim()) newErrors.state = "State is required";
-            if (!formData.guardianName.trim()) newErrors.guardianName = "Guardian Name is required";
-            if (!formData.relation.trim()) newErrors.relation = "Relation is required";
-            if (!formData.guardianPhone.trim()) newErrors.guardianPhone = "Guardian Phone is required";
-            else if (!/^\d{10}$/.test(formData.guardianPhone)) newErrors.guardianPhone = "Guardian Phone must be 10 digits";
-        }
+    // Step 1: Personal Information
+    if (currentStep === 1) {
+      if (!formData.name.trim()) newErrors.name = "Name is required";
+      if (!formData.email.trim()) newErrors.email = "Email is required";
+      else if (!/\S+@\S+\.\S+/.test(formData.email))
+        newErrors.email = "Email is invalid";
+      if (!formData.phone.trim()) newErrors.phone = "Phone number is required";
+      else if (!/^\d{10}$/.test(formData.phone))
+        newErrors.phone = "Phone number must be 10 digits";
+      if (!formData.dateOfBirth)
+        newErrors.dateOfBirth = "Date of Birth is required";
+      if (!formData.permanentAddress.trim())
+        newErrors.permanentAddress = "Permanent Address is required";
+      if (!formData.state.trim()) newErrors.state = "State is required";
+      if (!formData.guardianName.trim())
+        newErrors.guardianName = "Guardian Name is required";
+      if (!formData.relation.trim())
+        newErrors.relation = "Relation is required";
+      if (!formData.guardianPhone.trim())
+        newErrors.guardianPhone = "Guardian Phone is required";
+      else if (!/^\d{10}$/.test(formData.guardianPhone))
+        newErrors.guardianPhone = "Guardian Phone must be 10 digits";
+    }
 
-        // Step 2: Academic Information
-        if (currentStep === 2) {
-            if (!formData.institution.trim()) newErrors.institution = "Institution name is required";
-            if (!formData.program.trim()) newErrors.program = "Program is required";
-            if (!formData.department.trim()) newErrors.department = "Department is required";
-            if (!formData.year.trim()) newErrors.year = "Year of study is required";
-            if (!formData.instituteLocation.trim()) newErrors.instituteLocation = "Institute Location is required";
-            if (!formData.instituteState.trim()) newErrors.instituteState = "Institute State is required";
-            if (!formData.cgpa10.trim()) newErrors.cgpa10 = "10th CGPA is required";
-            if (!formData.board10.trim()) newErrors.board10 = "10th Board is required";
-            if (!formData.cgpa12.trim()) newErrors.cgpa12 = "12th CGPA is required";
-            if (!formData.board12.trim()) newErrors.board12 = "12th Board is required";
-            if (!formData.currentSemesterCgpa.trim()) newErrors.currentSemesterCgpa = "Current Semester CGPA is required";
-        }
+    // Step 2: Academic Information
+    if (currentStep === 2) {
+      if (!formData.institution.trim())
+        newErrors.institution = "Institution name is required";
+      if (!formData.program.trim()) newErrors.program = "Program is required";
+      if (!formData.department.trim())
+        newErrors.department = "Department is required";
+      if (!formData.year.trim()) newErrors.year = "Year of study is required";
+      if (!formData.instituteLocation.trim())
+        newErrors.instituteLocation = "Institute Location is required";
+      if (!formData.instituteState.trim())
+        newErrors.instituteState = "Institute State is required";
+      if (!formData.cgpa10.trim()) newErrors.cgpa10 = "10th CGPA is required";
+      if (!formData.board10.trim())
+        newErrors.board10 = "10th Board is required";
+      if (!formData.cgpa12.trim()) newErrors.cgpa12 = "12th CGPA is required";
+      if (!formData.board12.trim())
+        newErrors.board12 = "12th Board is required";
+      if (!formData.currentSemesterCgpa.trim())
+        newErrors.currentSemesterCgpa = "Current Semester CGPA is required";
+    }
 
-        // Step 3: Project Preferences
-        if (currentStep === 3) {
-            if (!formData.projectPreference1.trim()) newErrors.projectPreference1 = "At least one project preference is required";
-        }
+    // Step 3: Project Preferences
+    if (currentStep === 3) {
+      if (!formData.projectPreference1.trim())
+        newErrors.projectPreference1 =
+          "At least one project preference is required";
+    }
 
         // Step 4: Documents and Statement
         if (currentStep === 4) {
@@ -145,46 +175,46 @@ function SummerInternship() {
               if(!formData.payment) newErrors.payment = "Payment is required";
         }
 
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-        if (validateForm()) {
-            alert("Form submitted successfully!");
-            console.log(formData);
-        } else {
-            alert("Please fix the errors in the form");
-        }
-    };
+    if (validateForm()) {
+      alert("Form submitted successfully!");
+      console.log(formData);
+    } else {
+      alert("Please fix the errors in the form");
+    }
+  };
 
-    const nextStep = () => {
-        if (validateForm()) {
-            setCurrentStep(currentStep + 1);
-        }
-    };
+  const nextStep = () => {
+    if (validateForm()) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
 
-    const prevStep = () => {
-        setCurrentStep(currentStep - 1);
-    };
+  const prevStep = () => {
+    setCurrentStep(currentStep - 1);
+  };
 
-    const goToStep = (step) => {
-        setCurrentStep(step);
-    };
+  const goToStep = (step) => {
+    setCurrentStep(step);
+  };
 
-    const departments = [
-        "Computer Science and Engineering",
-        "Electrical Engineering",
-        "Mechanical Engineering",
-        "Civil Engineering",
-        "Chemical Engineering",
-        "Physics",
-        "Chemistry",
-        "Mathematics",
-        "Other",
-    ];
+  const departments = [
+    "Computer Science & Engineering",
+    "Electrical Engineering",
+    "Mechanical Engineering",
+    "Civil Engineering",
+    "Chemical Engineering",
+    "Physics",
+    "Chemistry",
+    "Mathematics",
+    "Other",
+  ];
 
     const projects = [
         "Machine Learning for Image Recognition",
@@ -615,20 +645,22 @@ function SummerInternship() {
             { id: 6,label: "Review and Submit"},
         ];
 
-        return (
-            <div className="progress-bar">
-                {steps.map((step) => (
-                    <button
-                        key={step.id}
-                        className={`progress-step ${currentStep === step.id ? "active" : ""} ${currentStep > step.id ? "completed" : ""}`}
-                        onClick={() => goToStep(step.id)}
-                    >
-                        {step.label}
-                    </button>
-                ))}
-            </div>
-        );
-    };
+    return (
+      <div className="progress-bar">
+        {steps.map((step) => (
+          <button
+            key={step.id}
+            className={`progress-step ${
+              currentStep === step.id ? "active" : ""
+            } ${currentStep > step.id ? "completed" : ""}`}
+            onClick={() => goToStep(step.id)}
+          >
+            {step.label}
+          </button>
+        ))}
+      </div>
+    );
+  };
 
     return (
         <>
