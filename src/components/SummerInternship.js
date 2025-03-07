@@ -136,11 +136,13 @@ function SummerInternship() {
             if (!formData.twelfthMarksheet) newErrors.twelfthMarksheet = "12th Marksheet is required";
             if (!formData.idCard) newErrors.idCard = "ID Card is required";
             if (!formData.photo) newErrors.photo = "Photo is required";
+            if(!formData.payment) newErrors.payment = "Payment is required";
         }
 
         // Step 5: Review and Submit
         if (currentStep === 5) {
-            if (!formData.agreeToTerms) newErrors.agreeToTerms = "You must agree to the terms";
+           if(!formData.transactionId) newErrors.transactionId = "Transaction ID is required";
+              if(!formData.payment) newErrors.payment = "Payment is required";
         }
 
         setErrors(newErrors);
@@ -377,7 +379,7 @@ function SummerInternship() {
             case 3:
                 return (
                     <div className="p-4" style={{ paddingTop: "50px" }}>
-
+<div className='form-group'>
       <h2 className="text-xl font-bold mb-4">Filter Mentors</h2>
 
       {/* Department Dropdown */}
@@ -390,7 +392,7 @@ function SummerInternship() {
         {departments.map((dept) => (
           <option key={dept} value={dept}>{dept}</option>
         ))}
-      </select>
+      </select></div>
 
       {/* Preferred Duration Multi Checkbox */}
       <div className="mb-2">
@@ -409,7 +411,7 @@ function SummerInternship() {
       </div>
 
       {/* Internship Mode Multi Checkbox */}
-      <div className="mb-2">
+      <div className="form-group">
         <label className="font-bold">Internship Mode:</label>
         {modes.map((mode) => (
           <label key={mode} className="block">
@@ -490,9 +492,9 @@ function SummerInternship() {
                             {errors.tenthMarksheet && <span className="error-message">{errors.tenthMarksheet}</span>}
                         </div>
                         <div className="form-group">
-                            <label htmlFor="twelfthMarksheet">12th Marksheet (PDF only) <span className="required">*</span></label>
-                            <input type="file" id="twelfthMarksheet" name="twelfthMarksheet" accept=".pdf" onChange={handleChange} className={errors.twelfthMarksheet ? "error" : ""} />
-                            {errors.twelfthMarksheet && <span className="error-message">{errors.twelfthMarksheet}</span>}
+                            <label htmlFor="twelthMarksheet">12th Marksheet (PDF only) <span className="required">*</span></label>
+                            <input type="file" id="twelfthMarksheet" name="twelthMarksheet" accept=".pdf" onChange={handleChange} className={errors.twelfthMarksheet ? "error" : ""} />
+                            {errors.twelthMarksheet && <span className="error-message">{errors.twelthMarksheet}</span>}
                         </div>
                         <div className="form-group">
                             <label htmlFor="idCard">ID Card (PDF only) <span className="required">*</span></label>
@@ -516,6 +518,26 @@ function SummerInternship() {
             case 5:
                 return (
                     <div className="form-section">
+                        <h2>Payment</h2>
+                        <div className='form-group'>
+                            <img src="/images/payment.jpg"/>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor='transaction-id' >Transaction ID <span className="required">*</span></label>
+                            <input type="text" id="transaction-id" name="transaction-id" value={formData.transactionId} onChange={handleChange} className={errors.transactionId ? "error" : ""} />
+                            {errors.transactionId && <span className="error-message">{errors.transactionId}</span>}
+                          
+                        </div>
+                        <div className='form-group'>
+                        <label htmlFor='payment-screenshot' id='payment-screenshot'></label>
+                           <input type="file" id="payment-screenshot" name="payment-screenshot" accept=".jpg,.jpeg,.png" onChange={handleChange} className={errors.payment ? "error" : ""} />
+                            {errors.payment && <span className="error-message">{errors.payment}</span>}
+                        </div>
+                    </div>
+                );
+            case 6:
+                return (
+                    <div className="form-section">
                         <h2>Review and Submit</h2>
                         <div className="form-group">
                             <label>Full Name: {formData.name}</label>
@@ -536,7 +558,7 @@ function SummerInternship() {
                             <label>Department: {formData.department}</label>
                         </div>
                         <div className="form-group">
-                            <label>Year of Study: {formData.year}</label>
+                            <label>Year of Study: { formData.year}</label>
                         </div>
                         <div className="form-group">
                             <label>CGPA: {formData.cgpa}</label>
@@ -589,7 +611,8 @@ function SummerInternship() {
             { id: 2, label: "Academic Information" },
             { id: 3, label: "Project Preferences" },
             { id: 4, label: "Documents and Statement" },
-            { id: 5, label: "Review and Submit" },
+            { id: 5, label: "payment" },
+            { id: 6,label: "Review and Submit"},
         ];
 
         return (
@@ -617,10 +640,11 @@ function SummerInternship() {
                         {currentStep > 1 && (
                             <button type="button" className="prev-button" onClick={prevStep}>Previous</button>
                         )}
-                        {currentStep < 5 && (
+                        {currentStep < 6 && (
                             <button type="button" className="next-button" onClick={nextStep}>Next</button>
                         )}
-                        {currentStep === 5 && (
+                        
+                        {currentStep === 6 && (
                             <button type="submit" className="submit-button">Submit Application</button>
                         )}
                     </div>
