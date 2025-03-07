@@ -173,7 +173,7 @@ function SummerInternship() {
     };
 
     const departments = [
-        "Computer Science and Engineering",
+        "Computer Science & Engineering",
         "Electrical Engineering",
         "Mechanical Engineering",
         "Civil Engineering",
