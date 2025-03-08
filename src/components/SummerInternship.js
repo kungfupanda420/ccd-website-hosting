@@ -20,6 +20,7 @@ const departments = [
 
 const durations = ["1", "2", "Any"];
 const modes = ["Offline", "Hybrid", "Online"];
+
 function SummerInternship() {
   const [selectedDepartment, setSelectedDepartment] = useState("");
   const [selectedDurations, setSelectedDurations] = useState([]);
@@ -35,25 +36,26 @@ function SummerInternship() {
     );
   };
 
-  const applyFilter = async () => {
-    const response = await axios.post("http://localhost:5000/filter", {
-      department: selectedDepartment,
-      preferred_duration: selectedDurations,
-      internship_mode: selectedModes,
-    });
+    const applyFilter = async () => {
+        const response = await axios.post("http://localhost:5000/filter", {
+            department: selectedDepartment,
+            preferred_duration: selectedDurations,
+            internship_mode: selectedModes,
+        });
 
-    setFilteredData(response.data);
-  };
+        setFilteredData(response.data);
+    };
 
-  const handleRowSelection = (id) => {
-    const updatedSelection = selectedRows.includes(id)
-      ? selectedRows.filter((rowId) => rowId !== id)
-      : [...selectedRows, id];
+    const handleRowSelection = (id) => {
+        const updatedSelection = selectedRows.includes(id)
+            ? selectedRows.filter((rowId) => rowId !== id)
+            : [...selectedRows, id];
 
     if (updatedSelection.length <= 3) {
       setSelectedRows(updatedSelection);
     }
   };
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -87,6 +89,8 @@ function SummerInternship() {
     twelfthMarksheet: null,
     idCard: null,
     photo: null,
+    transactionId: "",
+    payment: null,
   });
 
   const [errors, setErrors] = useState({});
@@ -157,23 +161,22 @@ function SummerInternship() {
           "At least one project preference is required";
     }
 
-        // Step 4: Documents and Statement
-        if (currentStep === 4) {
-            if (!formData.resume) newErrors.resume = "Resume is required";
-            if (!formData.statement) newErrors.statement = "Statement of Purpose is required";
-            if (!formData.bonafide) newErrors.bonafide = "Bonafide Certificate is required";
-            if (!formData.tenthMarksheet) newErrors.tenthMarksheet = "10th Marksheet is required";
-            if (!formData.twelfthMarksheet) newErrors.twelfthMarksheet = "12th Marksheet is required";
-            if (!formData.idCard) newErrors.idCard = "ID Card is required";
-            if (!formData.photo) newErrors.photo = "Photo is required";
-            if(!formData.payment) newErrors.payment = "Payment is required";
-        }
+    // Step 4: Documents and Statement
+    if (currentStep === 4) {
+      if (!formData.resume) newErrors.resume = "Resume is required";
+      if (!formData.statement) newErrors.statement = "Statement of Purpose is required";
+      if (!formData.bonafide) newErrors.bonafide = "Bonafide Certificate is required";
+      if (!formData.tenthMarksheet) newErrors.tenthMarksheet = "10th Marksheet is required";
+      if (!formData.twelfthMarksheet) newErrors.twelfthMarksheet = "12th Marksheet is required";
+      if (!formData.idCard) newErrors.idCard = "ID Card is required";
+      if (!formData.photo) newErrors.photo = "Photo is required";
+    }
 
-        // Step 5: Review and Submit
-        if (currentStep === 5) {
-           if(!formData.transactionId) newErrors.transactionId = "Transaction ID is required";
-              if(!formData.payment) newErrors.payment = "Payment is required";
-        }
+    // Step 5: Payment
+    if (currentStep === 5) {
+      if (!formData.transactionId.trim()) newErrors.transactionId = "Transaction ID is required";
+      if (!formData.payment) newErrors.payment = "Payment screenshot is required";
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -231,39 +234,39 @@ function SummerInternship() {
     const handlehange = (event) => {
         const file = event.target.files[0];
         const errors = {};
-    
+
         if (file) {
             // Check file size (less than 50KB)
             if (file.size > 50 * 1024) { // 50KB in bytes
                 errors.photo = "File size must be less than 50KB.";
             }
-    
+
             // Check image dimensions (2x2 inches)
             const img = new Image();
             img.src = URL.createObjectURL(file);
-    
+
             img.onload = () => {
                 const width = img.width;
                 const height = img.height;
-    
+
                 // Assuming 96 DPI (standard screen resolution)
                 const expectedWidth = 2 * 96; // 2 inches * 96 DPI
                 const expectedHeight = 2 * 96; // 2 inches * 96 DPI
-    
+
                 if (width !== expectedWidth || height !== expectedHeight) {
                     errors.photo = "Photo must be exactly 2x2 inches (192x192 pixels at 96 DPI).";
                 }
-    
+
                 // Update errors state
                 setErrors(errors);
-    
+
                 // If no errors, proceed with file upload
                 if (Object.keys(errors).length === 0) {
                     // Handle valid file upload
                     console.log("File is valid:", file);
                 }
             };
-    
+
             img.onerror = () => {
                 errors.photo = "Invalid image file.";
                 setErrors(errors);
@@ -273,6 +276,7 @@ function SummerInternship() {
             setErrors(errors);
         }
     };
+
     const renderStep = () => {
     
         switch (currentStep) {
@@ -446,24 +450,20 @@ function SummerInternship() {
         </div>
       </div>
 
-      {/* Internship Mode Selection */}
+      {/* Internship Mode Multi Checkbox */}
       <div className="form-group">
-        <label>Internship Mode:</label>
-        <div className="checkbox-grid">
-          {modes.map((mode) => (
-            <label key={mode} className="checkbox-label">
-              <input
-                type="checkbox"
-                value={mode}
-                checked={selectedModes.includes(mode)}
-                onChange={() =>
-                  handleCheckboxChange(mode, selectedModes, setSelectedModes)
-                }
-              />
-              <span>{mode}</span>
-            </label>
-          ))}
-        </div>
+        <label className="font-bold">Internship Mode:</label>
+        {modes.map((mode) => (
+          <label key={mode} className="block">
+            <input
+              type="checkbox"
+              value={mode}
+              checked={selectedModes.includes(mode)}
+              onChange={() => handleCheckboxChange(mode, selectedModes, setSelectedModes)}
+            />
+            {mode}
+          </label>
+        ))}
       </div>
 
       {/* Apply Filter Button */}
@@ -652,15 +652,15 @@ function SummerInternship() {
         
     };
 
-    const renderProgress = () => {
-        const steps = [
-            { id: 1, label: "Personal Information" },
-            { id: 2, label: "Academic Information" },
-            { id: 3, label: "Project Preferences" },
-            { id: 4, label: "Documents and Statement" },
-            { id: 5, label: "payment" },
-            { id: 6,label: "Review and Submit"},
-        ];
+  const renderProgress = () => {
+    const steps = [
+      { id: 1, label: "Personal Information" },
+      { id: 2, label: "Academic Information" },
+      { id: 3, label: "Project Preferences" },
+      { id: 4, label: "Documents and Statement" },
+      { id: 5, label: "Payment" },
+      { id: 6, label: "Review and Submit" },
+    ];
 
     return (
       <div className="progress-bar">
@@ -670,7 +670,7 @@ function SummerInternship() {
             className={`progress-step ${
               currentStep === step.id ? "active" : ""
             } ${currentStep > step.id ? "completed" : ""}`}
-            onClick={() => goToStep(step.id)}
+         //   onClick={() => goToStep(step.id)}
           >
             {step.label}
           </button>
@@ -686,14 +686,13 @@ function SummerInternship() {
                 <form onSubmit={handleSubmit} className="summer-form">
                     {renderStep()}
                     <div className="form-actions">
-                        <div clasName="wrap">
-                            {currentStep > 1 && (
-                                <button type="button" className="prev-button" onClick={prevStep}>Previous</button>
-                            )}
-                            {currentStep < 6 && (
-                                <button type="button" className="next-button" onClick={nextStep}>Next</button>
-                            )}
-                        </div>
+                        {currentStep > 1 && (
+                            <button type="button" className="prev-button" onClick={prevStep}>Previous</button>
+                        )}
+                        {currentStep < 6 && (
+                            <button type="button" className="next-button" onClick={nextStep}>Next</button>
+                        )}
+                        
                         {currentStep === 6 && (
                             <button type="submit" className="submit-button">Submit Application</button>
                         )}

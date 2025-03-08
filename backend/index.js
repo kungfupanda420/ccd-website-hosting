@@ -11,8 +11,8 @@ app.use(express.json());
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "peace",
-  database: "ccd_sip",
+  password: "password",
+  database: "ccd",
 });
 
 db.connect((err) => {
@@ -52,6 +52,5 @@ app.post("/filter", (req, res) => {
   });
 });
 
-// Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT} 🚀`));
