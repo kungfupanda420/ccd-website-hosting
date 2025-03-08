@@ -353,9 +353,7 @@ section p {
   /* Mobile Responsive Styles */
 /* Mobile Responsive Styles */
 @media (max-width: 768px) {
-    .wrapper{
-        padding-top: 10vh;
-    }
+    
     header h1 {
         font-size: 3vw;
     }
@@ -364,6 +362,7 @@ section p {
         width: 90vw;
         margin: 5vh auto;
         padding: 2vh;
+        margin-top: 12vh;
     }
 
     .progress-bar {
