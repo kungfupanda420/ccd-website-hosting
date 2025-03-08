@@ -278,7 +278,7 @@ function SummerInternship() {
     };
 
     const renderStep = () => {
-    
+      
         switch (currentStep) {
             case 1:
                 return (
@@ -670,7 +670,7 @@ function SummerInternship() {
             className={`progress-step ${
               currentStep === step.id ? "active" : ""
             } ${currentStep > step.id ? "completed" : ""}`}
-         //   onClick={() => goToStep(step.id)}
+           onClick={() => goToStep(step.id)}
           >
             {step.label}
           </button>
@@ -686,12 +686,15 @@ function SummerInternship() {
                 <form onSubmit={handleSubmit} className="summer-form">
                     {renderStep()}
                     <div className="form-actions">
-                        {currentStep > 1 && (
+                      <div className="wrap">
+                      {currentStep > 1 && (
                             <button type="button" className="prev-button" onClick={prevStep}>Previous</button>
                         )}
                         {currentStep < 6 && (
                             <button type="button" className="next-button" onClick={nextStep}>Next</button>
                         )}
+                      </div>
+                        
                         
                         {currentStep === 6 && (
                             <button type="submit" className="submit-button">Submit Application</button>
