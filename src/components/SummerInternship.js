@@ -242,27 +242,7 @@ function SummerInternship() {
             const img = new Image();
             img.src = URL.createObjectURL(file);
     
-            img.onload = () => {
-                const width = img.width;
-                const height = img.height;
-    
-                // Assuming 96 DPI (standard screen resolution)
-                const expectedWidth = 2 * 96; // 2 inches * 96 DPI
-                const expectedHeight = 2 * 96; // 2 inches * 96 DPI
-    
-                if (width !== expectedWidth || height !== expectedHeight) {
-                    errors.photo = "Photo must be exactly 2x2 inches (192x192 pixels at 96 DPI).";
-                }
-    
-                // Update errors state
-                setErrors(errors);
-    
-                // If no errors, proceed with file upload
-                if (Object.keys(errors).length === 0) {
-                    // Handle valid file upload
-                    console.log("File is valid:", file);
-                }
-            };
+            
     
             img.onerror = () => {
                 errors.photo = "Invalid image file.";
@@ -653,7 +633,8 @@ function SummerInternship() {
             className={`progress-step ${
               currentStep === step.id ? "active" : ""
             } ${currentStep > step.id ? "completed" : ""}`}
-            onClick={() => goToStep(step.id)}
+          // for enabling the buttons make this line active
+         onClick={() => goToStep(step.id)}
           >
             {step.label}
           </button>
