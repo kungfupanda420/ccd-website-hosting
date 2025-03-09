@@ -4,6 +4,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import AnimatedCursor from "react-animated-cursor";
 import Loader from './pages/Loader';
 import SummerInternship from './components/SummerInternship';
+import InternshipAlert from './components/InternshipAlert';
 // import FaqStudents from './pages/FaqStudents';
 // import Roadmap from './components/Roadmap';
 // import Preptips from './components/Preptips';
@@ -89,6 +90,7 @@ function App() {
             <Route path='roadmap' element={<Roadmap isDarkMode={isDarkMode} onToggleTheme={handleToggleTheme} />} />
             <Route path='preptips' element={<Preptips/>} />
           </Route>
+          <Route path='/internshipalert' element={<InternshipAlert />} />
           <Route path='/SummerInternship' element={<SummerInternship />} />
           <Route path='/login' element={<Login />} />
           <Route path='/admin@CCD_nitc123' element={<Admin />} />
