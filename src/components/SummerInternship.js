@@ -39,7 +39,8 @@ function SummerInternship() {
         );
     };
 
-    const applyFilter = async () => {
+    const applyFilter = async (e) => {
+        e.preventDefault();
         console.log("Selected Department:", selectedDepartment);
         console.log("Selected Durations:", selectedDurations);
         console.log("Selected Modes:", selectedModes);
@@ -290,49 +291,47 @@ function SummerInternship() {
 
     const handlehange = (event) => {
         const file = event.target.files[0];
-        const errors = {};
-
+        let newErrors = {}; // Use a new object
+    
         if (file) {
             // Check file size (less than 50KB)
-            if (file.size > 50 * 1024) { // 50KB in bytes
-                errors.photo = "File size must be less than 50KB.";
+            if (file.size > 50 * 1024) {
+                newErrors.photo = "File size must be less than 50KB.";
             }
-
+    
             // Check image dimensions (2x2 inches)
             const img = new Image();
             img.src = URL.createObjectURL(file);
-
+    
             img.onload = () => {
                 const width = img.width;
                 const height = img.height;
-
-                // Assuming 96 DPI (standard screen resolution)
-                const expectedWidth = 2 * 96; // 2 inches * 96 DPI
-                const expectedHeight = 2 * 96; // 2 inches * 96 DPI
-
+    
+                const expectedWidth = 2 * 96;
+                const expectedHeight = 2 * 96;
+    
+                // Uncomment this if you want strict image size validation
                 // if (width !== expectedWidth || height !== expectedHeight) {
-                //     errors.photo = "Photo must be exactly 2x2 inches (192x192 pixels at 96 DPI).";
+                //     newErrors.photo = "Photo must be exactly 2x2 inches (192x192 pixels at 96 DPI).";
                 // }
-
-                // Update errors state
-                setErrors(errors);
-
-                // If no errors, proceed with file upload
-                if (Object.keys(errors).length === 0) {
-                    // Handle valid file upload
+    
+                setErrors({ ...newErrors }); // Ensure new reference
+    
+                if (Object.keys(newErrors).length === 0) {
                     console.log("File is valid:", file);
                 }
             };
-
+    
             img.onerror = () => {
-                errors.photo = "Invalid image file.";
-                setErrors(errors);
+                newErrors.photo = "Invalid image file.";
+                setErrors({ ...newErrors });
             };
         } else {
-            errors.photo = "Please select a file.";
-            setErrors(errors);
+            newErrors.photo = "Please select a file.";
+            setErrors({ ...newErrors });
         }
     };
+    
 
     const renderStep = () => {
       
@@ -524,7 +523,7 @@ function SummerInternship() {
                         </div>
 
       {/* Apply Filter Button */}
-      <button className="apply-button" onClick={applyFilter} disabled={!selectedDepartment || selectedDurations.length === 0 || selectedModes.length === 0}>
+      <button type="button" className="apply-button" onClick={applyFilter} disabled={!selectedDepartment || selectedDurations.length === 0 || selectedModes.length === 0}>
         Apply Filter
       </button>
 
@@ -645,7 +644,7 @@ function SummerInternship() {
                             {errors.idCard && <span className="error-message">{errors.idCard}</span>}
                         </div>
                         <div className="form-group">
-    <label htmlFor="photo">Photo (Passport Size: 2x2 inches, less than 50KB) <span className="required">*</span></label>
+    <label htmlFor="photo">Photo (less than 50KB) <span className="required">*</span></label>
     <input
         type="file"
         id="photo"
@@ -667,7 +666,7 @@ function SummerInternship() {
                         </div>
                         <div className="form-group">
                             <label htmlFor='transaction-id' >Transaction ID <span className="required">*</span></label>
-                            <input type="text" id="transaction-id" name="transaction-id" value={formData.transactionId} onChange={handleChange} className={errors.transactionId ? "error" : ""} />
+                            <input type="text" id="transactionId" name="transactionId" value={formData.transactionId} onChange={handleChange} className={errors.transactionId ? "error" : ""} />
                             {errors.transactionId && <span className="error-message">{errors.transactionId}</span>}
 
                         </div>
