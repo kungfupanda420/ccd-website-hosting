@@ -63,8 +63,8 @@ function SummerInternship() {
         }
     };
 
-  
-  const [formData, setFormData] = useState({
+
+    const [formData, setFormData] = useState({
         name: "",
         email: "",
         phone: "",
@@ -72,7 +72,6 @@ function SummerInternship() {
         program: "",
         department: "",
         year: "",
-        // cgpa: "",
         projectPreference1: "",
         projectPreference2: "",
         projectPreference3: "",
@@ -97,9 +96,9 @@ function SummerInternship() {
         twelfthMarksheet: null,
         idCard: null,
         photo: null,
-      transactionId: "",
-    payment: null,
-  });
+        transactionId: "",
+        payment: null,
+    });
 
     const [errors, setErrors] = useState({});
     const [currentStep, setCurrentStep] = useState(1);
@@ -173,22 +172,22 @@ function SummerInternship() {
                     "At least one project preference is required";
         }
 
-    // Step 4: Documents and Statement
-    if (currentStep === 4) {
-      if (!formData.resume) newErrors.resume = "Resume is required";
-      if (!formData.statement) newErrors.statement = "Statement of Purpose is required";
-      if (!formData.bonafide) newErrors.bonafide = "Bonafide Certificate is required";
-      if (!formData.tenthMarksheet) newErrors.tenthMarksheet = "10th Marksheet is required";
-      if (!formData.twelfthMarksheet) newErrors.twelfthMarksheet = "12th Marksheet is required";
-      if (!formData.idCard) newErrors.idCard = "ID Card is required";
-      if (!formData.photo) newErrors.photo = "Photo is required";
-    }
+        // Step 4: Documents and Statement
+        if (currentStep === 4) {
+            if (!formData.resume) newErrors.resume = "Resume is required";
+            if (!formData.statement) newErrors.statement = "Statement of Purpose is required";
+            if (!formData.bonafide) newErrors.bonafide = "Bonafide Certificate is required";
+            if (!formData.tenthMarksheet) newErrors.tenthMarksheet = "10th Marksheet is required";
+            if (!formData.twelfthMarksheet) newErrors.twelfthMarksheet = "12th Marksheet is required";
+            if (!formData.idCard) newErrors.idCard = "ID Card is required";
+            if (!formData.photo) newErrors.photo = "Photo is required";
+        }
 
-    // Step 5: Payment
-    if (currentStep === 5) {
-      if (!formData.transactionId.trim()) newErrors.transactionId = "Transaction ID is required";
-      if (!formData.payment) newErrors.payment = "Payment screenshot is required";
-    }
+        // Step 5: Payment
+        if (currentStep === 5) {
+            if (!formData.transactionId.trim()) newErrors.transactionId = "Transaction ID is required";
+            if (!formData.payment) newErrors.payment = "Payment screenshot is required";
+        }
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -196,7 +195,7 @@ function SummerInternship() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         setprojectPreference1(selectedRows[0]);
         setprojectPreference2(selectedRows[1]);
         setprojectPreference3(selectedRows[2]);
@@ -204,9 +203,9 @@ function SummerInternship() {
         formData.projectPreference2 = projectPreference2;
         formData.projectPreference3 = projectPreference3;
         console.log("Initial Form Data:", formData);
-        
+
         // if (validateForm()) {
-        if(true){
+        if (true) {
             const formDataToSend = new FormData();
 
             // Append files (ensure field names match backend Multer config)
@@ -217,7 +216,7 @@ function SummerInternship() {
             if (formData.twelfthMarksheet) formDataToSend.append("twelfthMarksheet", formData.twelfthMarksheet);
             if (formData.idCard) formDataToSend.append("idCard", formData.idCard);
             if (formData.photo) formDataToSend.append("photo", formData.photo);
-        
+
             // Append text fields
             for (const key in formData) {
                 if (!(formData[key] instanceof File)) {  // Prevent re-adding files
@@ -225,29 +224,29 @@ function SummerInternship() {
                     formDataToSend.append(key, formData[key] ?? "");
                 }
             }
-          
-          console.log("Form data to send:", formDataToSend.get("resume"));
-          try {
-            const response = await axios.post(
-              "http://localhost:5000/submit-application",
-              formDataToSend,
-              {
-                headers: {
-                  "Content-Type": "multipart/form-data", // Required for file uploads
-                },
-              }
-            );
-            alert("Form submitted successfully!");
-            console.log(response.data);
-          } catch (error) {
-            console.error("Error submitting form:", error);
-            alert("Error submitting form. Please try again.");
-          }
-        } 
-        else {
-          alert("Please fix the errors in the form");
+
+            console.log("Form data to send:", formDataToSend.get("photo"));
+            try {
+                const response = await axios.post(
+                    "http://localhost:5000/submit-application",
+                    formDataToSend,
+                    {
+                        headers: {
+                            "Content-Type": "multipart/form-data", // Required for file uploads
+                        },
+                    }
+                );
+                alert("Form submitted successfully!");
+                console.log(response.data);
+            } catch (error) {
+                console.error("Error submitting form:", error);
+                alert("Error submitting form. Please try again.");
+            }
         }
-      };
+        else {
+            alert("Please fix the errors in the form");
+        }
+    };
 
     const nextStep = () => {
         // if (validateForm()) {
@@ -321,6 +320,16 @@ function SummerInternship() {
                 if (Object.keys(errors).length === 0) {
                     // Handle valid file upload
                     console.log("File is valid:", file);
+                    const { name, value, type, checked, files } = event.target;
+                    setFormData((prev) => ({
+                        ...prev,
+                        [name]:
+                            type === "checkbox"
+                                ? checked
+                                : type === "file"
+                                    ? files[0]
+                                    : value,
+                    }));
                 }
             };
 
@@ -332,10 +341,12 @@ function SummerInternship() {
             errors.photo = "Please select a file.";
             setErrors(errors);
         }
+
+
     };
 
     const renderStep = () => {
-      
+
         switch (currentStep) {
             case 1:
                 return (
@@ -472,40 +483,40 @@ function SummerInternship() {
             case 3:
                 return (
                     <div className="mentor-filter-container">
-      <h2 className="title">Filter Mentors</h2>
+                        <h2 className="title">Filter Mentors</h2>
 
-      {/* Department Selection */}
-      <div className="form-group">
-        <label>Department in which you wish to do the internship:</label>
-        <select value={selectedDepartment} onChange={(e) => setSelectedDepartment(e.target.value)}>
-          <option value="">Select Department</option>
-          {departments.map((dept) => (
-            <option key={dept} value={dept}>
-              {dept}
-            </option>
-          ))}
-        </select>
-      </div>
+                        {/* Department Selection */}
+                        <div className="form-group">
+                            <label>Department in which you wish to do the internship:</label>
+                            <select value={selectedDepartment} onChange={(e) => setSelectedDepartment(e.target.value)}>
+                                <option value="">Select Department</option>
+                                {departments.map((dept) => (
+                                    <option key={dept} value={dept}>
+                                        {dept}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
 
-      {/* Preferred Duration Selection */}
-      <div className="form-group">
-        <label>Preferred Duration of Internship:</label>
-        <div className="checkbox-grid">
-          {durations.map((duration) => (
-            <label key={duration} className="checkbox-label">
-              <input
-                type="checkbox"
-                value={duration}
-                checked={selectedDurations.includes(duration)}
-                onChange={() =>
-                  handleCheckboxChange(duration, selectedDurations, setSelectedDurations)
-                }
-              />
-              <span>{duration}</span>
-            </label>
-          ))}
-        </div>
-      </div>
+                        {/* Preferred Duration Selection */}
+                        <div className="form-group">
+                            <label>Preferred Duration of Internship:</label>
+                            <div className="checkbox-grid">
+                                {durations.map((duration) => (
+                                    <label key={duration} className="checkbox-label">
+                                        <input
+                                            type="checkbox"
+                                            value={duration}
+                                            checked={selectedDurations.includes(duration)}
+                                            onChange={() =>
+                                                handleCheckboxChange(duration, selectedDurations, setSelectedDurations)
+                                            }
+                                        />
+                                        <span>{duration}</span>
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
 
                         {/* Internship Mode Multi Checkbox */}
                         <div className="form-group">
@@ -523,49 +534,49 @@ function SummerInternship() {
                             ))}
                         </div>
 
-      {/* Apply Filter Button */}
-      <button className="apply-button" onClick={applyFilter} disabled={!selectedDepartment || selectedDurations.length === 0 || selectedModes.length === 0}>
-        Apply Filter
-      </button>
+                        {/* Apply Filter Button */}
+                        <button className="apply-button" onClick={applyFilter} disabled={!selectedDepartment || selectedDurations.length === 0 || selectedModes.length === 0}>
+                            Apply Filter
+                        </button>
 
-      {/* Display Results */}
-      {filteredData.length > 0 && (
-        <div className="results-container">
-          <h3 className="subtitle">Results:</h3>
-          <div className="table-container">
-            <table className="mentor-table">
-              <thead>
-                <tr>
-                  <th>Select</th>
-                  <th>Faculty Name</th>
-                  <th>Department</th>
-                  <th>Preferred Duration</th>
-                  <th>Internship Mode</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredData.map((mentor, index) => (
-                  <tr key={mentor.id} className={index % 2 === 0 ? "even-row" : "odd-row"}>
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={selectedRows.includes(mentor.id)}
-                        onChange={() => handleRowSelection(mentor.id)}
-                        disabled={selectedRows.length >= 3 && !selectedRows.includes(mentor.id)}
-                      />
-                    </td>
-                    <td>{mentor.faculty_name}</td>
-                    <td>{mentor.department}</td>
-                    <td>{mentor.preferred_duration}</td>
-                    <td>{mentor.internship_mode}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
-    </div>
+                        {/* Display Results */}
+                        {filteredData.length > 0 && (
+                            <div className="results-container">
+                                <h3 className="subtitle">Results:</h3>
+                                <div className="table-container">
+                                    <table className="mentor-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Select</th>
+                                                <th>Faculty Name</th>
+                                                <th>Department</th>
+                                                <th>Preferred Duration</th>
+                                                <th>Internship Mode</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {filteredData.map((mentor, index) => (
+                                                <tr key={mentor.id} className={index % 2 === 0 ? "even-row" : "odd-row"}>
+                                                    <td>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={selectedRows.includes(mentor.id)}
+                                                            onChange={() => handleRowSelection(mentor.id)}
+                                                            disabled={selectedRows.length >= 3 && !selectedRows.includes(mentor.id)}
+                                                        />
+                                                    </td>
+                                                    <td>{mentor.faculty_name}</td>
+                                                    <td>{mentor.department}</td>
+                                                    <td>{mentor.preferred_duration}</td>
+                                                    <td>{mentor.internship_mode}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        )}
+                    </div>
 
                 );
             case 4:
@@ -645,17 +656,17 @@ function SummerInternship() {
                             {errors.idCard && <span className="error-message">{errors.idCard}</span>}
                         </div>
                         <div className="form-group">
-    <label htmlFor="photo">Photo (Passport Size: 2x2 inches, less than 50KB) <span className="required">*</span></label>
-    <input
-        type="file"
-        id="photo"
-        name="photo"
-        accept=".jpg,.jpeg,.png"
-        onChange={handlehange}
-        className={errors.photo ? "error" : ""}
-    />
-    {errors.photo && <span className="error-message">{errors.photo}</span>}
-</div>
+                            <label htmlFor="photo">Photo (Passport Size: 2x2 inches, less than 50KB) <span className="required">*</span></label>
+                            <input
+                                type="file"
+                                id="photo"
+                                name="photo"
+                                accept=".jpg,.jpeg,.png"
+                                onChange={handlehange}
+                                className={errors.photo ? "error" : ""}
+                            />
+                            {errors.photo && <span className="error-message">{errors.photo}</span>}
+                        </div>
                     </div>
                 );
             case 5:
@@ -666,14 +677,14 @@ function SummerInternship() {
                             <img src="/images/payment.jpg" />
                         </div>
                         <div className="form-group">
-                            <label htmlFor='transaction-id' >Transaction ID <span className="required">*</span></label>
-                            <input type="text" id="transaction-id" name="transaction-id" value={formData.transactionId} onChange={handleChange} className={errors.transactionId ? "error" : ""} />
+                            <label htmlFor='transactionId' >Transaction ID <span className="required">*</span></label>
+                            <input type="text" id="transactionId" name="transactionId" value={formData.transactionId} onChange={handleChange} className={errors.transactionId ? "error" : ""} />
                             {errors.transactionId && <span className="error-message">{errors.transactionId}</span>}
 
                         </div>
                         <div className='form-group'>
-                            <label htmlFor='payment-screenshot' id='payment-screenshot'></label>
-                            <input type="file" id="payment-screenshot" name="payment-screenshot" accept=".jpg,.jpeg,.png" onChange={handleChange} className={errors.payment ? "error" : ""} />
+                            <label htmlFor='payment' id='payment'></label>
+                            <input type="file" id="payment" name="payment" accept=".jpg,.jpeg,.png" onChange={handleChange} className={errors.payment ? "error" : ""} />
                             {errors.payment && <span className="error-message">{errors.payment}</span>}
                         </div>
                     </div>
@@ -742,41 +753,40 @@ function SummerInternship() {
                             {errors.agreeToTerms && <span className="error-message">{errors.agreeToTerms}</span>}
                         </div>
                     </div>
-                // </div>
+                    // </div>
                 );
             default:
                 return null;
-                
+
         }
-        
+
     };
 
-  const renderProgress = () => {
-    const steps = [
-      { id: 1, label: "Personal Information" },
-      { id: 2, label: "Academic Information" },
-      { id: 3, label: "Project Preferences" },
-      { id: 4, label: "Documents and Statement" },
-      { id: 5, label: "Payment" },
-      { id: 6, label: "Review and Submit" },
-    ];
+    const renderProgress = () => {
+        const steps = [
+            { id: 1, label: "Personal Information" },
+            { id: 2, label: "Academic Information" },
+            { id: 3, label: "Project Preferences" },
+            { id: 4, label: "Documents and Statement" },
+            { id: 5, label: "Payment" },
+            { id: 6, label: "Review and Submit" },
+        ];
 
-    return (
-      <div className="progress-bar">
-        {steps.map((step) => (
-          <button
-            key={step.id}
-            className={`progress-step ${
-              currentStep === step.id ? "active" : ""
-            } ${currentStep > step.id ? "completed" : ""}`}
-           onClick={() => goToStep(step.id)}
-          >
-            {step.label}
-          </button>
-        ))}
-      </div>
-    );
-  };
+        return (
+            <div className="progress-bar">
+                {steps.map((step) => (
+                    <button
+                        key={step.id}
+                        className={`progress-step ${currentStep === step.id ? "active" : ""
+                            } ${currentStep > step.id ? "completed" : ""}`}
+                        onClick={() => goToStep(step.id)}
+                    >
+                        {step.label}
+                    </button>
+                ))}
+            </div>
+        );
+    };
 
     return (
         <>
@@ -785,18 +795,18 @@ function SummerInternship() {
                 <form onSubmit={handleSubmit} encType="multipart/form-data" className="summer-form">
                     {renderStep()}
                     <div className="form-actions">
-                      <div className="wrap">
-                      {currentStep > 1 && (
-                            <button type="button" className="prev-button" onClick={prevStep}>Previous</button>
-                        )}
-                        {currentStep < 6 && (
-                            <button type="button" className="next-button" onClick={nextStep}>
-                                Next
-                            </button>
-                        )}
-                      </div>
-                        
-                        
+                        <div className="wrap">
+                            {currentStep > 1 && (
+                                <button type="button" className="prev-button" onClick={prevStep}>Previous</button>
+                            )}
+                            {currentStep < 6 && (
+                                <button type="button" className="next-button" onClick={nextStep}>
+                                    Next
+                                </button>
+                            )}
+                        </div>
+
+
                         {currentStep === 6 && (
                             <button type="submit" className="submit-button">
                                 Submit Application
