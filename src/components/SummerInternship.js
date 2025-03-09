@@ -3,40 +3,47 @@ import "../css/SummerInternship.css";
 import axios from "axios";
 
 const departments = [
-  "Chemical Engineering",
-  "Chemistry",
-  "Civil Engineering",
-  "Management Studies",
-  "Electronics & Communication Engineering",
-  "Electrical Engineering",
-  "Materials Science and Engineering",
-  "Mathematics",
-  "Mechanical Engineering",
-  "Architecture and Planning",
-  "Physics",
-  "Humanities, Arts and Social Sciences",
-  "Computer Science & Engineering",
+    "Chemical Engineering",
+    "Chemistry",
+    "Civil Engineering",
+    "Management Studies",
+    "Electronics & Communication Engineering",
+    "Electrical Engineering",
+    "Materials Science and Engineering",
+    "Mathematics",
+    "Mechanical Engineering",
+    "Architecture and Planning",
+    "Physics",
+    "Humanities, Arts and Social Sciences",
+    "Computer Science & Engineering",
 ];
 
 const durations = ["1", "2", "Any"];
 const modes = ["Offline", "Hybrid", "Online"];
 
 function SummerInternship() {
-  const [selectedDepartment, setSelectedDepartment] = useState("");
-  const [selectedDurations, setSelectedDurations] = useState([]);
-  const [selectedModes, setSelectedModes] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
-  const [selectedRows, setSelectedRows] = useState([]);
+    const [selectedDepartment, setSelectedDepartment] = useState("");
+    const [selectedDurations, setSelectedDurations] = useState([]);
+    const [selectedModes, setSelectedModes] = useState([]);
+    const [filteredData, setFilteredData] = useState([]);
+    const [selectedRows, setSelectedRows] = useState([]);
+    const [projectPreference1, setprojectPreference1] = useState("");
+    const [projectPreference2, setprojectPreference2] = useState("");
+    const [projectPreference3, setprojectPreference3] = useState("");
 
-  const handleCheckboxChange = (value, list, setList) => {
-    setList(
-      list.includes(value)
-        ? list.filter((item) => item !== value)
-        : [...list, value]
-    );
-  };
+    const handleCheckboxChange = (value, list, setList) => {
+        setList(
+            list.includes(value)
+                ? list.filter((item) => item !== value)
+                : [...list, value]
+        );
+    };
 
     const applyFilter = async () => {
+        console.log("Selected Department:", selectedDepartment);
+        console.log("Selected Durations:", selectedDurations);
+        console.log("Selected Modes:", selectedModes);
+
         const response = await axios.post("http://localhost:5000/filter", {
             department: selectedDepartment,
             preferred_duration: selectedDurations,
@@ -51,115 +58,120 @@ function SummerInternship() {
             ? selectedRows.filter((rowId) => rowId !== id)
             : [...selectedRows, id];
 
-    if (updatedSelection.length <= 3) {
-      setSelectedRows(updatedSelection);
-    }
-  };
+        if (updatedSelection.length <= 3) {
+            setSelectedRows(updatedSelection);
+        }
+    };
 
+  
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    institution: "",
-    program: "",
-    department: "",
-    year: "",
-    cgpa: "",
-    projectPreference1: "",
-    projectPreference2: "",
-    projectPreference3: "",
-    resume: null,
-    statement: "",
-    agreeToTerms: false,
-    cgpa10: "",
-    board10: "",
-    cgpa12: "",
-    board12: "",
-    currentSemesterCgpa: "",
-    dateOfBirth: "",
-    permanentAddress: "",
-    state: "",
-    guardianName: "",
-    relation: "",
-    guardianPhone: "",
-    instituteLocation: "",
-    instituteState: "",
-    bonafide: null,
-    tenthMarksheet: null,
-    twelfthMarksheet: null,
-    idCard: null,
-    photo: null,
-    transactionId: "",
+        name: "",
+        email: "",
+        phone: "",
+        institution: "",
+        program: "",
+        department: "",
+        year: "",
+        // cgpa: "",
+        projectPreference1: "",
+        projectPreference2: "",
+        projectPreference3: "",
+        statement: "",
+        agreeToTerms: false,
+        cgpa10: "",
+        board10: "",
+        cgpa12: "",
+        board12: "",
+        currentSemesterCgpa: "",
+        dateOfBirth: "",
+        permanentAddress: "",
+        state: "",
+        guardianName: "",
+        relation: "",
+        guardianPhone: "",
+        instituteLocation: "",
+        instituteState: "",
+        resume: null,
+        bonafide: null,
+        tenthMarksheet: null,
+        twelfthMarksheet: null,
+        idCard: null,
+        photo: null,
+      transactionId: "",
     payment: null,
   });
 
-  const [errors, setErrors] = useState({});
-  const [currentStep, setCurrentStep] = useState(1);
+    const [errors, setErrors] = useState({});
+    const [currentStep, setCurrentStep] = useState(1);
 
-  const handleChange = (e) => {
-    const { name, value, type, checked, files } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]:
-        type === "checkbox" ? checked : type === "file" ? files[0] : value,
-    }));
-  };
+    const handleChange = (e) => {
+        const { name, value, type, checked, files } = e.target;
+        setFormData((prev) => ({
+            ...prev,
+            [name]:
+                type === "checkbox"
+                    ? checked
+                    : type === "file"
+                        ? files[0]
+                        : value,
+        }));
+    };
 
-  const validateForm = () => {
-    const newErrors = {};
+    const validateForm = () => {
+        const newErrors = {};
 
-    // Step 1: Personal Information
-    if (currentStep === 1) {
-      if (!formData.name.trim()) newErrors.name = "Name is required";
-      if (!formData.email.trim()) newErrors.email = "Email is required";
-      else if (!/\S+@\S+\.\S+/.test(formData.email))
-        newErrors.email = "Email is invalid";
-      if (!formData.phone.trim()) newErrors.phone = "Phone number is required";
-      else if (!/^\d{10}$/.test(formData.phone))
-        newErrors.phone = "Phone number must be 10 digits";
-      if (!formData.dateOfBirth)
-        newErrors.dateOfBirth = "Date of Birth is required";
-      if (!formData.permanentAddress.trim())
-        newErrors.permanentAddress = "Permanent Address is required";
-      if (!formData.state.trim()) newErrors.state = "State is required";
-      if (!formData.guardianName.trim())
-        newErrors.guardianName = "Guardian Name is required";
-      if (!formData.relation.trim())
-        newErrors.relation = "Relation is required";
-      if (!formData.guardianPhone.trim())
-        newErrors.guardianPhone = "Guardian Phone is required";
-      else if (!/^\d{10}$/.test(formData.guardianPhone))
-        newErrors.guardianPhone = "Guardian Phone must be 10 digits";
-    }
+        // Step 1: Personal Information
+        if (currentStep === 1) {
+            if (!formData.name.trim()) newErrors.name = "Name is required";
+            if (!formData.email.trim()) newErrors.email = "Email is required";
+            else if (!/\S+@\S+\.\S+/.test(formData.email))
+                newErrors.email = "Email is invalid";
+            if (!formData.phone.trim()) newErrors.phone = "Phone number is required";
+            else if (!/^\d{10}$/.test(formData.phone))
+                newErrors.phone = "Phone number must be 10 digits";
+            if (!formData.dateOfBirth)
+                newErrors.dateOfBirth = "Date of Birth is required";
+            if (!formData.permanentAddress.trim())
+                newErrors.permanentAddress = "Permanent Address is required";
+            if (!formData.state.trim()) newErrors.state = "State is required";
+            if (!formData.guardianName.trim())
+                newErrors.guardianName = "Guardian Name is required";
+            if (!formData.relation.trim())
+                newErrors.relation = "Relation is required";
+            if (!formData.guardianPhone.trim())
+                newErrors.guardianPhone = "Guardian Phone is required";
+            else if (!/^\d{10}$/.test(formData.guardianPhone))
+                newErrors.guardianPhone = "Guardian Phone must be 10 digits";
+        }
 
-    // Step 2: Academic Information
-    if (currentStep === 2) {
-      if (!formData.institution.trim())
-        newErrors.institution = "Institution name is required";
-      if (!formData.program.trim()) newErrors.program = "Program is required";
-      if (!formData.department.trim())
-        newErrors.department = "Department is required";
-      if (!formData.year.trim()) newErrors.year = "Year of study is required";
-      if (!formData.instituteLocation.trim())
-        newErrors.instituteLocation = "Institute Location is required";
-      if (!formData.instituteState.trim())
-        newErrors.instituteState = "Institute State is required";
-      if (!formData.cgpa10.trim()) newErrors.cgpa10 = "10th CGPA is required";
-      if (!formData.board10.trim())
-        newErrors.board10 = "10th Board is required";
-      if (!formData.cgpa12.trim()) newErrors.cgpa12 = "12th CGPA is required";
-      if (!formData.board12.trim())
-        newErrors.board12 = "12th Board is required";
-      if (!formData.currentSemesterCgpa.trim())
-        newErrors.currentSemesterCgpa = "Current Semester CGPA is required";
-    }
+        // Step 2: Academic Information
+        if (currentStep === 2) {
+            if (!formData.institution.trim())
+                newErrors.institution = "Institution name is required";
+            if (!formData.program.trim()) newErrors.program = "Program is required";
+            if (!formData.department.trim())
+                newErrors.department = "Department is required";
+            if (!formData.year.trim()) newErrors.year = "Year of study is required";
+            if (!formData.instituteLocation.trim())
+                newErrors.instituteLocation = "Institute Location is required";
+            if (!formData.instituteState.trim())
+                newErrors.instituteState = "Institute State is required";
+            if (!formData.cgpa10.trim()) newErrors.cgpa10 = "10th CGPA is required";
+            if (!formData.board10.trim())
+                newErrors.board10 = "10th Board is required";
+            if (!formData.cgpa12.trim()) newErrors.cgpa12 = "12th CGPA is required";
+            if (!formData.board12.trim())
+                newErrors.board12 = "12th Board is required";
+            if (!formData.currentSemesterCgpa.trim())
+                newErrors.currentSemesterCgpa = "Current Semester CGPA is required";
+        }
 
-    // Step 3: Project Preferences
-    if (currentStep === 3) {
-      if (!formData.projectPreference1.trim())
-        newErrors.projectPreference1 =
-          "At least one project preference is required";
-    }
+        // Step 3: Project Preferences
+        if (currentStep === 3) {
+            if (!formData.projectPreference1.trim())
+                newErrors.projectPreference1 =
+                    "At least one project preference is required";
+        }
 
     // Step 4: Documents and Statement
     if (currentStep === 4) {
@@ -178,46 +190,90 @@ function SummerInternship() {
       if (!formData.payment) newErrors.payment = "Payment screenshot is required";
     }
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        setprojectPreference1(selectedRows[0]);
+        setprojectPreference2(selectedRows[1]);
+        setprojectPreference3(selectedRows[2]);
+        formData.projectPreference1 = projectPreference1;
+        formData.projectPreference2 = projectPreference2;
+        formData.projectPreference3 = projectPreference3;
+        console.log("Initial Form Data:", formData);
+        
+        // if (validateForm()) {
+        if(true){
+            const formDataToSend = new FormData();
 
-    if (validateForm()) {
-      alert("Form submitted successfully!");
-      console.log(formData);
-    } else {
-      alert("Please fix the errors in the form");
-    }
-  };
+            // Append files (ensure field names match backend Multer config)
+            if (formData.resume) formDataToSend.append("resume", formData.resume);
+            if (formData.statement) formDataToSend.append("statement", formData.statement);
+            if (formData.bonafide) formDataToSend.append("bonafide", formData.bonafide);
+            if (formData.tenthMarksheet) formDataToSend.append("tenthMarksheet", formData.tenthMarksheet);
+            if (formData.twelfthMarksheet) formDataToSend.append("twelfthMarksheet", formData.twelfthMarksheet);
+            if (formData.idCard) formDataToSend.append("idCard", formData.idCard);
+            if (formData.photo) formDataToSend.append("photo", formData.photo);
+        
+            // Append text fields
+            for (const key in formData) {
+                if (!(formData[key] instanceof File)) {  // Prevent re-adding files
+                    console.log("Key:", key, "Value:", formData[key]);
+                    formDataToSend.append(key, formData[key] ?? "");
+                }
+            }
+          
+          console.log("Form data to send:", formDataToSend.get("resume"));
+          try {
+            const response = await axios.post(
+              "http://localhost:5000/submit-application",
+              formDataToSend,
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data", // Required for file uploads
+                },
+              }
+            );
+            alert("Form submitted successfully!");
+            console.log(response.data);
+          } catch (error) {
+            console.error("Error submitting form:", error);
+            alert("Error submitting form. Please try again.");
+          }
+        } 
+        else {
+          alert("Please fix the errors in the form");
+        }
+      };
 
-  const nextStep = () => {
-    if (validateForm()) {
-      setCurrentStep(currentStep + 1);
-    }
-  };
+    const nextStep = () => {
+        // if (validateForm()) {
+        setCurrentStep(currentStep + 1);
+        // }
+    };
 
-  const prevStep = () => {
-    setCurrentStep(currentStep - 1);
-  };
+    const prevStep = () => {
+        setCurrentStep(currentStep - 1);
+    };
 
-  const goToStep = (step) => {
-    setCurrentStep(step);
-  };
+    const goToStep = (step) => {
+        setCurrentStep(step);
+    };
 
-  const departments = [
-    "Computer Science & Engineering",
-    "Electrical Engineering",
-    "Mechanical Engineering",
-    "Civil Engineering",
-    "Chemical Engineering",
-    "Physics",
-    "Chemistry",
-    "Mathematics",
-    "Other",
-  ];
+    const departments = [
+        "Computer Science & Engineering",
+        "Electrical Engineering",
+        "Mechanical Engineering",
+        "Civil Engineering",
+        "Chemical Engineering",
+        "Physics",
+        "Chemistry",
+        "Mathematics",
+        "Other",
+    ];
 
     const projects = [
         "Machine Learning for Image Recognition",
@@ -231,6 +287,7 @@ function SummerInternship() {
         "Blockchain Technology",
         "Internet of Things (IoT)",
     ];
+
     const handlehange = (event) => {
         const file = event.target.files[0];
         const errors = {};
@@ -253,9 +310,9 @@ function SummerInternship() {
                 const expectedWidth = 2 * 96; // 2 inches * 96 DPI
                 const expectedHeight = 2 * 96; // 2 inches * 96 DPI
 
-                if (width !== expectedWidth || height !== expectedHeight) {
-                    errors.photo = "Photo must be exactly 2x2 inches (192x192 pixels at 96 DPI).";
-                }
+                // if (width !== expectedWidth || height !== expectedHeight) {
+                //     errors.photo = "Photo must be exactly 2x2 inches (192x192 pixels at 96 DPI).";
+                // }
 
                 // Update errors state
                 setErrors(errors);
@@ -450,21 +507,21 @@ function SummerInternship() {
         </div>
       </div>
 
-      {/* Internship Mode Multi Checkbox */}
-      <div className="form-group">
-        <label className="font-bold">Internship Mode:</label>
-        {modes.map((mode) => (
-          <label key={mode} className="block">
-            <input
-              type="checkbox"
-              value={mode}
-              checked={selectedModes.includes(mode)}
-              onChange={() => handleCheckboxChange(mode, selectedModes, setSelectedModes)}
-            />
-            {mode}
-          </label>
-        ))}
-      </div>
+                        {/* Internship Mode Multi Checkbox */}
+                        <div className="form-group">
+                            <label className="font-bold">Internship Mode:</label>
+                            {modes.map((mode) => (
+                                <label key={mode} className="block">
+                                    <input
+                                        type="checkbox"
+                                        value={mode}
+                                        checked={selectedModes.includes(mode)}
+                                        onChange={() => handleCheckboxChange(mode, selectedModes, setSelectedModes)}
+                                    />
+                                    {mode}
+                                </label>
+                            ))}
+                        </div>
 
       {/* Apply Filter Button */}
       <button className="apply-button" onClick={applyFilter} disabled={!selectedDepartment || selectedDurations.length === 0 || selectedModes.length === 0}>
@@ -517,32 +574,74 @@ function SummerInternship() {
                         <h2>Documents and Statement</h2>
                         <div className="form-group">
                             <label htmlFor="resume">Resume (PDF only) <span className="required">*</span></label>
-                            <input type="file" id="resume" name="resume" accept=".pdf" onChange={handleChange} className={errors.resume ? "error" : ""} />
+                            <input
+                                type="file"
+                                id="resume"
+                                name="resume" // Correct field name
+                                accept=".pdf"
+                                onChange={handleChange}
+                                className={errors.resume ? "error" : ""}
+                            />
                             {errors.resume && <span className="error-message">{errors.resume}</span>}
                         </div>
                         <div className="form-group">
                             <label htmlFor="statement">Statement of Purpose (PDF only) <span className="required">*</span></label>
-                            <input type="file" id="statement" name="statement" accept=".pdf" onChange={handleChange} className={errors.statement ? "error" : ""} />
+                            <input
+                                type="file"
+                                id="statement"
+                                name="statement" // Correct field name
+                                accept=".pdf"
+                                onChange={handleChange}
+                                className={errors.statement ? "error" : ""}
+                            />
                             {errors.statement && <span className="error-message">{errors.statement}</span>}
                         </div>
                         <div className="form-group">
                             <label htmlFor="bonafide">Bonafide Certificate (PDF only) <span className="required">*</span></label>
-                            <input type="file" id="bonafide" name="bonafide" accept=".pdf" onChange={handleChange} className={errors.bonafide ? "error" : ""} />
+                            <input
+                                type="file"
+                                id="bonafide"
+                                name="bonafide" // Correct field name
+                                accept=".pdf"
+                                onChange={handleChange}
+                                className={errors.bonafide ? "error" : ""}
+                            />
                             {errors.bonafide && <span className="error-message">{errors.bonafide}</span>}
                         </div>
                         <div className="form-group">
                             <label htmlFor="tenthMarksheet">10th Marksheet (PDF only) <span className="required">*</span></label>
-                            <input type="file" id="tenthMarksheet" name="tenthMarksheet" accept=".pdf" onChange={handleChange} className={errors.tenthMarksheet ? "error" : ""} />
+                            <input
+                                type="file"
+                                id="tenthMarksheet"
+                                name="tenthMarksheet" // Correct field name
+                                accept=".pdf"
+                                onChange={handleChange}
+                                className={errors.tenthMarksheet ? "error" : ""}
+                            />
                             {errors.tenthMarksheet && <span className="error-message">{errors.tenthMarksheet}</span>}
                         </div>
                         <div className="form-group">
-                            <label htmlFor="twelthMarksheet">12th Marksheet (PDF only) <span className="required">*</span></label>
-                            <input type="file" id="twelfthMarksheet" name="twelthMarksheet" accept=".pdf" onChange={handleChange} className={errors.twelfthMarksheet ? "error" : ""} />
-                            {errors.twelthMarksheet && <span className="error-message">{errors.twelthMarksheet}</span>}
+                            <label htmlFor="twelfthMarksheet">12th Marksheet (PDF only) <span className="required">*</span></label>
+                            <input
+                                type="file"
+                                id="twelfthMarksheet"
+                                name="twelfthMarksheet" // Correct field name
+                                accept=".pdf"
+                                onChange={handleChange}
+                                className={errors.twelfthMarksheet ? "error" : ""}
+                            />
+                            {errors.twelfthMarksheet && <span className="error-message">{errors.twelfthMarksheet}</span>}
                         </div>
                         <div className="form-group">
                             <label htmlFor="idCard">ID Card (PDF only) <span className="required">*</span></label>
-                            <input type="file" id="idCard" name="idCard" accept=".pdf" onChange={handleChange} className={errors.idCard ? "error" : ""} />
+                            <input
+                                type="file"
+                                id="idCard"
+                                name="idCard" // Correct field name
+                                accept=".pdf"
+                                onChange={handleChange}
+                                className={errors.idCard ? "error" : ""}
+                            />
                             {errors.idCard && <span className="error-message">{errors.idCard}</span>}
                         </div>
                         <div className="form-group">
@@ -564,17 +663,17 @@ function SummerInternship() {
                     <div className="form-section">
                         <h2>Payment</h2>
                         <div className='form-group'>
-                            <img src="/images/payment.jpg"/>
+                            <img src="/images/payment.jpg" />
                         </div>
                         <div className="form-group">
                             <label htmlFor='transaction-id' >Transaction ID <span className="required">*</span></label>
                             <input type="text" id="transaction-id" name="transaction-id" value={formData.transactionId} onChange={handleChange} className={errors.transactionId ? "error" : ""} />
                             {errors.transactionId && <span className="error-message">{errors.transactionId}</span>}
-                          
+
                         </div>
                         <div className='form-group'>
-                        <label htmlFor='payment-screenshot' id='payment-screenshot'></label>
-                           <input type="file" id="payment-screenshot" name="payment-screenshot" accept=".jpg,.jpeg,.png" onChange={handleChange} className={errors.payment ? "error" : ""} />
+                            <label htmlFor='payment-screenshot' id='payment-screenshot'></label>
+                            <input type="file" id="payment-screenshot" name="payment-screenshot" accept=".jpg,.jpeg,.png" onChange={handleChange} className={errors.payment ? "error" : ""} />
                             {errors.payment && <span className="error-message">{errors.payment}</span>}
                         </div>
                     </div>
@@ -602,10 +701,10 @@ function SummerInternship() {
                             <label>Department: {formData.department}</label>
                         </div>
                         <div className="form-group">
-                            <label>Year of Study: { formData.year}</label>
+                            <label>Year of Study: {formData.year}</label>
                         </div>
                         <div className="form-group">
-                            <label>CGPA: {formData.cgpa}</label>
+                            <label>CGPA: {formData.currentSemesterCgpa}</label>
                         </div>
                         <div className="form-group">
                             <label>Project Preference 1: {formData.projectPreference1}</label>
@@ -683,7 +782,7 @@ function SummerInternship() {
         <>
             <div className="form-container">
                 {renderProgress()}
-                <form onSubmit={handleSubmit} className="summer-form">
+                <form onSubmit={handleSubmit} encType="multipart/form-data" className="summer-form">
                     {renderStep()}
                     <div className="form-actions">
                       <div className="wrap">
@@ -691,13 +790,17 @@ function SummerInternship() {
                             <button type="button" className="prev-button" onClick={prevStep}>Previous</button>
                         )}
                         {currentStep < 6 && (
-                            <button type="button" className="next-button" onClick={nextStep}>Next</button>
+                            <button type="button" className="next-button" onClick={nextStep}>
+                                Next
+                            </button>
                         )}
                       </div>
                         
                         
                         {currentStep === 6 && (
-                            <button type="submit" className="submit-button">Submit Application</button>
+                            <button type="submit" className="submit-button">
+                                Submit Application
+                            </button>
                         )}
                     </div>
                 </form>
