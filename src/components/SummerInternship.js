@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../css/SummerInternship.css";
 import axios from "axios";
+import { title } from "process";
 
 const departments = [
     "Chemical Engineering",
@@ -27,9 +28,7 @@ function SummerInternship() {
     const [selectedModes, setSelectedModes] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [selectedRows, setSelectedRows] = useState([]);
-    const [projectPreference1, setprojectPreference1] = useState("");
-    const [projectPreference2, setprojectPreference2] = useState("");
-    const [projectPreference3, setprojectPreference3] = useState("");
+    // const [select]
 
     const handleCheckboxChange = (value, list, setList) => {
         setList(
@@ -76,6 +75,25 @@ function SummerInternship() {
         projectPreference1: "",
         projectPreference2: "",
         projectPreference3: "",
+        selectedDepartment: "",
+        faculty1: "",
+        duration1: "",
+        mode1: "",
+        domain1: "",
+        title1: "",
+        remarks1: "",
+        faculty2: "",
+        duration2: "",
+        mode2: "",
+        domain2: "",
+        title2: "",
+        remarks2: "",
+        faculty3: "",
+        duration3: "",
+        mode3: "",
+        domain3: "",
+        title3: "",
+        remarks3: "",
         statement: "",
         agreeToTerms: false,
         cgpa10: "",
@@ -194,46 +212,127 @@ function SummerInternship() {
         return Object.keys(newErrors).length === 0;
     };
 
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+
+    //     setprojectPreference1(selectedRows[0]);
+    //     setprojectPreference2(selectedRows[1]);
+    //     setprojectPreference3(selectedRows[2]);
+    //     formData.projectPreference1 = projectPreference1;
+    //     formData.projectPreference2 = projectPreference2;
+    //     formData.projectPreference3 = projectPreference3;
+    //     console.log("Initial Form Data:", formData);
+
+    //     // if (validateForm()) {
+    //     if (true) {
+    //         const formDataToSend = new FormData();
+
+    //         // Append files (ensure field names match backend Multer config)
+    //         if (formData.resume) formDataToSend.append("resume", formData.resume);
+    //         if (formData.statement) formDataToSend.append("statement", formData.statement);
+    //         if (formData.bonafide) formDataToSend.append("bonafide", formData.bonafide);
+    //         if (formData.tenthMarksheet) formDataToSend.append("tenthMarksheet", formData.tenthMarksheet);
+    //         if (formData.twelfthMarksheet) formDataToSend.append("twelfthMarksheet", formData.twelfthMarksheet);
+    //         if (formData.idCard) formDataToSend.append("idCard", formData.idCard);
+    //         if (formData.photo) formDataToSend.append("photo", formData.photo);
+
+    //         // Append text fields
+    //         for (const key in formData) {
+    //             if (!(formData[key] instanceof File)) {  // Prevent re-adding files
+    //                 console.log("Key:", key, "Value:", formData[key]);
+    //                 formDataToSend.append(key, formData[key] ?? "");
+    //             }
+    //         }
+
+    //         console.log("Form data to send:", formDataToSend.get("photo"));
+    //         try {
+    //             const response = await axios.post(
+    //                 "http://localhost:5000/submit-application",
+    //                 formDataToSend,
+    //                 {
+    //                     headers: {
+    //                         "Content-Type": "multipart/form-data", // Required for file uploads
+    //                     },
+    //                 }
+    //             );
+    //             alert("Form submitted successfully!");
+    //             console.log(response.data);
+    //         } catch (error) {
+    //             console.error("Error submitting form:", error);
+    //             alert("Error submitting form. Please try again.");
+    //         }
+    //     }
+    //     else {
+    //         alert("Please fix the errors in the form");
+    //     }
+    // };
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        setprojectPreference1(selectedRows[0]);
-        setprojectPreference2(selectedRows[1]);
-        setprojectPreference3(selectedRows[2]);
-        formData.projectPreference1 = projectPreference1;
-        formData.projectPreference2 = projectPreference2;
-        formData.projectPreference3 = projectPreference3;
-        console.log("Initial Form Data:", formData);
-
-        // if (validateForm()) {
-        if (true) {
+    
+        if (selectedRows.length === 0) {
+            alert("Please select at least one faculty member.");
+            return;
+        }
+    
+        // Set faculty preferences dynamically
+        const facultySelections = selectedRows.map((id) => 
+            filteredData.find((mentor) => mentor.id === id)
+        );
+    
+        const updatedFormData = {
+            ...formData,
+            selectedDepartment,
+            faculty1: facultySelections[0]?.faculty_name || "",
+            duration1: facultySelections[0]?.preferred_duration || "",
+            mode1: facultySelections[0]?.internship_mode || "",
+            domain1: facultySelections[0]?.research_domain || "",
+            title1: facultySelections[0]?.internship_title || "",
+            remarks1: facultySelections[0]?.remarks || "",
+            faculty2: facultySelections[1]?.faculty_name || "",
+            duration2: facultySelections[1]?.preferred_duration || "",
+            mode2: facultySelections[1]?.internship_mode || "",
+            domain2: facultySelections[1]?.research_domain || "",
+            title2: facultySelections[1]?.internship_title || "",
+            remarks2: facultySelections[1]?.remarks || "",
+            faculty3: facultySelections[2]?.faculty_name || "",
+            duration3: facultySelections[2]?.preferred_duration || "",
+            mode3: facultySelections[2]?.internship_mode || "",
+            domain3: facultySelections[2]?.research_domain || "",
+            title3: facultySelections[2]?.internship_title || "",
+            remarks3: facultySelections[2]?.remarks || "",
+        };
+    
+        setFormData(updatedFormData);
+        console.log("Updated Form Data:", updatedFormData);
+    
+        if (true) { // Replace with validateForm() if needed
             const formDataToSend = new FormData();
-
-            // Append files (ensure field names match backend Multer config)
-            if (formData.resume) formDataToSend.append("resume", formData.resume);
-            if (formData.statement) formDataToSend.append("statement", formData.statement);
-            if (formData.bonafide) formDataToSend.append("bonafide", formData.bonafide);
-            if (formData.tenthMarksheet) formDataToSend.append("tenthMarksheet", formData.tenthMarksheet);
-            if (formData.twelfthMarksheet) formDataToSend.append("twelfthMarksheet", formData.twelfthMarksheet);
-            if (formData.idCard) formDataToSend.append("idCard", formData.idCard);
-            if (formData.photo) formDataToSend.append("photo", formData.photo);
-
+    
+            // Append files
+            if (updatedFormData.resume) formDataToSend.append("resume", updatedFormData.resume);
+            if (updatedFormData.statement) formDataToSend.append("statement", updatedFormData.statement);
+            if (updatedFormData.bonafide) formDataToSend.append("bonafide", updatedFormData.bonafide);
+            if (updatedFormData.tenthMarksheet) formDataToSend.append("tenthMarksheet", updatedFormData.tenthMarksheet);
+            if (updatedFormData.twelfthMarksheet) formDataToSend.append("twelfthMarksheet", updatedFormData.twelfthMarksheet);
+            if (updatedFormData.idCard) formDataToSend.append("idCard", updatedFormData.idCard);
+            if (updatedFormData.photo) formDataToSend.append("photo", updatedFormData.photo);
+            if(updatedFormData.payment) formDataToSend.append("payment",updatedFormData.payment);
             // Append text fields
-            for (const key in formData) {
-                if (!(formData[key] instanceof File)) {  // Prevent re-adding files
-                    console.log("Key:", key, "Value:", formData[key]);
-                    formDataToSend.append(key, formData[key] ?? "");
+            for (const key in updatedFormData) {
+                if (!(updatedFormData[key] instanceof File)) {  // Prevent re-adding files
+                    formDataToSend.append(key, updatedFormData[key] ?? "");
                 }
             }
-
-            console.log("Form data to send:", formDataToSend.get("photo"));
+    
+            console.log("Final Data to Send:", Object.fromEntries(formDataToSend));
+    
             try {
                 const response = await axios.post(
                     "http://localhost:5000/submit-application",
                     formDataToSend,
                     {
                         headers: {
-                            "Content-Type": "multipart/form-data", // Required for file uploads
+                            "Content-Type": "multipart/form-data",
                         },
                     }
                 );
@@ -243,11 +342,11 @@ function SummerInternship() {
                 console.error("Error submitting form:", error);
                 alert("Error submitting form. Please try again.");
             }
-        }
-        else {
+        } else {
             alert("Please fix the errors in the form");
         }
     };
+    
 
     const nextStep = () => {
         // if (validateForm()) {
@@ -264,29 +363,10 @@ function SummerInternship() {
     };
 
     const departments = [
-        "Computer Science & Engineering",
-        "Electrical Engineering",
-        "Mechanical Engineering",
-        "Civil Engineering",
-        "Chemical Engineering",
-        "Physics",
-        "Chemistry",
-        "Mathematics",
-        "Other",
+        'Chemical Engineering',
+        'Chemistry','Civil Engineering','Management Studies','Electronics & Communication Engineering','Electrical Engineering','Materials Science and Engineering','Mathematics','Mechanical Engineering','Architecture and Planning','Physics','Humanities, Arts and Social Sciences','Computer Science & Engineering','Other'
     ];
 
-    const projects = [
-        "Machine Learning for Image Recognition",
-        "Renewable Energy Systems",
-        "Structural Analysis of Materials",
-        "Quantum Computing Algorithms",
-        "Natural Language Processing",
-        "Robotics and Automation",
-        "Environmental Engineering",
-        "Data Science and Analytics",
-        "Blockchain Technology",
-        "Internet of Things (IoT)",
-    ];
 
     const handlehange = (event) => {
         const file = event.target.files[0];
@@ -511,7 +591,7 @@ function SummerInternship() {
                                                 handleCheckboxChange(duration, selectedDurations, setSelectedDurations)
                                             }
                                         />
-                                        <span>{duration}</span>
+                                        <span>{duration} Months(s)</span>
                                     </label>
                                 ))}
                             </div>
@@ -548,9 +628,12 @@ function SummerInternship() {
                                             <tr>
                                                 <th>Select</th>
                                                 <th>Faculty Name</th>
-                                                <th>Department</th>
+                                                {/* <th>Department</th> */}
                                                 <th>Preferred Duration</th>
                                                 <th>Internship Mode</th>
+                                                <th>Research Domain</th>
+                                                <th>Internship Title</th>
+                                                <th>Remarks</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -565,9 +648,12 @@ function SummerInternship() {
                                                         />
                                                     </td>
                                                     <td>{mentor.faculty_name}</td>
-                                                    <td>{mentor.department}</td>
+                                                    {/* <td>{mentor.department}</td> */}
                                                     <td>{mentor.preferred_duration}</td>
                                                     <td>{mentor.internship_mode}</td>
+                                                    <td>{mentor.research_domain}</td>
+                                                    <td>{mentor.internship_title}</td>
+                                                    <td>{mentor.remarks}</td>
                                                 </tr>
                                             ))}
                                         </tbody>
@@ -716,7 +802,7 @@ function SummerInternship() {
                         <div className="form-group">
                             <label>CGPA: {formData.currentSemesterCgpa}</label>
                         </div>
-                        <div className="form-group">
+                        {/* <div className="form-group">
                             <label>Project Preference 1: {formData.projectPreference1}</label>
                         </div>
                         <div className="form-group">
@@ -724,6 +810,60 @@ function SummerInternship() {
                         </div>
                         <div className="form-group">
                             <label>Project Preference 3: {formData.projectPreference3}</label>
+                        </div> */}
+                        <div className="form-group">
+                            <label>Faculty 1: {formData.faculty1}</label>
+                        </div>
+                        <div className="form-group">
+                            <label>Duration 1: {formData.duration1}</label>
+                        </div>
+                        <div className="form-group">    
+                            <label>Mode 1: {formData.mode1}</label>
+                        </div>
+                        <div className="form-group">
+                            <label>Domain 1: {formData.domain1}</label>
+                        </div>
+                        <div className="form-group">
+                            <label>Title 1: {formData.title1}</label>
+                        </div>
+                        <div className="form-group">
+                            <label>Remarks 1:{formData.remarks1}</label>
+                        </div>
+                        <div className="form-group">
+                            <label>Faculty 2: {formData.faculty2}</label>
+                        </div>
+                        <div className="form-group">
+                            <label>Duration 2: {formData.duration2}</label>
+                        </div>
+                        <div className="form-group">    
+                            <label>Mode 2: {formData.mode2}</label>
+                        </div>
+                        <div className="form-group">
+                            <label>Domain 2: {formData.domain2}</label>
+                        </div>
+                        <div className="form-group">
+                            <label>Title 2: {formData.title2}</label>
+                        </div>
+                        <div className="form-group">
+                            <label>Remarks 2:{formData.remarks2}</label>
+                        </div>
+                        <div className="form-group">
+                            <label>Faculty 3: {formData.faculty3}</label>
+                        </div>
+                        <div className="form-group">
+                            <label>Duration 3: {formData.duration3}</label>
+                        </div>
+                        <div className="form-group">    
+                            <label>Mode 3: {formData.mode3}</label>
+                        </div>
+                        <div className="form-group">
+                            <label>Domain 3: {formData.domain3}</label>
+                        </div>
+                        <div className="form-group">
+                            <label>Title 3: {formData.title3}</label>
+                        </div>
+                        <div className="form-group">
+                            <label>Remarks 3:{formData.remarks3}</label>
                         </div>
                         <div className="form-group">
                             <label>Resume: {formData.resume ? formData.resume.name : "No file selected"}</label>
@@ -748,7 +888,7 @@ function SummerInternship() {
                         </div>
                         <div className="form-group checkbox-group">
                             <input type="checkbox" id="agreeToTerms" name="agreeToTerms" checked={formData.agreeToTerms} onChange={handleChange} className={errors.agreeToTerms ? "error" : ""} />
-                            <label htmlFor="agreeToTerms">I certify that the information provided is accurate and complete. I understand that any false information may result in the rejection of my application. <span className="required">*</span></label>
+                            <label htmlFor="agreeToTerms">I hereby certify that all the information provided and the payment made by me are correct. I understand that my application may be rejected at any stage if any of the information or payment details are found to be incorrect. <span className="required">*</span></label>
                             {errors.agreeToTerms && <span className="error-message">{errors.agreeToTerms}</span>}
                         </div>
                     </div>
