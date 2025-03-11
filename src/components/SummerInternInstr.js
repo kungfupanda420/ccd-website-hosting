@@ -6,7 +6,6 @@ const SummerInternInstr = () => {
     const navigate = useNavigate();
 
     const handleDownload = () => {
-        // Replace 'instructions.pdf' with your actual PDF file path
         const link = document.createElement("a");
         link.href = "/documents/instructions.pdf";
         link.download = "Instructions.pdf";
