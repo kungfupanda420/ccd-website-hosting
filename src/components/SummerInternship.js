@@ -1261,7 +1261,7 @@ function SummerInternship() {
             </div>
 
             {currentStep === 6 && (
-              <button type="submit" className="submit-button">
+              <button type="submit" className="submit-button1">
                 Submit Application
               </button>
             )}

@@ -183,7 +183,8 @@ section p {
   cursor: pointer;
 }
 
-.submit-button{
+.submit-button1{
+  margin-top: 1vw;
   padding: 10px;
   font-size: 1em;
   color: #ffffff;
@@ -193,8 +194,9 @@ section p {
   cursor: pointer;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
-.submit-button:hover {
+.submit-button1:hover {
   background-color: #0677f0;
 }
 
