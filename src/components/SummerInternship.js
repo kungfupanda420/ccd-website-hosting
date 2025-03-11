@@ -50,7 +50,7 @@ function SummerInternship() {
     console.log("Selected Durations:", selectedDurations);
     console.log("Selected Modes:", selectedModes);
 
-    const response = await axios.post("http://localhost:5000/filter", {
+    const response = await axios.post("https://placement.nitc.ac.in/filter", {
       department: selectedDepartment,
       preferred_duration: selectedDurations,
       internship_mode: selectedModes,
@@ -363,7 +363,7 @@ function SummerInternship() {
 
       try {
         const response = await axios.post(
-          "http://localhost:5000/submit-application",
+          "https://placement.nitc.ac.in/submit-application",
           formDataToSend,
           {
             headers: {
