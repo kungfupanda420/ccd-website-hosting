@@ -300,7 +300,10 @@ function SummerInternship() {
       alert("Please select at least one faculty member.");
       return;
     }
-
+    if (!formData.agreeToTerms) {
+      alert("You must agree to the terms before submitting.");
+      return; // Stop the submission if the checkbox is not checked
+    }
     // Set faculty preferences dynamically
     const facultySelections = Object.values(selectedRows); // Extract selected mentor objects
 
@@ -1036,7 +1039,10 @@ function SummerInternship() {
         return (
           <div className="form-section">
             <h2>Payment - Amount of Rupees 118/- (100 + 18% GST)</h2>
-            <h3>Failure to pay the correct amount will result in your application not being considered.</h3>
+            <h3>
+              Failure to pay the correct amount will result in your application
+              not being considered.
+            </h3>
             <div className="form-group">
               <img src="/images/payment.jpg" />
             </div>
