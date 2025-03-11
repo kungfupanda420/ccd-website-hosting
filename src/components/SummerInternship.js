@@ -50,7 +50,7 @@ function SummerInternship() {
     console.log("Selected Durations:", selectedDurations);
     console.log("Selected Modes:", selectedModes);
 
-    const response = await axios.post("http://localhost:5000/filter", {
+    const response = await axios.post("https://placement.nitc.ac.in/filter", {
       department: selectedDepartment,
       preferred_duration: selectedDurations,
       internship_mode: selectedModes,
@@ -302,7 +302,7 @@ function SummerInternship() {
     }
     if (!formData.agreeToTerms) {
       alert("You must agree to the terms before submitting.");
-      return; // Stop the submission if the checkbox is not checked
+      return; 
     }
     // Set faculty preferences dynamically
     const facultySelections = Object.values(selectedRows); // Extract selected mentor objects
@@ -363,7 +363,7 @@ function SummerInternship() {
 
       try {
         const response = await axios.post(
-          "http://localhost:5000/submit-application",
+          "https://placement.nitc.ac.in/submit-application",
           formDataToSend,
           {
             headers: {
@@ -373,6 +373,56 @@ function SummerInternship() {
         );
         alert("Form submitted successfully!");
         console.log(response.data);
+        setCurrentStep(1);
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          dateOfBirth: "",
+          permanentAddress: "",
+          state: "",
+          guardianName: "",
+          relation: "",
+          guardianPhone: "",
+          institution: "",
+          program: "",
+          department: "",
+          year: "",
+          instituteLocation: "",
+          instituteState: "",
+          currentSemesterCgpa: "",
+          UG: "",
+          cgpa12: "",
+          board12: "",
+          cgpa10: "",
+          board10: "",
+          selectedDepartment: "",
+          faculty1: "",
+          duration1: "",
+          mode1: "",
+          domain1: "",
+          title1: "",
+          remarks1: "",
+          faculty2: "",
+          duration2: "",
+          mode2: "",
+          domain2: "",
+          title2: "",
+          remarks2: "",
+          faculty3: "",
+          duration3: "",
+          mode3: "",
+          domain3: "",
+          title3: "",
+          remarks3: "",
+          statement: "",
+          docs: null,
+          photo: null,
+          transactionId: "",
+          payment: null,
+          agreeToTerms: false,
+        });
+
       } catch (error) {
         console.error("Error submitting form:", error);
         alert("Error submitting form. Please try again.");
@@ -398,7 +448,9 @@ function SummerInternship() {
   };
 
   const goToStep = (step) => {
-    setCurrentStep(step);
+    if(step<currentStep|| validateForm()){
+      setCurrentStep(step)
+    }
   };
 
   const departments = [
@@ -1228,6 +1280,7 @@ function SummerInternship() {
             className={`progress-step ${currentStep === step.id ? "active" : ""
               } ${currentStep > step.id ? "completed" : ""}`}
             onClick={() => goToStep(step.id)}
+            disabled={step.id>currentStep}
           >
             {step.label}
           </button>
