@@ -2,12 +2,13 @@
     text-align: center ;
     padding: 2rem;
     background-color: var(--headColor);
-    color: var(--nameColor);
+    color: var(--instrFont);
     border-radius: 1rem;
-    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 3px 3px 8px var(--shadow);
     max-width: 600px;
     margin: 11rem auto;
 }
+
 
 .button-group {
     display: flex;

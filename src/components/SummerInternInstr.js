@@ -16,8 +16,8 @@ const SummerInternInstr = () => {
 
     return (
         <div className="instructions-container">
-            <h2>Important Instructions</h2>
-            <p>
+            <h2 className="instructions-head-text">Important Instructions</h2>
+            <p className="instructions-subhead-text">
                 Please read the instructions carefully before proceeding.
             </p>
 
