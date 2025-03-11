@@ -1,402 +1,402 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700;800&amp;display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700;800&amp;display=swap');
 
-[data-theme='light']{
-  --headColor:rgb(255, 255, 255);
-  --nameColor:rgba(1, 89, 170, 255);
-}
-:root{
-  --headColor:black;
-  --nameColor:black;
-}
-
-body {
-  margin: 0;
-}
-
-.ourTeamContainer {
-  width: 100vw;
-  padding: 4rem 6rem;
-  background-color: var(--textColor);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 0 0 3rem 3rem;
-  margin: 3rem 0;
-}
-
-.ourTeamSubDiv {
-  width: 92%;
-}
-
-.nft {
-  max-width: 300px;
-  margin: 5rem auto;
-  /* border: 5px solid var(--textColor); */
-  background-color: rgb(255, 255, 255);
-  box-shadow: 3px 3px 8px 3px rgba(214, 214, 214, 0.5);
-  border-radius: 2rem;
-  overflow: hidden;
-  transition: .5s all;
-
-  
-
-  .main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    padding: 2rem;
-    gap: 0.5rem;
-    h2{
-      text-align: center;
-      font-size: 1.4rem;
-    }
+  [data-theme='light']{
+    --headColor:rgb(255, 255, 255);
+    --nameColor:rgba(1, 89, 170, 255);
+  }
+  :root{
+    --headColor:black;
+    --nameColor:black;
   }
 
-  .tokenImage {
-    border-radius: 100%;
-    max-width: 100%;
-    height: 200px;
-    object-fit: scale-down;
-
+  body {
+    margin: 0;
   }
 
-  .description1 {
-    margin: .5rem;
-    color: #2a292b;
-  }
-
-
-  ::before {
-    position: fixed;
-    content: "";
-    box-shadow: 0 0 100px 40px #ffffff08;
-    top: -10%;
-    left: -100%;
-    transform: rotate(-45deg);
-    height: 60rem;
-    transition: .7s all;
-  }
-
-  &:hover {
-    box-shadow: none;
-    transform: scale(1.015);
-    background-color: rgb(224, 236, 255);
-    ::before {
-      filter: brightness(.5);
-      top: -100%;
-      left: 200%;
-    }
-  }
-}
-
-.nft hr {
-  width: 100%;
-  border: none;
-  border-bottom: 1px solid #88888855;
-  margin-top: 0;
-}
-
-.bg {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-
-  h1 {
-    font-size: 20rem;
-    filter: opacity(0.5);
-  }
-}
-
-/* student card */
-.studentsDiv {
-  display: flex;
-  scrollbar-width: 20vw;
-  scroll-behavior: smooth;
-  scroll-snap-type: mandatory;
-  scroll-margin-block: 30vw;
-  position: relative;
-  overflow: hidden;
-  flex-direction: column;
-  width: 100%;
-}
-
-.innerStudentsDiv {
-  /*display: flex;
-    flex-wrap: wrap;
-     align-items: center; 
-    justify-content: center;*/
-  display: grid;
-  grid-template-columns: auto auto auto auto;
-  /* grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); */
-  justify-content: space-between;
-}
-
-
-
-.studentCard {
-  border-radius: 0.5rem;
-  /* padding: 1.5rem 2rem; */
-  width: 22rem;
-  height: 15rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.studentCard img {
-  width: 96px;
-  height: 96px;
-  background-color: var(--grayTextColor);
-  pointer-events: none;
-  filter: grayscale(80%);
-  transition: filter 0.3s ease;
-  border-radius: 1rem;
-  /* Add transition for smooth effect */
-}
-
-.studentCard:hover img {
-  filter: none;
-  /* Remove grayscale filter on hover */
-}
-
-.innerInternDiv {
-  display: grid;
-  /* grid-template-columns:auto auto auto; */
-  grid-template-columns: repeat(3, 1fr);
-  /* grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); */
-  padding-bottom: 1rem 0;
-  place-items: center;
-  
-}
-
-.internCard {
-  border-radius: 0.5rem;
-  /* padding: 1.5rem 2rem; */
-  width: 13rem;
-  height: 11rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.internCard img {
-  width: 96px;
-  height: 96px;
-  background-color: var(--grayTextColor);
-  pointer-events: none;
-  filter: grayscale(80%);
-  transition: filter 0.3s ease;
-  border-radius: 1rem;
-  /* Add transition for smooth effect */
-}
-
-.internCard:hover img {
-  filter: none;
-  /* Remove grayscale filter on hover */
-}
-
-.studentDetail {
-  text-align: center;
-  padding: 1rem;
-}
-
-.spochead {
-  margin: 1.5rem auto;
-  line-height: 2rem;
-  font-size: xx-large;
-  /* width: 8rem; */
-  color:var(--nameColor);
-}
-
-.responsive-cell-block {
-  min-height: 75px;
-}
-
-.responsive-container-block {
-  min-height: 75px;
-  height: fit-content;
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  margin-top: 0px;
-  margin-right: auto;
-  margin-bottom: 0px;
-  margin-left: auto;
-  justify-content: space-evenly;
-  font-family: system-ui;
-}
-
-.outer-container {
-  padding-top: 10px;
-  padding-right: 30px;
-  padding-bottom: 10px;
-  padding-left: 30px;
-  background-color: rgb(244, 252, 255);
-  border-radius: 2rem;
-}
-
-.inner-container {
-  max-width: 1320px;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 50px;
-  margin-right: auto;
-  margin-bottom: 50px;
-  margin-left: auto;
-}
-
-.section-head-text {
-  margin-top: 0px;
-  margin-right: 0px;
-  margin-bottom: 4rem;
-  margin-left: 0px;
-  text-align: center;
-  font-size: 35px;
-  font-weight: 700;
-  line-height: 48px;
-  color: var(--headColor);
-  /* margin: 0 0 20px 0; */
-  text-transform: uppercase;
-  font-family: 'Montserrat', sans-serif;
-}
-
-.section-subhead-text {
-  font-size: 25px;
-  color: rgb(153, 153, 153);
-  line-height: 35px;
-  max-width: 470px;
-  text-align: center;
-  margin-top: 0px;
-  margin-right: 0px;
-  margin-bottom: 60px;
-  margin-left: 0px;
-}
-
-/* responsive */
-/* media queries */
-@media (max-width: 500px) {
-  .outer-container {
-    padding: 10px 20px 10px 20px;
-  }
-
-  .section-head-text {
-    text-align: center;
-  }
-}
-
-@media screen and (min-width: 769px) and (max-width: 1180px) {
   .ourTeamContainer {
-    padding: 4rem 3rem;
-  }
-
-  .ourTeamSubDiv {
-    width: 95%;
-
-  }
-
-  .teachersDiv {
-    padding: 3rem 1rem;
+    width: 100vw;
+    padding: 4rem 6rem;
+    background-color: var(--textColor);
     display: flex;
-
-
-  }
-
-  .teacherCard {
-    margin-right: 2rem;
-
-  }
-}
-
-@media screen and (min-width:425px) and (max-width:769px) {
-  .ourTeamContainer {
-    padding: 4rem 3rem;
-  }
-
-  .ourTeamSubDiv {
-    width: 95%;
-
-  }
-
-  .teachersDiv {
-    padding: 3rem 1rem;
-    justify-content: space-around;
-  }
-
-  .teacherCard {
-    margin-right: 2rem;
-  }
-}
-
-@media screen and (max-width:426px) {
-  .ourTeamContainer {
-    padding: 4rem 2rem;
-  }
-
-  .ourTeamSubDiv {
-    width: 98%;
-
-  }
-
-  .teachersDiv {
-    padding: 1.85rem 0;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
     justify-content: center;
+    align-items: center;
+    border-radius: 0 0 3rem 3rem;
+    margin: 3rem 0;
   }
 
-  .teacherCard {
-    margin-right: 0;
+  .ourTeamSubDiv {
+    width: 92%;
   }
 
-  .studentCard {
-    margin-right: 1rem;
-    padding: 1rem;
+  .nft {
+    max-width: 300px;
+    margin: 5rem auto;
+    /* border: 5px solid var(--textColor); */
+    background-color: rgb(255, 255, 255);
+    box-shadow: 3px 3px 8px 3px rgba(214, 214, 214, 0.5);
+    border-radius: 2rem;
+    overflow: hidden;
+    transition: .5s all;
+
+    
+
+    .main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      padding: 2rem;
+      gap: 0.5rem;
+      h2{
+        text-align: center;
+        font-size: 1.4rem;
+      }
+    }
+
+    .tokenImage {
+      border-radius: 100%;
+      max-width: 100%;
+      height: 200px;
+      object-fit: scale-down;
+
+    }
+
+    .description1 {
+      margin: .5rem;
+      color: #2a292b;
+    }
+
+
+    ::before {
+      position: fixed;
+      content: "";
+      box-shadow: 0 0 100px 40px #ffffff08;
+      top: -10%;
+      left: -100%;
+      transform: rotate(-45deg);
+      height: 60rem;
+      transition: .7s all;
+    }
+
+    &:hover {
+      box-shadow: none;
+      transform: scale(1.015);
+      background-color: rgb(224, 236, 255);
+      ::before {
+        filter: brightness(.5);
+        top: -100%;
+        left: 200%;
+      }
+    }
   }
 
-}
+  .nft hr {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #88888855;
+    margin-top: 0;
+  }
 
-@media (max-width:1400px) {
+  .bg {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    h1 {
+      font-size: 20rem;
+      filter: opacity(0.5);
+    }
+  }
+
+  /* student card */
+  .studentsDiv {
+    display: flex;
+    scrollbar-width: 20vw;
+    scroll-behavior: smooth;
+    scroll-snap-type: mandatory;
+    scroll-margin-block: 30vw;
+    position: relative;
+    overflow: hidden;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .innerStudentsDiv {
+    /*display: flex;
+      flex-wrap: wrap;
+      align-items: center; 
+      justify-content: center;*/
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    /* grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); */
+    justify-content: space-between;
+  }
+
+
+
   .studentCard {
     border-radius: 0.5rem;
-    margin-left: 1rem;
-    margin-right: 1rem;
-    width: 20vw;
+    /* padding: 1.5rem 2rem; */
+    width: 22rem;
     height: 15rem;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
   }
-}
 
-@media screen and (min-width:425px) and (max-width: 1675px) {
-  .innerStudentsDiv {
-    display: grid;
-    grid-template-columns: auto auto auto;
+  .studentCard img {
+    width: 96px;
+    height: 96px;
+    background-color: var(--grayTextColor);
+    pointer-events: none;
+    filter: grayscale(80%);
+    transition: filter 0.3s ease;
+    border-radius: 1rem;
+    /* Add transition for smooth effect */
   }
+
+  .studentCard:hover img {
+    filter: none;
+    /* Remove grayscale filter on hover */
+  }
+
   .innerInternDiv {
     display: grid;
-    grid-template-columns: auto auto auto;
+    /* grid-template-columns:auto auto auto; */
+    grid-template-columns: repeat(3, 1fr);
+    /* grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); */
+    padding-bottom: 1rem 0;
+    place-items: center;
+    
   }
-}
 
-@media screen and (min-width:200px) and (max-width: 643px){
-  .innerStudentsDiv {
-    display: grid;
-    grid-template-columns: auto auto;
+  .internCard {
+    border-radius: 0.5rem;
+    /* padding: 1.5rem 2rem; */
+    width: 13rem;
+    height: 11rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
-  .innerInternDiv {
-    display: grid;
-    grid-template-columns: auto auto;
+
+  .internCard img {
+    width: 96px;
+    height: 96px;
+    background-color: var(--grayTextColor);
+    pointer-events: none;
+    filter: grayscale(80%);
+    transition: filter 0.3s ease;
+    border-radius: 1rem;
+    /* Add transition for smooth effect */
   }
-  .internCard{
-    width: 8rem;
-    height: 9rem;
+
+  .internCard:hover img {
+    filter: none;
+    /* Remove grayscale filter on hover */
   }
-  
-}
+
+  .studentDetail {
+    text-align: center;
+    padding: 1rem;
+  }
+
+  .spochead {
+    margin: 1.5rem auto;
+    line-height: 2rem;
+    font-size: xx-large;
+    /* width: 8rem; */
+    color:var(--nameColor);
+  }
+
+  .responsive-cell-block {
+    min-height: 75px;
+  }
+
+  .responsive-container-block {
+    min-height: 75px;
+    height: fit-content;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 0px;
+    margin-right: auto;
+    margin-bottom: 0px;
+    margin-left: auto;
+    justify-content: space-evenly;
+    font-family: system-ui;
+  }
+
+  .outer-container {
+    padding-top: 10px;
+    padding-right: 30px;
+    padding-bottom: 10px;
+    padding-left: 30px;
+    background-color: rgb(244, 252, 255);
+    border-radius: 2rem;
+  }
+
+  .inner-container {
+    max-width: 1320px;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+    margin-right: auto;
+    margin-bottom: 50px;
+    margin-left: auto;
+  }
+
+  .section-head-text {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 4rem;
+    margin-left: 0px;
+    text-align: center;
+    font-size: 35px;
+    font-weight: 700;
+    line-height: 48px;
+    color: var(--headColor);
+    /* margin: 0 0 20px 0; */
+    text-transform: uppercase;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  .section-subhead-text {
+    font-size: 25px;
+    color: rgb(153, 153, 153);
+    line-height: 35px;
+    max-width: 470px;
+    text-align: center;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 60px;
+    margin-left: 0px;
+  }
+
+  /* responsive */
+  /* media queries */
+  @media (max-width: 500px) {
+    .outer-container {
+      padding: 10px 20px 10px 20px;
+    }
+
+    .section-head-text {
+      text-align: center;
+    }
+  }
+
+  @media screen and (min-width: 769px) and (max-width: 1180px) {
+    .ourTeamContainer {
+      padding: 4rem 3rem;
+    }
+
+    .ourTeamSubDiv {
+      width: 95%;
+
+    }
+
+    .teachersDiv {
+      padding: 3rem 1rem;
+      display: flex;
+
+
+    }
+
+    .teacherCard {
+      margin-right: 2rem;
+
+    }
+  }
+
+  @media screen and (min-width:425px) and (max-width:769px) {
+    .ourTeamContainer {
+      padding: 4rem 3rem;
+    }
+
+    .ourTeamSubDiv {
+      width: 95%;
+
+    }
+
+    .teachersDiv {
+      padding: 3rem 1rem;
+      justify-content: space-around;
+    }
+
+    .teacherCard {
+      margin-right: 2rem;
+    }
+  }
+
+  @media screen and (max-width:426px) {
+    .ourTeamContainer {
+      padding: 4rem 2rem;
+    }
+
+    .ourTeamSubDiv {
+      width: 98%;
+
+    }
+
+    .teachersDiv {
+      padding: 1.85rem 0;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .teacherCard {
+      margin-right: 0;
+    }
+
+    .studentCard {
+      margin-right: 1rem;
+      padding: 1rem;
+    }
+
+  }
+
+  @media (max-width:1400px) {
+    .studentCard {
+      border-radius: 0.5rem;
+      margin-left: 1rem;
+      margin-right: 1rem;
+      width: 20vw;
+      height: 15rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+    }
+  }
+
+  @media screen and (min-width:425px) and (max-width: 1675px) {
+    .innerStudentsDiv {
+      display: grid;
+      grid-template-columns: auto auto auto;
+    }
+    .innerInternDiv {
+      display: grid;
+      grid-template-columns: auto auto auto;
+    }
+  }
+
+  @media screen and (min-width:200px) and (max-width: 643px){
+    .innerStudentsDiv {
+      display: grid;
+      grid-template-columns: auto auto;
+    }
+    .innerInternDiv {
+      display: grid;
+      grid-template-columns: auto auto;
+    }
+    .internCard{
+      width: 8rem;
+      height: 9rem;
+    }
+    
+  }
