@@ -27,7 +27,7 @@ function SummerInternship() {
   const [selectedDurations, setSelectedDurations] = useState([]);
   const [selectedModes, setSelectedModes] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-  const [selectedRows, setSelectedRows] = useState([]);
+  const [selectedRows, setSelectedRows] = useState({});
   // const [select]
 
   const handleCheckboxChange = (value, list, setList) => {
@@ -59,15 +59,28 @@ function SummerInternship() {
     setFilteredData(response.data);
   };
 
-  const handleRowSelection = (id) => {
-    const updatedSelection = selectedRows.includes(id)
-      ? selectedRows.filter((rowId) => rowId !== id)
-      : [...selectedRows, id];
+  const handleRowSelection = (id, mentor) => {
+    setSelectedRows((prevSelectedRows) => {
+      const isSelected = prevSelectedRows[id];
 
-    if (updatedSelection.length <= 3) {
-      setSelectedRows(updatedSelection);
-    }
+      // Clone the previous state
+      const updatedSelection = { ...prevSelectedRows };
+
+      if (isSelected) {
+        // If already selected, remove it
+        delete updatedSelection[id];
+      } else {
+        // If selecting a new row, ensure max limit of 3
+        if (Object.keys(updatedSelection).length < 3) {
+          updatedSelection[id] = mentor;
+        }
+      }
+
+      console.log("Selected Rows:", updatedSelection);
+      return updatedSelection;
+    });
   };
+
 
   const [formData, setFormData] = useState({
     name: "",
@@ -278,38 +291,36 @@ function SummerInternship() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if(!formData.agreeToTerms){
+      alert("You must agree to the terms before submitting!!");
+      return;
+    }
+
     if (selectedRows.length === 0) {
       alert("Please select at least one faculty member.");
       return;
     }
-
+    if (!formData.agreeToTerms) {
+      alert("You must agree to the terms before submitting.");
+      return; // Stop the submission if the checkbox is not checked
+    }
     // Set faculty preferences dynamically
-    const facultySelections = selectedRows.map((id) =>
-      filteredData.find((mentor) => mentor.id === id)
-    );
+    const facultySelections = Object.values(selectedRows); // Extract selected mentor objects
 
     const updatedFormData = {
       ...formData,
       selectedDepartment,
-      faculty1: facultySelections[0]?.faculty_name || "",
-      duration1: facultySelections[0]?.preferred_duration || "",
-      mode1: facultySelections[0]?.internship_mode || "",
-      domain1: facultySelections[0]?.research_domain || "",
-      title1: facultySelections[0]?.internship_title || "",
-      remarks1: facultySelections[0]?.remarks || "",
-      faculty2: facultySelections[1]?.faculty_name || "",
-      duration2: facultySelections[1]?.preferred_duration || "",
-      mode2: facultySelections[1]?.internship_mode || "",
-      domain2: facultySelections[1]?.research_domain || "",
-      title2: facultySelections[1]?.internship_title || "",
-      remarks2: facultySelections[1]?.remarks || "",
-      faculty3: facultySelections[2]?.faculty_name || "",
-      duration3: facultySelections[2]?.preferred_duration || "",
-      mode3: facultySelections[2]?.internship_mode || "",
-      domain3: facultySelections[2]?.research_domain || "",
-      title3: facultySelections[2]?.internship_title || "",
-      remarks3: facultySelections[2]?.remarks || "",
     };
+
+    facultySelections.forEach((mentor, index) => {
+      updatedFormData[`faculty${index + 1}`] = mentor?.faculty_name || "";
+      updatedFormData[`duration${index + 1}`] = mentor?.preferred_duration || "";
+      updatedFormData[`mode${index + 1}`] = mentor?.internship_mode || "";
+      updatedFormData[`domain${index + 1}`] = mentor?.research_domain || "";
+      updatedFormData[`title${index + 1}`] = mentor?.internship_title || "";
+      updatedFormData[`remarks${index + 1}`] = mentor?.remarks || "";
+    });
+
 
     setFormData(updatedFormData);
     console.log("Updated Form Data:", updatedFormData);
@@ -319,7 +330,7 @@ function SummerInternship() {
       const formDataToSend = new FormData();
 
       // Append files
-      if(updatedFormData.docs)
+      if (updatedFormData.docs)
         formDataToSend.append("docs", updatedFormData.docs);
       if (updatedFormData.resume)
         formDataToSend.append("resume", updatedFormData.resume);
@@ -444,8 +455,8 @@ function SummerInternship() {
               type === "checkbox"
                 ? checked
                 : type === "file"
-                ? files[0]
-                : value,
+                  ? files[0]
+                  : value,
           }));
         }
       };
@@ -945,13 +956,13 @@ function SummerInternship() {
                           <td>
                             <input
                               type="checkbox"
-                              checked={selectedRows.includes(mentor.id)}
-                              onChange={() => handleRowSelection(mentor.id)}
+                              checked={Boolean(selectedRows[mentor.id])} // Check if mentor.id exists in selectedRows
+                              onChange={() => handleRowSelection(mentor.id, mentor)}
                               disabled={
-                                selectedRows.length >= 3 &&
-                                !selectedRows.includes(mentor.id)
+                                Object.keys(selectedRows).length >= 3 && !selectedRows[mentor.id]
                               }
                             />
+
                           </td>
                           <td>{mentor.faculty_name}</td>
                           {/* <td>{mentor.department}</td> */}
@@ -1028,7 +1039,10 @@ function SummerInternship() {
         return (
           <div className="form-section">
             <h2>Payment - Amount of Rupees 118/- (100 + 18% GST)</h2>
-            <h3>Failure to pay the correct amount will result in your application not being considered.</h3>
+            <h3>
+              Failure to pay the correct amount will result in your application
+              not being considered.
+            </h3>
             <div className="form-group">
               <img src="/images/payment.jpg" />
             </div>
@@ -1128,28 +1142,22 @@ function SummerInternship() {
               </div>
               <div className="form-group">
                 <label>
-                  Preferred Department for Internship:{" "}
-                  {formData.selectedDepartment}
+                  Preferred Department for Internship: {selectedDepartment}
                 </label>
               </div>
-              <div className="form-group">
-                <label>
-                  Preferred Internship 1: {formData.faculty1} ,{" "}
-                  {formData.duration1} , {formData.mode1} , {formData.domain1}
-                </label>
-              </div>
-              <div className="form-group">
-                <label>
-                  Preferred Internship 2: {formData.faculty2} ,{" "}
-                  {formData.duration2} , {formData.mode2} , {formData.domain2}
-                </label>
-              </div>
-              <div className="form-group">
-                <label>
-                  Preferred Internship 3: {formData.faculty3} ,{" "}
-                  {formData.duration3} , {formData.mode3} , {formData.domain3}
-                </label>
-              </div>
+
+              {Object.values(selectedRows).length > 0 ? (
+                Object.values(selectedRows).map((mentor, index) => (
+                  <div key={mentor.id} className="form-group">
+                    <label>
+                      Preferred Internship {index + 1}: {mentor.faculty_name}, {mentor.internship_title}, {mentor.internship_mode}, {mentor.research_domain}
+                    </label>
+                  </div>
+                ))
+              ) : (
+                <p>No mentors selected</p>
+              )}
+
               <div className="form-group">
                 <label>
                   Documents file:{" "}
@@ -1217,9 +1225,8 @@ function SummerInternship() {
         {steps.map((step) => (
           <button
             key={step.id}
-            className={`progress-step ${
-              currentStep === step.id ? "active" : ""
-            } ${currentStep > step.id ? "completed" : ""}`}
+            className={`progress-step ${currentStep === step.id ? "active" : ""
+              } ${currentStep > step.id ? "completed" : ""}`}
             onClick={() => goToStep(step.id)}
           >
             {step.label}
