@@ -13,6 +13,14 @@ const SummerInternInstr = () => {
         link.click();
         document.body.removeChild(link);
     };
+    const handleDownload2 = () => {
+        const link = document.createElement("a");
+        link.href="/documents/SIP_2025_Mentors_List.xlsx";
+        link.download = "SIP_2025_Mentors_List.xlsx";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
 
     return (
         <div className="instructions-container">
@@ -24,6 +32,9 @@ const SummerInternInstr = () => {
             <div className="button-group">
                 <button className="download-button" onClick={handleDownload}>
                     📄 Download Instructions
+                </button>
+                <button className="download-button" onClick={handleDownload2}>
+                    📄 Download Mentorship Details
                 </button>
                 <button className="next-button" onClick={() => navigate("/SummerInternship")}>
                     ➡ Proceed to Next Step

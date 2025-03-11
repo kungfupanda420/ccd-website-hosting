@@ -978,7 +978,7 @@ function SummerInternship() {
                 Read the following instructions carefully while uploading the
                 required documents:
               </h3>
-              <h4>make a file with all the documents below and upload it:</h4>
+              <h4>Make a file with all the documents below and upload it:</h4>
               <p>1. Resume</p>
               <p>2. Statement of Purpose</p>
               <p>3. Bonafide Certificate</p>
@@ -1027,7 +1027,8 @@ function SummerInternship() {
       case 5:
         return (
           <div className="form-section">
-            <h2>Payment</h2>
+            <h2>Payment - Amount of Rupees 118/- (100 + 18% GST)</h2>
+            <h3>Failure to pay the correct amount will result in your application not being considered.</h3>
             <div className="form-group">
               <img src="/images/payment.jpg" />
             </div>

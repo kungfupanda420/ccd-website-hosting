@@ -89,11 +89,20 @@ section p {
   color: var(--textColor2);
   margin-bottom: 10px;
 }
-
+.form-section h3{
+  color: rgb(174, 0, 0);
+  padding-bottom: 0.3rem;
+}
+.form-group p{
+  padding-bottom: 0.3rem;
+  padding-top: 0.3rem;
+}
 .form-group {
   margin-bottom: 15px;
 }
-
+.form-group{
+  color: var(--textColor2);
+}
 .form-group label {
   display: block;
   font-size: 1em;
