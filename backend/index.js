@@ -278,8 +278,8 @@ app.use(express.urlencoded({ extended: true }));
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "password",
-  database: "ccd",
+  password: "peace",
+  database: "ccd_sip",
 });
 
 db.connect((err) => {
@@ -370,8 +370,8 @@ app.post(
         faculty1, duration1, mode1, domain1, title1, remarks1,
         faculty2, duration2, mode2, domain2, title2, remarks2,
         faculty3, duration3, mode3, domain3, title3, remarks3,
-        statement, docs, photo, transactionId, payment, agreeToTerms
-      ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+         docs, photo, transactionId, payment, agreeToTerms
+      ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
 
       const values = [
         formData.name, formData.email, formData.phone, formData.dateOfBirth, formData.permanentAddress,
@@ -381,7 +381,7 @@ app.post(
         formData.selectedDepartment, formData.faculty1, formData.duration1, formData.mode1, formData.domain1, formData.title1,
         formData.remarks1, formData.faculty2, formData.duration2, formData.mode2, formData.domain2, formData.title2,
         formData.remarks2, formData.faculty3, formData.duration3, formData.mode3, formData.domain3, formData.title3,
-        formData.remarks3, formData.statement, formData.docs, formData.photo, formData.transactionId,
+        formData.remarks3, formData.docs, formData.photo, formData.transactionId,
         formData.payment, formData.agreeToTerms
       ];
 

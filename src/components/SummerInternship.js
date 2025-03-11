@@ -85,7 +85,7 @@ function SummerInternship() {
     year: "",
     instituteLocation: "",
     instituteState: "",
-    currentSemesterCgpa: "", 
+    currentSemesterCgpa: "",
     UG: "",
     cgpa12: "",
     board12: "",
@@ -116,7 +116,6 @@ function SummerInternship() {
     transactionId: "",
     payment: null,
     agreeToTerms: false,
-    
   });
 
   const [errors, setErrors] = useState({});
@@ -209,6 +208,13 @@ function SummerInternship() {
         newErrors.transactionId = "Transaction ID is required";
       if (!formData.payment)
         newErrors.payment = "Payment screenshot is required";
+    }
+    // Step 6: Review and Submit
+    if (currentStep === 6) {
+      if (!formData.agreeToTerms) {
+        newErrors.agreeToTerms =
+          "You must agree to the terms before submitting.";
+      }
     }
 
     setErrors(newErrors);
@@ -313,6 +319,8 @@ function SummerInternship() {
       const formDataToSend = new FormData();
 
       // Append files
+      if(updatedFormData.docs)
+        formDataToSend.append("docs", updatedFormData.docs);
       if (updatedFormData.resume)
         formDataToSend.append("resume", updatedFormData.resume);
       if (updatedFormData.statement)
@@ -1164,7 +1172,7 @@ function SummerInternship() {
                     : "No file selected"}
                 </label>
               </div>
-              
+
               <div className="form-group checkbox-group">
                 <input
                   type="checkbox"

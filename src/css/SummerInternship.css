@@ -173,8 +173,7 @@ section p {
 }
 
 .prev-button,
-.next-button,
-.submit-button {
+.next-button {
   padding: 10px;
   font-size: 1em;
   color: #ffffff;
@@ -184,6 +183,17 @@ section p {
   cursor: pointer;
 }
 
+.submit-button{
+  padding: 10px;
+  font-size: 1em;
+  color: #ffffff;
+  background-color: var(--textColor2);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+}
 .submit-button:hover {
   background-color: #0677f0;
 }
@@ -362,11 +372,11 @@ section p {
     font-size: 3vw;
     padding: 2vh;
     width: 100%;
+    margin-bottom: 0.5vh;
   }
   .submit-button{
-    display: block;
-    /* justify-content: center; */
-    /* align-it/ems: center; */
+    display: flex;
+    justify-content: center;
   }
   .mentor-table {
     display: block;
