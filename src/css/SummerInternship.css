@@ -190,7 +190,7 @@ section p {
 
 /* Mentor Filter */
 .mentor-filter-container {
-  max-width: 100%;
+  max-width: inherit;
   margin: auto;
   padding: 24px;
   background: white;
@@ -352,7 +352,7 @@ section p {
   .form-group input,
   .form-group select,
   .form-group textarea {
-    font-size: 3vw;
+    font-size: 0.85rem;
     padding: 2vh;
   }
 
