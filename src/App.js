@@ -3,6 +3,9 @@ import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import AnimatedCursor from "react-animated-cursor";
 import Loader from './pages/Loader';
+import SummerInternship from './components/SummerInternship';
+import InternshipAlert from './components/InternshipAlert';
+import SummerInternInstr from './components/SummerInternInstr';
 // import FaqStudents from './pages/FaqStudents';
 // import Roadmap from './components/Roadmap';
 // import Preptips from './components/Preptips';
@@ -27,6 +30,7 @@ const NotFound = lazy(() => import('./pages/NotFound'));
 // import Temp from './components/Temp';
 // const Temp=lazy(()=>import('./components/Temp'));
 const Temp2=lazy(()=>import('./components/Temp2'));
+const MentorFilter = lazy(() => import('./components/MentorFilter'));
 function App() {
   const { pathname } = useLocation();
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -87,11 +91,16 @@ function App() {
             <Route path='roadmap' element={<Roadmap isDarkMode={isDarkMode} onToggleTheme={handleToggleTheme} />} />
             <Route path='preptips' element={<Preptips/>} />
           </Route>
+          <Route path='/internshipalert' element={<InternshipAlert />} />
+          <Route path='/internshipinstructions' element={<SummerInternInstr/>} />
+          <Route path='/SummerInternship' element={<SummerInternship />} />
           <Route path='/login' element={<Login />} />
           <Route path='/admin@CCD_nitc123' element={<Admin />} />
           <Route path='*' element={<NotFound />} />
           {/* <Route path='/' element={<Temp/>} /> */}
           <Route path='/dashboard' element={<Temp2/>} />
+
+          <Route path='/sip' element={<MentorFilter />} />
         </Routes>
       </Suspense>
       <Footer />

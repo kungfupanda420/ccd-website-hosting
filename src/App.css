@@ -40,6 +40,9 @@ sans-serif; */
   --stuNav:white;
   --headColor:black;
   --nameColor:black;
+  --formText:black;
+  --instrFont:white;
+  --shadow:white;
   
 }
 
@@ -68,6 +71,9 @@ sans-serif; */
   --headColor:rgb(255, 255, 255);
   --nameColor:rgba(1, 89, 170, 255);
   --pgmBgHover: rgba(1,89,170,255);
+  --formText: rgba(1,89,170,255);
+  --instrFont:rgba(1, 89, 170, 255);
+  --shadow:rgba(0, 0, 0, 0.2);
 }
 
 *{

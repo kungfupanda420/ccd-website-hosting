@@ -10,10 +10,11 @@ import Form from "./Form"
 import NewAbout from "./NewAbout"
 import NewCompanies from "./NewCompanies"
 import Rankings from "./Rankings"
+import InternshipAlert from "./InternshipAlert"
 function Home(){
     return(
         <>
-      
+      <InternshipAlert/>
       <Hero/>
       <NewAbout/>
       {/* <About/> */}
