@@ -1131,7 +1131,7 @@ function SummerInternship() {
               </div>
               <div className="form-group">
                 <label>
-                  Preferred Department for Internship: {formData.selectedDepartment}
+                  Preferred Department for Internship: {selectedDepartment}
                 </label>
               </div>
 
