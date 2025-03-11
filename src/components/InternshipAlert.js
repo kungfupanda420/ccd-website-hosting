@@ -6,7 +6,7 @@ const AlertButton = () => {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(true); 
   const handleApplyClick = () => {
-    navigate('/SummerInternship'); 
+    navigate('/internshipinstructions'); 
   };
 
   const handleCloseClick = () => {

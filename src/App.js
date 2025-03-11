@@ -5,6 +5,7 @@ import AnimatedCursor from "react-animated-cursor";
 import Loader from './pages/Loader';
 import SummerInternship from './components/SummerInternship';
 import InternshipAlert from './components/InternshipAlert';
+import SummerInternInstr from './components/SummerInternInstr';
 // import FaqStudents from './pages/FaqStudents';
 // import Roadmap from './components/Roadmap';
 // import Preptips from './components/Preptips';
@@ -91,6 +92,7 @@ function App() {
             <Route path='preptips' element={<Preptips/>} />
           </Route>
           <Route path='/internshipalert' element={<InternshipAlert />} />
+          <Route path='/internshipinstructions' element={<SummerInternInstr/>} />
           <Route path='/SummerInternship' element={<SummerInternship />} />
           <Route path='/login' element={<Login />} />
           <Route path='/admin@CCD_nitc123' element={<Admin />} />
