@@ -291,6 +291,11 @@ function SummerInternship() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if(!formData.agreeToTerms){
+      alert("You must agree to the terms before submitting!!");
+      return;
+    }
+
     if (selectedRows.length === 0) {
       alert("Please select at least one faculty member.");
       return;
