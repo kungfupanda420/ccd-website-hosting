@@ -16,8 +16,8 @@ app.use(express.urlencoded({ extended: true }));
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "peace",
-  database: "ccd_sip",
+  password: "password",
+  database: "ccd",
 });
 
 db.connect((err) => {
