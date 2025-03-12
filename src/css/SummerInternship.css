@@ -218,18 +218,22 @@ section p {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   border-radius: 12px;
   border: 1px solid #ddd;
+  color: var(--textColor2)
 }
+.mentor-filter-container h3{
+  padding-bottom: 0.3vh;
+  color: rgb(174, 0, 0);
 
+}
 .title {
   font-size: 24px;
-  font-weight: bold;
-  color: #333;
+  font-weight: bold;;
   margin-bottom: 16px;
 }
 
 .form-group label {
   font-weight: 600;
-  color: #555;
+  color: var(--textColor2);
   display: block;
   margin-bottom: 8px;
 }

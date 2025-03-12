@@ -81,7 +81,6 @@ function SummerInternship() {
     });
   };
 
-
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -217,11 +216,17 @@ function SummerInternship() {
 
     // Step 5: Payment
     if (currentStep === 5) {
-      if (!formData.transactionId.trim())
+      if (!formData.transactionId.trim()) {
         newErrors.transactionId = "Transaction ID is required";
-      if (!formData.payment)
+      } else if (!/^\d{12}$/.test(formData.transactionId.trim())) {
+        newErrors.transactionId = "Transaction ID must be exactly 12 digits";
+      }
+
+      if (!formData.payment) {
         newErrors.payment = "Payment screenshot is required";
+      }
     }
+
     // Step 6: Review and Submit
     if (currentStep === 6) {
       if (!formData.agreeToTerms) {
@@ -291,7 +296,7 @@ function SummerInternship() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if(!formData.agreeToTerms){
+    if (!formData.agreeToTerms) {
       alert("You must agree to the terms before submitting!!");
       return;
     }
@@ -302,7 +307,7 @@ function SummerInternship() {
     }
     if (!formData.agreeToTerms) {
       alert("You must agree to the terms before submitting.");
-      return; 
+      return;
     }
     // Set faculty preferences dynamically
     const facultySelections = Object.values(selectedRows); // Extract selected mentor objects
@@ -314,13 +319,13 @@ function SummerInternship() {
 
     facultySelections.forEach((mentor, index) => {
       updatedFormData[`faculty${index + 1}`] = mentor?.faculty_name || "";
-      updatedFormData[`duration${index + 1}`] = mentor?.preferred_duration || "";
+      updatedFormData[`duration${index + 1}`] =
+        mentor?.preferred_duration || "";
       updatedFormData[`mode${index + 1}`] = mentor?.internship_mode || "";
       updatedFormData[`domain${index + 1}`] = mentor?.research_domain || "";
       updatedFormData[`title${index + 1}`] = mentor?.internship_title || "";
       updatedFormData[`remarks${index + 1}`] = mentor?.remarks || "";
     });
-
 
     setFormData(updatedFormData);
     console.log("Updated Form Data:", updatedFormData);
@@ -422,7 +427,6 @@ function SummerInternship() {
           payment: null,
           agreeToTerms: false,
         });
-
       } catch (error) {
         console.error("Error submitting form:", error);
         alert("Error submitting form. Please try again.");
@@ -448,8 +452,8 @@ function SummerInternship() {
   };
 
   const goToStep = (step) => {
-    if(step<currentStep|| validateForm()){
-      setCurrentStep(step)
+    if (step < currentStep || validateForm()) {
+      setCurrentStep(step);
     }
   };
 
@@ -507,8 +511,8 @@ function SummerInternship() {
               type === "checkbox"
                 ? checked
                 : type === "file"
-                  ? files[0]
-                  : value,
+                ? files[0]
+                : value,
           }));
         }
       };
@@ -904,6 +908,15 @@ function SummerInternship() {
         return (
           <div className="mentor-filter-container">
             <h2 className="title">Filter Mentors</h2>
+            <h3>Instructions</h3>
+            <h3>
+              Please select the mentors in your preferred order for the
+              internship.
+            </h3>
+            <h3>
+              Kindly note that you may choose up to a maximum of three
+              preferences.
+            </h3>
 
             {/* Department Selection */}
             <div className="form-group">
@@ -1009,12 +1022,14 @@ function SummerInternship() {
                             <input
                               type="checkbox"
                               checked={Boolean(selectedRows[mentor.id])} // Check if mentor.id exists in selectedRows
-                              onChange={() => handleRowSelection(mentor.id, mentor)}
+                              onChange={() =>
+                                handleRowSelection(mentor.id, mentor)
+                              }
                               disabled={
-                                Object.keys(selectedRows).length >= 3 && !selectedRows[mentor.id]
+                                Object.keys(selectedRows).length >= 3 &&
+                                !selectedRows[mentor.id]
                               }
                             />
-
                           </td>
                           <td>{mentor.faculty_name}</td>
                           {/* <td>{mentor.department}</td> */}
@@ -1202,7 +1217,9 @@ function SummerInternship() {
                 Object.values(selectedRows).map((mentor, index) => (
                   <div key={mentor.id} className="form-group">
                     <label>
-                      Preferred Internship {index + 1}: {mentor.faculty_name}, {mentor.internship_title}, {mentor.internship_mode}, {mentor.research_domain}
+                      Preferred Internship {index + 1}: {mentor.faculty_name},{" "}
+                      {mentor.internship_title}, {mentor.internship_mode},{" "}
+                      {mentor.research_domain}
                     </label>
                   </div>
                 ))
@@ -1277,10 +1294,11 @@ function SummerInternship() {
         {steps.map((step) => (
           <button
             key={step.id}
-            className={`progress-step ${currentStep === step.id ? "active" : ""
-              } ${currentStep > step.id ? "completed" : ""}`}
+            className={`progress-step ${
+              currentStep === step.id ? "active" : ""
+            } ${currentStep > step.id ? "completed" : ""}`}
             onClick={() => goToStep(step.id)}
-            disabled={step.id>currentStep}
+            disabled={step.id > currentStep}
           >
             {step.label}
           </button>

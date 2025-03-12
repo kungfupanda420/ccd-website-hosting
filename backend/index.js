@@ -157,11 +157,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Database Connection
+// const db = mysql.createConnection({
+//   host: "localhost",
+//   user: "placemetuser",
+//   password: "PwDmPlacemeter1234",
+//   database: "placemetdb",
+// });
 const db = mysql.createConnection({
   host: "localhost",
-  user: "placemetuser",
-  password: "PwDmPlacemeter1234",
-  database: "placemetdb",
+  user: "root",
+  password: "peace",
+  database: "ccd_sip",
 });
 
 db.connect((err) => {
