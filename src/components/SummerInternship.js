@@ -718,6 +718,8 @@ function SummerInternship() {
                 <option value="M.Tech">M.Tech/M.Plan/M.Arch</option>
                 <option value="MSc">MSc</option>
                 <option value="PhD">PhD</option>
+                <option value="MBA">MBA</option>
+                <option value="Other">Other</option>
                 {/* <option value="Other">Other</option> */}
               </select>
               {errors.program && (
