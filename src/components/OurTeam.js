@@ -34,8 +34,8 @@ function OurTeam() {
     },
     {
       name: "Dr. Manu Mohan",
-      position: "Training and Placement Officer",
-      image: "/images/our_team/teachers/manumohan.jpg",
+      position: "Placement & Career Development Officer",
+      image: "/images/our_team/teachers/manumohan2.jpg",
       linkedin: "https://www.linkedin.com/in/dr-manumohanthundathil",
     },
   ];
