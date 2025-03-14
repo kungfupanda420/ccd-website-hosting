@@ -5,7 +5,7 @@
     color: var(--instrFont);
     border-radius: 1rem;
     box-shadow: 3px 3px 8px var(--shadow);
-    max-width: 50vw;
+    max-width: 90vw;
     margin: 11rem auto;
 }
 
@@ -15,6 +15,7 @@
     justify-content: center;
     gap: 1rem;
     margin-top: 1.5rem;
+    
 }
 
 .download-button, .next-button {
@@ -43,10 +44,14 @@
 .next-button:hover {
     background-color: #388e3c;
 }
+.contact{
+    color: rgb(160, 0, 0);
+    padding-top: 2rem;
+}
 @media (max-width: 630px) {
     .instructions-container {
         margin: 11rem 2.5rem;
-        max-width: calc(100% - 4rem);
+        max-width: 100%;
     }
 
     .button-group {
