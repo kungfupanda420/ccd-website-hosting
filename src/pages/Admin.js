@@ -1,10 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import '../pagesCss/Admin.css';
 import NewsMedia from "../components/NewsMedia";
 import ActivePrograms from "../components/ActivePrograms";
 import Queries from '../components/Queries';
 
 function Admin() {
+  const [applications, setApplications] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [columns, setColumns] = useState([]);
+
+  useEffect(() => {
+    fetch("/api/internships")
+      .then((res) => res.json())
+      .then((data) => {
+        setApplications(data);
+        setColumns(Object.keys(data[0] || {})); // Get column names dynamically
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching applications:", error);
+        setLoading(false);
+      });
+  }, []);
+
   const [news_img, setNewsImg] = useState('');
   const [news_title, setNewsTitle] = useState('');
   const [news_subtext, setNewsSubtext] = useState('');
@@ -108,8 +126,43 @@ function Admin() {
           <div className='titleContainer'>
             <h1 className='adminHeading'>CCD ADMIN PAGE</h1>
           </div>
+          {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <div className="tableContainer">
+            <table className="applicationsTable">
+              <thead>
+                <tr>
+                  {columns.map((col) => (
+                    <th key={col}>{col}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {applications.map((app, index) => (
+                  <tr key={index}>
+                    {columns.map((col) => (
+                      <td key={col}>
+                        {col.includes("docs") ||
+                        col.includes("photo") ||
+                        col.includes("payment") ? (
+                          <a href={`/${app[col]}`} target="_blank" rel="noopener noreferrer">
+                            View
+                          </a>
+                        ) : (
+                          app[col]
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+  
           {/* News Media */}
-          <div className='newsMediaForm'>
+          {/* <div className='newsMediaForm'>
             <Queries/>
             <NewsMedia />
             <div className='newsMediaInputContainer'>
@@ -159,10 +212,10 @@ function Admin() {
                 Delete
               </button>
             </div>
-          </div>
+          </div> */}
           {/* Active Programs */}
           
-          <div className='activeProgramsForm'>
+          {/* <div className='activeProgramsForm'>
             <ActivePrograms />
               <div className='activeProgramsContainer'>
               <h1>POST ACTIVE PROGRAMS</h1>
@@ -222,8 +275,8 @@ function Admin() {
                 Delete
               </button>
             </div>
-          </div>
-        </div>
+          </div>*/}
+        </div> 
       </div>
     </>
   );
