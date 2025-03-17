@@ -45,7 +45,7 @@ app.post("/api/login", (req, res) => {
   }
 });
 app.get("/api/internships", (req, res) => {
-  const sql = "SELECT * FROM internship_applications ORDER BY createdAt DESC";
+  const sql = "SELECT * FROM internship_applications ORDER BY createdAt";
 
   db.query(sql, (err, results) => {
     if (err) {
