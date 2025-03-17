@@ -36,7 +36,31 @@ function SummerInternship() {
         ? list.filter((item) => item !== value)
         : [...list, value]
     );
+
   };
+  const handleCheckboxChange2 = (value, selectedList, setSelectedList) => {
+    if (value === "Any") {
+      if (selectedList.includes("Any")) {
+        // If "Any" is already selected, deselect all
+        setSelectedList([]);
+      } else {
+        // If selecting "Any", select all durations
+        setSelectedList(["1", "2", "Any"]);
+      }
+    } else {
+      let updatedList = selectedList.includes(value)
+        ? selectedList.filter((item) => item !== value)
+        : [...selectedList, value];
+  
+      // Ensure "Any" is removed if a specific duration is deselected
+      if (updatedList.includes("Any") && value !== "Any") {
+        updatedList = updatedList.filter((item) => item !== "Any");
+      }
+  
+      setSelectedList(updatedList);
+    }
+  };
+  
   const handleCg = (e) => {
     const { name, value } = e.target;
     if (value > 10 || value < 0) {
@@ -947,7 +971,7 @@ function SummerInternship() {
                       value={duration}
                       checked={selectedDurations.includes(duration)}
                       onChange={() =>
-                        handleCheckboxChange(
+                        handleCheckboxChange2(
                           duration,
                           selectedDurations,
                           setSelectedDurations
