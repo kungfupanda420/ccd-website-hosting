@@ -230,6 +230,9 @@ function SummerInternship() {
       if (selectedRows.length === 0) {
         newErrors.selectedRows = "Please select at least one mentor (max 3)";
       }
+      if(Object.keys(selectedRows).length ==0){
+        newErrors.selectedRows="please select at least one mentor"
+      }
     }
 
     // Step 4: Documents and Statement
