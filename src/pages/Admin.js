@@ -14,7 +14,8 @@ function Admin() {
       .then((res) => res.json())
       .then((data) => {
         setApplications(data);
-        setColumns(Object.keys(data[0] || {})); // Get column names dynamically
+        const dynamicColumns = Object.keys(data[0] || {});
+        setColumns(["S.No", ...dynamicColumns]); // Add Serial Number column
         setLoading(false);
       })
       .catch((error) => {
@@ -22,6 +23,7 @@ function Admin() {
         setLoading(false);
       });
   }, []);
+
 
   const [news_img, setNewsImg] = useState('');
   const [news_title, setNewsTitle] = useState('');
@@ -121,10 +123,10 @@ function Admin() {
   };
   return (
     <>
-      <div className='adminContainer'>
-        <div className='adminStaticHolder'>
-          <div className='titleContainer'>
-            <h1 className='adminHeading'>CCD ADMIN PAGE</h1>
+      <div className="adminContainer">
+        <div className="adminStaticHolder">
+          <div className="titleContainer">
+            <h1 className="adminHeading">CCD ADMIN PAGE</h1>
           </div>
           {loading ? (
             <p>Loading...</p>
@@ -141,13 +143,17 @@ function Admin() {
                 <tbody>
                   {applications.map((app, index) => (
                     <tr key={index}>
-                      <td>{index + 1}</td> {/* Auto-increment ID */}
+                      <td>{index + 1}</td> {/* Auto-incremented Serial Number */}
                       {Object.keys(app).map((col) => (
                         <td key={col}>
                           {col.includes("docs") ||
                           col.includes("photo") ||
                           col.includes("payment") ? (
-                            <a href={`/${app[col]}`} target="_blank" rel="noopener noreferrer">
+                            <a
+                              href={`/${app[col]}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
                               View
                             </a>
                           ) : (
@@ -161,8 +167,9 @@ function Admin() {
               </table>
             </div>
           )}
-        </div> 
+        </div>
       </div>
+
     </>
   );
 }
