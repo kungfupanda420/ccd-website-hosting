@@ -127,41 +127,40 @@ function Admin() {
             <h1 className='adminHeading'>CCD ADMIN PAGE</h1>
           </div>
           {loading ? (
-          <p>Loading...</p>
-        ) : (
-          <div className="tableContainer">
-            <table className="applicationsTable">
-              <thead>
-                <tr>
-                  {columns.map((col) => (
-                    <th key={col}>{col}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {applications.map((app, index) => (
-                  <tr key={index}>
+            <p>Loading...</p>
+          ) : (
+            <div className="tableContainer">
+              <table className="applicationsTable">
+                <thead>
+                  <tr>
                     {columns.map((col) => (
-                      <td key={col}>
-                        {col.includes("docs") ||
-                        col.includes("photo") ||
-                        col.includes("payment") ? (
-                          <a href={`/${app[col]}`} target="_blank" rel="noopener noreferrer">
-                            View
-                          </a>
-                        ) : (
-                          app[col]
-                        )}
-                      </td>
+                      <th key={col}>{col}</th>
                     ))}
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-
-
+                </thead>
+                <tbody>
+                  {applications.map((app, index) => (
+                    <tr key={index}>
+                      <td>{index + 1}</td> {/* Auto-increment ID */}
+                      {Object.keys(app).map((col) => (
+                        <td key={col}>
+                          {col.includes("docs") ||
+                          col.includes("photo") ||
+                          col.includes("payment") ? (
+                            <a href={`/${app[col]}`} target="_blank" rel="noopener noreferrer">
+                              View
+                            </a>
+                          ) : (
+                            app[col]
+                          )}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div> 
       </div>
     </>
