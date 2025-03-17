@@ -10,7 +10,7 @@ function OurTeam() {
     {
       name: "Dr. Vinay V. Panicker",
       position: "Chairperson",
-      image: "/images/our_team/teachers/vinayp.jpg",
+      image: "/images/our_team/teachers/vinay.jpg",
       linkedin: "https://www.linkedin.com/in/vinay-panicker-5b61b484/",
     },
     {
