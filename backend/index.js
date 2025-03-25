@@ -276,13 +276,22 @@ app.post(
       db.query(sql, values, (err, result) => {
         if (err) {
           console.error("Database Insertion Error:", err);
-          return res.status(500).send("Error submitting application");
+          if (err.code === "ER_DUP_ENTRY") {
+            console.log("Duplicate entry error");
+            return res.status(400).json({ message: "An application with this transaction ID already exists!" });
+          }
+
+          return res.status(500).json({ message: "Error submitting application", error: err.message });
         }
         res.status(200).send("Application submitted successfully");
       });
     } catch (error) {
       console.error("Server Error:", error);
-      res.status(500).send("Internal server error");
+      if (error.code === "ER_DUP_ENTRY") {
+        console.log("Duplicate entry error");
+        return res.status(400).json({ message: "An application with this transaction ID already exists!" });
+      }
+      res.status(500).send("Internal server error ");
     }
   }
 );
@@ -291,4 +300,4 @@ app.post(
 app.use("/uploads", express.static("uploads"));
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT,"0.0.0.0", () => console.log(`Server running on port ${PORT} 🚀`));
+app.listen(PORT,"0.0.0.0", () => console.log(`Server running on port ${PORT}`));

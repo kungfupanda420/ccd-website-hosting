@@ -428,12 +428,13 @@ function SummerInternship() {
           agreeToTerms: false,
         });
       } catch (error) {
-        console.error("Error submitting form:", error);
-        alert("Error submitting form. Please try again.");
+        console.error("Error submitting form:", error.response.data.message);
+        if(error.response.data.message.includes("transaction ID already exists")){
+          alert("You have already submitted the form. Please do not submit again.");
+        }
+        else alert("Error submitting form. Please try again.");
       }
-    } else {
-      alert("Please fix the errors in the form");
-    }
+    } 
   };
 
   const nextStep = () => {
