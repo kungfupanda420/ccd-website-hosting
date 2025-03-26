@@ -92,8 +92,8 @@ function App() {
             <Route path='preptips' element={<Preptips/>} />
           </Route>
           <Route path='/internshipalert' element={<InternshipAlert />} />
-          <Route path='/internshipinstructions' element={<SummerInternInstr/>} />
-          <Route path='/SummerInternship' element={<SummerInternship />} />
+          {/* <Route path='/internshipinstructions' element={<SummerInternInstr/>} /> */}
+          {/* <Route path='/SummerInternship' element={<SummerInternship />} /> */}
           <Route path='/login' element={<Login />} />
           <Route path='/admin@CCD_nitc123' element={<Admin />} />
           <Route path='*' element={<NotFound />} />
