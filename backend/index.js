@@ -12,18 +12,18 @@ app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ extended: true,limit: '100mb' }));
 
 // Database Connection
-// const db = mysql.createConnection({
-//   host: "localhost",
-//   user: "placemetuser",
-//   password: "PwDmPlacemeter1234",
-//   database: "placemetdb",
-// });
 const db = mysql.createConnection({
   host: "localhost",
-  user: "root",
-  password: "peace",
-  database: "ccd_sip",
-});  
+  user: "placemetuser",
+  password: "PwDmPlacemeter1234",
+  database: "placemetdb",
+});
+// const db = mysql.createConnection({
+//   host: "localhost",
+//   user: "root",
+//   password: "peace",
+//   database: "ccd_sip",
+// });  
 
 db.connect((err) => {
   if (err) {
