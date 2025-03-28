@@ -4,6 +4,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import AnimatedCursor from "react-animated-cursor";
 import Loader from './pages/Loader';
 import SummerInternInstr from './components/SummerInternInstr';
+import SummerInternship from './components/SummerInternship.js';
 // import FaqStudents from './pages/FaqStudents';
 // import Roadmap from './components/Roadmap';
 // import Preptips from './components/Preptips';
@@ -92,7 +93,7 @@ function App() {
           </Route>
           {/* <Route path='/internshipalert' element={<InternshipAlert />} /> */}
           <Route path='/internshipinstructions' element={<SummerInternInstr/>} />
-          {/* <Route path='/SummerInternship' element={<SummerInternship />} /> */}
+          <Route path='/2025SummerInternshipSIP' element={<SummerInternship/>} />
           <Route path='/login' element={<Login />} />
           <Route path='/admin@CCD_nitc123' element={<Admin />} />
           <Route path='*' element={<NotFound />} />
