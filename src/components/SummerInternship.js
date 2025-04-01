@@ -1141,11 +1141,8 @@ function SummerInternship() {
               not being considered.
             </h3>
             <div className="form-group">
-              <img src="/images/payment.jpg" />
-            </div>
-            <div className="form-group">
               <label htmlFor="transactionId">
-                Transaction ID <span className="required">*</span>
+                Transaction ID of the transaction already made <span className="required">*</span>
               </label>
               <input
                 type="text"
