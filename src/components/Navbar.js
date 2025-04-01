@@ -36,9 +36,9 @@ const Navbar = ({ isDarkMode, onToggleTheme }) => {
               <NavLink to="/about" className="navLink" onClick={closeMobileMenu}>
                 About Us
               </NavLink>
-              <NavLink to="/internshipinstructions" className="navLink" onClick={closeMobileMenu}>
+              {/* <NavLink to="/internshipinstructions" className="navLink" onClick={closeMobileMenu}>
                 Summer Internship
-              </NavLink>
+              </NavLink> */}
               <NavLink to="/placement" className="navLink" onClick={closeMobileMenu}>
                 Placement Statistics
               </NavLink>
