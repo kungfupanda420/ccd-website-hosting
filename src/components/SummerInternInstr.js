@@ -6,10 +6,19 @@ const SummerInternInstr = () => {
   return (
     <div className="instructions-container">
       <h2 className="contact">
-        The registrations have been closed on March 26th, 2025, at 5 P.M., as mentioned in the instructions.<br/>
+        Registered students have been sent an email with a deadline of 5:00 PM,
+        April 5, 2025. Please complete the task at the earliest to ensure your
+        application is processed smoothly.
+        <br />
         For any queries, please contact us at{" "}
-        <span style={{ fontSize: "1.3em", fontWeight: "bold", textDecoration: "underline" }}>
-          sip@nitc.ac.in  
+        <span
+          style={{
+            fontSize: "1.3em",
+            fontWeight: "bold",
+            textDecoration: "underline",
+          }}
+        >
+          sip@nitc.ac.in
         </span>
       </h2>
     </div>
