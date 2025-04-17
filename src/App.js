@@ -10,6 +10,7 @@ import SummerInternship from './components/SummerInternship.js';
 // import Preptips from './components/Preptips';
 // import Footer from './components/Footer';
 // import Navbar from './components/Navbar';
+const SipTable=lazy(()=> import('./components/SipTable.js'))
 const Footer = lazy(() => import('./components/Footer'));
 const FaqStudents = lazy(() => import('./pages/FaqStudents'));
 const Navbar = lazy(() => import('./components/Navbar'));
@@ -99,7 +100,7 @@ function App() {
           <Route path='*' element={<NotFound />} />
           {/* <Route path='/' element={<Temp/>} /> */}
           <Route path='/dashboard' element={<Temp2/>} />
-
+          <Route path='/results' element={<SipTable/>} />
           <Route path='/sip' element={<MentorFilter />} />
         </Routes>
       </Suspense>

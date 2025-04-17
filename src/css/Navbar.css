@@ -38,6 +38,8 @@
   border-radius: 5rem;
   overflow: hidden;
   background-color: rgba(255, 255, 255, 0.07);
+  
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
 
@@ -129,6 +131,7 @@
 
 @media (max-width: 1210px) {
   .navbar::before {
+    -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
     border: none;
   }
@@ -165,6 +168,7 @@
     justify-content: center;
     align-items: center;
     z-index: 99;
+    -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
     transform: translateY(-110%);
     transition: transform 0.1s ease-out;
