@@ -22,7 +22,7 @@ const SipTable = () => {
   ];
 
   useEffect(() => {
-    Papa.parse("/documents/sip_selected.csv", {
+    Papa.parse("/documents/sip_selected2.csv", {
       download: true,
       header: true,
       skipEmptyLines: true,
