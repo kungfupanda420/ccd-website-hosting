@@ -26,6 +26,7 @@ const Login = lazy(() => import('./components/Login'));
 const Admin = lazy(() => import('./pages/Admin'));
 const ForRecruiter = lazy(() => import('./components/ForRecruiter'));
 const NotFound = lazy(() => import('./pages/NotFound'));
+const Results = lazy(() => import('./components/Results'));
 // import Temp2 from './components/Temp2';
 // import Temp from './components/Temp';
 // const Temp=lazy(()=>import('./components/Temp'));
@@ -101,6 +102,7 @@ function App() {
           {/* <Route path='/' element={<Temp/>} /> */}
           <Route path='/dashboard' element={<Temp2/>} />
           <Route path='/results' element={<SipTable/>} />
+          <Route path='sipresults' element={<Results/>} />
           <Route path='/sip' element={<MentorFilter />} />
         </Routes>
       </Suspense>
