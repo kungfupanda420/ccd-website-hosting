@@ -5,6 +5,8 @@ import AnimatedCursor from "react-animated-cursor";
 import Loader from './pages/Loader';
 import SummerInternInstr from './components/SummerInternInstr';
 import SummerInternship from './components/SummerInternship.js';
+import LoginForm from './components/loginform.js';
+import RegisterForm from './components/registerform.js';
 // import FaqStudents from './pages/FaqStudents';
 // import Roadmap from './components/Roadmap';
 // import Preptips from './components/Preptips';
@@ -104,6 +106,8 @@ function App() {
           <Route path='/results' element={<SipTable/>} />
           <Route path='sipresults' element={<Results/>} />
           <Route path='/sip' element={<MentorFilter />} />
+          <Route path='/loginform' element={<LoginForm />} />
+          <Route path='/Registerform' element={<RegisterForm />} />
         </Routes>
       </Suspense>
       <Footer />
