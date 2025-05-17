@@ -113,6 +113,13 @@ function RegisterForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (step !== 5) return; // Only submit when on review step
+    
+    // Confirm before submission
+    if (!window.confirm("Are you sure you want to submit your registration?")) {
+      return;
+    }
+
     setIsSubmitting(true);
     setFirebaseError(null);
 
@@ -197,6 +204,7 @@ function RegisterForm() {
         <div className={`step ${step >= 2 ? 'active' : ''}`}>2. Account</div>
         <div className={`step ${step >= 3 ? 'active' : ''}`}>3. Photo</div>
         <div className={`step ${step >= 4 ? 'active' : ''}`}>4. Academic</div>
+        <div className={`step ${step >= 5 ? 'active' : ''}`}>5. Review</div>
       </div>
       
       {firebaseError && <div className="error-message">{firebaseError}</div>}
@@ -544,7 +552,7 @@ function RegisterForm() {
           </div>
         )}
 
-        <div className="form-navigation">
+<div className="form-navigation">
           {step > 1 && (
             <button type="button" onClick={handleBack} className="back-button">
               Back
@@ -555,8 +563,12 @@ function RegisterForm() {
               Next
             </button>
           ) : (
-            <button type="submit" className="submit-button" disabled={isSubmitting}>
-              {isSubmitting ? 'Submitting...' : 'Submit'}
+            <button 
+              type="submit" 
+              className="submit-button" 
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Submitting...' : 'Submit Registration'}
             </button>
           )}
         </div>

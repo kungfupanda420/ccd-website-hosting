@@ -7,6 +7,7 @@ import SummerInternInstr from './components/SummerInternInstr';
 import SummerInternship from './components/SummerInternship.js';
 import LoginForm from './components/loginform.js';
 import RegisterForm from './components/registerform.js';
+import admin_sip from './components/admin_sip.js';
 // import FaqStudents from './pages/FaqStudents';
 // import Roadmap from './components/Roadmap';
 // import Preptips from './components/Preptips';
@@ -108,6 +109,7 @@ function App() {
           <Route path='/sip' element={<MentorFilter />} />
           <Route path='/loginform' element={<LoginForm />} />
           <Route path='/Registerform' element={<RegisterForm />} />
+          <Route path='/admin_sip' element={<admin_sip />} />
         </Routes>
       </Suspense>
       <Footer />

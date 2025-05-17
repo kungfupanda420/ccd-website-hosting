@@ -378,6 +378,7 @@ const mysql = require("mysql2");
 const cors = require("cors");
 const path = require("path");
 const fs = require("fs");
+const xlsx = require("xlsx");
 
 const app = express();
 const PORT = 5000;
@@ -512,6 +513,46 @@ app.post(
     });
   }
 );
+
+// API Endpoint to Handle Excel File Upload
+app.post("/upload-excel", upload.single("file"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: "No file uploaded." });
+  }
+
+  const filePath = path.join(__dirname, req.file.path);
+  const workbook = xlsx.readFile(filePath);
+  const sheetName = workbook.SheetNames[0];
+  const sheetData = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
+
+  // Iterate through the rows and insert them into the database
+  const query = `
+    INSERT INTO internships (
+      sl_no, faculty_name, department, preferred_duration, title,
+      no_of_interns_needed, preferred_mode_of_internship
+    ) VALUES (?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  sheetData.forEach((row) => {
+    const values = [
+      row["sl no"],
+      row["faculty name"],
+      row["department"],
+      row["preferred duration"],
+      row["title"],
+      row["no of interns needed"],
+      row["preferred mode of internship"],
+    ];
+
+    db.query(query, values, (err) => {
+      if (err) {
+        console.error("Error inserting data into MySQL:", err);
+      }
+    });
+  });
+
+  res.status(200).json({ message: "File uploaded and data stored successfully." });
+});
 
 // Start Server
 app.listen(PORT, () => {
