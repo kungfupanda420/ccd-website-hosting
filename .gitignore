@@ -27,5 +27,5 @@ yarn-error.log*
 
 
 fastapi/venv
-fastapi/.env
+fastapi-backend/.env
 venv
