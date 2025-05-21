@@ -5,6 +5,7 @@ class Token(BaseModel):
     id:int
     name: str
     email: str
+    role:str
     access_token: str
     token_type: str
 

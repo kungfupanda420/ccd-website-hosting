@@ -33,3 +33,6 @@ class StudentRegister(BaseModel):
     regPayment: str
 #    regPaymentScreenshotPath: str
     
+class StudentLogin(BaseModel):
+    email: EmailStr
+    password: str
