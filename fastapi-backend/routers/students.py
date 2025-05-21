@@ -22,7 +22,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 get_db=get_db
 
-@router.post("/auth/register",response_model=Token)
+@router.post("/register",response_model=Token)
 def register(request:StudentRegister,db:Session=Depends(get_db)):
     
     user=db.query(User).filter(User.email==request.email).first()
