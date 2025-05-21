@@ -76,10 +76,11 @@ class Professor(Base):
     dept_id = Column(Integer, ForeignKey("departments.user_id"), nullable=False)
     department = relationship("Department", back_populates="professors")
     projects = relationship(
-        "Project",
-        secondary=profProject,
-        back_populates="professors"
-    )
+    "Project",
+    secondary=profProject,
+    back_populates="professors"
+)
+
 
 
 class Admin(Base):
