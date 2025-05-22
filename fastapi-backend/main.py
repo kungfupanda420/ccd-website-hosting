@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from .database import engine
-from .routers import students
+from .routers import students,admin,login
 from . import models
 
 from fastapi.middleware.cors import CORSMiddleware
@@ -22,9 +22,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(login.router)
+app.include_router(admin.router)
 app.include_router(students.router)
-# app.include_router(events.router)
-# app.include_router(venues.router)
 
 # if __name__== "main":
 #     import uvicorn

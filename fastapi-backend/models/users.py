@@ -48,7 +48,14 @@ class Student(Base):
     certificatePayment = Column(String(255))
     certificatePaymentScreenshotPath = Column(String(255))
     paymentStatus= Column(Integer,default=0)
+    pref1_id=Column(Integer, ForeignKey('projects.id'))
+    pref2_id=Column(Integer, ForeignKey('projects.id'))
+    pref3_id=Column(Integer, ForeignKey('projects.id'))
 
+    pref1=relationship("Project",foreign_keys=[pref1_id])
+    pref2=relationship("Project",foreign_keys=[pref2_id])
+    pref3=relationship("Project",foreign_keys=[pref3_id])
+    
     user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
     user = relationship("User", back_populates="student")
 

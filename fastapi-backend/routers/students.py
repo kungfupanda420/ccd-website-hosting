@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status, Response
 from sqlalchemy.orm import Session
 
 from ..schemas.token import Token
-from ..schemas.students import StudentRegister, StudentLogin
+from ..schemas.students import StudentRegister
 from ..models.users import User, Student
 from ..security.JWTtoken import create_access_token
 from ..database import get_db
@@ -15,7 +15,7 @@ from ..security.oauth2 import get_current_user
 
 router =APIRouter(
     prefix="/api/students",
-    tags=["students"]
+    tags=["Students"]
 )
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -73,30 +73,9 @@ def register(request:StudentRegister,db:Session=Depends(get_db)):
         data={"sub":new_user.email}
     )
 
-    return Token(access_token=access_token, token_type="bearer", id=new_user.id, name=new_student.name, email=new_user.email)
+    return Token(access_token=access_token, token_type="bearer", id=new_user.id, name=new_student.name, email=new_user.email, role=new_user.role)
 
-@router.post('/login')
-def login(request: StudentLogin, db: Session=Depends(get_db)):
-    user = db.query(User).filter(User.email== request.email).first()
-    if not user:
-        raise HTTPException(status_code=404, detail="Invalid Credentials")
-    if not pwd_context.verify(request.password,user.password):
-        raise HTTPException(status_code=404, detail="Invalid Credentials")
-    student = db.query(Student).filter(Student.user_id==user.id).first()
-    if not student:
-        raise HTTPException(status_code=404, detail="Student record not found")
-    
-    access_token= create_access_token(
-        data={"sub":user.email}
-    )
-    return Token(
-        access_token=access_token,
-        token_type="bearer",
-        id=user.id,
-        name=student.name,
-        email=user.email,
-        role=user.role
-    )
+
 
 # @router.post("/auth/login")
 # def login(request:UserLogin,db:Session=Depends(get_db)):
