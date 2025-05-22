@@ -76,7 +76,8 @@ class Professor(Base):
     __tablename__ = "professors"
     
     name=Column(String(255))
-    
+    initial_password = Column(String(255))
+
     user_id = Column(Integer, ForeignKey("users.id"),primary_key=True)
     user = relationship("User", back_populates="professor")
 

@@ -35,3 +35,6 @@ fastapi-backend/models/__pycache__
 fastapi-backend/routers/__pycache__
 fastapi-backend/schemas/__pycache__
 fastapi-backend/security/__pycache__
+
+fastapi-backend/makepassword.py
+fastapi-backend/makepassword.py
