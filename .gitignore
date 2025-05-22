@@ -29,3 +29,9 @@ yarn-error.log*
 fastapi/venv
 fastapi-backend/.env
 venv
+
+fastapi-backend/__pycache__
+fastapi-backend/models/__pycache__
+fastapi-backend/routers/__pycache__
+fastapi-backend/schemas/__pycache__
+fastapi-backend/security/__pycache__

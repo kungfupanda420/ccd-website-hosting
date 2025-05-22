@@ -2,7 +2,7 @@
   "name": "ccd-react-website",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:5000",
+  "proxy": "http://localhost:8000",
   "dependencies": {
     "@coreui/coreui": "^5.0.2",
     "@coreui/react": "^5.1.0",
