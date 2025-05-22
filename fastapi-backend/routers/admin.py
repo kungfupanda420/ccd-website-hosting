@@ -64,7 +64,8 @@ def make_professor(file: UploadFile= File(...),db: Session=Depends(get_db), curr
         new_professor=Professor(
             name=name,
             user_id=new_user.id,
-            dept_id=dept.user_id
+            dept_id=dept.user_id,
+            initial_password=password,
         )
         db.add(new_professor)
 
