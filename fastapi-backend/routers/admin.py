@@ -30,9 +30,9 @@ get_db=get_db
 def make_professor(file: UploadFile= File(...),db: Session=Depends(get_db), current_user: User= Depends(get_current_user)):
     if current_user.role != 'admin':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not an Admin")
-    
-    df = pd.read_excel(file.file)
-    required_cols=['Email','Name','Department']
+
+    df = pd.read_csv(file.file)
+    required_cols={'Email','Name','Department'}
 
     if not required_cols.issubset(df.columns):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid file format. Required columns: Email, Name, Department")
