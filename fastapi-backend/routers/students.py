@@ -73,7 +73,7 @@ def register(request:StudentRegister,db:Session=Depends(get_db)):
         data={"sub":new_user.email}
     )
 
-    return Token(access_token=access_token, token_type="bearer", id=new_user.id, name=new_student.name, email=new_user.email)
+    return Token(access_token=access_token, token_type="bearer", id=new_user.id, name=new_student.name, email=new_user.email,role=new_user.role)
 
 @router.post('/login')
 def login(request: StudentLogin, db: Session=Depends(get_db)):

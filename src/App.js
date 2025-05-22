@@ -5,6 +5,9 @@ import AnimatedCursor from "react-animated-cursor";
 import Loader from './pages/Loader';
 import SummerInternInstr from './components/SummerInternInstr';
 import SummerInternship from './components/SummerInternship.js';
+import Registerform from './components/Registerform.js';
+import Admin_sip from './components/admin_sip.js';
+import CandidateDashboard from './components/Candidate_dashboard.js';
 // import FaqStudents from './pages/FaqStudents';
 // import Roadmap from './components/Roadmap';
 // import Preptips from './components/Preptips';
@@ -94,15 +97,18 @@ function App() {
             <Route path='preptips' element={<Preptips/>} />
           </Route>
           {/* <Route path='/internshipalert' element={<InternshipAlert />} /> */}
+          <Route path='/candidatedashboard' element={<CandidateDashboard />} />
           <Route path='/internshipinstructions' element={<SummerInternInstr/>} />
           <Route path='/2025SummerInternshipSIP' element={<SummerInternship/>} />
           <Route path='/login' element={<Login />} />
           <Route path='/admin@CCD_nitc123' element={<Admin />} />
           <Route path='*' element={<NotFound />} />
           {/* <Route path='/' element={<Temp/>} /> */}
+          <Route path='/registerform' element={<Registerform />} />
           <Route path='/dashboard' element={<Temp2/>} />
           <Route path='/results' element={<SipTable/>} />
           <Route path='sipresults' element={<Results/>} />
+          <Route path='/admin_sip' element={<Admin_sip/>} />
           <Route path='/sip' element={<MentorFilter />} />
         </Routes>
       </Suspense>
