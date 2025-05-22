@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status, Response
 from sqlalchemy.orm import Session
 
 from ..schemas.token import Token
-from ..schemas.students import StudentRegister
+from ..schemas.students import StudentRegister, ShowStudent
 from ..models.users import User, Student
 from ..security.JWTtoken import create_access_token
 from ..database import get_db
@@ -76,28 +76,18 @@ def register(request:StudentRegister,db:Session=Depends(get_db)):
     return Token(access_token=access_token, token_type="bearer", id=new_user.id, name=new_student.name, email=new_user.email,role=new_user.role)
 
 
-# @router.post("/auth/login")
-# def login(request:UserLogin,db:Session=Depends(get_db)):
-#     user=db.query(User).filter(User.email==request.email).first()
-#     if not user:
-#         raise HTTPException(status_code=404,detail=f"Invalid Credentials")
-#     if not pwd_context.verify(request.password,user.password):  
-#         raise HTTPException(status_code=404,detail=f"Invalid Credentials")
+
+@router.get("/me",response_model=ShowStudent)
+def get_me(db: Session=Depends(get_db),current_user: User=Depends(get_current_user)):
+    if current_user.role != 'student':
+        raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
     
-#     access_token= create_access_token(
-#         data={"sub":user.email}
-#     )
-
-#     return Token(access_token=access_token, token_type="bearer", id=user.id, name=user.name, email=user.email)
-
-# @router.get("/users/me",response_model=ShowUser)
-# def get_me(current_user: User=Depends(get_current_user)):
-#     print (current_user)
-#     return ShowUser(
-#         id=current_user.id,
-#         name=current_user.name,
-#         email=current_user.email
-#     )
+    student=db.query(Student).filter(Student.user_id==current_user.id).first()
+    if not student:
+        raise HTTPException(status_code=404, detail="Student not found")
+    return student
+    
+    
 
 # @router.delete("/users/delete/{id}")
 # def user_delete(id:int, current_user: User=Depends(get_current_user), db:Session=Depends(get_db)):
