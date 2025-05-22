@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import "../css/LogIn.css";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
+import jwt_decode from "jwt-decode"; // <-- Add this import
 
 function Login() {
   const [showpwd, setShowpwd] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const navigate = useNavigate(); // Initialize navigate
+  const navigate = useNavigate();
 
   function handleShow() {
     setShowpwd(prev => !prev);
@@ -16,9 +17,8 @@ function Login() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    setError(""); // Clear previous errors
+    setError("");
 
-    // Basic validation
     if (!email || !password) {
       setError("Please fill in all fields");
       return;
@@ -36,12 +36,27 @@ function Login() {
     }).then(async response => {
       if (response.ok) {
         const data = await response.json();
-          console.log("Basipckend Response:", data);
-        // Store token if your backend returns one
         if (data.access_token) {
           localStorage.setItem('token', data.access_token);
+
+          // Decode the token to get the role
+          const decoded = jwt_decode(data.access_token);
+          // Your backend should put the role in the token payload, e.g. { "role": "admin" }
+          const role = decoded.role;
+
+          // Route based on role
+          if (role === "admin") {
+            navigate("/admin_sip");
+          } else if (role === "student") {
+            navigate("/student_dashboard");
+          } else if (role === "professor") {
+            navigate("/professor_dashboard");
+          } else if (role === "department") {
+            navigate("/department_dashboard");
+          } else {
+            setError("Unknown role");
+          }
         }
-        navigate("/admin_sip"); // Use lowercase navigate
       } else {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Login failed');
