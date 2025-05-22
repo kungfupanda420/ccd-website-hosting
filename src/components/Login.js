@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "../css/LogIn.css";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
-import jwt_decode from "jwt-decode"; // <-- Add this import
+import {jwtDecode} from "jwt-decode"; // <-- Add this import
 
 function Login() {
   const [showpwd, setShowpwd] = useState(false);
@@ -40,15 +40,15 @@ function Login() {
           localStorage.setItem('token', data.access_token);
 
           // Decode the token to get the role
-          const decoded = jwt_decode(data.access_token);
+          // const decoded = jwtDecode(data.access_token);
           // Your backend should put the role in the token payload, e.g. { "role": "admin" }
-          const role = decoded.role;
+          const role = data.role; 
 
           // Route based on role
           if (role === "admin") {
             navigate("/admin_sip");
           } else if (role === "student") {
-            navigate("/student_dashboard");
+            navigate("/candidate_dashboard");
           } else if (role === "professor") {
             navigate("/professor_dashboard");
           } else if (role === "department") {

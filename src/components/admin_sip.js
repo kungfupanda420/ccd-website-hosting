@@ -20,14 +20,12 @@ function Admin_sip() {
       const formData = new FormData();
       formData.append("file", file);
 
-      // Get JWT token from localStorage
       const token = localStorage.getItem('token');
 
       const response = await fetch("/api/admin/makeProfessor", {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`
-          // Do NOT set Content-Type when sending FormData
         },
         body: formData,
       });
@@ -38,6 +36,38 @@ function Admin_sip() {
       }
 
       setMessage("File uploaded successfully!");
+    } catch (error) {
+      setMessage(`An error occurred: ${error.message}`);
+    }
+  };
+
+  // Download professors CSV
+  const handleDownload = async () => {
+    setMessage("Downloading...");
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch("/api/admin/exportProfessors", {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Download failed");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = "professors.csv";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+      setMessage("Download started!");
     } catch (error) {
       setMessage(`An error occurred: ${error.message}`);
     }
@@ -55,8 +85,12 @@ function Admin_sip() {
         <button onClick={handleFileUpload} disabled={!file}>
           Upload File
         </button>
+        <button onClick={handleDownload} style={{ marginLeft: "10px" }}>
+          Download Professors
+        </button>
       </div>
       {message && <div className="message">{message}</div>}
+      <div className="export professor"></div>
     </div>
   );
 }
