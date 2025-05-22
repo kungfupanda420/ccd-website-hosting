@@ -30,19 +30,16 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 get_db=get_db
 
 @router.post("/makeProfessor")
-def make_professor(file: UploadFile= File(...), db: Session=Depends(get_db), current_user: User= Depends(get_current_user)):
-    print("Current user:", current_user.email, "Role:", current_user.role)
+def make_professor(file: UploadFile= File(...),db: Session=Depends(get_db), current_user: User= Depends(get_current_user)):
     if current_user.role != 'admin':
-        print("Not an admin!")
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not an Admin")
 
     df = pd.read_csv(file.file)
     required_cols={'Email','Name','Department'}
 
     if not required_cols.issubset(df.columns):
-        print("Missing columns!")
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid file format. Required columns: Email, Name, Department")
-    # ...rest of your code...
+
     for _, row in df.iterrows():   #df.iterrows() yields pairs of (index, row) for each row in the DataFrame. If you don’t need the index, you use _ to indicate “I’m ignoring this value.”
         email= row['Email']
         name= row['Name']
