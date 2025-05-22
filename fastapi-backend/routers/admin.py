@@ -17,6 +17,9 @@ import pandas as pd
 import random
 import string
 
+import io
+from fastapi.responses import StreamingResponse
+
 router =APIRouter(
     prefix="/api/admin",
     tags=["Admin"]
@@ -73,3 +76,28 @@ def make_professor(file: UploadFile= File(...),db: Session=Depends(get_db), curr
 
     return {"status":"success", "message":"Professors added successfully"}
 
+
+@router.get('/exportProfessors')
+def export_professors(db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
+    if current_user.role != 'admin':
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not an Admin")
+    
+    professors= db.query(Professor).join(User).join(Department).all()
+
+    data=[]
+
+    for prof in professors:
+        data.append({
+            "Name": prof.name,
+            "Email": prof.user.email,
+            "Department": prof.department.name,
+            "Password": prof.initial_password
+        })
+    
+    df =pd.DataFrame(data)
+
+    stream= io.StringIO()
+    df.to_csv(stream,index=False)
+    stream.seek(0)
+
+    return StreamingResponse( stream, media_type='text/csv', headers={"Content-Disposition": "attachment; filename=professors.csv"})
