@@ -1,21 +1,28 @@
 import React, { useState } from "react";
 import "../css/LogIn.css";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [showpwd, setShowpwd] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate(); // Initialize navigate
 
   function handleShow() {
-    setShowpwd(prev => !prev)
+    setShowpwd(prev => !prev);
   }
 
   function handleSubmit(e) {
     e.preventDefault();
+    setError(""); // Clear previous errors
 
-    // Log the credentials being sent
-    console.log("Sending to /api/login:", { email, password });
+    // Basic validation
+    if (!email || !password) {
+      setError("Please fill in all fields");
+      return;
+    }
 
     fetch('/api/login', {
       method: 'POST',
@@ -26,16 +33,21 @@ function Login() {
         email: email,
         password: password
       })
-    }).then(response => {
-      if (response.status === 200) {
-        window.location.href = "/admin@CCD_nitc123";
-      } else if (response.status === 401) {
-        throw new Error('Invalid credentials');
+    }).then(async response => {
+      if (response.ok) {
+        const data = await response.json();
+          console.log("Basipckend Response:", data);
+        // Store token if your backend returns one
+        if (data.access_token) {
+          localStorage.setItem('token', data.access_token);
+        }
+        navigate("/admin_sip"); // Use lowercase navigate
       } else {
-        throw new Error('An error occurred while logging in');
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Login failed');
       }
     }).catch(error => {
-      alert(error.message);
+      setError(error.message);
     });
   }
 
@@ -43,17 +55,26 @@ function Login() {
     <div className="loginContainer">
       <div className="AdminLogIn">
         <h1 className="mainHeading">Admin</h1>
+        {error && <div className="error-message">{error}</div>}
         <form className="formLogIn" onSubmit={handleSubmit}>
           <div className="fillBoxInput mediumHeading">
-            <input type="text" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
-            <p className="tinyTexts">Enter Correct Details</p>
+            <input 
+              type="text" 
+              placeholder="Email" 
+              value={email} 
+              onChange={e => setEmail(e.target.value)} 
+            />
           </div>
           <div className="fillBoxInput mediumHeading">
-            <input type={showpwd ? "text" :"password"} placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
+            <input 
+              type={showpwd ? "text" : "password"} 
+              placeholder="Password" 
+              value={password} 
+              onChange={e => setPassword(e.target.value)} 
+            />
             <span className="eyeIcon" onClick={handleShow}>
               {showpwd ? <AiFillEye /> : <AiFillEyeInvisible/>}
             </span>
-            <p className="tinyTexts">Enter Correct Details</p>
           </div>
           <button type="submit" className="loginBtn">Log In</button>
         </form>

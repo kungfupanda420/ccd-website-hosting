@@ -20,8 +20,15 @@ function Admin_sip() {
       const formData = new FormData();
       formData.append("file", file);
 
-      const response = await fetch("/api/admin/make_proffesor", {
+      // Get JWT token from localStorage
+      const token = localStorage.getItem('token');
+
+      const response = await fetch("/api/admin/makeProfessor", {
         method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`
+          // Do NOT set Content-Type when sending FormData
+        },
         body: formData,
       });
 
