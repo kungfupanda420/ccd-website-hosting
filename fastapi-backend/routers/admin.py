@@ -82,7 +82,8 @@ def export_professors(db:Session=Depends(get_db),current_user: User=Depends(get_
     if current_user.role != 'admin':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not an Admin")
     
-    professors= db.query(Professor).join(User).join(Department).all()
+    professors = db.query(Professor).join(Professor.user).join(Professor.department).all()
+
 
     data=[]
 
