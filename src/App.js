@@ -8,6 +8,7 @@ import SummerInternship from './components/SummerInternship.js';
 import Registerform from './components/Registerform.js';
 import Admin_sip from './components/admin_sip.js';
 import CandidateDashboard from './components/Candidate_dashboard.js';
+import Professor_dashboard from './components/Professor_dashboard.js';
 // import FaqStudents from './pages/FaqStudents';
 // import Roadmap from './components/Roadmap';
 // import Preptips from './components/Preptips';
@@ -109,6 +110,7 @@ function App() {
           <Route path='/results' element={<SipTable/>} />
           <Route path='sipresults' element={<Results/>} />
           <Route path='/admin_sip' element={<Admin_sip/>} />
+          <Route path='Professor_dashboard' element={<Professor_dashboard/>} />
           <Route path='/sip' element={<MentorFilter />} />
         </Routes>
       </Suspense>

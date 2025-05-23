@@ -48,7 +48,7 @@ function Login() {
           if (role === "admin") {
             navigate("/admin_sip");
           } else if (role === "student") {
-            navigate("/candidate_dashboard");
+            navigate("/Candidatedashboard");
           } else if (role === "professor") {
             navigate("/professor_dashboard");
           } else if (role === "department") {
@@ -69,7 +69,7 @@ function Login() {
   return (
     <div className="loginContainer">
       <div className="AdminLogIn">
-        <h1 className="mainHeading">Admin</h1>
+        <h1 className="mainHeading">SIP LOGIN</h1>
         {error && <div className="error-message">{error}</div>}
         <form className="formLogIn" onSubmit={handleSubmit}>
           <div className="fillBoxInput mediumHeading">
