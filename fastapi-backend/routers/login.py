@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status, Response
 from sqlalchemy.orm import Session
 
 from ..schemas.token import Token
-from ..schemas.login import UserLogin, ForgotPasswordRequest
+from ..schemas.login import UserLogin, ForgotPasswordRequest, ChangePasswordRequest
 from ..models.users import User, Student
 from ..security.JWTtoken import create_access_token, create_refresh_token
 from ..database import get_db
@@ -66,7 +66,7 @@ conf = ConnectionConfig(
     USE_CREDENTIALS=True
 )
 
-@router.post('/forgot_password')
+@router.post('/forgotPassword')
 async def forgot_password(request: ForgotPasswordRequest ,db:Session=Depends(get_db)):
     user = db.query(User).filter(User.email == request.email).first()
     if not user:
@@ -94,3 +94,6 @@ async def forgot_password(request: ForgotPasswordRequest ,db:Session=Depends(get
 
     await fm.send_message(message)
     return {"msg": f"Password Reset email sent to {request.email}"}
+
+
+@router.post('/changePassword')

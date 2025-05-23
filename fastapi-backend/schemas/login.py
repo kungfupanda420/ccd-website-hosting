@@ -8,3 +8,7 @@ class UserLogin(BaseModel):
 
 class ForgotPasswordRequest(BaseModel):
     email: EmailStr
+
+class ChangePasswordRequest(BaseModel):
+    token:str
+    password:str
