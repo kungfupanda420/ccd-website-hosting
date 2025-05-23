@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status, Response
 from sqlalchemy.orm import Session
 
 from ..schemas.token import Token
-from ..schemas.login import UserLogin
+from ..schemas.login import UserLogin, ForgotPasswordRequest
 from ..models.users import User, Student
 from ..security.JWTtoken import create_access_token, create_refresh_token
 from ..database import get_db
@@ -67,10 +67,13 @@ conf = ConnectionConfig(
 )
 
 @router.post('/forgot_password')
-async def forgot_password(db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
-
+async def forgot_password(request: ForgotPasswordRequest ,db:Session=Depends(get_db)):
+    user = db.query(User).filter(User.email == request.email).first()
+    if not user:
+        return {"msg": "If this email exists, a reset link will be sent."}
+    
     reset_token= create_access_token(
-        data={"sub":current_user.email},
+        data={"sub":request.email},
         expires_delta=timedelta(minutes=30)
     )
 
@@ -78,7 +81,7 @@ async def forgot_password(db:Session=Depends(get_db),current_user: User=Depends(
 
     message=MessageSchema(
         subject="This is a test email",
-        recipients=[current_user.email],
+        recipients=[request.email],
         body=f"""
         <h3>Password Reset</h3>
         <p>Click the link below to reset your password:</p>
@@ -90,4 +93,4 @@ async def forgot_password(db:Session=Depends(get_db),current_user: User=Depends(
     fm=FastMail(conf)
 
     await fm.send_message(message)
-    return {"msg": f"Password Reset email sent to {current_user.email}"}
+    return {"msg": f"Password Reset email sent to {request.email}"}
