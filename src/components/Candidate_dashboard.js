@@ -1,11 +1,15 @@
 import React, { useRef, useState } from "react";
 import "../css/Candidate_dashboard.css";
+// import { usenavigate, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function CandidateDashboard() {
   const fileInputRef = useRef(null);
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [feeStatus, setFeeStatus] = useState("Pending");
   const [shortlistStatus, setShortlistStatus] = useState("Not Shortlisted");
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // Simulating authentication status
+  const navigate = useNavigate();
 
   const handleFileChange = (e) => {
     alert("File uploaded: " + e.target.files[0]?.name);
@@ -38,7 +42,8 @@ function CandidateDashboard() {
           />
           <label htmlFor="profile-photo-upload" className="profile-photo-edit">✎</label>
         </div>
-        <button className="sidebar-btn">Profile Page</button>
+        {/* <button className="sidebar-btn" onClick={useNavigate('/Candidate_profile')}>Profile Page</button> */}
+        <button className="sidebar-btn" onClick={() => navigate('/candidate_profile')}>Profile Page</button>
         <button className="sidebar-btn">Shortlisting Status</button>
         <button className="sidebar-btn">Fee Payment</button>
         <button className="sidebar-btn">Upload Docs</button>
