@@ -1,5 +1,21 @@
 from pydantic import BaseModel, EmailStr
 
+class DepartmentName(BaseModel):
+    name:str
+
+    model_config = {
+        "from_attributes": True
+    }
+
+
+class ProfessorName(BaseModel):
+    name:str
+    department:DepartmentName
+
+    model_config = {
+        "from_attributes": True
+    }
+
 class ShowProject(BaseModel):
     id:int
     title:str
@@ -9,9 +25,11 @@ class ShowProject(BaseModel):
     mode:str
     prerequisites:str
     applied_count:int
+    professor:ProfessorName
 
-    class Config:
-        orm_mode = True
+    model_config = {
+        "from_attributes": True
+    }
 
 class ProjectCreation(BaseModel):
 
@@ -22,5 +40,6 @@ class ProjectCreation(BaseModel):
     mode:str
     prerequisites:str
 
-    class Config:
-        orm_mode = True
+    model_config = {
+        "from_attributes": True
+    }

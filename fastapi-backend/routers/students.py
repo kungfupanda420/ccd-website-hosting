@@ -2,8 +2,10 @@ from fastapi import APIRouter, Depends, HTTPException, status, Response
 from sqlalchemy.orm import Session
 
 from ..schemas.token import Token
-from ..schemas.students import StudentRegister, ShowStudent
+from ..schemas.students import StudentRegister, ShowStudent, StudentUpdate
+from ..schemas.projects import ShowProject
 from ..models.users import User, Student
+from ..models.projects import Project
 from ..security.JWTtoken import create_access_token
 from ..database import get_db
 
@@ -88,3 +90,28 @@ def get_me(db: Session=Depends(get_db),current_user: User=Depends(get_current_us
     return student
     
     
+@router.put("/me/edit",response_model=ShowStudent)
+def edit_me(request:StudentUpdate,db: Session=Depends(get_db),current_user: User=Depends(get_current_user)):
+    if current_user.role != 'student':
+        raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
+    
+    student=db.query(Student).filter(Student.user_id==current_user.id).first()
+    if not student:
+        raise HTTPException(status_code=404, detail="Student not found")
+    
+    for key,value in request.model_dump(exclude_unset=True).items():
+        if hasattr(student, key):
+            setattr(student, key, value)
+    
+    db.commit()
+    
+    return student
+
+@router.get("/allProjects",response_model=list[ShowProject])
+def show_projects(db: Session=Depends(get_db),current_user: User=Depends(get_current_user)):
+    if current_user.role != 'student':
+        raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
+    
+    projects=db.query(Project).all()
+    
+    return projects

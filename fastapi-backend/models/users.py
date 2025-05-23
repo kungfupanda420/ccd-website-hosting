@@ -42,10 +42,13 @@ class Student(Base):
     board12 = Column(String(255))
     cgpa10 = Column(Float)
     board10 = Column(String(255))
+
     regPayment = Column(String(255))
     regPaymentScreenshotPath = Column(String(255))
+
     certificatePayment = Column(String(255))
     certificatePaymentScreenshotPath = Column(String(255))
+    
     paymentStatus= Column(Integer,default=0)
     pref1_id=Column(Integer, ForeignKey('projects.id'))
     pref2_id=Column(Integer, ForeignKey('projects.id'))
