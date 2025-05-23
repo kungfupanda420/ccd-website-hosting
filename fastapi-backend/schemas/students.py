@@ -3,7 +3,7 @@
 from pydantic import BaseModel, EmailStr
 from datetime import date
 
-from .projects import ShowProjectStudent
+from .projects import ShowProject
 from .users import ShowUser
 
 from typing import Optional
@@ -70,9 +70,9 @@ class ShowStudent(BaseModel):
     certificatePaymentScreenshotPath: Optional[str]
     paymentStatus: int
 
-    pref1: Optional[ShowProjectStudent]
-    pref2: Optional[ShowProjectStudent]
-    pref3: Optional[ShowProjectStudent]
+    pref1: Optional[ShowProject]
+    pref2: Optional[ShowProject]
+    pref3: Optional[ShowProject]
 
     
 

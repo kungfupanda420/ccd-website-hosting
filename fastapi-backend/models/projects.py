@@ -5,10 +5,6 @@ from ..database import Base
 from sqlalchemy.sql.sqltypes import Float, Date
 
 
-profProject = Table('profProject', Base.metadata,
-    Column('user_id', Integer, ForeignKey('professors.user_id', ondelete="CASCADE"),primary_key=True),
-    Column('project_id', Integer, ForeignKey('projects.id', ondelete="CASCADE"),primary_key=True)
-)
 
 
 class Project(Base):
@@ -24,11 +20,6 @@ class Project(Base):
     applied_count = Column(Integer, default=0)
     prerequisites = Column(String(1000))  # Can be a JSON string or simple text
 
-    professors = relationship(
-    "Professor",
-    secondary=profProject,
-    back_populates="projects"
-)
-
+    professor = relationship("Professor", back_populates="projects")
 
 

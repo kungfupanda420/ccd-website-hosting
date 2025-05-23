@@ -4,7 +4,6 @@ from sqlalchemy.orm import relationship
 from ..database import Base
 from sqlalchemy.sql.sqltypes import Float, Date
 
-from .projects import profProject
 
 class User(Base):
     __tablename__ = "users"
@@ -83,11 +82,7 @@ class Professor(Base):
 
     dept_id = Column(Integer, ForeignKey("departments.user_id"), nullable=False)
     department = relationship("Department", back_populates="professors")
-    projects = relationship(
-    "Project",
-    secondary=profProject,
-    back_populates="professors"
-)
+    projects = relationship("Project", back_populates="professor")
 
 
 
