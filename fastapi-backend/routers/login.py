@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from ..schemas.token import Token
 from ..schemas.login import UserLogin, ForgotPasswordRequest, ChangePasswordRequest
 from ..models.users import User, Student
-from ..security.JWTtoken import create_access_token, create_refresh_token
+from ..security.JWTtoken import create_access_token, create_refresh_token, verify_access_token
 from ..database import get_db
 
 from passlib.context import CryptContext
@@ -80,7 +80,7 @@ async def forgot_password(request: ForgotPasswordRequest ,db:Session=Depends(get
     reset_link = f"http://localhost:3000/reset_password?token={reset_token}"
 
     message=MessageSchema(
-        subject="This is a test email",
+        subject="Chage password on NITC SIP Portal",
         recipients=[request.email],
         body=f"""
         <h3>Password Reset</h3>
@@ -97,3 +97,22 @@ async def forgot_password(request: ForgotPasswordRequest ,db:Session=Depends(get
 
 
 @router.post('/changePassword')
+async def change_password(request: ChangePasswordRequest,db:Session=Depends(get_db)):
+
+    try:
+        payload=verify_access_token(request.token)
+        email=payload.get("sub")
+
+        if email is None:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+    except Exception:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+    
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    user.password = pwd_context.hash(request.password)
+    db.commit() 
+    db.refresh(user)    
+    return {"msg": "Password changed successfully"}
