@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from ..schemas.token import Token
 from ..schemas.login import UserLogin
 from ..models.users import User, Student
-from ..security.JWTtoken import create_access_token
+from ..security.JWTtoken import create_access_token, create_refresh_token
 from ..database import get_db
 
 from passlib.context import CryptContext
@@ -19,6 +19,8 @@ from pydantic import EmailStr, BaseModel
 import os
 from dotenv import load_dotenv
 
+from datetime import timedelta
+
 router =APIRouter(
     prefix="/api",
     tags=["Login"]
@@ -28,7 +30,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 get_db=get_db
 
-
+load_dotenv()
 
 @router.post('/login')
 def login(request: UserLogin, db: Session=Depends(get_db)):
@@ -41,8 +43,12 @@ def login(request: UserLogin, db: Session=Depends(get_db)):
     access_token= create_access_token(
         data={"sub":user.email}
     )
+    refresh_token= create_refresh_token(
+        data={"sub":user.email}
+    )
     return Token(
         access_token=access_token,
+        refresh_token=refresh_token,
         token_type="bearer",
         id=user.id,
         email=user.email,
@@ -62,13 +68,26 @@ conf = ConnectionConfig(
 
 @router.post('/forgot_password')
 async def forgot_password(db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
+
+    reset_token= create_access_token(
+        data={"sub":current_user.email},
+        expires_delta=timedelta(minutes=30)
+    )
+
+    reset_link = f"http://localhost:3000/reset_password?token={reset_token}"
+
     message=MessageSchema(
         subject="This is a test email",
         recipients=[current_user.email],
-        body=f"This is a test email",
+        body=f"""
+        <h3>Password Reset</h3>
+        <p>Click the link below to reset your password:</p>
+        <a href="{reset_link}">{reset_link}</a>
+        <p>If you didn't request this, you can ignore this email.</p>
+        """,
         subtype="html"
     )
     fm=FastMail(conf)
 
     await fm.send_message(message)
-    return {"msg": f"Email sent to {current_user.email}"}
+    return {"msg": f"Password Reset email sent to {current_user.email}"}

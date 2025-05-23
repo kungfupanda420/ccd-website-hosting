@@ -16,6 +16,7 @@ from sqlalchemy.orm import Session
 from ..database import get_db
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/login")
 
+
 def get_current_user(token: Annotated[str, Depends(oauth2_scheme)],
                      db: Session = Depends(get_db)
                      ):
