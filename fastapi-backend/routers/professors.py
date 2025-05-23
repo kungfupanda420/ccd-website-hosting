@@ -50,7 +50,7 @@ def show_projects(db:Session=Depends(get_db),current_user: User=Depends(get_curr
     projects=db.query(Project).filter(Project.professor_id==current_user.id).all()
     return projects
 
-@router.put("editProject/{id}",response_model=ShowProject)
+@router.put("/editProject/{id}",response_model=ShowProject)
 def edit_project(id:int,request:ProjectCreation,db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
     if(current_user.role != 'professor'):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to edit project")
