@@ -42,3 +42,5 @@ def login(request: UserLogin, db: Session=Depends(get_db)):
         email=user.email,
         role=user.role
     )
+
+router.post('/forgot_password')

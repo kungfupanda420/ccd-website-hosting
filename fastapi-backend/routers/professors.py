@@ -50,6 +50,28 @@ def show_projects(db:Session=Depends(get_db),current_user: User=Depends(get_curr
     projects=db.query(Project).filter(Project.professor_id==current_user.id).all()
     return projects
 
+@router.put("editProject/{id}",response_model=ShowProject)
+def edit_project(id:int,request:ProjectCreation,db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
+    if(current_user.role != 'professor'):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to edit project")
+    
+    project=db.query(Project).filter(Project.id==id).first()
+    if not project:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Project not found")
+    if not project.professor_id == current_user.id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to edit project")
+    
+    project.title=request.title
+    project.description=request.description
+    project.no_of_interns=request.no_of_interns
+    project.duration=request.duration
+    project.mode=request.mode
+    project.prerequisites=request.prerequisites
+
+    db.commit()
+    db.refresh(project)
+    return project
+
 @router.delete('/deleteProject/{id}',status_code=status.HTTP_204_NO_CONTENT)
 def delete_project(id:int,db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
     if(current_user.role != 'professor'):
