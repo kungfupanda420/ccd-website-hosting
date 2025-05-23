@@ -110,7 +110,7 @@ function App() {
           <Route path='/results' element={<SipTable/>} />
           <Route path='sipresults' element={<Results/>} />
           <Route path='/admin_sip' element={<Admin_sip/>} />
-          <Route path='Professor_dashboard' element={<Professor_dashboard/>} />
+          <Route path='/professor_dashboard' element={<Professor_dashboard/>} />
           <Route path='/sip' element={<MentorFilter />} />
         </Routes>
       </Suspense>
