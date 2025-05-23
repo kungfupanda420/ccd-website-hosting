@@ -88,11 +88,3 @@ def get_me(db: Session=Depends(get_db),current_user: User=Depends(get_current_us
     return student
     
     
-
-# @router.delete("/users/delete/{id}")
-# def user_delete(id:int, current_user: User=Depends(get_current_user), db:Session=Depends(get_db)):
-#     if(current_user.id != id):
-#         raise HTTPException(status_code=403, detail="You can only delete your own account")
-#     db.delete(current_user)
-#     db.commit()
-#     return Response(status_code=status.HTTP_204_NO_CONTENT)

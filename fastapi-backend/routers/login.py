@@ -13,6 +13,12 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 from ..security.oauth2 import get_current_user
 
+from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
+from pydantic import EmailStr, BaseModel
+
+import os
+from dotenv import load_dotenv
+
 router =APIRouter(
     prefix="/api",
     tags=["Login"]
@@ -43,4 +49,26 @@ def login(request: UserLogin, db: Session=Depends(get_db)):
         role=user.role
     )
 
-router.post('/forgot_password')
+conf = ConnectionConfig(
+    MAIL_USERNAME='thomassjamess420@gmail.com',
+    MAIL_PASSWORD=os.getenv('MAIL_PASSWORD'),
+    MAIL_FROM='thomassjamess420@gmail.com',
+    MAIL_PORT=587,
+    MAIL_SERVER="smtp.gmail.com",
+    MAIL_STARTTLS=True,
+    MAIL_SSL_TLS= False,
+    USE_CREDENTIALS=True
+)
+
+@router.post('/forgot_password')
+async def forgot_password(db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
+    message=MessageSchema(
+        subject="This is a test email",
+        recipients=[current_user.email],
+        body=f"This is a test email",
+        subtype="html"
+    )
+    fm=FastMail(conf)
+
+    await fm.send_message(message)
+    return {"msg": f"Email sent to {current_user.email}"}
