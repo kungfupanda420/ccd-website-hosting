@@ -2,6 +2,8 @@ import React, { useRef, useState } from "react";
 import "../css/Candidate_dashboard.css";
 // import { usenavigate, Navigate } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { authFetch } from "../utils/authFetch";
+
 
 function CandidateDashboard() {
   const fileInputRef = useRef(null);
@@ -47,6 +49,9 @@ function CandidateDashboard() {
         <button className="sidebar-btn">Shortlisting Status</button>
         <button className="sidebar-btn">Fee Payment</button>
         <button className="sidebar-btn">Upload Docs</button>
+        <button className="sidebar-btn" onClick={() => navigate('/CandidatePreferences')}>project preferences</button>
+        <button className="sidebar-btn" onClick={() => navigate('/logout')}>Logout</button>
+        
       </div>
 
       {/* Main Content */}
@@ -75,6 +80,7 @@ function CandidateDashboard() {
             onChange={handleFileChange}
             multiple
           />
+        
         </div>
       </div>
     </div>

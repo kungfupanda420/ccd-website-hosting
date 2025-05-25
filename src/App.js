@@ -10,6 +10,7 @@ import Admin_sip from './components/admin_sip.js';
 import CandidateDashboard from './components/Candidate_dashboard.js';
 import Professor_dashboard from './components/Professor_dashboard.js';
 import CandidateProfile from './components/Candidate_profile.js';
+import CandidatePreferences from './components/candidate_preferences.js';
 // import FaqStudents from './pages/FaqStudents';
 // import Roadmap from './components/Roadmap';
 // import Preptips from './components/Preptips';
@@ -112,6 +113,7 @@ function App() {
           <Route path='sipresults' element={<Results/>} />
           <Route path='/admin_sip' element={<Admin_sip/>} />
           <Route path='/professor_dashboard' element={<Professor_dashboard/>} />
+          <Route path='/CandidatePreferences' element={<CandidatePreferences />} />
           <Route path='/candidate_profile' element={<CandidateProfile/>} />
           <Route path='/sip' element={<MentorFilter />} />
         </Routes>
