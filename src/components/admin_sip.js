@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import '../css/admin_sip.css';
+import {authFetch} from "../utils/authFetch"; // Assuming you have a utility for authenticated fetch
 
 function Admin_sip() {
   const [file, setFile] = useState(null);
@@ -22,7 +23,7 @@ function Admin_sip() {
 
       const token = localStorage.getItem('token');
 
-      const response = await fetch("/api/admin/makeProfessor", {
+      const response = await authFetch("/api/admin/makeProfessor", {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`
@@ -46,7 +47,7 @@ function Admin_sip() {
     setMessage("Downloading...");
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch("/api/admin/exportProfessors", {
+      const response = await authFetch("/api/admin/exportProfessors", {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`

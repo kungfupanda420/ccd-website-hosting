@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../css/Professor_dashboard.css";
 import { useNavigate } from "react-router-dom";
+import { authFetch } from "../utils/authFetch"; // Assuming you have a utility for authenticated fetch
 
 function Professor_dashboard() {
   const [activeTab, setActiveTab] = useState(null);
@@ -45,7 +46,7 @@ function Professor_dashboard() {
       return;
     }
     try {
-      const res = await fetch("/api/professors/myProjects", {
+      const res = await authFetch("/api/professors/myProjects", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -87,7 +88,7 @@ function Professor_dashboard() {
       prerequisites,
     };
     try {
-      const res = await fetch("/api/professors/makeProject", {
+      const res = await authFetch("/api/professors/makeProject", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -140,7 +141,7 @@ function Professor_dashboard() {
       return;
     }
     try {
-      const res = await fetch(`/api/professors/editProject/${id}`, {
+      const res = await authFetch(`/api/professors/editProject/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -171,7 +172,7 @@ function Professor_dashboard() {
       return;
     }
     try {
-      const res = await fetch(`/api/professors/deleteProject/${id}`, {
+      const res = await authFetch(`/api/professors/deleteProject/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
