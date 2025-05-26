@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr
-
+from typing import Optional
 class DepartmentName(BaseModel):
     name:str
 
@@ -39,6 +39,15 @@ class ProjectCreation(BaseModel):
     duration:str
     mode:str
     prerequisites:str
+
+    model_config = {
+        "from_attributes": True
+    }
+
+class ProjectPreferences(BaseModel):
+    pref1:Optional[int] = None
+    pref2:Optional[int] = None
+    pref3:Optional[int] = None
 
     model_config = {
         "from_attributes": True

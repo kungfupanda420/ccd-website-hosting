@@ -3,10 +3,10 @@ from sqlalchemy.orm import Session
 
 from ..schemas.token import Token
 from ..schemas.students import StudentRegister, ShowStudent, StudentUpdate
-from ..schemas.projects import ShowProject
+from ..schemas.projects import ShowProject, ProjectPreferences
 from ..models.users import User, Student
 from ..models.projects import Project
-from ..security.JWTtoken import create_access_token
+from ..security.JWTtoken import create_access_token, create_refresh_token
 from ..database import get_db
 
 from passlib.context import CryptContext
@@ -74,8 +74,11 @@ def register(request:StudentRegister,db:Session=Depends(get_db)):
     access_token=create_access_token(
         data={"sub":new_user.email}
     )
+    refresh_token=create_refresh_token(
+        data={"sub":new_user.email}
+    )
 
-    return Token(access_token=access_token, token_type="bearer", id=new_user.id, name=new_student.name, email=new_user.email,role=new_user.role)
+    return Token(access_token=access_token, refresh_token=refresh_token, token_type="bearer", id=new_user.id, name=new_student.name, email=new_user.email,role=new_user.role)
 
 
 
@@ -169,8 +172,80 @@ def show_applied_projects(db: Session=Depends(get_db),current_user: User=Depends
     
     return applied_projects
 
+@router.delete("/withdrawProject/{project_id}",status_code=status.HTTP_204_NO_CONTENT)
+def withdraw_project(project_id:int,db:Session=Depends(get_db),current_user:User=Depends(get_current_user)):
+    if current_user.role != 'student':
+        raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
+    student=db.query(Student).filter(Student.user_id==current_user.id).first()
+    if not student:
+        raise HTTPException(status_code=404, detail="Student not found")
+    project=db.query(Project).filter(Project.id==project_id).first()
+    if not project:
+        raise HTTPException(status_code=404, detail="Project not found")
+    
+    if(student.pref1 != project and student.pref2 != project and student.pref3 != project):
+        raise HTTPException(status_code=400, detail="You have not applied for this project")
+    
+    if(student.pref1==project):
+        student.pref1=student.pref2
+        student.pref2=student.pref3
+        student.pref3=None
+    elif(student.pref2==project):
+        student.pref2=student.pref3
+        student.pref3=None
+    elif(student.pref3==project):
+        student.pref3=None
+    project.applied_count-=1
+    db.commit()
+    db.refresh(student)
+    db.refresh(project)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
+@router.post("/preferences",response_model=list[ShowProject])
+def increase_preference(request:ProjectPreferences,db:Session=Depends(get_db),current_user:User=Depends(get_current_user)):
+    if current_user.role != 'student':
+        raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
+    
+    student=db.query(Student).filter(Student.user_id==current_user.id).first()
+    if not student:
+        raise HTTPException(status_code=404, detail="Student not found")
+    
+    updated_projects = []
 
+    
+    if request.pref1 is not None:
+        pref1 = db.query(Project).filter(Project.id == request.pref1).first()
+        if not pref1:
+            raise HTTPException(status_code=404, detail="Project for pref1 not found")
+        student.pref1 = pref1
+        updated_projects.append(pref1)
+    else:
+        student.pref1 = None
+
+    
+    if request.pref2 is not None:
+        pref2 = db.query(Project).filter(Project.id == request.pref2).first()
+        if not pref2:
+            raise HTTPException(status_code=404, detail="Project for pref2 not found")
+        student.pref2 = pref2
+        updated_projects.append(pref2)
+    else:
+        student.pref2 = None
+
+    
+    if request.pref3 is not None:
+        pref3 = db.query(Project).filter(Project.id == request.pref3).first()
+        if not pref3:
+            raise HTTPException(status_code=404, detail="Project for pref3 not found")
+        student.pref3 = pref3
+        updated_projects.append(pref3)
+    else:
+        student.pref3 = None
+
+    db.commit()
+    db.refresh(student)
+
+    return updated_projects
 # if student.pref1_id:
 #         if project.professor.dept_id != student.pref1.professor.dept_id:
 #             raise HTTPException(status_code=400, detail="All project applied to have to be from the same department")
