@@ -1,142 +1,377 @@
 import React, { useEffect, useState } from "react";
 import { authFetch } from "../utils/authFetch";
-// import "../css/CandidatePreferences.css";
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import "../css/CandidatePreferences.css";
 
 function CandidatePreferences() {
   const [projects, setProjects] = useState([]);
-  const [search, setSearch] = useState("");
-  const [filtered, setFiltered] = useState([]);
-  const [preferences, setPreferences] = useState({ pref1: null, pref2: null, pref3: null });
-  const [message, setMessage] = useState("");
+  const [filteredProjects, setFilteredProjects] = useState([]);
+  const [departments, setDepartments] = useState([]);
+  const [modes, setModes] = useState([]);
+  const [durations, setDurations] = useState([]);
+  const [professors, setProfessors] = useState([]);
+  const [filters, setFilters] = useState({
+    department: "",
+    mode: "",
+    duration: "",
+    professor: "",
+    search: ""
+  });
+  const [selectedProjects, setSelectedProjects] = useState([]);
+  const [message, setMessage] = useState({ text: "", type: "" });
 
   useEffect(() => {
-    // Fetch all available projects
     const fetchProjects = async () => {
       try {
-        const res = await authFetch("/api/projects", { method: "GET" });
+        const res = await authFetch("/api/students/allProjects", { method: "GET" });
         if (res.ok) {
           const data = await res.json();
           setProjects(data);
-          setFiltered(data);
+          setFilteredProjects(data);
+
+          // Extract unique filter options with proper null checks
+          setDepartments([...new Set(data.map(p => p.professor?.dept?.name || "N/A"))]);
+          setModes([...new Set(data.map(p => p.mode || "N/A"))]);
+          setDurations([...new Set(data.map(p => p.duration || "N/A"))]);
+          setProfessors([...new Set(data.map(p => 
+            p.professor ? `${p.professor.first_name || ""} ${p.professor.last_name || ""}`.trim() : "N/A"
+          ))]);
         } else {
-          setMessage("Failed to load projects.");
+          setMessage({ text: "Failed to load projects.", type: "error" });
         }
-      } catch {
-        setMessage("Network error.");
+      } catch (err) {
+        setMessage({ text: "Network error.", type: "error" });
       }
     };
     fetchProjects();
   }, []);
 
-  // Filter projects by search
   useEffect(() => {
-    setFiltered(
-      projects.filter(
-        (p) =>
-          p.title.toLowerCase().includes(search.toLowerCase()) ||
-          (p.description && p.description.toLowerCase().includes(search.toLowerCase()))
-      )
-    );
-  }, [search, projects]);
-
-  // Handle preference selection
-  const handlePrefChange = (pref, projectId) => {
-    setPreferences((prev) => {
-      // Prevent duplicate preferences
-      const updated = { ...prev };
-      Object.keys(updated).forEach((key) => {
-        if (updated[key] === projectId) updated[key] = null;
+    let result = [...projects];
+    
+    if (filters.department && filters.department !== "N/A") {
+      result = result.filter(p => (p.professor?.dept?.name || "N/A") === filters.department);
+    }
+    if (filters.mode && filters.mode !== "N/A") {
+      result = result.filter(p => (p.mode || "N/A") === filters.mode);
+    }
+    if (filters.duration && filters.duration !== "N/A") {
+      result = result.filter(p => (p.duration || "N/A") === filters.duration);
+    }
+    if (filters.professor && filters.professor !== "N/A") {
+      result = result.filter(p => {
+        const profName = p.professor ? 
+          `${p.professor.first_name || ""} ${p.professor.last_name || ""}`.trim() : "N/A";
+        return profName === filters.professor;
       });
-      updated[pref] = projectId;
-      return updated;
+    }
+    if (filters.search) {
+      const searchTerm = (filters.search || "").toString().toLowerCase();
+      result = result.filter(p => {
+        const title = (p.title || "").toString().toLowerCase();
+        const description = (p.description || "").toString().toLowerCase();
+        const profFirstName = (p.professor?.first_name || "").toString().toLowerCase();
+        const profLastName = (p.professor?.last_name || "").toString().toLowerCase();
+        
+        return (
+          title.includes(searchTerm) ||
+          description.includes(searchTerm) ||
+          profFirstName.includes(searchTerm) ||
+          profLastName.includes(searchTerm)
+        );
+      });
+    }
+    
+    setFilteredProjects(result);
+  }, [projects, filters]);
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSearchChange = (e) => {
+    setFilters(prev => ({
+      ...prev,
+      search: e.target.value
+    }));
+  };
+
+  const toggleProjectSelection = (project) => {
+    setSelectedProjects(prev => {
+      const isSelected = prev.some(p => p.id === project.id);
+      
+      if (isSelected) {
+        return prev.filter(p => p.id !== project.id);
+      }
+      
+      if (prev.length === 0 || 
+          (project.professor?.dept?.name === prev[0].professor?.dept?.name)) {
+        return [...prev, project];
+      } else {
+        setMessage({ 
+          text: "You can only select projects from the same department.", 
+          type: "error" 
+        });
+        return prev;
+      }
     });
   };
 
-  // Submit preferences
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setMessage("");
-    if (!preferences.pref1 || !preferences.pref2 || !preferences.pref3) {
-      setMessage("Please select all three preferences.");
+  const handleDragEnd = (result) => {
+    if (!result.destination) return;
+    
+    const items = Array.from(selectedProjects);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+    
+    setSelectedProjects(items);
+  };
+
+  const submitPreferences = async () => {
+    if (selectedProjects.length < 3) {
+      setMessage({ 
+        text: "Please select at least 3 projects.", 
+        type: "error" 
+      });
       return;
     }
-    if (
-      new Set([preferences.pref1, preferences.pref2, preferences.pref3]).size !== 3
-    ) {
-      setMessage("Preferences must be unique.");
-      return;
-    }
+    
     try {
       const res = await authFetch("/api/students/preferences", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(preferences),
+        body: JSON.stringify({
+          pref1: selectedProjects[0].id,
+          pref2: selectedProjects[1].id,
+          pref3: selectedProjects[2].id
+        }),
       });
+      
       if (res.ok) {
-        setMessage("Preferences submitted successfully!");
+        setMessage({ 
+          text: "Preferences submitted successfully!", 
+          type: "success" 
+        });
       } else {
         const err = await res.json();
-        setMessage(err.detail || "Failed to submit preferences.");
+        setMessage({ 
+          text: err.detail || "Failed to submit preferences.", 
+          type: "error" 
+        });
       }
-    } catch {
-      setMessage("Network error.");
+    } catch (err) {
+      setMessage({ 
+        text: "Network error.", 
+        type: "error" 
+      });
     }
   };
 
   return (
-    <div className="candidate-preferences">
+    <div className="preferences-container">
       <h1>Project Preferences</h1>
-      <input
-        type="text"
-        placeholder="Search projects..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="search-input"
-      />
-      <form onSubmit={handleSubmit}>
-        <div className="preferences-list">
-          {filtered.length === 0 && <div>No projects found.</div>}
-          {filtered.map((project) => (
-            <div key={project.id} className="project-card">
-              <div className="project-title">{project.title}</div>
-              <div className="project-desc">{project.description}</div>
-              <div className="pref-selectors">
-                <label>
-                  <input
-                    type="radio"
-                    name="pref1"
-                    checked={preferences.pref1 === project.id}
-                    onChange={() => handlePrefChange("pref1", project.id)}
-                  />
-                  Preference 1
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    name="pref2"
-                    checked={preferences.pref2 === project.id}
-                    onChange={() => handlePrefChange("pref2", project.id)}
-                  />
-                  Preference 2
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    name="pref3"
-                    checked={preferences.pref3 === project.id}
-                    onChange={() => handlePrefChange("pref3", project.id)}
-                  />
-                  Preference 3
-                </label>
-              </div>
-            </div>
-          ))}
+      
+      <div className="filters-section">
+        <div className="filter-row">
+          <div className="filter-group">
+            <label>Department:</label>
+            <select 
+              name="department" 
+              value={filters.department}
+              onChange={handleFilterChange}
+            >
+              <option value="">All Departments</option>
+              {departments.map((dept, index) => (
+                <option key={index} value={dept}>{dept}</option>
+              ))}
+            </select>
+          </div>
+          
+          <div className="filter-group">
+            <label>Mode:</label>
+            <select 
+              name="mode" 
+              value={filters.mode}
+              onChange={handleFilterChange}
+            >
+              <option value="">All Modes</option>
+              {modes.map((mode, index) => (
+                <option key={index} value={mode}>{mode}</option>
+              ))}
+            </select>
+          </div>
+          
+          <div className="filter-group">
+            <label>Duration:</label>
+            <select 
+              name="duration" 
+              value={filters.duration}
+              onChange={handleFilterChange}
+            >
+              <option value="">All Durations</option>
+              {durations.map((duration, index) => (
+                <option key={index} value={duration}>{duration}</option>
+              ))}
+            </select>
+          </div>
+          
+          <div className="filter-group">
+            <label>Professor:</label>
+            <select 
+              name="professor" 
+              value={filters.professor}
+              onChange={handleFilterChange}
+            >
+              <option value="">All Professors</option>
+              {professors.map((prof, index) => (
+                <option key={index} value={prof}>{prof}</option>
+              ))}
+            </select>
+          </div>
         </div>
-        <button type="submit" className="submit-btn">
-          Submit Preferences
-        </button>
-      </form>
-      {message && <div className="message">{message}</div>}
+        
+        <div className="search-group">
+          <input
+            type="text"
+            placeholder="Search projects..."
+            value={filters.search}
+            onChange={handleSearchChange}
+          />
+        </div>
+      </div>
+      
+      <div className="projects-section">
+        <div className="available-projects">
+          <h2>Available Projects ({filteredProjects.length})</h2>
+          <div className="projects-table-container">
+            <table className="projects-table">
+              <thead>
+                <tr>
+                  <th>Select</th>
+                  <th>Title</th>
+                  <th>Description</th>
+                  <th>Department</th>
+                  <th>Professor</th>
+                  <th>Mode</th>
+                  <th>Duration</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredProjects.length === 0 ? (
+                  <tr>
+                    <td colSpan="7">No projects found matching your filters.</td>
+                  </tr>
+                ) : (
+                  filteredProjects.map(project => (
+                    <tr 
+                      key={project.id} 
+                      className={selectedProjects.some(p => p.id === project.id) ? "selected" : ""}
+                    >
+                      <td>
+                        <input
+                          type="checkbox"
+                          checked={selectedProjects.some(p => p.id === project.id)}
+                          onChange={() => toggleProjectSelection(project)}
+                        />
+                      </td>
+                      <td>{project.title || "N/A"}</td>
+                      <td>{project.description || "N/A"}</td>
+                      <td>{project.professor?.dept?.name || "N/A"}</td>
+                      <td>
+                        {project.professor ? 
+                          `${project.professor.first_name || ""} ${project.professor.last_name || ""}`.trim() : 
+                          "N/A"}
+                      </td>
+                      <td>{project.mode || "N/A"}</td>
+                      <td>{project.duration || "N/A"}</td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <div className="selected-projects">
+          <h2>Selected Projects ({selectedProjects.length})</h2>
+          {selectedProjects.length === 0 ? (
+            <p>No projects selected yet.</p>
+          ) : (
+            <div className="selected-list">
+              <div className="department-warning">
+                {selectedProjects.length > 0 && 
+                  `All projects from ${selectedProjects[0].professor?.dept?.name || "N/A"} department`}
+              </div>
+              
+              <DragDropContext onDragEnd={handleDragEnd}>
+                <Droppable droppableId="selected-projects-list">
+                  {(provided) => (
+                    <ol 
+                      {...provided.droppableProps} 
+                      ref={provided.innerRef}
+                      className="draggable-list"
+                    >
+                      {selectedProjects.map((project, index) => (
+                        <Draggable 
+                          key={project.id} 
+                          draggableId={project.id.toString()} 
+                          index={index}
+                        >
+                          {(provided, snapshot) => (
+                            <li 
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              className={`selected-item ${snapshot.isDragging ? "dragging" : ""}`}
+                            >
+                              <div className="drag-handle">☰</div>
+                              <div className="selected-content">
+                                <div className="selected-rank">Preference {index + 1}</div>
+                                <div className="selected-title">{project.title || "N/A"}</div>
+                                <div className="selected-prof">
+                                  {project.professor ? 
+                                    `${project.professor.first_name || ""} ${project.professor.last_name || ""}`.trim() : 
+                                    "N/A"}
+                                </div>
+                              </div>
+                              <button 
+                                onClick={() => toggleProjectSelection(project)}
+                                className="remove-btn"
+                              >
+                                Remove
+                              </button>
+                            </li>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </ol>
+                  )}
+                </Droppable>
+              </DragDropContext>
+              
+              {selectedProjects.length >= 3 && (
+                <button 
+                  onClick={submitPreferences}
+                  className="submit-btn"
+                >
+                  Submit Preferences
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+      
+      {message.text && (
+        <div className={`message ${message.type}`}>
+          {message.text}
+        </div>
+      )}
     </div>
   );
 }
