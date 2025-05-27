@@ -1,8 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Response
+from fastapi import APIRouter, Depends, HTTPException, status, Response, UploadFile, File,Form
 from sqlalchemy.orm import Session
+from datetime import date
 
 from ..schemas.token import Token
-from ..schemas.students import StudentRegister, ShowStudent, StudentUpdate
+from ..schemas.students import  ShowStudent, StudentUpdate
 from ..schemas.projects import ShowProject, ProjectPreferences
 from ..models.users import User, Student
 from ..models.projects import Project
@@ -14,6 +15,8 @@ from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 from ..security.oauth2 import get_current_user
+import os
+import shutil
 
 router =APIRouter(
     prefix="/api/students",
@@ -24,46 +27,101 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 get_db=get_db
 
-@router.post("/register",response_model=Token)
-def register(request:StudentRegister,db:Session=Depends(get_db)):
+UPLOAD_DIR="uploads"
+
+def saveFile(file:UploadFile,folder:str,email:str):
+    ext=file.filename.split(".")[-1]
+
+    fileemail=email.replace("@","at").replace(".","dot")
     
-    user=db.query(User).filter(User.email==request.email).first()
+    filename=f"{fileemail}.{ext}"
+    folder_path=os.path.join(UPLOAD_DIR,folder)
+    os.makedirs(folder_path,exist_ok=True)
+
+    file_path=os.path.join(folder_path,filename)
+    with open(file_path,"wb") as buffer:
+        shutil.copyfileobj(file.file,buffer)
+    return f"{file_path}"
+
+
+@router.post("/register",response_model=Token)
+def register(
+    # Basic info
+    name: str = Form(...),
+    email: str = Form(...),
+    password: str = Form(...),
+
+    # Student fields
+    phone: str = Form(...),
+    dob: date = Form(...),
+    address: str = Form(...),
+    state: str = Form(...),
+    guardianName: str = Form(...),
+    guardianRelation: str = Form(...),
+    guardianPhone: str = Form(...),
+    institution: str = Form(...),
+    program: str = Form(...),
+    department: str = Form(...),
+    year: str = Form(...),
+    instituteLocation: str = Form(...),
+    instituteState: str = Form(...),
+    currentSemesterCgpa: float = Form(...),
+    UG: str = Form(...),
+    cgpa12: float = Form(...),
+    board12: str = Form(...),
+    cgpa10: float = Form(...),
+    board10: str = Form(...),
+    regPayment: str = Form(...),
+
+    # Files
+    regPaymentScreenshot: UploadFile = File(...),
+    profilePhoto: UploadFile = File(...),
+
+    db: Session = Depends(get_db)
+):
+    
+    user=db.query(User).filter(User.email==email).first()
     if user:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
-    hashed_password = pwd_context.hash(request.password)
-    new_user=       new_user = User(
-            
-            email=request.email,
-            password=hashed_password,
-            role='student'
+    hashed_password = pwd_context.hash(password)
+    new_user=User(
+        email=email,
+        password=hashed_password,
+        role='student'
     )
     
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
+    
+    reg_screenshot_path=saveFile(file=regPaymentScreenshot,folder="regPaymentScreenshots",email=new_user.email)
+    profile_photo_path=saveFile(file=profilePhoto,folder="profilePhotos",email=new_user.email)
+
     new_student = Student(
         user_id=new_user.id,
-        name=request.name,
-        phone=request.phone,
-        dob=request.dob,
-        address=request.address,
-        state=request.state,
-        guardianName=request.guardianName,
-        guardianRelation=request.guardianRelation,
-        guardianPhone=request.guardianPhone,
-        institution=request.institution,
-        program=request.program,
-        department=request.department,
-        year=request.year,
-        instituteLocation=request.instituteLocation,
-        instituteState=request.instituteState,
-        currentSemesterCgpa=request.currentSemesterCgpa,
-        UG=request.UG,
-        cgpa12=request.cgpa12,
-        board12=request.board12,
-        cgpa10=request.cgpa10,
-        board10=request.board10,
-        regPayment=request.regPayment,
+        name=name,
+        phone=phone,
+        dob=dob,
+        address=address,
+        state=state,
+        guardianName=guardianName,
+        guardianRelation=guardianRelation,
+        guardianPhone=guardianPhone,
+        institution=institution,
+        program=program,
+        department=department,
+        year=year,
+        instituteLocation=instituteLocation,
+        instituteState=instituteState,
+        currentSemesterCgpa=currentSemesterCgpa,
+        UG=UG,
+        cgpa12=cgpa12,
+        board12=board12,
+        cgpa10=cgpa10,
+        board10=board10,
+        regPayment=regPayment,
+        regPaymentScreenshotPath=reg_screenshot_path,
+        profilePhotoPath=profile_photo_path
         # add other fields if needed
     )
 
