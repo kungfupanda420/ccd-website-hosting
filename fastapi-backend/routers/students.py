@@ -152,20 +152,66 @@ def get_me(db: Session=Depends(get_db),current_user: User=Depends(get_current_us
     
     
 @router.put("/me/edit",response_model=ShowStudent)
-def edit_me(request:StudentUpdate,db: Session=Depends(get_db),current_user: User=Depends(get_current_user)):
+def edit_me(
+    # Updatable fields (add/remove as per your needs)
+    name: str = Form(None),
+    phone: str = Form(None),
+    dob: date = Form(None),
+    address: str = Form(None),
+    state: str = Form(None),
+    guardianName: str = Form(None),
+    guardianRelation: str = Form(None),
+    guardianPhone: str = Form(None),
+    institution: str = Form(None),
+    program: str = Form(None),
+    department: str = Form(None),
+    year: str = Form(None),
+    instituteLocation: str = Form(None),
+    instituteState: str = Form(None),
+    currentSemesterCgpa: float = Form(None),
+    UG: str = Form(None),
+    cgpa12: float = Form(None),
+    board12: str = Form(None),
+    cgpa10: float = Form(None),
+    board10: str = Form(None),
+    regPayment: str = Form(None),
+
+    
+    regPaymentScreenshot: UploadFile = File(None),
+    profilePhoto: UploadFile = File(None),
+
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     if current_user.role != 'student':
         raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
-    
-    student=db.query(Student).filter(Student.user_id==current_user.id).first()
+
+    student = db.query(Student).filter(Student.user_id == current_user.id).first()
     if not student:
         raise HTTPException(status_code=404, detail="Student not found")
-    
-    for key,value in request.model_dump(exclude_unset=True).items():
-        if hasattr(student, key):
+
+    # Update fields if they are provided
+    update_fields = locals()
+    for key in [
+        'name', 'phone', 'dob', 'address', 'state',
+        'guardianName', 'guardianRelation', 'guardianPhone',
+        'institution', 'program', 'department', 'year',
+        'instituteLocation', 'instituteState', 'currentSemesterCgpa',
+        'UG', 'cgpa12', 'board12', 'cgpa10', 'board10', 'regPayment'
+    ]:
+        value = update_fields.get(key)
+        if value is not None:
             setattr(student, key, value)
-    
+
+    # Save new files if provided
+    if regPaymentScreenshot:
+        student.regPaymentScreenshotPath = saveFile(file=regPaymentScreenshot,folder="regPaymentScreenshots",email= current_user.email)
+
+    if profilePhoto:
+        student.profilePhotoPath = saveFile(profilePhoto, "profilePhotos", current_user.email)
+
     db.commit()
-    
+    db.refresh(student)
     return student
 
 @router.get("/allProjects",response_model=list[ShowProject])
