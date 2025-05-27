@@ -11,6 +11,7 @@ import CandidateDashboard from './components/Candidate_dashboard.js';
 import Professor_dashboard from './components/Professor_dashboard.js';
 import CandidateProfile from './components/Candidate_profile.js';
 import CandidatePreferences from './components/candidate_preferences.js';
+import { startTransition } from 'react';
 // import FaqStudents from './pages/FaqStudents';
 // import Roadmap from './components/Roadmap';
 // import Preptips from './components/Preptips';
@@ -42,7 +43,7 @@ const MentorFilter = lazy(() => import('./components/MentorFilter'));
 function App() {
   const { pathname } = useLocation();
   const [isDarkMode, setIsDarkMode] = useState(false);
-
+  const [hashMap, setHashMap] = useState({});
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     const theme = localStorage.getItem("theme");
@@ -66,6 +67,16 @@ function App() {
     }
   };
 
+  // List of routes where Navbar and Footer should NOT be shown
+  const noNavFooterRoutes = [
+    '/professor_dashboard',
+    '/CandidatePreferences',
+    '/candidate_profile',
+    '/Candidatedashboard',
+    '/candidatedashboard',
+  ];
+  const hideNavFooter = noNavFooterRoutes.includes(pathname);
+
   return (
     <div className={`App ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
       <AnimatedCursor
@@ -83,7 +94,9 @@ function App() {
           mixBlendMode: "difference"
         }}
       />
-      <Navbar isDarkMode={isDarkMode} onToggleTheme={handleToggleTheme} />
+      {!hideNavFooter && (
+        <Navbar isDarkMode={isDarkMode} onToggleTheme={handleToggleTheme} />
+      )}
 
       <Suspense fallback={<Loader />}>
         <Routes>
@@ -118,7 +131,7 @@ function App() {
           <Route path='/sip' element={<MentorFilter />} />
         </Routes>
       </Suspense>
-      <Footer />
+      {!hideNavFooter && <Footer />}
     </div>
   );
 }

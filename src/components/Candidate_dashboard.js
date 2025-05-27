@@ -50,7 +50,7 @@ function CandidateDashboard() {
         <button className="sidebar-btn">Fee Payment</button>
         <button className="sidebar-btn">Upload Docs</button>
         <button className="sidebar-btn" onClick={() => navigate('/CandidatePreferences')}>project preferences</button>
-        <button className="sidebar-btn" onClick={() => navigate('/logout')}>Logout</button>
+        <button className="sidebar-btn" onClick={() => navigate('/')}>Logout</button>
         
       </div>
 

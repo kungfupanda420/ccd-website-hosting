@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../css/Professor_dashboard.css";
 import { useNavigate } from "react-router-dom";
-import { authFetch } from "../utils/authFetch"; // Assuming you have a utility for authenticated fetch
+import { authFetch } from "../utils/authFetch";
 
 function Professor_dashboard() {
   const [activeTab, setActiveTab] = useState(null);
@@ -209,7 +209,7 @@ function Professor_dashboard() {
     <div className="dashboard-container">
       <button onClick={() => setActiveTab("add")}>Add Project</button>
       <button onClick={() => setActiveTab("view")}>View Projects</button>
-      <button onClick={handleLogout} style={{ background: "#bdbdbd", color: "#222" }}>Logout</button>
+      <button onClick={handleLogout} >Logout</button>
 
       {activeTab === "add" && (
         <div className="add-project-form">

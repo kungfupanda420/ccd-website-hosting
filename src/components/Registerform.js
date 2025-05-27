@@ -22,7 +22,7 @@ function Registerform() {
     program: "",
     department: "",
     year: "",
-    instituteLocation: "",
+    instituteLocation: "", 
     instituteState: "",
     currentSemesterCgpa: "",
     UG: "",
@@ -97,98 +97,95 @@ function Registerform() {
   };
 
   
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (step !== 6) return;
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (step !== 6) return;
 
-    if (!window.confirm("Are you sure you want to submit your registration?")) return;
+  if (!window.confirm("Are you sure you want to submit your registration?")) return;
 
-    setIsSubmitting(true);
+  setIsSubmitting(true);
 
-    try {
-      // Convert files to base64 if present
-      const profilePhotoBase64 = formData.profilePhoto ? await toBase64(formData.profilePhoto) : null;
-      const paymentScreenshotBase64 = formData.paymentScreenshot ? await toBase64(formData.paymentScreenshot) : null;
+  try {
+    // Prepare FormData for multipart/form-data
+    const form = new FormData();
+    form.append("name", formData.name);
+    form.append("email", formData.email);
+    form.append("password", formData.password);
+    form.append("phone", formData.phone);
+    form.append("dob", formData.dob);
+    form.append("address", formData.address);
+    form.append("state", formData.state);
+    form.append("guardianName", formData.guardianName);
+    form.append("guardianRelation", formData.guardianRelation);
+    form.append("guardianPhone", formData.guardianPhone);
+    form.append("institution", formData.institution);
+    form.append("program", formData.program);
+    form.append("department", formData.department);
+    form.append("year", formData.year);
+    form.append("instituteLocation", formData.instituteLocation);
+    form.append("instituteState", formData.instituteState);
+    form.append("currentSemesterCgpa", formData.currentSemesterCgpa);
+    form.append("UG", formData.UG);
+    form.append("cgpa12", formData.cgpa12);
+    form.append("board12", formData.board12);
+    form.append("cgpa10", formData.cgpa10);
+    form.append("board10", formData.board10);
+    form.append("regPayment", formData.paymentId);
+    form.append("role", formData.role);
 
-      // Prepare payload matching backend schema
-      const payload = {
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-        phone: formData.phone,
-        dob: formData.dob,
-        address: formData.address,
-        state: formData.state,
-        guardianName: formData.guardianName,
-        guardianRelation: formData.guardianRelation,
-        guardianPhone: formData.guardianPhone,
-        institution: formData.institution,
-        program: formData.program,
-        department: formData.department,
-        year: formData.year,
-        instituteLocation: formData.instituteLocation,
-        instituteState: formData.instituteState,
-        currentSemesterCgpa: formData.currentSemesterCgpa,
-        UG: formData.UG,
-        cgpa12: formData.cgpa12,
-        board12: formData.board12,
-        cgpa10: formData.cgpa10,
-        board10: formData.board10,
-        regPayment: formData.paymentId, // Mapping paymentId to regPayment
-        // Note: profilePhoto and paymentScreenshot are not in the backend schema
-        // You might want to confirm with backend team if these should be included
-      };
-
-      const response = await fetch("/api/students/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.detail || data.message || "Registration failed");
-
-      // Reset form
-      console.log("Registration successful:", data);
-      setFormData({
-        name: "",
-        phone: "",
-        dob: "",
-        address: "",
-        state: "",
-        guardianName: "",
-        guardianRelation: "",
-        guardianPhone: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-        profilePhoto: null,
-        institution: "",
-        program: "",
-        department: "",
-        year: "",
-        instituteLocation: "",
-        instituteState: "",
-        currentSemesterCgpa: "",
-        UG: "",
-        cgpa12: "",
-        board12: "",
-        cgpa10: "",
-        board10: "",
-        paymentId: "",
-        paymentScreenshot: null,
-        role: "student",
-      });
-      setStep(1);
-      alert("Registration successful!");
-      // Navigate("");
-    } catch (error) {
-      console.error("Submission error:", error.message);
-      alert("Registration failed: " + error.message);
-    } finally {
-      setIsSubmitting(false);
+    if (formData.profilePhoto) {
+      form.append("profilePhoto", formData.profilePhoto);
     }
-  };
+    if (formData.paymentScreenshot) {
+      form.append("paymentScreenshot", formData.paymentScreenshot);
+    }
+
+    const response = await fetch("/api/students/register", {
+      method: "POST",
+      body: form,
+    });
+
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.detail || data.message || "Registration failed");
+
+    // Reset form
+    setFormData({
+      name: "",
+      phone: "",
+      dob: "",
+      address: "",
+      state: "",
+      guardianName: "",
+      guardianRelation: "",
+      guardianPhone: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      profilePhoto: null,
+      institution: "",
+      program: "",
+      department: "",
+      year: "",
+      instituteLocation: "",
+      instituteState: "",
+      currentSemesterCgpa: "",
+      UG: "",
+      cgpa12: "",
+      board12: "",
+      cgpa10: "",
+      board10: "",
+      paymentId: "",
+      paymentScreenshot: null,
+      role: "student",
+    });
+    setStep(1);
+    alert("Registration successful!");
+  } catch (error) {
+    alert("Registration failed: " + error.message);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   // Function to convert file to base64
   const toBase64 = (file) =>
