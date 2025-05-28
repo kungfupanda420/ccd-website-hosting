@@ -207,146 +207,197 @@ function Professor_dashboard() {
 
   return (
     <div className="dashboard-container">
-      <button onClick={() => setActiveTab("add")}>Add Project</button>
-      <button onClick={() => setActiveTab("view")}>View Projects</button>
-      <button onClick={handleLogout} >Logout</button>
+      <div className="dashboard-sidebar">
+        <button className="sidebar-btn" onClick={() => setActiveTab("add")}>Add Project</button>
+        <button className="sidebar-btn" onClick={() => setActiveTab("view")}>View Projects</button>
+        <button className="sidebar-btn" onClick={handleLogout}>Logout</button>
+      </div>
 
-      {activeTab === "add" && (
-        <div className="add-project-form">
-          <h2>Add Project</h2>
-          <form onSubmit={handleSubmit}>
-            <input
-              type="text"
-              placeholder="Project Title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-            />
-            <textarea
-              placeholder="Project Description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
-            />
-            <input
-              type="number"
-              placeholder="Number of Interns"
-              value={no_of_interns}
-              onChange={(e) => setNoOfInterns(e.target.value)}
-              required
-            />
-            <input
-              type="text"
-              placeholder="Duration"
-              value={duration}
-              onChange={(e) => setDuration(e.target.value)}
-              required
-            />
-            <input
-              type="text"
-              placeholder="Mode (e.g. Remote/Onsite)"
-              value={mode}
-              onChange={(e) => setMode(e.target.value)}
-              required
-            />
-            <input
-              type="text"
-              placeholder="Prerequisites"
-              value={prerequisites}
-              onChange={(e) => setPrerequisites(e.target.value)}
-              required
-            />
-            <button type="submit">Submit</button>
-          </form>
-          {message && <p style={{ marginTop: "10px", color: "red" }}>{message}</p>}
-        </div>
-      )}
+            <div className="dashboard-main">
+        {activeTab === "add" && (
+          <div className="add-project-form">
+            <h2>Add Project</h2>
+            <form onSubmit={handleSubmit}>
+              <input
+                type="text"
+                placeholder="Project Title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required
+              />
+              <textarea
+                placeholder="Project Description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                required
+              />
+              <input
+                type="number"
+                placeholder="Number of Interns"
+                value={no_of_interns}
+                onChange={(e) => setNoOfInterns(e.target.value)}
+                required
+              />
+              {/* Duration dropdown */}
+              <select
+                value={duration}
+                onChange={(e) => setDuration(e.target.value)}
+                required
+                style={{ marginBottom: "14px", padding: "10px", borderRadius: "5px", border: "1.5px solid #bdbdbd", fontSize: "15px", width: "100%" }}
+              >
+                <option value="" disabled>
+                  Select Duration
+                </option>
+                <option value="1 month">1 month</option>
+                <option value="2 months">2 months</option>
+              </select>
+              {/* Mode dropdown */}
+              <select
+                value={mode}
+                onChange={(e) => setMode(e.target.value)}
+                required
+                style={{ marginBottom: "14px", padding: "10px", borderRadius: "5px", border: "1.5px solid #bdbdbd", fontSize: "15px", width: "100%" }}
+              >
+                <option value="" disabled>
+                  Select Mode
+                </option>
+                <option value="Remote">Remote</option>
+                <option value="Onsite">Onsite</option>
+                <option value="Hybrid">Hybrid</option>
+              </select>
+              <input
+                type="text"
+                placeholder="Prerequisites"
+                value={prerequisites}
+                onChange={(e) => setPrerequisites(e.target.value)}
+                required
+              />
+              <button type="submit">Submit</button>
+            </form>
+            {message && <p style={{ marginTop: "10px", color: "red" }}>{message}</p>}
+          </div>
+        )}
 
-      {activeTab === "view" && (
-        <div className="view-projects">
-          <h2>Projects List</h2>
-          {loadingProjects ? (
-            <p>Loading...</p>
-          ) : projects.length === 0 ? (
-            <p>No projects found.</p>
-          ) : (
-            <ul>
-              {projects.map((project) => (
-                <li key={project.id} style={{ marginBottom: "20px" }}>
-                  {editingId === project.id ? (
-                    <form onSubmit={(e) => handleEditSubmit(e, project.id)}>
-                      <input
-                        type="text"
-                        name="title"
-                        value={editFields.title}
-                        onChange={handleEditChange}
-                        required
-                      />
-                      <textarea
-                        name="description"
-                        value={editFields.description}
-                        onChange={handleEditChange}
-                        required
-                      />
-                      <input
-                        type="number"
-                        name="no_of_interns"
-                        value={editFields.no_of_interns}
-                        onChange={handleEditChange}
-                        required
-                      />
-                      <input
-                        type="text"
-                        name="duration"
-                        value={editFields.duration}
-                        onChange={handleEditChange}
-                        required
-                      />
-                      <input
-                        type="text"
-                        name="mode"
-                        value={editFields.mode}
-                        onChange={handleEditChange}
-                        required
-                      />
-                      <input
-                        type="text"
-                        name="prerequisites"
-                        value={editFields.prerequisites}
-                        onChange={handleEditChange}
-                        required
-                      />
-                      <button type="submit">Save</button>
-                      <button type="button" onClick={() => setEditingId(null)}>
-                        Cancel
-                      </button>
-                    </form>
-                  ) : (
-                    <>
-                      <strong>{project.title}</strong> - {project.description}
-                      <br />
-                      <span>
-                        Interns: {project.no_of_interns} | Duration: {project.duration} | Mode: {project.mode} | Prerequisites: {project.prerequisites}
-                      </span>
-                      <br />
-                      <button onClick={() => handleEditClick(project)} style={{ marginTop: "8px" }}>
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDelete(project.id)}
-                        style={{ marginTop: "8px", marginLeft: "8px", background: "#d32f2f", color: "#fff" }}
-                      >
-                        Delete
-                      </button>
-                    </>
-                  )}
-                </li>
-              ))}
-            </ul>
-          )}
-          {message && <p style={{ marginTop: "10px", color: "red" }}>{message}</p>}
-        </div>
-      )}
+        {activeTab === "view" && (
+          <div className="view-projects">
+            <h2>Projects List</h2>
+            {loadingProjects ? (
+              <p>Loading...</p>
+            ) : projects.length === 0 ? (
+              <p>No projects found.</p>
+            ) : (
+              <ul>
+                {projects.map((project) => (
+                  <li key={project.id} style={{ marginBottom: "20px" }}>
+                    {editingId === project.id ? (
+                      <form onSubmit={(e) => handleEditSubmit(e, project.id)}>
+                        <input
+                          type="text"
+                          name="title"
+                          value={editFields.title}
+                          onChange={handleEditChange}
+                          required
+                        />
+                        <textarea
+                          name="description"
+                          value={editFields.description}
+                          onChange={handleEditChange}
+                          required
+                        />
+                        <input
+                          type="number"
+                          name="no_of_interns"
+                          value={editFields.no_of_interns}
+                          onChange={handleEditChange}
+                          required
+                        />
+                        {/* Duration dropdown */}
+                        <select
+                          name="duration"
+                          value={editFields.duration}
+                          onChange={handleEditChange}
+                          required
+                          style={{ marginBottom: "14px", padding: "10px", borderRadius: "5px", border: "1.5px solid #bdbdbd", fontSize: "15px", width: "100%" }}
+                        >
+                          <option value="" disabled>
+                            Select Duration
+                          </option>
+                          <option value="1 month">1 month</option>
+                          <option value="2 months">2 months</option>
+                        </select>
+                        {/* Mode dropdown */}
+                        <select
+                          name="mode"
+                          value={editFields.mode}
+                          onChange={handleEditChange}
+                          required
+                          style={{ marginBottom: "14px", padding: "10px", borderRadius: "5px", border: "1.5px solid #bdbdbd", fontSize: "15px", width: "100%" }}
+                        >
+                          <option value="" disabled>
+                            Select Mode
+                          </option>
+                          <option value="Remote">Remote</option>
+                          <option value="Onsite">Onsite</option>
+                          <option value="Hybrid">Hybrid</option>
+                        </select>
+                        <input
+                          type="text"
+                          name="prerequisites"
+                          value={editFields.prerequisites}
+                          onChange={handleEditChange}
+                          required
+                        />
+                        <button type="submit">Save</button>
+                        <button type="button" onClick={() => setEditingId(null)}>
+                          Cancel
+                        </button>
+                      </form>
+                    ) : (
+                      <>
+                        <strong>{project.title}</strong> - {project.description}
+                        <br />
+                        <span>
+                          Interns: {project.no_of_interns} | Duration: {project.duration} | Mode: {project.mode} | Prerequisites: {project.prerequisites}
+                        </span>
+                        <br />
+                        <div style={{ display: "flex", gap: "12px", marginTop: "12px" }}>
+                          <button
+                            className="sidebar-btn"
+                            style={{ width: "120px", marginTop: 0 }}
+                            onClick={() => handleEditClick(project)}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            className="sidebar-btn"
+                            style={{
+                              width: "120px",
+                              marginTop: 0,
+                              background: "#d32f2f",
+                              color: "#fff",
+                              borderColor: "#d32f2f",
+                            }}
+                            onClick={() => handleDelete(project.id)}
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {message && <p style={{ marginTop: "10px", color: "red" }}>{message}</p>}
+          </div>
+        )}
+        {!activeTab && (
+          <div >
+            <h2>Welcome to Professor Dashboard</h2>
+            <p>Select an option from the left menu.</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

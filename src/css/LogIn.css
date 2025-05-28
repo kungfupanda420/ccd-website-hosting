@@ -1,3 +1,14 @@
+:root {
+  --textColor: #1565c0;
+  --grayBorderColor: #b0bec5;
+  --backgroundColor: #e3edf9;
+  --inputText: #222;
+}
+
+body {
+  background: var(--backgroundColor);
+}
+
 .loginContainer {
   display: flex;
   width: 100vw;
@@ -5,6 +16,7 @@
   justify-content: center;
   align-items: center;
   overflow-x: hidden;
+  background: var(--backgroundColor);
 }
 
 .AdminLogIn {
@@ -16,33 +28,41 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  background: #fff;
+  color: var(--inputText);
 }
+
 .AdminLogIn .mainHeading {
   color: var(--textColor);
   text-transform: uppercase;
 }
+
 .formLogIn {
   width: 80%;
 }
+
 .fillBoxInput {
   margin: 1.5rem 0;
   position: relative;
 }
-.fillBoxInput>input  {
+
+.fillBoxInput > input {
   width: 100%;
   padding: 0.8rem 0.75rem;
   background-color: transparent;
   border: none;
   outline: none;
   border-bottom: 1px solid var(--grayBorderColor);
-  color: white;
+  color: var(--inputText);
   font-weight: 500;
   font-size: 1.15rem;
-  transition:all 0.25s ease;
+  transition: all 0.25s ease;
 }
-.fillBoxInput input:focus{
-    border-bottom: 1px solid var(--textColor);
+
+.fillBoxInput input:focus {
+  border-bottom: 1px solid var(--textColor);
 }
+
 .fillBoxInput p {
   color: red;
   text-align-last: right;
@@ -55,11 +75,18 @@
   color: var(--grayBorderColor);
   right: 10px;
   top: 12px;
+  cursor: pointer;
 }
+
+.login-btn-row {
+  display: flex;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
 .loginBtn {
   padding: 1rem 1.5rem;
   width: 100%;
-  margin: 2rem 0;
   font-size: 1rem;
   font-weight: bold;
   text-transform: uppercase;
@@ -67,36 +94,65 @@
   border: none;
   border-radius: 0.25rem;
   background-color: var(--textColor);
+  color: #fff;
+  transition: background 0.2s;
 }
 
+.loginBtn:disabled {
+  background: #b0bec5;
+  cursor: not-allowed;
+}
+
+.forgotBtn {
+  background: #fff;
+  color: var(--textColor);
+  border: 1.5px solid var(--textColor);
+}
+
+.forgotBtn:hover:not(:disabled) {
+  background: var(--textColor);
+  color: #fff;
+}
+
+.error-message {
+  color: #d32f2f;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.forgot-message {
+  color: #357a38;
+  margin-bottom: 1rem;
+  text-align: center;
+}
 
 /* responsive */
-
-@media screen and (max-width:1025px) {
-  .AdminLogIn
-  {
+@media screen and (max-width: 1025px) {
+  .AdminLogIn {
     width: 45%;
   }
 }
 
-@media screen and (max-width:769px) {
-  .AdminLogIn
-  {
+@media screen and (max-width: 769px) {
+  .AdminLogIn {
     width: 60%;
   }
 }
 
-@media screen and (max-width:426px) {
-  .AdminLogIn
-  {
+@media screen and (max-width: 426px) {
+  .AdminLogIn {
     width: 90%;
-  }.formLogIn {
-  width: 90%;
-}
-.loginBtn
-{
-  font-size: 0.85rem;
-  margin: 1rem 0;
-}
-
+  }
+  .formLogIn {
+    width: 90%;
+  }
+  .login-btn-row {
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 1rem 0;
+  }
+  .loginBtn {
+    font-size: 0.85rem;
+    margin: 0;
+  }
 }
