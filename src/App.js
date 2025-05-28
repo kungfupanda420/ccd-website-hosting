@@ -11,6 +11,7 @@ import CandidateDashboard from './components/Candidate_dashboard.js';
 import Professor_dashboard from './components/Professor_dashboard.js';
 import CandidateProfile from './components/Candidate_profile.js';
 import CandidatePreferences from './components/candidate_preferences.js';
+import ResetPassword from './components/Reset_password.js';
 import { startTransition } from 'react';
 // import FaqStudents from './pages/FaqStudents';
 // import Roadmap from './components/Roadmap';
@@ -129,6 +130,7 @@ function App() {
           <Route path='/CandidatePreferences' element={<CandidatePreferences />} />
           <Route path='/candidate_profile' element={<CandidateProfile/>} />
           <Route path='/sip' element={<MentorFilter />} />
+          <Route path='reset_password' element={<ResetPassword />} />
         </Routes>
       </Suspense>
       {!hideNavFooter && <Footer />}

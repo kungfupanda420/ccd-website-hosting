@@ -29,13 +29,11 @@ function CandidatePreferences() {
           setProjects(data);
           setFilteredProjects(data);
 
-          // Extract unique filter options with proper null checks
-          setDepartments([...new Set(data.map(p => p.professor?.dept?.name || "N/A"))]);
+          // Extract unique filter options with correct keys
+          setDepartments([...new Set(data.map(p => p.professor?.department?.name || "N/A"))]);
           setModes([...new Set(data.map(p => p.mode || "N/A"))]);
           setDurations([...new Set(data.map(p => p.duration || "N/A"))]);
-          setProfessors([...new Set(data.map(p => 
-            p.professor ? `${p.professor.first_name || ""} ${p.professor.last_name || ""}`.trim() : "N/A"
-          ))]);
+          setProfessors([...new Set(data.map(p => p.professor?.name || "N/A"))]);
         } else {
           setMessage({ text: "Failed to load projects.", type: "error" });
         }
@@ -50,7 +48,7 @@ function CandidatePreferences() {
     let result = [...projects];
     
     if (filters.department && filters.department !== "N/A") {
-      result = result.filter(p => (p.professor?.dept?.name || "N/A") === filters.department);
+      result = result.filter(p => (p.professor?.department?.name || "N/A") === filters.department);
     }
     if (filters.mode && filters.mode !== "N/A") {
       result = result.filter(p => (p.mode || "N/A") === filters.mode);
@@ -59,25 +57,18 @@ function CandidatePreferences() {
       result = result.filter(p => (p.duration || "N/A") === filters.duration);
     }
     if (filters.professor && filters.professor !== "N/A") {
-      result = result.filter(p => {
-        const profName = p.professor ? 
-          `${p.professor.first_name || ""} ${p.professor.last_name || ""}`.trim() : "N/A";
-        return profName === filters.professor;
-      });
+      result = result.filter(p => (p.professor?.name || "N/A") === filters.professor);
     }
     if (filters.search) {
       const searchTerm = (filters.search || "").toString().toLowerCase();
       result = result.filter(p => {
         const title = (p.title || "").toString().toLowerCase();
         const description = (p.description || "").toString().toLowerCase();
-        const profFirstName = (p.professor?.first_name || "").toString().toLowerCase();
-        const profLastName = (p.professor?.last_name || "").toString().toLowerCase();
-        
+        const profName = (p.professor?.name || "").toString().toLowerCase();
         return (
           title.includes(searchTerm) ||
           description.includes(searchTerm) ||
-          profFirstName.includes(searchTerm) ||
-          profLastName.includes(searchTerm)
+          profName.includes(searchTerm)
         );
       });
     }
@@ -103,18 +94,18 @@ function CandidatePreferences() {
   const toggleProjectSelection = (project) => {
     setSelectedProjects(prev => {
       const isSelected = prev.some(p => p.id === project.id);
-      
       if (isSelected) {
         return prev.filter(p => p.id !== project.id);
       }
-      
-      if (prev.length === 0 || 
-          (project.professor?.dept?.name === prev[0].professor?.dept?.name)) {
+      if (
+        prev.length === 0 ||
+        (project.professor?.department?.name === prev[0].professor?.department?.name)
+      ) {
         return [...prev, project];
       } else {
-        setMessage({ 
-          text: "You can only select projects from the same department.", 
-          type: "error" 
+        setMessage({
+          text: "You can only select projects from the same department.",
+          type: "error"
         });
         return prev;
       }
@@ -123,23 +114,20 @@ function CandidatePreferences() {
 
   const handleDragEnd = (result) => {
     if (!result.destination) return;
-    
     const items = Array.from(selectedProjects);
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
-    
     setSelectedProjects(items);
   };
 
   const submitPreferences = async () => {
     if (selectedProjects.length < 3) {
-      setMessage({ 
-        text: "Please select at least 3 projects.", 
-        type: "error" 
+      setMessage({
+        text: "Please select at least 3 projects.",
+        type: "error"
       });
       return;
     }
-    
     try {
       const res = await authFetch("/api/students/preferences", {
         method: "POST",
@@ -150,23 +138,22 @@ function CandidatePreferences() {
           pref3: selectedProjects[2].id
         }),
       });
-      
       if (res.ok) {
-        setMessage({ 
-          text: "Preferences submitted successfully!", 
-          type: "success" 
+        setMessage({
+          text: "Preferences submitted successfully!",
+          type: "success"
         });
       } else {
         const err = await res.json();
-        setMessage({ 
-          text: err.detail || "Failed to submit preferences.", 
-          type: "error" 
+        setMessage({
+          text: err.detail || "Failed to submit preferences.",
+          type: "error"
         });
       }
     } catch (err) {
-      setMessage({ 
-        text: "Network error.", 
-        type: "error" 
+      setMessage({
+        text: "Network error.",
+        type: "error"
       });
     }
   };
@@ -174,13 +161,12 @@ function CandidatePreferences() {
   return (
     <div className="preferences-container">
       <h1>Project Preferences</h1>
-      
       <div className="filters-section">
         <div className="filter-row">
           <div className="filter-group">
             <label>Department:</label>
-            <select 
-              name="department" 
+            <select
+              name="department"
               value={filters.department}
               onChange={handleFilterChange}
             >
@@ -190,11 +176,10 @@ function CandidatePreferences() {
               ))}
             </select>
           </div>
-          
           <div className="filter-group">
             <label>Mode:</label>
-            <select 
-              name="mode" 
+            <select
+              name="mode"
               value={filters.mode}
               onChange={handleFilterChange}
             >
@@ -204,11 +189,10 @@ function CandidatePreferences() {
               ))}
             </select>
           </div>
-          
           <div className="filter-group">
             <label>Duration:</label>
-            <select 
-              name="duration" 
+            <select
+              name="duration"
               value={filters.duration}
               onChange={handleFilterChange}
             >
@@ -218,11 +202,10 @@ function CandidatePreferences() {
               ))}
             </select>
           </div>
-          
           <div className="filter-group">
             <label>Professor:</label>
-            <select 
-              name="professor" 
+            <select
+              name="professor"
               value={filters.professor}
               onChange={handleFilterChange}
             >
@@ -233,7 +216,6 @@ function CandidatePreferences() {
             </select>
           </div>
         </div>
-        
         <div className="search-group">
           <input
             type="text"
@@ -243,7 +225,6 @@ function CandidatePreferences() {
           />
         </div>
       </div>
-      
       <div className="projects-section">
         <div className="available-projects">
           <h2>Available Projects ({filteredProjects.length})</h2>
@@ -267,8 +248,8 @@ function CandidatePreferences() {
                   </tr>
                 ) : (
                   filteredProjects.map(project => (
-                    <tr 
-                      key={project.id} 
+                    <tr
+                      key={project.id}
                       className={selectedProjects.some(p => p.id === project.id) ? "selected" : ""}
                     >
                       <td>
@@ -280,12 +261,8 @@ function CandidatePreferences() {
                       </td>
                       <td>{project.title || "N/A"}</td>
                       <td>{project.description || "N/A"}</td>
-                      <td>{project.professor?.dept?.name || "N/A"}</td>
-                      <td>
-                        {project.professor ? 
-                          `${project.professor.first_name || ""} ${project.professor.last_name || ""}`.trim() : 
-                          "N/A"}
-                      </td>
+                      <td>{project.professor?.department?.name || "N/A"}</td>
+                      <td>{project.professor?.name || "N/A"}</td>
                       <td>{project.mode || "N/A"}</td>
                       <td>{project.duration || "N/A"}</td>
                     </tr>
@@ -295,7 +272,6 @@ function CandidatePreferences() {
             </table>
           </div>
         </div>
-        
         <div className="selected-projects">
           <h2>Selected Projects ({selectedProjects.length})</h2>
           {selectedProjects.length === 0 ? (
@@ -303,26 +279,25 @@ function CandidatePreferences() {
           ) : (
             <div className="selected-list">
               <div className="department-warning">
-                {selectedProjects.length > 0 && 
-                  `All projects from ${selectedProjects[0].professor?.dept?.name || "N/A"} department`}
+                {selectedProjects.length > 0 &&
+                  `All projects from ${selectedProjects[0].professor?.department?.name || "N/A"} department`}
               </div>
-              
               <DragDropContext onDragEnd={handleDragEnd}>
                 <Droppable droppableId="selected-projects-list">
                   {(provided) => (
-                    <ol 
-                      {...provided.droppableProps} 
+                    <ol
+                      {...provided.droppableProps}
                       ref={provided.innerRef}
                       className="draggable-list"
                     >
                       {selectedProjects.map((project, index) => (
-                        <Draggable 
-                          key={project.id} 
-                          draggableId={project.id.toString()} 
+                        <Draggable
+                          key={project.id}
+                          draggableId={project.id.toString()}
                           index={index}
                         >
                           {(provided, snapshot) => (
-                            <li 
+                            <li
                               ref={provided.innerRef}
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
@@ -333,12 +308,10 @@ function CandidatePreferences() {
                                 <div className="selected-rank">Preference {index + 1}</div>
                                 <div className="selected-title">{project.title || "N/A"}</div>
                                 <div className="selected-prof">
-                                  {project.professor ? 
-                                    `${project.professor.first_name || ""} ${project.professor.last_name || ""}`.trim() : 
-                                    "N/A"}
+                                  {project.professor?.name || "N/A"}
                                 </div>
                               </div>
-                              <button 
+                              <button
                                 onClick={() => toggleProjectSelection(project)}
                                 className="remove-btn"
                               >
@@ -353,9 +326,8 @@ function CandidatePreferences() {
                   )}
                 </Droppable>
               </DragDropContext>
-              
               {selectedProjects.length >= 3 && (
-                <button 
+                <button
                   onClick={submitPreferences}
                   className="submit-btn"
                 >
@@ -366,7 +338,6 @@ function CandidatePreferences() {
           )}
         </div>
       </div>
-      
       {message.text && (
         <div className={`message ${message.type}`}>
           {message.text}

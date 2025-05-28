@@ -3,10 +3,14 @@
   --grayBorderColor: #b0bec5;
   --backgroundColor: #e3edf9;
   --inputText: #222;
+  --transitionTime: 0.2s;
 }
 
 body {
   background: var(--backgroundColor);
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
 }
 
 .loginContainer {
@@ -30,11 +34,16 @@ body {
   flex-direction: column;
   background: #fff;
   color: var(--inputText);
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: all 0.3s ease;
 }
 
 .AdminLogIn .mainHeading {
   color: var(--textColor);
   text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  transition: color var(--transitionTime) ease;
 }
 
 .formLogIn {
@@ -57,6 +66,7 @@ body {
   font-weight: 500;
   font-size: 1.15rem;
   transition: all 0.25s ease;
+  box-sizing: border-box;
 }
 
 .fillBoxInput input:focus {
@@ -68,6 +78,8 @@ body {
   text-align-last: right;
   margin: 0.25rem 0.1rem;
   display: none;
+  font-size: 0.8rem;
+  transition: opacity 0.3s ease;
 }
 
 .fillBoxInput .eyeIcon {
@@ -76,12 +88,19 @@ body {
   right: 10px;
   top: 12px;
   cursor: pointer;
+  font-size: 1.2rem;
+  transition: color var(--transitionTime) ease;
+}
+
+.fillBoxInput .eyeIcon:hover {
+  color: var(--textColor);
 }
 
 .login-btn-row {
   display: flex;
   gap: 1rem;
   margin: 2rem 0;
+  width: 100%;
 }
 
 .loginBtn {
@@ -95,35 +114,82 @@ body {
   border-radius: 0.25rem;
   background-color: var(--textColor);
   color: #fff;
-  transition: background 0.2s;
+  transition: all var(--transitionTime) ease;
+  box-sizing: border-box;
+}
+
+.loginBtn:hover:not(:disabled),
+.loginBtn:focus:not(:disabled) {
+  background-color: #0d47a1;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.loginBtn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: none;
 }
 
 .loginBtn:disabled {
   background: #b0bec5;
   cursor: not-allowed;
+  opacity: 0.7;
 }
 
 .forgotBtn {
+  padding: 1rem 1.5rem;
+  width: 100%;
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 0.25rem;
   background: #fff;
   color: var(--textColor);
   border: 1.5px solid var(--textColor);
+  transition: all var(--transitionTime) ease;
+  box-sizing: border-box;
 }
 
-.forgotBtn:hover:not(:disabled) {
+.forgotBtn:hover:not(:disabled),
+.forgotBtn:focus:not(:disabled) {
   background: var(--textColor);
   color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.forgotBtn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.forgotBtn:disabled {
+  border-color: #b0bec5;
+  color: #b0bec5;
+  cursor: not-allowed;
+  opacity: 0.7;
 }
 
 .error-message {
   color: #d32f2f;
   margin-bottom: 1rem;
   text-align: center;
+  font-size: 0.9rem;
+  animation: fadeIn 0.3s ease;
 }
 
 .forgot-message {
   color: #357a38;
   margin-bottom: 1rem;
   text-align: center;
+  font-size: 0.9rem;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* responsive */
@@ -142,6 +208,7 @@ body {
 @media screen and (max-width: 426px) {
   .AdminLogIn {
     width: 90%;
+    padding: 1rem;
   }
   .formLogIn {
     width: 90%;
@@ -151,8 +218,13 @@ body {
     gap: 0.5rem;
     margin: 1rem 0;
   }
-  .loginBtn {
+  .loginBtn,
+  .forgotBtn {
     font-size: 0.85rem;
     margin: 0;
+    padding: 0.8rem;
+  }
+  .fillBoxInput > input {
+    font-size: 1rem;
   }
 }

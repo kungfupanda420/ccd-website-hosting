@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { authFetch } from "../utils/authFetch";
-import "../css/CandidateProfile.css"; // <-- Add this import for styling
+import "../css/CandidateProfile.css";
 import { useNavigate } from "react-router-dom";
 
 function CandidateProfile() {
@@ -9,7 +9,10 @@ function CandidateProfile() {
   const [error, setError] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [form, setForm] = useState({});
+  const [regPaymentScreenshot, setRegPaymentScreenshot] = useState(null);
+  const [profilePhoto, setProfilePhoto] = useState(null);
   const navigate = useNavigate();
+
   useEffect(() => {
     const fetchCandidate = async () => {
       setLoading(true);
@@ -69,24 +72,44 @@ function CandidateProfile() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const handleFileChange = (e) => {
+    if (e.target.name === "regPaymentScreenshot") {
+      setRegPaymentScreenshot(e.target.files[0]);
+    }
+    if (e.target.name === "profilePhoto") {
+      setProfilePhoto(e.target.files[0]);
+    }
+  };
+
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
     try {
       const token = localStorage.getItem("token");
+      const formData = new FormData();
+      Object.entries(form).forEach(([key, value]) => {
+        formData.append(key, value);
+      });
+      if (regPaymentScreenshot) {
+        formData.append("regPaymentScreenshot", regPaymentScreenshot);
+      }
+      if (profilePhoto) {
+        formData.append("profilePhoto", profilePhoto);
+      }
       const res = await authFetch("/api/students/me/edit", {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(form),
+        body: formData,
       });
       if (res.ok) {
         const updated = await res.json();
         setCandidate(updated);
         setEditMode(false);
+        setRegPaymentScreenshot(null);
+        setProfilePhoto(null);
       } else {
         const err = await res.json();
         setError(err.detail || "Failed to update profile.");
@@ -130,12 +153,28 @@ function CandidateProfile() {
             <div><strong>10th Board:</strong> {candidate.board10}</div>
             <div><strong>Registration Payment:</strong> {candidate.regPayment}</div>
             <div><strong>Payment Status:</strong> {candidate.paymentStatus}</div>
+            <div>
+              <strong>Payment Screenshot:</strong>{" "}
+              {candidate.regPaymentScreenshotPath && (
+                <a href={`/${candidate.regPaymentScreenshotPath}`} target="_blank" rel="noopener noreferrer">
+                  View Screenshot
+                </a>
+              )}
+            </div>
+            <div>
+              <strong>Profile Photo:</strong>{" "}
+              {candidate.profilePhotoPath && (
+                <a href={`/${candidate.profilePhotoPath}`} target="_blank" rel="noopener noreferrer">
+                  View Photo
+                </a>
+              )}
+            </div>
           </div>
           <button className="edit-btn" onClick={() => setEditMode(true)}>Edit Profile</button>
           <button className="edit-btn" onClick={() => navigate("/candidatedashboard")}>dashboard</button>
         </>
       ) : (
-        <form className="edit-profile-form" onSubmit={handleEditSubmit}>
+        <form className="edit-profile-form" onSubmit={handleEditSubmit} encType="multipart/form-data">
           <div className="form-row">
             <label>Name: <input name="name" value={form.name} onChange={handleEditChange} /></label>
             <label>Phone: <input name="phone" value={form.phone} onChange={handleEditChange} /></label>
@@ -158,7 +197,24 @@ function CandidateProfile() {
             <label>10th CGPA: <input name="cgpa10" value={form.cgpa10} onChange={handleEditChange} /></label>
             <label>10th Board: <input name="board10" value={form.board10} onChange={handleEditChange} /></label>
             <label>Registration Payment: <input name="regPayment" value={form.regPayment} onChange={handleEditChange} /></label>
-            <label>Payment Status: <input name="paymentStatus" value={form.paymentStatus} onChange={handleEditChange} /></label>
+            <label>
+              Payment Screenshot:
+              <input
+                type="file"
+                name="regPaymentScreenshot"
+                accept="image/*,application/pdf"
+                onChange={handleFileChange}
+              />
+            </label>
+            <label>
+              Profile Photo:
+              <input
+                type="file"
+                name="profilePhoto"
+                accept="image/*"
+                onChange={handleFileChange}
+              />
+            </label>
           </div>
           <div className="form-actions">
             <button type="submit" className="save-btn">Save</button>
