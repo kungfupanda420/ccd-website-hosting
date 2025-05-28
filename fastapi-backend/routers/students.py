@@ -223,37 +223,37 @@ def show_projects(db: Session=Depends(get_db),current_user: User=Depends(get_cur
     
     return projects
 
-@router.post("/apply/{project_id}",response_model=ShowProject)
-def apply_project(project_id:int,db:Session=Depends(get_db),current_user:User=Depends(get_current_user)):
-    if current_user.role!= 'student':
-        raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
-    student=db.query(Student).filter(Student.user_id==current_user.id).first()
-    if not student:
-        raise HTTPException(status_code=404, detail="Student not found")
+# @router.post("/apply/{project_id}",response_model=ShowProject)
+# def apply_project(project_id:int,db:Session=Depends(get_db),current_user:User=Depends(get_current_user)):
+#     if current_user.role!= 'student':
+#         raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
+#     student=db.query(Student).filter(Student.user_id==current_user.id).first()
+#     if not student:
+#         raise HTTPException(status_code=404, detail="Student not found")
     
-    project=db.query(Project).filter(Project.id==project_id).first()
-    if not project:
-        raise HTTPException(status_code=404, detail="Project not found")
+#     project=db.query(Project).filter(Project.id==project_id).first()
+#     if not project:
+#         raise HTTPException(status_code=404, detail="Project not found")
     
-    prefs=["pref1","pref2","pref3"]
+#     prefs=["pref1","pref2","pref3"]
 
-    if any(getattr(student,pref)==project for pref in prefs):
-        raise HTTPException(status_code=400, detail="Already applied for this project")
+#     if any(getattr(student,pref)==project for pref in prefs):
+#         raise HTTPException(status_code=400, detail="Already applied for this project")
     
-    if student.pref1:
-        if project.professor.dept_id != student.pref1.professor.dept_id:
-            raise HTTPException(status_code=400, detail="All project applied to have to be from the same department")
+#     if student.pref1:
+#         if project.professor.dept_id != student.pref1.professor.dept_id:
+#             raise HTTPException(status_code=400, detail="All project applied to have to be from the same department")
     
-    for pref in prefs:
-        if not getattr(student,pref):
-            setattr(student,pref,project)
-            project.applied_count+=1
-            db.commit()
-            db.refresh(student)
-            db.refresh(project)
-            return project
+#     for pref in prefs:
+#         if not getattr(student,pref):
+#             setattr(student,pref,project)
+#             project.applied_count+=1
+#             db.commit()
+#             db.refresh(student)
+#             db.refresh(project)
+#             return project
         
-    raise HTTPException(status_code=400, detail="Maximum 3 projects can be applied")
+#     raise HTTPException(status_code=400, detail="Maximum 3 projects can be applied")
     
 
 
@@ -350,6 +350,8 @@ def increase_preference(request:ProjectPreferences,db:Session=Depends(get_db),cu
     db.refresh(student)
 
     return updated_projects
+
+
 # if student.pref1_id:
 #         if project.professor.dept_id != student.pref1.professor.dept_id:
 #             raise HTTPException(status_code=400, detail="All project applied to have to be from the same department")
