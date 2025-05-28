@@ -47,7 +47,7 @@ class ShowStudent(BaseModel):
     pref2: Optional[ShowProject]
     pref3: Optional[ShowProject]
 
-    
+    selected_project: Optional[ShowProject]
 
     model_config = {
         "from_attributes": True
@@ -80,6 +80,14 @@ class StudentUpdate(BaseModel):
     cgpa10: Optional[float]  = None
     board10: Optional[str]  = None
     regPayment: Optional[str]  = None
+
+    model_config = {
+        "from_attributes": True
+    }
+
+class StudentSIPEmail(BaseModel):
+    sip_id: str
+    email: EmailStr
 
     model_config = {
         "from_attributes": True

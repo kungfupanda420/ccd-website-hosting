@@ -65,6 +65,9 @@ class Student(Base):
     pref2=relationship("Project",foreign_keys=[pref2_id])
     pref3=relationship("Project",foreign_keys=[pref3_id])
     
+    selected_project_id = Column(Integer, ForeignKey("projects.id"), nullable=True)
+    selected_project = relationship("Project",back_populates="selected_students", foreign_keys=[selected_project_id])
+
     user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
     user = relationship("User", back_populates="student")
 
