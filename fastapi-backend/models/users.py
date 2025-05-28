@@ -53,6 +53,8 @@ class Student(Base):
 
     certificatePayment = Column(String(255))
     certificatePaymentScreenshotPath = Column(String(1000))
+
+    documents_path = Column(String(1000))
     
     paymentStatus= Column(Integer,default=0)
     pref1_id=Column(Integer, ForeignKey('projects.id'))

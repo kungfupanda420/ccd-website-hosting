@@ -90,6 +90,7 @@ def register(
     regPaymentScreenshot: UploadFile = File(...),
     profilePhoto: UploadFile = File(...),
     student_college_idcard: UploadFile = File(...),
+    documents: UploadFile = File(None),
 
     db: Session = Depends(get_db)
 ):
@@ -97,6 +98,11 @@ def register(
     user=db.query(User).filter(User.email==email).first()
     if user:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
+    
+    student=db.query(Student).filter(Student.adhaar_id==adhaar_id).first()
+    if student:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Adhaar ID already registered")
+
     hashed_password = pwd_context.hash(password)
     new_user=User(
         email=email,
@@ -111,7 +117,7 @@ def register(
     reg_screenshot_path=saveFile(file=regPaymentScreenshot,folder="regPaymentScreenshots",email=new_user.email)
     profile_photo_path=saveFile(file=profilePhoto,folder="profilePhotos",email=new_user.email)
     student_college_idcard_path=saveFile(file=student_college_idcard,folder="studentCollegeIdcards",email=new_user.email)
-
+    documents_path = saveFile(file=documents, folder="studentDocuments", email=new_user.email) 
     sip_id = generate_sip(db)
 
     new_student = Student(
@@ -142,10 +148,10 @@ def register(
 
         regPaymentScreenshotPath=reg_screenshot_path,
         profilePhotoPath=profile_photo_path,
-        student_college_idcard_path=student_college_idcard_path
+        student_college_idcard_path=student_college_idcard_path,
+        documents_path=documents_path,
         # add other fields if needed
     )
-
     db.add(new_student)
     db.commit()
     db.refresh(new_student)
@@ -202,6 +208,7 @@ def edit_me(
     regPaymentScreenshot: UploadFile = File(None),
     profilePhoto: UploadFile = File(None),
     student_college_idcard: UploadFile = File(None),
+    documents: UploadFile = File(None),
 
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
@@ -235,6 +242,9 @@ def edit_me(
 
     if student_college_idcard:
         student.student_college_idcard_path = saveFile(student_college_idcard, "studentCollegeIdcards", current_user.email)
+
+    if documents:
+        student.documents_path = saveFile(documents, "studentDocuments", current_user.email)
 
     db.commit()
     db.refresh(student)
