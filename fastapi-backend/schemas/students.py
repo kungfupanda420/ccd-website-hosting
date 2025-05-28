@@ -15,6 +15,7 @@ class ShowStudent(BaseModel):
     user: ShowUser
 
     name: str
+    adhaar_id:str
     phone: str
     dob: date
     address: str
@@ -41,7 +42,7 @@ class ShowStudent(BaseModel):
     certificatePayment: Optional[str]
     certificatePaymentScreenshotPath: Optional[str]
     paymentStatus: int
-
+    student_college_idcard_path: Optional[str]
     pref1: Optional[ShowProject]
     pref2: Optional[ShowProject]
     pref3: Optional[ShowProject]

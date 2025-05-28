@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from .database import engine
-from .routers import students,admin,login, professors,auth
+from .routers import students,admin,login, professors,auth, departments
 from . import models
 
 from fastapi.middleware.cors import CORSMiddleware
@@ -36,6 +36,7 @@ app.include_router(login.router)
 app.include_router(admin.router)
 app.include_router(students.router)
 app.include_router(professors.router)
+app.include_router(departments.router)
 
 # if __name__== "main":
 #     import uvicorn

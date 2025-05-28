@@ -21,6 +21,11 @@ class User(Base):
 
 class Student(Base):
     __tablename__ = "students"
+
+    sip_id= Column(String(255),unique=True, index=True)
+    adhaar_id= Column(String(255), unique=True)
+    nitc_idcard_path = Column(String(1000))
+    student_college_idcard_path = Column(String(1000))
     name = Column(String(255))
     phone = Column(String(255))
     dob = Column(Date)
@@ -44,10 +49,10 @@ class Student(Base):
     board10 = Column(String(255))
 
     regPayment = Column(String(255))
-    regPaymentScreenshotPath = Column(String(255))
+    regPaymentScreenshotPath = Column(String(1000))
 
     certificatePayment = Column(String(255))
-    certificatePaymentScreenshotPath = Column(String(255))
+    certificatePaymentScreenshotPath = Column(String(1000))
     
     paymentStatus= Column(Integer,default=0)
     pref1_id=Column(Integer, ForeignKey('projects.id'))

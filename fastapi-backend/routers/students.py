@@ -43,6 +43,18 @@ def saveFile(file:UploadFile,folder:str,email:str):
         shutil.copyfileobj(file.file,buffer)
     return f"{file_path}"
 
+def generate_sip(db: Session):
+    prefix = "SIP26"
+
+    latest_sip= db.query(Student).filter(Student.sip_id.like(f"{prefix}%")).order_by(Student.sip_id.desc()).first()
+    if latest_sip and latest_sip.sip_id:
+        try:
+            new_sip = int(latest_sip.sip_id[len(prefix):]) + 1
+        except ValueError:
+            new_sip = 1
+    else:
+        new_sip = 1
+    return f"{prefix}{new_sip:04d}"
 
 @router.post("/register",response_model=Token)
 def register(
@@ -52,6 +64,7 @@ def register(
     password: str = Form(...),
 
     # Student fields
+    adhaar_id=Form(...),
     phone: str = Form(...),
     dob: date = Form(...),
     address: str = Form(...),
@@ -76,6 +89,7 @@ def register(
     # Files
     regPaymentScreenshot: UploadFile = File(...),
     profilePhoto: UploadFile = File(...),
+    student_college_idcard: UploadFile = File(...),
 
     db: Session = Depends(get_db)
 ):
@@ -96,9 +110,14 @@ def register(
     
     reg_screenshot_path=saveFile(file=regPaymentScreenshot,folder="regPaymentScreenshots",email=new_user.email)
     profile_photo_path=saveFile(file=profilePhoto,folder="profilePhotos",email=new_user.email)
+    student_college_idcard_path=saveFile(file=student_college_idcard,folder="studentCollegeIdcards",email=new_user.email)
+
+    sip_id = generate_sip(db)
 
     new_student = Student(
         user_id=new_user.id,
+        adhaar_id=adhaar_id,
+        sip_id=sip_id,
         name=name,
         phone=phone,
         dob=dob,
@@ -120,8 +139,10 @@ def register(
         cgpa10=cgpa10,
         board10=board10,
         regPayment=regPayment,
+
         regPaymentScreenshotPath=reg_screenshot_path,
-        profilePhotoPath=profile_photo_path
+        profilePhotoPath=profile_photo_path,
+        student_college_idcard_path=student_college_idcard_path
         # add other fields if needed
     )
 
@@ -155,6 +176,7 @@ def get_me(db: Session=Depends(get_db),current_user: User=Depends(get_current_us
 def edit_me(
     # Updatable fields (add/remove as per your needs)
     name: str = Form(None),
+    adhaar_id: str = Form(None),
     phone: str = Form(None),
     dob: date = Form(None),
     address: str = Form(None),
@@ -179,6 +201,7 @@ def edit_me(
     
     regPaymentScreenshot: UploadFile = File(None),
     profilePhoto: UploadFile = File(None),
+    student_college_idcard: UploadFile = File(None),
 
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
@@ -193,7 +216,7 @@ def edit_me(
     # Update fields if they are provided
     update_fields = locals()
     for key in [
-        'name', 'phone', 'dob', 'address', 'state',
+        'name', 'adhaar_id', 'phone', 'dob', 'address', 'state',
         'guardianName', 'guardianRelation', 'guardianPhone',
         'institution', 'program', 'department', 'year',
         'instituteLocation', 'instituteState', 'currentSemesterCgpa',
@@ -209,6 +232,9 @@ def edit_me(
 
     if profilePhoto:
         student.profilePhotoPath = saveFile(profilePhoto, "profilePhotos", current_user.email)
+
+    if student_college_idcard:
+        student.student_college_idcard_path = saveFile(student_college_idcard, "studentCollegeIdcards", current_user.email)
 
     db.commit()
     db.refresh(student)
