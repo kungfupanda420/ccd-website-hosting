@@ -39,5 +39,6 @@ fastapi-backend/security/__pycache__
 fastapi-backend/makepassword.py
 fastapi-backend/makepassword.py
 fastapi-backend/people_curlreq.txt
+fastapi-backend/testmail.py
 
 /uploads
