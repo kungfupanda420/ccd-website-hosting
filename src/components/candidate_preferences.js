@@ -29,7 +29,6 @@ function CandidatePreferences() {
           setProjects(data);
           setFilteredProjects(data);
 
-          // Extract unique filter options with correct keys
           setDepartments([...new Set(data.map(p => p.professor?.department?.name || "N/A"))]);
           setModes([...new Set(data.map(p => p.mode || "N/A"))]);
           setDurations([...new Set(data.map(p => p.duration || "N/A"))]);
@@ -46,7 +45,6 @@ function CandidatePreferences() {
 
   useEffect(() => {
     let result = [...projects];
-    
     if (filters.department && filters.department !== "N/A") {
       result = result.filter(p => (p.professor?.department?.name || "N/A") === filters.department);
     }
@@ -72,7 +70,6 @@ function CandidatePreferences() {
         );
       });
     }
-    
     setFilteredProjects(result);
   }, [projects, filters]);
 
@@ -97,11 +94,18 @@ function CandidatePreferences() {
       if (isSelected) {
         return prev.filter(p => p.id !== project.id);
       }
+      // Only allow max 3 selections and same department
       if (
-        prev.length === 0 ||
-        (project.professor?.department?.name === prev[0].professor?.department?.name)
+        prev.length < 3 &&
+        (prev.length === 0 || project.professor?.department?.name === prev[0].professor?.department?.name)
       ) {
         return [...prev, project];
+      } else if (prev.length >= 3) {
+        setMessage({
+          text: "You can select a maximum of 3 projects.",
+          type: "error"
+        });
+        return prev;
       } else {
         setMessage({
           text: "You can only select projects from the same department.",
@@ -121,9 +125,9 @@ function CandidatePreferences() {
   };
 
   const submitPreferences = async () => {
-    if (selectedProjects.length < 3) {
+    if (selectedProjects.length !== 3) {
       setMessage({
-        text: "Please select at least 3 projects.",
+        text: "Please select exactly 3 projects.",
         type: "error"
       });
       return;
@@ -257,6 +261,12 @@ function CandidatePreferences() {
                           type="checkbox"
                           checked={selectedProjects.some(p => p.id === project.id)}
                           onChange={() => toggleProjectSelection(project)}
+                          disabled={
+                            // Disable if already 3 selected and this one is not selected
+                            (selectedProjects.length >= 3 && !selectedProjects.some(p => p.id === project.id)) ||
+                            // Disable if department doesn't match
+                            (selectedProjects.length > 0 && project.professor?.department?.name !== selectedProjects[0].professor?.department?.name)
+                          }
                         />
                       </td>
                       <td>{project.title || "N/A"}</td>
@@ -326,7 +336,7 @@ function CandidatePreferences() {
                   )}
                 </Droppable>
               </DragDropContext>
-              {selectedProjects.length >= 3 && (
+              {selectedProjects.length === 3 && (
                 <button
                   onClick={submitPreferences}
                   className="submit-btn"

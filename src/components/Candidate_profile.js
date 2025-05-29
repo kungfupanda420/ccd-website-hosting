@@ -153,6 +153,7 @@ function CandidateProfile() {
             <div><strong>10th Board:</strong> {candidate.board10}</div>
             <div><strong>Registration Payment:</strong> {candidate.regPayment}</div>
             <div><strong>Payment Status:</strong> {candidate.paymentStatus}</div>
+            <div><strong>aa</strong></div>
             <div>
               <strong>Payment Screenshot:</strong>{" "}
               {candidate.regPaymentScreenshotPath && (
