@@ -1,9 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Response, UploadFile, File,Form
+from fastapi import APIRouter, Depends, HTTPException, status, Response, UploadFile, File,Form, Query
 from sqlalchemy.orm import Session
 from datetime import date
 
 from ..schemas.token import Token
-from ..schemas.students import  ShowStudent, StudentUpdate
+from ..schemas.students import  ShowStudent, StudentUpdate, VerifyEmail
 from ..schemas.projects import ShowProject, ProjectPreferences
 from ..models.users import User, Student
 from ..models.projects import Project
@@ -18,12 +18,21 @@ from ..security.oauth2 import get_current_user
 import os
 import shutil
 
+from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
+from pydantic import EmailStr, BaseModel
+
+from dotenv import load_dotenv
+
+
+
 router =APIRouter(
     prefix="/api/students",
     tags=["Students"]
 )
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+load_dotenv()
 
 get_db=get_db
 
@@ -56,12 +65,79 @@ def generate_sip(db: Session):
         new_sip = 1
     return f"{prefix}{new_sip:04d}"
 
+
+conf = ConnectionConfig(
+    MAIL_USERNAME='thomassjamess420@gmail.com',
+    MAIL_PASSWORD=os.getenv('MAIL_PASSWORD'),
+    MAIL_FROM='thomassjamess420@gmail.com',
+    MAIL_PORT=587,
+    MAIL_SERVER="smtp.gmail.com",
+    MAIL_STARTTLS=True,
+    MAIL_SSL_TLS= False,
+    USE_CREDENTIALS=True
+)
+
+@router.post("/verify_email")
+async def verify_email(request:VerifyEmail,db:Session=Depends(get_db)):
+    user = db.query(User).filter(User.email == request.email).first()
+    if user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Email already registered")
+
+    verify_link = f"http://localhost:8000/api/students/confirm_email?email={request.email}&password={request.password}"
+
+    message=MessageSchema(
+        subject="Verify email on NITC SIP Portal",
+        recipients=[request.email],
+        body=f"""
+        <h3>Verify email</h3>
+        <p>Click the link to verify the email. Do not share this link to anyone:</p>
+        <a href="{verify_link}">{verify_link}</a>
+        <p>If you didn't request this, you can ignore this email.</p>
+        """,
+        subtype="html"
+    )
+    fm=FastMail(conf)
+    await fm.send_message(message)
+    return {"msg": f"Verification email sent to {request.email}. Please check your inbox."}
+
+@router.post("/confirm_email", response_model=Token)
+def confirm_email(email: str=Query(...), password: str=Query(...), db: Session = Depends(get_db)):
+    
+    user = db.query(User).filter(User.email == email).first()
+    if user:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
+    
+    hashed_password=pwd_context.hash(password)
+
+    new_user=User(
+        email=email,
+        password=hashed_password,
+        role='Verified Email'
+    )
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    access_token = create_access_token(
+        data={"sub": new_user.email}
+    )
+    refresh_token = create_refresh_token(
+        data={"sub": new_user.email}
+    )
+
+    return Token(
+        access_token=access_token,
+        refresh_token=refresh_token,
+        token_type="bearer",
+        id=new_user.id,
+        email=new_user.email,
+        role=new_user.role
+    )
+        
+
 @router.post("/register",response_model=Token)
 def register(
     # Basic info
     name: str = Form(...),
-    email: str = Form(...),
-    password: str = Form(...),
 
     # Student fields
     adhaar_id=Form(...),
@@ -90,38 +166,24 @@ def register(
     regPaymentScreenshot: UploadFile = File(...),
     profilePhoto: UploadFile = File(...),
     student_college_idcard: UploadFile = File(...),
-    documents: UploadFile = File(None),
+    documents: UploadFile = File(...),
 
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
-    
-    user=db.query(User).filter(User.email==email).first()
-    if user:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
     
     student=db.query(Student).filter(Student.adhaar_id==adhaar_id).first()
     if student:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Adhaar ID already registered")
 
-    hashed_password = pwd_context.hash(password)
-    new_user=User(
-        email=email,
-        password=hashed_password,
-        role='student'
-    )
-    
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-    
-    reg_screenshot_path=saveFile(file=regPaymentScreenshot,folder="regPaymentScreenshots",email=new_user.email)
-    profile_photo_path=saveFile(file=profilePhoto,folder="profilePhotos",email=new_user.email)
-    student_college_idcard_path=saveFile(file=student_college_idcard,folder="studentCollegeIdcards",email=new_user.email)
-    documents_path = saveFile(file=documents, folder="studentDocuments", email=new_user.email) 
+    reg_screenshot_path=saveFile(file=regPaymentScreenshot,folder="regPaymentScreenshots",email=current_user.email)
+    profile_photo_path=saveFile(file=profilePhoto,folder="profilePhotos",email=current_user.email)
+    student_college_idcard_path=saveFile(file=student_college_idcard,folder="studentCollegeIdcards",email=current_user.email)
+    documents_path = saveFile(file=documents, folder="studentDocuments", email=current_user.email) 
     sip_id = generate_sip(db)
 
     new_student = Student(
-        user_id=new_user.id,
+        user_id=current_user.id,
         adhaar_id=adhaar_id,
         sip_id=sip_id,
         name=name,
@@ -156,14 +218,18 @@ def register(
     db.commit()
     db.refresh(new_student)
     
+    current_user.role = 'student'
+    db.commit()
+    db.refresh(current_user)
+
     access_token=create_access_token(
-        data={"sub":new_user.email}
+        data={"sub":current_user.email}
     )
     refresh_token=create_refresh_token(
-        data={"sub":new_user.email}
+        data={"sub":current_user.email}
     )
 
-    return Token(access_token=access_token, refresh_token=refresh_token, token_type="bearer", id=new_user.id, name=new_student.name, email=new_user.email,role=new_user.role)
+    return Token(access_token=access_token, refresh_token=refresh_token, token_type="bearer", id=current_user.id, name=new_student.name, email=current_user.email,role=current_user.role)
 
 
 
@@ -219,6 +285,11 @@ def edit_me(
     student = db.query(Student).filter(Student.user_id == current_user.id).first()
     if not student:
         raise HTTPException(status_code=404, detail="Student not found")
+
+    if adhaar_id:
+        student=db.query(Student).filter(Student.adhaar_id==adhaar_id).first()
+        if student:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Adhaar ID already registered")
 
     # Update fields if they are provided
     update_fields = locals()
@@ -312,34 +383,34 @@ def show_applied_projects(db: Session=Depends(get_db),current_user: User=Depends
     
     return applied_projects
 
-@router.delete("/withdrawProject/{project_id}",status_code=status.HTTP_204_NO_CONTENT)
-def withdraw_project(project_id:int,db:Session=Depends(get_db),current_user:User=Depends(get_current_user)):
-    if current_user.role != 'student':
-        raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
-    student=db.query(Student).filter(Student.user_id==current_user.id).first()
-    if not student:
-        raise HTTPException(status_code=404, detail="Student not found")
-    project=db.query(Project).filter(Project.id==project_id).first()
-    if not project:
-        raise HTTPException(status_code=404, detail="Project not found")
+# @router.delete("/withdrawProject/{project_id}",status_code=status.HTTP_204_NO_CONTENT)
+# def withdraw_project(project_id:int,db:Session=Depends(get_db),current_user:User=Depends(get_current_user)):
+#     if current_user.role != 'student':
+#         raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
+#     student=db.query(Student).filter(Student.user_id==current_user.id).first()
+#     if not student:
+#         raise HTTPException(status_code=404, detail="Student not found")
+#     project=db.query(Project).filter(Project.id==project_id).first()
+#     if not project:
+#         raise HTTPException(status_code=404, detail="Project not found")
     
-    if(student.pref1 != project and student.pref2 != project and student.pref3 != project):
-        raise HTTPException(status_code=400, detail="You have not applied for this project")
+#     if(student.pref1 != project and student.pref2 != project and student.pref3 != project):
+#         raise HTTPException(status_code=400, detail="You have not applied for this project")
     
-    if(student.pref1==project):
-        student.pref1=student.pref2
-        student.pref2=student.pref3
-        student.pref3=None
-    elif(student.pref2==project):
-        student.pref2=student.pref3
-        student.pref3=None
-    elif(student.pref3==project):
-        student.pref3=None
-    project.applied_count-=1
-    db.commit()
-    db.refresh(student)
-    db.refresh(project)
-    return Response(status_code=status.HTTP_204_NO_CONTENT)
+#     if(student.pref1==project):
+#         student.pref1=student.pref2
+#         student.pref2=student.pref3
+#         student.pref3=None
+#     elif(student.pref2==project):
+#         student.pref2=student.pref3
+#         student.pref3=None
+#     elif(student.pref3==project):
+#         student.pref3=None
+#     project.applied_count-=1
+#     db.commit()
+#     db.refresh(student)
+#     db.refresh(project)
+#     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 @router.post("/preferences",response_model=list[ShowProject])
 def increase_preference(request:ProjectPreferences,db:Session=Depends(get_db),current_user:User=Depends(get_current_user)):
@@ -352,12 +423,20 @@ def increase_preference(request:ProjectPreferences,db:Session=Depends(get_db),cu
     
     updated_projects = []
 
+    if student.pref1:
+        student.pref1.applied_count -= 1
+
+    if student.pref2:
+        student.pref2.applied_count -= 1
     
+    if student.pref3:
+        student.pref3.applied_count -= 1
     if request.pref1 is not None:
         pref1 = db.query(Project).filter(Project.id == request.pref1).first()
         if not pref1:
             raise HTTPException(status_code=404, detail="Project for pref1 not found")
         student.pref1 = pref1
+        pref1.applied_count += 1
         updated_projects.append(pref1)
     else:
         student.pref1 = None
@@ -368,6 +447,7 @@ def increase_preference(request:ProjectPreferences,db:Session=Depends(get_db),cu
         if not pref2:
             raise HTTPException(status_code=404, detail="Project for pref2 not found")
         student.pref2 = pref2
+        pref2.applied_count += 1
         updated_projects.append(pref2)
     else:
         student.pref2 = None
@@ -378,6 +458,7 @@ def increase_preference(request:ProjectPreferences,db:Session=Depends(get_db),cu
         if not pref3:
             raise HTTPException(status_code=404, detail="Project for pref3 not found")
         student.pref3 = pref3
+        pref3.applied_count += 1
         updated_projects.append(pref3)
     else:
         student.pref3 = None

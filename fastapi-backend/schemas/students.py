@@ -8,7 +8,14 @@ from .users import ShowUser
 
 from typing import Optional
 
+class VerifyEmail(BaseModel):
+    email: EmailStr
+    password: str
 
+
+    model_config = {
+        "from_attributes": True
+    }
 
 class ShowStudent(BaseModel):
     
