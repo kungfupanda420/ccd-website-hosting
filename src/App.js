@@ -12,6 +12,8 @@ import Professor_dashboard from './components/Professor_dashboard.js';
 import CandidateProfile from './components/Candidate_profile.js';
 import CandidatePreferences from './components/candidate_preferences.js';
 import ResetPassword from './components/Reset_password.js';
+import Register from './components/Register.js';
+import VerifyEmail from './components/Verify_email.js';
 import { startTransition } from 'react';
 // import FaqStudents from './pages/FaqStudents';
 // import Roadmap from './components/Roadmap';
@@ -122,6 +124,7 @@ function App() {
           <Route path='*' element={<NotFound />} />
           {/* <Route path='/' element={<Temp/>} /> */}
           <Route path='/registerform' element={<Registerform />} />
+          <Route path='/verify_email' element={<VerifyEmail />} />
           <Route path='/dashboard' element={<Temp2/>} />
           <Route path='/results' element={<SipTable/>} />
           <Route path='sipresults' element={<Results/>} />
@@ -131,6 +134,8 @@ function App() {
           <Route path='/candidate_profile' element={<CandidateProfile/>} />
           <Route path='/sip' element={<MentorFilter />} />
           <Route path='reset_password' element={<ResetPassword />} />
+          <Route path='/register' element={<Register />} />
+          {/* Add more routes as needed */}
         </Routes>
       </Suspense>
       {!hideNavFooter && <Footer />}
