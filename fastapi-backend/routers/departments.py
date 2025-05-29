@@ -156,3 +156,21 @@ def allot_student(user_id:int, project_id:int, db:Session=Depends(get_db), curre
     db.commit()
     db.refresh(student)
     return {"message": "Student alloted to project successfully", "student": student, "project": project}
+
+@router.delete("/unallotStudent/{user_id}")
+def unallot_student(user_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    if current_user.role != 'department':
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not a Department User")
+    
+    student = db.query(Student).filter(Student.user_id == user_id).first()
+    if not student:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Student not found")
+    
+    if student.selected_project_id is None:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Student has not been alloted any project")
+    
+    student.selected_project = None
+    db.commit()
+    db.refresh(student)
+    
+    return {"message": "Student unalloted from project successfully", "student": student}
