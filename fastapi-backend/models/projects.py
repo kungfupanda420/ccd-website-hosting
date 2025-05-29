@@ -22,4 +22,11 @@ class Project(Base):
 
     professor = relationship("Professor", back_populates="projects")
 
+    selected_students= relationship(
+        "Student",
+        back_populates="selected_project",
+        foreign_keys="Student.selected_project_id"
+    )
+
+
 
