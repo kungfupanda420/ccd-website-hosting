@@ -152,3 +152,7 @@ def allot_student(user_id:int, project_id:int, db:Session=Depends(get_db), curre
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Project already has maximum number of interns")
     
     student.selected_project= project
+
+    db.commit()
+    db.refresh(student)
+    return {"message": "Student alloted to project successfully", "student": student, "project": project}
