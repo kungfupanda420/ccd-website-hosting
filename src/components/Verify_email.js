@@ -32,7 +32,7 @@ function ConfirmEmail() {
         if (data.role === "student") {
           navigate("/candidate_dashboard");
         } else if (data.role === "Verified Email") {
-          navigate("/register");
+          navigate("/registerform");
         } else {
           // fallback
           navigate("/");
