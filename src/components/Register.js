@@ -88,6 +88,7 @@ function Register() {
         {error && <div className="error-text">{error}</div>}
         {success && <div className="success-text">{success}</div>}
         <button type="submit" className="submit-button">
+          
           Verify Email
         </button>
       </form>

@@ -11,6 +11,7 @@ import CandidateDashboard from './components/Candidate_dashboard.js';
 import Professor_dashboard from './components/Professor_dashboard.js';
 import CandidateProfile from './components/Candidate_profile.js';
 import CandidatePreferences from './components/candidate_preferences.js';
+import ConfirmEmail from './components/Verify_email.js';
 import ResetPassword from './components/Reset_password.js';
 import Register from './components/Register.js';
 import VerifyEmail from './components/Verify_email.js';
@@ -135,6 +136,7 @@ function App() {
           <Route path='/sip' element={<MentorFilter />} />
           <Route path='reset_password' element={<ResetPassword />} />
           <Route path='/register' element={<Register />} />
+          <Route path='/confirm_email' element={<ConfirmEmail />} />
           {/* Add more routes as needed */}
         </Routes>
       </Suspense>

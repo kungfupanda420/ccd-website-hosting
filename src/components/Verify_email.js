@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function ConfirmEmail() {
   const [msg, setMsg] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -16,21 +18,32 @@ function ConfirmEmail() {
 
     const confirm = async () => {
       try {
-        const res = await fetch(`/api/students/confirm_email?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`, {
-          method: "POST"
-        });
+        const res = await fetch(
+          `/api/students/confirm_email?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`,
+          { method: "POST" }
+        );
         const data = await res.json();
         if (!res.ok) {
           throw new Error(data.detail || "Confirmation failed");
         }
-        setMsg("Email confirmed successfully! You can now log in.");
+        setMsg("Email confirmed successfully!");
+
+        // Redirect based on role
+        if (data.role === "student") {
+          navigate("/candidate_dashboard");
+        } else if (data.role === "Verified Email") {
+          navigate("/register");
+        } else {
+          // fallback
+          navigate("/");
+        }
       } catch (err) {
         setError(err.message);
       }
     };
 
     confirm();
-  }, []);
+  }, [navigate]);
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100">

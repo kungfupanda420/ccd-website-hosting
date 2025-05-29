@@ -67,9 +67,9 @@ def generate_sip(db: Session):
 
 
 conf = ConnectionConfig(
-    MAIL_USERNAME='sip@nitc.ac.in',
+    MAIL_USERNAME='thomassjamess420@gmail.com',
     MAIL_PASSWORD=os.getenv('MAIL_PASSWORD'),
-    MAIL_FROM='sip@nitc.ac.in',
+    MAIL_FROM='thomassjamess420@gmail.com',
     MAIL_PORT=587,
     MAIL_SERVER="smtp.gmail.com",
     MAIL_STARTTLS=True,
