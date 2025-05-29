@@ -45,9 +45,18 @@ class ProjectCreation(BaseModel):
     }
 
 class ProjectPreferences(BaseModel):
-    pref1:Optional[int] = None
-    pref2:Optional[int] = None
-    pref3:Optional[int] = None
+    pref1:Optional[ShowProject] = None
+    pref2:Optional[ShowProject] = None
+    pref3:Optional[ShowProject] = None
+
+    model_config = {
+        "from_attributes": True
+    }
+
+class ProjectPreferencesId(BaseModel):
+    pref1_id:Optional[int] = None
+    pref2_id:Optional[int] = None
+    pref3_id:Optional[int] = None
 
     model_config = {
         "from_attributes": True

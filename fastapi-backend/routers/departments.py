@@ -112,3 +112,43 @@ def dept_students(db: Session = Depends(get_db), current_user: User = Depends(ge
 
     return students
 
+@router.get("/studentPrefernces/{user_id}", response_model=ProjectPreferences)
+def student_preferences(user_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    if current_user.role != 'department':
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not a Department User")
+    
+    student = db.query(Student).filter(Student.user_id == user_id).first()
+    if not student:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Student not found")
+    
+    return ProjectPreferences(
+        pref1=student.pref1,
+        pref2=student.pref2,
+        pref3=student.pref3
+    )   
+
+@router.post("/allotStudent/{user_id}/{project_id}")
+def allot_student(user_id:int, project_id:int, db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
+    if current_user.role != 'department':
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not a Department User")
+    
+    student = db.query(Student).filter(Student.user_id == user_id).first()
+    if not student:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Student not found")
+    
+    if student.selected_project_id is not None:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Student already has already been alloted")
+    
+    project = db.query(Project).filter(Project.id == project_id).first()
+    if not project:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Project not found")
+    
+    if project not in (student.pref1, student.pref2, student.pref3):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Project not in student's preferences")
+    
+    alloted_count= db.query(Student).filter(Student.selected_project_id == project.id).count()
+
+    if alloted_count >= project.no_of_interns:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Project already has maximum number of interns")
+    
+    student.selected_project= project

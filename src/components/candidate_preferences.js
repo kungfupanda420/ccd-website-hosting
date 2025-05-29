@@ -137,9 +137,9 @@ function CandidatePreferences() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          pref1: selectedProjects[0].id,
-          pref2: selectedProjects[1].id,
-          pref3: selectedProjects[2].id
+          pref1_id: selectedProjects[0].id,
+          pref2_id: selectedProjects[1].id,
+          pref3_id: selectedProjects[2].id
         }),
       });
       if (res.ok) {
