@@ -305,8 +305,10 @@ def edit_me(
         raise HTTPException(status_code=404, detail="Student not found")
 
     if adhaar_id:
-        student=db.query(Student).filter(Student.adhaar_id==adhaar_id).first()
-        if student:
+
+        student1=db.query(Student).filter(Student.adhaar_id==adhaar_id).first()
+
+        if student1 and student.user_id!= student1.user_id:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Adhaar ID already registered")
 
     # Update fields if they are provided
