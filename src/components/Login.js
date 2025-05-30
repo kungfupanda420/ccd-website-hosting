@@ -42,6 +42,7 @@ function Login() {
             else if (role === "student") navigate("/Candidatedashboard");
             else if (role === "professor") navigate("/professor_dashboard");
             else if (role === "department") navigate("/department_sip");
+            else if (role === "Verified Email") navigate("/registerform");
             
             else setError("Unknown role");
           }

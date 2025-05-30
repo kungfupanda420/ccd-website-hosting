@@ -13,7 +13,6 @@ function Registerform() {
     guardianName: "",
     guardianRelation: "",
     guardianPhone: "",
-    email: "",
     password: "",
     confirmPassword: "",
     profilePhoto: null,
@@ -30,8 +29,9 @@ function Registerform() {
     cgpa10: "",
     board10: "",
     adhaar_id: "",
+    apaar_id: "",
     student_college_idcard_path: null,
-    documents_path: null, // <-- add for docs
+    documents_path: null,
     paymentId: "",
     paymentScreenshot: null,
     role: "student",
@@ -62,7 +62,6 @@ function Registerform() {
       if (!formData.guardianRelation.trim()) newErrors.guardianRelation = "Guardian relation is required.";
       if (!/^[0-9]{10}$/.test(formData.guardianPhone)) newErrors.guardianPhone = "Valid 10-digit guardian phone number is required.";
     } else if (step === 2) {
-      if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Valid email is required.";
       if (formData.password.length < 6) newErrors.password = "Password must be at least 6 characters.";
       if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = "Passwords do not match.";
     } else if (step === 3) {
@@ -82,8 +81,8 @@ function Registerform() {
       if (!formData.board10.trim()) newErrors.board10 = "10th board is required.";
     } else if (step === 5) {
       if (!formData.adhaar_id.trim()) newErrors.adhaar_id = "Aadhaar number is required.";
+      if (!formData.apaar_id.trim()) newErrors.apaar_id = "APAAR ID is required.";
       if (!formData.student_college_idcard_path) newErrors.student_college_idcard_path = "Student college ID card is required.";
-      // documents_path is optional
     } else if (step === 6) {
       if (!formData.paymentId.trim()) newErrors.paymentId = "Payment ID is required.";
       if (!formData.paymentScreenshot) newErrors.paymentScreenshot = "Payment screenshot is required.";
@@ -113,7 +112,6 @@ function Registerform() {
     try {
       const form = new FormData();
       form.append("name", formData.name);
-      form.append("email", formData.email);
       form.append("password", formData.password);
       form.append("phone", formData.phone);
       form.append("dob", formData.dob);
@@ -135,8 +133,9 @@ function Registerform() {
       form.append("cgpa10", formData.cgpa10);
       form.append("board10", formData.board10);
       form.append("adhaar_id", formData.adhaar_id);
+      form.append("apaar_id", formData.apaar_id);
       if (formData.student_college_idcard_path) form.append("student_college_idcard", formData.student_college_idcard_path);
-      if (formData.documents_path) form.append("documents", formData.documents_path); // <-- add docs
+      if (formData.documents_path) form.append("documents", formData.documents_path);
       form.append("regPayment", formData.paymentId);
       if (formData.profilePhoto) form.append("profilePhoto", formData.profilePhoto);
       if (formData.paymentScreenshot) form.append("regPaymentScreenshot", formData.paymentScreenshot);
@@ -159,7 +158,6 @@ function Registerform() {
         guardianName: "",
         guardianRelation: "",
         guardianPhone: "",
-        email: "",
         password: "",
         confirmPassword: "",
         profilePhoto: null,
@@ -176,6 +174,7 @@ function Registerform() {
         cgpa10: "",
         board10: "",
         adhaar_id: "",
+        apaar_id: "",
         student_college_idcard_path: null,
         documents_path: null,
         paymentId: "",
@@ -198,7 +197,7 @@ function Registerform() {
         <div className={`step ${step >= 2 ? 'active' : ''}`}>2. Account</div>
         <div className={`step ${step >= 3 ? 'active' : ''}`}>3. Photo</div>
         <div className={`step ${step >= 4 ? 'active' : ''}`}>4. Academic</div>
-        <div className={`step ${step >= 5 ? 'active' : ''}`}>5. Aadhaar, College ID & Docs</div>
+        <div className={`step ${step >= 5 ? 'active' : ''}`}>5. IDs</div>
         <div className={`step ${step >= 6 ? 'active' : ''}`}>6. Payment</div>
         <div className={`step ${step >= 7 ? 'active' : ''}`}>7. Review</div>
       </div>
@@ -255,14 +254,6 @@ function Registerform() {
         {step === 2 && (
           <div className="form-step">
             <h2>Account Information</h2>
-            <div className="form-group">
-              <label>Email*</label>
-              <input type="email" name="email" value={formData.email} onChange={handleChange} className={errors.email ? 'error' : ''} />
-              {errors.email && <span className="error-text">{errors.email}</span>}
-            </div>
-            <div>
-              <button>verify</button>
-            </div>
             <div className="form-group">
               <label>Password* (min 6 characters)</label>
               <input type="password" name="password" value={formData.password} onChange={handleChange} className={errors.password ? 'error' : ''} />
@@ -355,14 +346,19 @@ function Registerform() {
           </div>
         )}
 
-        {/* Step 5: Aadhaar, College ID & Docs */}
+        {/* Step 5: Aadhaar and APAAR ID */}
         {step === 5 && (
           <div className="form-step">
-            <h2>Aadhaar, College ID & Other Documents</h2>
+            <h2>Aadhaar and APAAR ID</h2>
             <div className="form-group">
               <label>Aadhaar Number*</label>
               <input type="text" name="adhaar_id" value={formData.adhaar_id} onChange={handleChange} className={errors.adhaar_id ? 'error' : ''} />
               {errors.adhaar_id && <span className="error-text">{errors.adhaar_id}</span>}
+            </div>
+            <div className="form-group">
+              <label>APAAR ID*</label>
+              <input type="text" name="apaar_id" value={formData.apaar_id} onChange={handleChange} className={errors.apaar_id ? 'error' : ''} />
+              {errors.apaar_id && <span className="error-text">{errors.apaar_id}</span>}
             </div>
             <div className="form-group">
               <label>Student College ID Card*</label>
@@ -407,8 +403,7 @@ function Registerform() {
               <p><strong>Guardian Name:</strong> {formData.guardianName}</p>
               <p><strong>Guardian Relation:</strong> {formData.guardianRelation}</p>
               <p><strong>Guardian Phone:</strong> {formData.guardianPhone}</p>
-              <h3>Account Information</h3>
-              <p><strong>Email:</strong> {formData.email}</p>
+              
               <h3>Academic Information</h3>
               <p><strong>Institution:</strong> {formData.institution}</p>
               <p><strong>Program:</strong> {formData.program}</p>
@@ -422,10 +417,13 @@ function Registerform() {
               <p><strong>12th Board:</strong> {formData.board12}</p>
               <p><strong>10th CGPA:</strong> {formData.cgpa10}</p>
               <p><strong>10th Board:</strong> {formData.board10}</p>
-              <h3>Aadhaar, College ID & Docs</h3>
+              
+              <h3>IDs</h3>
               <p><strong>Aadhaar Number:</strong> {formData.adhaar_id}</p>
+              <p><strong>APAAR ID:</strong> {formData.apaar_id}</p>
               <p><strong>Student College ID Card:</strong> {formData.student_college_idcard_path ? formData.student_college_idcard_path.name : "Not uploaded"}</p>
               <p><strong>Other Documents:</strong> {formData.documents_path ? formData.documents_path.name : "Not uploaded"}</p>
+              
               <h3>Payment Information</h3>
               <p><strong>Payment ID:</strong> {formData.paymentId}</p>
             </div>

@@ -39,6 +39,7 @@ function ConfirmEmail() {
         }
       } catch (err) {
         setError(err.message);
+        
       }
     };
 
