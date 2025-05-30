@@ -55,6 +55,9 @@ function CandidateProfile() {
             board10: data.board10 || "",
             regPayment: data.regPayment || "",
             paymentStatus: data.paymentStatus || "",
+            
+            
+            adhaar_id: data.adhaar_id || "",
           });
         } else {
           const err = await res.json();
@@ -153,7 +156,9 @@ function CandidateProfile() {
             <div><strong>10th Board:</strong> {candidate.board10}</div>
             <div><strong>Registration Payment:</strong> {candidate.regPayment}</div>
             <div><strong>Payment Status:</strong> {candidate.paymentStatus}</div>
-            <div><strong>aa</strong></div>
+            {/* <div><strong>aa</strong></div>
+             */}
+             <div><strong>Aadhaar ID:</strong> {candidate.adhaar_id}</div>
             <div>
               <strong>Payment Screenshot:</strong>{" "}
               {candidate.regPaymentScreenshotPath && (

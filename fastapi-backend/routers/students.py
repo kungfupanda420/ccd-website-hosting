@@ -52,6 +52,7 @@ def saveFile(file:UploadFile,folder:str,email:str):
         shutil.copyfileobj(file.file,buffer)
     return f"{file_path}"
 
+
 def generate_sip(db: Session):
     prefix = "SIP26"
 
@@ -502,3 +503,21 @@ def increase_preference(request:ProjectPreferencesId,db:Session=Depends(get_db),
 #     db.refresh(student)
 #     db.refresh(project)   
 #     return project
+
+
+@router.get("/profile_photo")
+async def get_profile_photo(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    if current_user.role != 'student':
+        raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
+    
+    student = db.query(Student).filter(Student.user_id == current_user.id).first()
+    if not student:
+        raise HTTPException(status_code=404, detail="Student not found")
+    
+    if not student.profilePhotoPath:
+        raise HTTPException(status_code=404, detail="Profile photo not found")
+    
+    return {"profile_photo_path": student.profilePhotoPath}
