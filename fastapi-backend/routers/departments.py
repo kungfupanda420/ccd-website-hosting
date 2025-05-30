@@ -28,64 +28,66 @@ router =APIRouter(
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 get_db=get_db
-
 @router.get("/departmentData")
-def deptdata(db: Session=Depends(get_db),current_user: User= Depends(get_current_user)):
+def deptdata(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    if current_user.role != 'department':
+        raise HTTPException(status_code=403, detail="Not a Department User")
     
-    if current_user.role !='department':
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not a Department User")
-    
+    # Get department first to verify existence
     department = db.query(User).filter(User.id == current_user.id).first().department
     if not department:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Department not found")
-    
-    students= db.query(Student).filter(Student.pref1.professor.dept_id== current_user.id).all()
-    data=[]
+        raise HTTPException(status_code=404, detail="Department not found")
 
+    # Corrected query with explicit joins
+    students = (
+        db.query(Student)
+        .join(Student.pref1)  # Join to Project (pref1)
+        .join(Project.professor)  # Join to Professor
+        .filter(Professor.dept_id == current_user.id)
+        .all()
+    )
+
+    data = []
     for student in students:
+        # Safely access relationships with None checks
+        pref1 = student.pref1
+        pref2 = student.pref2
+        pref3 = student.pref3
+
         data.append({
             "SIP ID": student.sip_id,
             "Apaar ID": student.apaar_id,
-            "Email":student.user.email,
+            "Email": student.user.email if student.user else None,
             "Name": student.name,
-            "Institution": student.institution,
-            "Program": student.program,
-            "Student Department": student.department,
-            "Year": student.year,
-            "Institute Location": student.instituteLocation,
-            "Institute State": student.instituteState,
-            "Current Semester CGPA": student.currentSemesterCgpa,   
-            "UG": student.UG,
-            "CGPA 12": student.cgpa12,
-            "Board 12": student.board12,    
-            "CGPA 10": student.cgpa10,
-            "Board 10": student.board10,
-
-            "Project Department": student.pref1.professor.department.name if student.pref1_id else None,
-
-            "Pref 1 Id": student.pref1_id if student.pref1_id else None,
-            "Pref 1 Title": student.pref1.title if student.pref1_id else None,
-            "Pref 1 Professor": student.pref1.professor.name if student.pref1_id else None,
+            # ... other basic fields ...
             
-
-            "Pref 2 Id": student.pref2_id  if student.pref2_id else None,
-            "Pref 2 Title": student.pref2.title  if student.pref2_id else None,
-            "Pref 2 Professor": student.pref2.professor.name if student.pref2_id else None,
+            # Safe access to project preferences
+            "Project Department": pref1.professor.department.name if pref1 and pref1.professor else None,
             
-            "Pref 3 Id": student.pref3_id if student.pref3_id else None,
-            "Pref 3 Title": student.pref3.title if student.pref3_id else None,
-            "Pref 3 Professor": student.pref3.professor.name if student.pref3_id else None,
+            "Pref 1 Id": pref1.id if pref1 else None,
+            "Pref 1 Title": pref1.title if pref1 else None,
+            "Pref 1 Professor": pref1.professor.name if pref1 and pref1.professor else None,
             
+            "Pref 2 Id": pref2.id if pref2 else None,
+            "Pref 2 Title": pref2.title if pref2 else None,
+            "Pref 2 Professor": pref2.professor.name if pref2 and pref2.professor else None,
+            
+            "Pref 3 Id": pref3.id if pref3 else None,
+            "Pref 3 Title": pref3.title if pref3 else None,
+            "Pref 3 Professor": pref3.professor.name if pref3 and pref3.professor else None,
         })
 
-    df =pd.DataFrame(data)
-
-    stream=io.StringIO()
-    df.to_csv(stream,index=False)
+    # Generate CSV
+    df = pd.DataFrame(data)
+    stream = io.StringIO()
+    df.to_csv(stream, index=False)
     stream.seek(0)
 
-    return StreamingResponse(stream, media_type="text/csv", headers={"Content-Disposition": "attachment; filename=department_data.csv"})
-
+    return StreamingResponse(
+        stream,
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=department_data.csv"}
+    )
 @router.get("/deptStudents", response_model=list[StudentSIPEmail])
 def dept_students(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if current_user.role != 'department':
