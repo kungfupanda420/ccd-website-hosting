@@ -31,7 +31,6 @@ def create_project(request:ProjectCreation,db:Session=Depends(get_db),current_us
     new_project= Project(
         title=request.title,
         description=request.description,
-        no_of_interns=request.no_of_interns,
         duration=request.duration,
         mode=request.mode,
         prerequisites=request.prerequisites,
@@ -63,7 +62,6 @@ def edit_project(id:int,request:ProjectCreation,db:Session=Depends(get_db),curre
     
     project.title=request.title
     project.description=request.description
-    project.no_of_interns=request.no_of_interns
     project.duration=request.duration
     project.mode=request.mode
     project.prerequisites=request.prerequisites

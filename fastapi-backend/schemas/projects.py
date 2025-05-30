@@ -20,7 +20,6 @@ class ShowProject(BaseModel):
     id:int
     title:str
     description:str
-    no_of_interns:int
     duration:str
     mode:str
     prerequisites:str
@@ -35,7 +34,6 @@ class ProjectCreation(BaseModel):
 
     title:str
     description:str
-    no_of_interns:int
     duration:str
     mode:str
     prerequisites:str

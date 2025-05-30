@@ -13,7 +13,6 @@ class Project(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String(255), nullable=False)
     description = Column(String(1000))
-    no_of_interns = Column(Integer, nullable=False)
     duration = Column(String(255), nullable=False)  # e.g., "3 months"
     mode = Column(String(255), nullable=False)  # e.g., "online", "offline", "hybrid"
     professor_id = Column(Integer, ForeignKey("professors.user_id"), nullable=False)
