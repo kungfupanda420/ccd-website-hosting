@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from datetime import date
 
 from ..schemas.token import Token
-from ..schemas.students import  ShowStudent, StudentUpdate, StudentSIPEmail
+from ..schemas.students import  ShowStudent, StudentUpdate, StudentSIPName
 from ..schemas.projects import ShowProject, ProjectPreferences
 from ..models.users import User, Student, Professor, Department
 from ..models.projects import Project
@@ -99,12 +99,18 @@ def deptdata(db: Session = Depends(get_db), current_user: User = Depends(get_cur
         media_type="text/csv",
         headers={"Content-Disposition": "attachment; filename=department_data.csv"}
     )
-@router.get("/deptStudents", response_model=list[StudentSIPEmail])
+@router.get("/deptStudents", response_model=list[StudentSIPName])
 def dept_students(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if current_user.role != 'department':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not a Department User")
     
-    students=db.query(Student).filter(Student.pref1_id!=None).filter(Student.pref1.professor.dept_id == current_user.id).all()
+    students = (
+        db.query(Student)
+        .join(Student.pref1)  # Join to Project (pref1)
+        .join(Project.professor)  # Join to Professor
+        .filter(Professor.dept_id == current_user.id)
+        .all()
+    )
 
     return students
 

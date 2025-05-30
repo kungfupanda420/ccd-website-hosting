@@ -518,7 +518,16 @@ def get_id_card(db: Session = Depends(get_db), current_user: User = Depends(get_
     
     ROOT_DIR= os.path.abspath(os.path.join(os.path.dirname(__file__),"..",".."))
     fileemail=student.user.email.replace("@","at").replace(".","dot")
-    filename=f"{fileemail}.png"
+    
+    #
+    #
+    #
+    #
+    
+    
+    filename=f"{fileemail}.png" # fix this to
+
+
 
     PFP_PATH=os.path.join(ROOT_DIR,"uploads","profilePhotos",filename)
     print (ROOT_DIR)
@@ -549,8 +558,6 @@ def get_id_card(db: Session = Depends(get_db), current_user: User = Depends(get_
     output_pdf=template.convert("RGB")
     
     output = io.BytesIO()
-    output_path = os.path.join(IDS_DIR, f"{student.sip_id}.pdf")
-    output_pdf.save(output_path, format="PDF")
     output_pdf.save(output, format="PDF")
     output.seek(0)
     

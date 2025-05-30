@@ -92,9 +92,9 @@ class StudentUpdate(BaseModel):
         "from_attributes": True
     }
 
-class StudentSIPEmail(BaseModel):
+class StudentSIPName(BaseModel):
     sip_id: str
-    email: EmailStr
+    name: str
 
     model_config = {
         "from_attributes": True
