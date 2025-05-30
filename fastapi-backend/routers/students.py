@@ -23,6 +23,10 @@ from pydantic import EmailStr, BaseModel
 
 from dotenv import load_dotenv
 
+from fastapi.responses import StreamingResponse
+from PIL import Image, ImageDraw, ImageFont
+import io
+
 
 
 router =APIRouter(
@@ -502,6 +506,45 @@ def increase_preference(request:ProjectPreferencesId,db:Session=Depends(get_db),
     db.refresh(student)
 
     return updated_projects
+
+@router.get("/generate_id_card")
+def get_id_card(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    if current_user.role != 'student':
+        raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
+    
+    student = db.query(Student).filter(Student.user_id == current_user.id).first()
+    if not student:
+        raise HTTPException(status_code=404, detail="Student not found")
+    
+    ROOT_DIR= os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
+    PFP_PATH=os.path.join(ROOT_DIR,student.profilePhotoPath)
+    if not os.path.exists(PFP_PATH):
+        raise HTTPException(status_code=404, detail="Profile photo not found")
+    TEMPLATE_PATH = os.path.join(ROOT_DIR, "templates", "id_card_template.png")
+    FONT_PATH = os.path.join(ROOT_DIR, "templates", "Roboto-Bold.ttf")
+
+    template= Image.open(TEMPLATE_PATH).convert("RGBA")
+    draw =ImageDraw.Draw(template)
+
+    font=ImageFont.truetype(FONT_PATH,size=32)
+
+
+    try :
+        student_image=Image.open(PFP_PATH).convert("RGBA")
+        student_image=student_image.resize((100,120))
+        template.paste(student_image,(50,50))
+    except FileNotFoundError:
+        print(f"Photo not found ")
+
+
+    draw.text((500, 260), f"Name: {student.name}", font=font, fill="black")
+    draw.text((500, 310), f"SIP ID: {student.sip_id}", font=font, fill="black")
+    
+    output = io.BytesIO()
+    template.save(output, format="PNG")
+    output.seek(0)
+    return StreamingResponse(output, media_type="image/png")
+
 
 
 # if student.pref1_id:
