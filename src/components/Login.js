@@ -38,6 +38,8 @@ function Login() {
           if (data.access_token) {
             localStorage.setItem("token", data.access_token);
             const role = data.role;
+            // console.log(toke);
+            console.log(localStorage.getItem("access_token"));
             if (role === "admin") navigate("/admin_sip");
             else if (role === "student") navigate("/Candidatedashboard");
             else if (role === "professor") navigate("/professor_dashboard");

@@ -1,11 +1,60 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-function DepartmentSIP({ department, sip }) {
+function DepartmentSIP() {
+  const [students, setStudents] = useState([]);
+
+  useEffect(() => {
+    fetchStudentData();
+  }, []);
+
+  const fetchStudentData = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('/api/departments/deptStudents', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch student data');
+      }
+
+      const data = await response.json();
+      setStudents(data);
+    } catch (error) {
+      console.error('Error fetching student data:', error);
+    }
+  };
+
+  const handleAllot = async (user_id, project_id) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`/api/allotStudent/${user_id}/${project_id}`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Failed to allot project');
+      }
+
+      const result = await response.json();
+      alert(result.message);
+      fetchStudentData(); // Refresh data
+    } catch (error) {
+      console.error('Allot error:', error);
+      alert(`Error: ${error.message}`);
+    }
+  };
+
   const downloadCSV = async () => {
     try {
-      // Get the authentication token from wherever it's stored in your app
-      const token = localStorage.getItem('token'); // or your auth context
-      
+      const token = localStorage.getItem('token');
       const response = await fetch('/api/departments/departmentData', {
         method: 'GET',
         headers: {
@@ -18,18 +67,13 @@ function DepartmentSIP({ department, sip }) {
         throw new Error('Failed to download CSV');
       }
 
-      // Create a blob from the response
       const blob = await response.blob();
-      
-      // Create a download link and trigger the download
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
       a.download = 'department_data.csv';
       document.body.appendChild(a);
       a.click();
-      
-      // Clean up
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
     } catch (error) {
@@ -38,12 +82,14 @@ function DepartmentSIP({ department, sip }) {
     }
   };
 
-  // Safely access department.name or sip.name (if needed)
-  const departmentName = department?.name || 'Department';
-  const sipName = sip?.name || 'SIP';
+  const cellStyle = {
+    border: '1px solid #ddd',
+    padding: '8px',
+    textAlign: 'center',
+  };
 
   return (
-    <div>
+    <div style={{ padding: '20px' }}>
       <button 
         onClick={downloadCSV}
         style={{
@@ -54,18 +100,76 @@ function DepartmentSIP({ department, sip }) {
           borderRadius: '4px',
           cursor: 'pointer',
           fontSize: '14px',
+          marginBottom: '20px',
         }}
       >
         Export as CSV
       </button>
+
+      <table 
+        style={{
+          width: '100%',
+          borderCollapse: 'collapse',
+          marginBottom: '20px'
+        }}
+      >
+        <thead>
+          <tr>
+            <th style={cellStyle}>SIP ID</th>
+            <th style={cellStyle}>Name</th>
+            <th style={cellStyle}>Preference 1</th>
+            <th style={cellStyle}>Preference 2</th>
+            <th style={cellStyle}>Preference 3</th>
+            <th style={cellStyle}>Allot</th>
+          </tr>
+        </thead>
+        <tbody>
+          {students.length === 0 ? (
+            <tr>
+              <td colSpan="6" style={{ textAlign: 'center' }}>No students found.</td>
+            </tr>
+          ) : (
+            students.map((student, index) => (
+              <tr key={index}>
+                <td style={cellStyle}>{student.sip_id}</td>
+                <td style={cellStyle}>{student.name}</td>
+                <td style={cellStyle}>{student.preference1?.title || '-'}</td>
+                <td style={cellStyle}>{student.preference2?.title || '-'}</td>
+                <td style={cellStyle}>{student.preference3?.title || '-'}</td>
+                <td style={cellStyle}>
+                  <select
+                    onChange={(e) => {
+                      if (e.target.value) {
+                        handleAllot(student.user_id, e.target.value);
+                      }
+                    }}
+                    defaultValue=""
+                  >
+                    <option value="" disabled>Select Project</option>
+                    {student.preference1 && (
+                      <option value={student.preference1.id}>
+                        {student.preference1.title}
+                      </option>
+                    )}
+                    {student.preference2 && (
+                      <option value={student.preference2.id}>
+                        {student.preference2.title}
+                      </option>
+                    )}
+                    {student.preference3 && (
+                      <option value={student.preference3.id}>
+                        {student.preference3.title}
+                      </option>
+                    )}
+                  </select>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
     </div>
   );
 }
-
-// Default props (optional)
-DepartmentSIP.defaultProps = {
-  department: {},
-  sip: {},
-};
 
 export default DepartmentSIP;
