@@ -1,18 +1,14 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "../css/Candidate_dashboard.css";
 import { useNavigate } from "react-router-dom";
 import { authFetch } from "../utils/authFetch";
 
 function CandidateDashboard() {
-  const fileInputRef = useRef(null);
   const [profilePhoto, setProfilePhoto] = useState("/images/default.png");
-  const [feeStatus, setFeeStatus] = useState("Pending");
-  // const [shortlistStatus, setShortlistStatus] = useState("Not Shortlisted");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // Fetch profile photo on component mount
   useEffect(() => {
     const fetchProfilePhoto = async () => {
       setIsLoading(true);
@@ -29,16 +25,24 @@ function CandidateDashboard() {
             Authorization: `Bearer ${token}`,
           },
         });
-        
+
         if (res.ok) {
           const data = await res.json();
-          if (data.profile_photo_url) {
-            // Construct full URL to the image
-            const fullUrl = `http://localhost:8000${data.profile_photo_url}`;
-            setProfilePhoto(fullUrl);
+          if (data.profile_photo_path) {
+            // Remove the leading '/' if present and add the base URL
+            const cleanedPath = data.profile_photo_path.startsWith('/') 
+              ? data.profile_photo_path.substring(1) 
+              : data.profile_photo_path;
+            
+            // Use the correct base URL (adjust if your backend is hosted elsewhere)
+            const fullUrl = `${window.location.origin}/${cleanedPath}`;
+            
+            // Add cache-busting parameter to force refresh
+            setProfilePhoto(`${fullUrl}?${Date.now()}`);
           }
         } else if (res.status === 404) {
           console.log("Profile photo not found, using default");
+          setProfilePhoto("/images/default.png");
         } else {
           const err = await res.json();
           setError(err.detail || "Failed to fetch profile photo");
@@ -46,69 +50,28 @@ function CandidateDashboard() {
       } catch (error) {
         console.error("Error fetching profile photo:", error);
         setError("Error fetching profile photo");
+        setProfilePhoto("/images/default.png");
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchProfilePhoto();
+
+    // Listen for profile updates from other components
+    const handleStorageChange = () => {
+      if (localStorage.getItem('profileUpdated')) {
+        fetchProfilePhoto();
+        localStorage.removeItem('profileUpdated');
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
-
-  // Handle profile photo upload
-  const handleProfilePhotoChange = async (e) => {
-    if (!e.target.files || !e.target.files[0]) return;
-
-    setIsLoading(true);
-    setError(null);
-    
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        setError("No authentication token found");
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append("profilePhoto", e.target.files[0]);
-
-      const res = await authFetch("/api/students/me/edit", {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      });
-
-      if (res.ok) {
-        const updated = await res.json();
-        // Construct new URL for the updated photo
-        const newPhotoUrl = `http://localhost:8000/uploads/profilePhotos/${updated.profilePhotoPath.split('/').pop()}`;
-        setProfilePhoto(newPhotoUrl);
-        alert("Profile photo updated successfully!");
-      } else {
-        const err = await res.json();
-        setError(err.detail || "Failed to update profile photo");
-        alert(err.detail || "Failed to update profile photo");
-      }
-    } catch (error) {
-      console.error("Error updating profile photo:", error);
-      setError("Error updating profile photo");
-      alert("Error updating profile photo");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Handle general file uploads
-  const handleFileChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      alert("File uploaded: " + e.target.files[0].name);
-    }
-  };
 
   return (
     <div className="dashboard-container">
-      {/* Sidebar */}
       <div className="dashboard-sidebar">
         <div className="profile-photo-wrapper">
           {isLoading ? (
@@ -124,8 +87,6 @@ function CandidateDashboard() {
               }}
             />
           )}
-          
-          
         </div>
 
         <button 
@@ -135,15 +96,7 @@ function CandidateDashboard() {
         >
           Profile Page
         </button>
-        {/* <button className="sidebar-btn" disabled={isLoading}>
-          Shortlisting Status
-        </button> */}
-        <button className="sidebar-btn" disabled={isLoading}>
-          Fee Payment
-        </button>
-        <button className="sidebar-btn" disabled={isLoading}>
-          Upload Docs
-        </button>
+
         <button 
           className="sidebar-btn" 
           onClick={() => navigate('/CandidatePreferences')}
@@ -151,51 +104,26 @@ function CandidateDashboard() {
         >
           Project Preferences
         </button>
+
         <button 
           className="sidebar-btn" 
-          onClick={() => navigate('/')}
+          onClick={() => {
+            localStorage.removeItem('token');
+            navigate('/');
+          }}
           disabled={isLoading}
         >
           Logout
         </button>
       </div>
 
-      {/* Main Content */}
       <div className="dashboard-main">
         <h1>Candidate Dashboard</h1>
         {error && <div className="error-message">{error}</div>}
-        
         {isLoading ? (
           <div className="loading-indicator">Loading dashboard...</div>
         ) : (
-          <>
-            <p>Welcome to the candidate dashboard!</p>
-
-            <div className="status-section">
-              {/* <h3>
-                Shortlisting Status:{" "}
-                <span className="shortlist-status">{shortlistStatus}</span>
-              </h3> */}
-              <h3>
-                Fee Payment Status:{" "}
-                <span className={feeStatus === "Paid" ? "fee-paid" : "fee-pending"}>
-                  {feeStatus}
-                </span>
-              </h3>
-            </div>
-
-            <div className="upload-section">
-              <h3>Upload Files / Documents</h3>
-              <input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleFileChange}
-                multiple
-                disabled={isLoading}
-              />
-              <p className="upload-hint">Supported formats: PDF, JPG, PNG</p>
-            </div>
-          </>
+          <p>Welcome to the candidate dashboard!</p>
         )}
       </div>
     </div>

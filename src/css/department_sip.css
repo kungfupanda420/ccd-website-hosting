@@ -1,0 +1,66 @@
+.department-students-container {
+  padding: 20px;
+}
+
+.search-field {
+  width: 300px;
+}
+
+.export-button {
+  background-color: #1976d2;
+  color: white;
+}
+
+.export-button:hover {
+  background-color: #1565c0;
+}
+
+.view-button {
+  color: #1976d2;
+}
+
+.view-button:hover {
+  background-color: rgba(25, 118, 210, 0.1);
+}
+
+.close-button {
+  color: #757575;
+}
+
+.close-button:hover {
+  background-color: rgba(117, 117, 117, 0.1);
+}
+
+.student-details-content {
+  padding: 10px;
+}
+
+.preferences-section {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+.preference-item {
+  padding: 15px;
+  margin-bottom: 20px;
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  .department-students-container {
+    padding: 10px;
+  }
+  
+  .search-field {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  
+  .export-button {
+    width: 100%;
+  }
+}

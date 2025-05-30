@@ -41,7 +41,8 @@ function Login() {
             if (role === "admin") navigate("/admin_sip");
             else if (role === "student") navigate("/Candidatedashboard");
             else if (role === "professor") navigate("/professor_dashboard");
-            else if (role === "department") navigate("/department_dashboard");
+            else if (role === "department") navigate("/department_sip");
+            
             else setError("Unknown role");
           }
         } else {

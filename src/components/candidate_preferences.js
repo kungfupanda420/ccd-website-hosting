@@ -19,30 +19,57 @@ function CandidatePreferences() {
   });
   const [selectedProjects, setSelectedProjects] = useState([]);
   const [message, setMessage] = useState({ text: "", type: "" });
+  const [isLoading, setIsLoading] = useState(true);
 
+  // Fetch all projects and applied projects on component mount
   useEffect(() => {
-    const fetchProjects = async () => {
+    const fetchData = async () => {
       try {
-        const res = await authFetch("/api/students/allProjects", { method: "GET" });
-        if (res.ok) {
-          const data = await res.json();
-          setProjects(data);
-          setFilteredProjects(data);
+        setIsLoading(true);
+        
+        // Fetch all available projects
+        const projectsRes = await authFetch("/api/students/allProjects");
+        if (!projectsRes.ok) {
+          throw new Error("Failed to load projects");
+        }
+        const projectsData = await projectsRes.json();
+        setProjects(projectsData);
+        setFilteredProjects(projectsData);
 
-          setDepartments([...new Set(data.map(p => p.professor?.department?.name || "N/A"))]);
-          setModes([...new Set(data.map(p => p.mode || "N/A"))]);
-          setDurations([...new Set(data.map(p => p.duration || "N/A"))]);
-          setProfessors([...new Set(data.map(p => p.professor?.name || "N/A"))]);
-        } else {
-          setMessage({ text: "Failed to load projects.", type: "error" });
+        // Extract filter options
+        setDepartments([...new Set(projectsData.map(p => p.professor?.department?.name || "N/A"))]);
+        setModes([...new Set(projectsData.map(p => p.mode || "N/A"))]);
+        setDurations([...new Set(projectsData.map(p => p.duration || "N/A"))]);
+        setProfessors([...new Set(projectsData.map(p => p.professor?.name || "N/A"))]);
+
+        // Fetch already applied projects
+        const appliedRes = await authFetch("/api/students/appliedProjects");
+        if (appliedRes.ok) {
+          const appliedData = await appliedRes.json();
+          if (appliedData.length > 0) {
+            // Set the selected projects to the already applied ones
+            setSelectedProjects(appliedData);
+            // Set the department filter to match the applied projects
+            setFilters(prev => ({
+              ...prev,
+              department: appliedData[0].professor?.department?.name || ""
+            }));
+          }
         }
       } catch (err) {
-        setMessage({ text: "Network error.", type: "error" });
+        setMessage({ 
+          text: err.message || "Failed to load data", 
+          type: "error" 
+        });
+      } finally {
+        setIsLoading(false);
       }
     };
-    fetchProjects();
+    
+    fetchData();
   }, []);
 
+  // Filter projects based on selected filters
   useEffect(() => {
     let result = [...projects];
     if (filters.department && filters.department !== "N/A") {
@@ -94,25 +121,25 @@ function CandidatePreferences() {
       if (isSelected) {
         return prev.filter(p => p.id !== project.id);
       }
+      
       // Only allow max 3 selections and same department
-      if (
-        prev.length < 3 &&
-        (prev.length === 0 || project.professor?.department?.name === prev[0].professor?.department?.name)
-      ) {
-        return [...prev, project];
-      } else if (prev.length >= 3) {
+      if (prev.length >= 3) {
         setMessage({
           text: "You can select a maximum of 3 projects.",
           type: "error"
         });
         return prev;
-      } else {
+      }
+      
+      if (prev.length > 0 && project.professor?.department?.name !== prev[0].professor?.department?.name) {
         setMessage({
           text: "You can only select projects from the same department.",
           type: "error"
         });
         return prev;
       }
+      
+      return [...prev, project];
     });
   };
 
@@ -132,7 +159,11 @@ function CandidatePreferences() {
       });
       return;
     }
+    
     try {
+      setIsLoading(true);
+      setMessage({ text: "", type: "" });
+      
       const res = await authFetch("/api/students/preferences", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -142,6 +173,7 @@ function CandidatePreferences() {
           pref3_id: selectedProjects[2].id
         }),
       });
+      
       if (res.ok) {
         setMessage({
           text: "Preferences submitted successfully!",
@@ -149,22 +181,41 @@ function CandidatePreferences() {
         });
       } else {
         const err = await res.json();
-        setMessage({
-          text: err.detail || "Failed to submit preferences.",
-          type: "error"
-        });
+        throw new Error(err.detail || "Failed to submit preferences");
       }
     } catch (err) {
       setMessage({
-        text: "Network error.",
+        text: err.message || "Network error",
         type: "error"
       });
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="preferences-container">
+        <h1>Project Preferences</h1>
+        <div className="loading-message">Loading projects...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="preferences-container">
       <h1>Project Preferences</h1>
+      
+      {selectedProjects.length > 0 && (
+        <div className="info-message">
+          You have {selectedProjects.length} project(s) selected. {
+            selectedProjects.length < 3 ? 
+            "Please select 3 projects to submit your preferences." : 
+            "Drag to reorder your preferences."
+          }
+        </div>
+      )}
+
       <div className="filters-section">
         <div className="filter-row">
           <div className="filter-group">
@@ -173,6 +224,7 @@ function CandidatePreferences() {
               name="department"
               value={filters.department}
               onChange={handleFilterChange}
+              disabled={selectedProjects.length > 0}
             >
               <option value="">All Departments</option>
               {departments.map((dept, index) => (
@@ -229,6 +281,7 @@ function CandidatePreferences() {
           />
         </div>
       </div>
+
       <div className="projects-section">
         <div className="available-projects">
           <h2>Available Projects ({filteredProjects.length})</h2>
@@ -265,7 +318,8 @@ function CandidatePreferences() {
                             // Disable if already 3 selected and this one is not selected
                             (selectedProjects.length >= 3 && !selectedProjects.some(p => p.id === project.id)) ||
                             // Disable if department doesn't match
-                            (selectedProjects.length > 0 && project.professor?.department?.name !== selectedProjects[0].professor?.department?.name)
+                            (selectedProjects.length > 0 && 
+                             project.professor?.department?.name !== selectedProjects[0].professor?.department?.name)
                           }
                         />
                       </td>
@@ -282,16 +336,20 @@ function CandidatePreferences() {
             </table>
           </div>
         </div>
+
         <div className="selected-projects">
-          <h2>Selected Projects ({selectedProjects.length})</h2>
+          <h2>Selected Projects ({selectedProjects.length}/3)</h2>
           {selectedProjects.length === 0 ? (
-            <p>No projects selected yet.</p>
+            <div className="empty-selection">
+              <p>No projects selected yet.</p>
+              <p>Select projects from the same department (max 3)</p>
+            </div>
           ) : (
             <div className="selected-list">
               <div className="department-warning">
-                {selectedProjects.length > 0 &&
-                  `All projects from ${selectedProjects[0].professor?.department?.name || "N/A"} department`}
+                All projects from {selectedProjects[0].professor?.department?.name || "N/A"} department
               </div>
+              
               <DragDropContext onDragEnd={handleDragEnd}>
                 <Droppable droppableId="selected-projects-list">
                   {(provided) => (
@@ -336,18 +394,21 @@ function CandidatePreferences() {
                   )}
                 </Droppable>
               </DragDropContext>
-              {selectedProjects.length   && (
+              
+              {selectedProjects.length === 3 && (
                 <button
                   onClick={submitPreferences}
                   className="submit-btn"
+                  disabled={isLoading}
                 >
-                  Submit Preferences
+                  {isLoading ? "Submitting..." : "Submit Preferences"}
                 </button>
               )}
             </div>
           )}
         </div>
       </div>
+
       {message.text && (
         <div className={`message ${message.type}`}>
           {message.text}
