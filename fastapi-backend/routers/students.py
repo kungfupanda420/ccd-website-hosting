@@ -516,8 +516,14 @@ def get_id_card(db: Session = Depends(get_db), current_user: User = Depends(get_
     if not student:
         raise HTTPException(status_code=404, detail="Student not found")
     
-    ROOT_DIR= os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
-    PFP_PATH=os.path.join(ROOT_DIR,student.profilePhotoPath)
+    ROOT_DIR= os.path.abspath(os.path.join(os.path.dirname(__file__),"..",".."))
+    fileemail=student.user.email.replace("@","at").replace(".","dot")
+    filename=f"{fileemail}.png"
+
+    PFP_PATH=os.path.join(ROOT_DIR,"uploads","profilePhotos",filename)
+    print (ROOT_DIR)
+    IDS_DIR = os.path.join(ROOT_DIR, "IDS")
+
     if not os.path.exists(PFP_PATH):
         raise HTTPException(status_code=404, detail="Profile photo not found")
     TEMPLATE_PATH = os.path.join(ROOT_DIR, "templates", "id_card_template.png")
@@ -539,11 +545,24 @@ def get_id_card(db: Session = Depends(get_db), current_user: User = Depends(get_
 
     draw.text((500, 260), f"Name: {student.name}", font=font, fill="black")
     draw.text((500, 310), f"SIP ID: {student.sip_id}", font=font, fill="black")
+
+    output_pdf=template.convert("RGB")
     
     output = io.BytesIO()
-    template.save(output, format="PNG")
+    output_path = os.path.join(IDS_DIR, f"{student.sip_id}.pdf")
+    output_pdf.save(output_path, format="PDF")
+    output_pdf.save(output, format="PDF")
     output.seek(0)
-    return StreamingResponse(output, media_type="image/png")
+    
+    return StreamingResponse(output, media_type="application/pdf", headers={
+        "Content-Disposition": f"inline; filename={student.sip_id}_id_card.pdf"
+    })
+
+
+    # rgb_template = template.convert("RGB")
+    # output_path = os.path.join(IDS_DIR, f"{student.sip_id}.pdf")
+    # rgb_template.save(output_path, format="PDF")
+    # return {"message": "ID card generated successfully", "id_card_path": output_path}
 
 
 
