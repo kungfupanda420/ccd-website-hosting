@@ -336,7 +336,7 @@ function CandidatePreferences() {
                   )}
                 </Droppable>
               </DragDropContext>
-              {selectedProjects.length === 3 && (
+              {selectedProjects.length   && (
                 <button
                   onClick={submitPreferences}
                   className="submit-btn"
