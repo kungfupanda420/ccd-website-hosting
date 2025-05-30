@@ -42,4 +42,7 @@ fastapi-backend/people_curlreq.txt
 fastapi-backend/testmail.py
 fastapi-backend/id_gen.py
 
+
+
 /uploads
+/templates
