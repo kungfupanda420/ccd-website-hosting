@@ -57,9 +57,20 @@ def deptdata(db: Session = Depends(get_db), current_user: User = Depends(get_cur
         data.append({
             "SIP ID": student.sip_id,
             "Apaar ID": student.apaar_id,
-            "Email": student.user.email if student.user else None,
+            "Email":student.user.email,
             "Name": student.name,
-            # ... other basic fields ...
+            "Institution": student.institution,
+            "Program": student.program,
+            "Student Department": student.department,
+            "Year": student.year,
+            "Institute Location": student.instituteLocation,
+            "Institute State": student.instituteState,
+            "Current Semester CGPA": student.currentSemesterCgpa,   
+            "UG": student.UG,
+            "CGPA 12": student.cgpa12,
+            "Board 12": student.board12,    
+            "CGPA 10": student.cgpa10,
+            "Board 10": student.board10,
             
             # Safe access to project preferences
             "Project Department": pref1.professor.department.name if pref1 and pref1.professor else None,
