@@ -142,6 +142,7 @@ def register(
 
     # Student fields
     adhaar_id=Form(...),
+    apaar_id=Form(...),
     phone: str = Form(...),
     dob: date = Form(...),
     address: str = Form(...),
@@ -177,6 +178,10 @@ def register(
     if student:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Adhaar ID already registered")
 
+    student=db.query(Student).filter(Student.apaar_id==apaar_id).first()
+    if student:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Apaar ID already registered")
+
     reg_screenshot_path=saveFile(file=regPaymentScreenshot,folder="regPaymentScreenshots",email=current_user.email)
     profile_photo_path=saveFile(file=profilePhoto,folder="profilePhotos",email=current_user.email)
     student_college_idcard_path=saveFile(file=student_college_idcard,folder="studentCollegeIdcards",email=current_user.email)
@@ -186,6 +191,7 @@ def register(
     new_student = Student(
         user_id=current_user.id,
         adhaar_id=adhaar_id,
+        apaar_id=apaar_id,
         sip_id=sip_id,
         name=name,
         phone=phone,
@@ -267,6 +273,7 @@ def edit_me(
     # Updatable fields (add/remove as per your needs)
     name: str = Form(None),
     adhaar_id: str = Form(None),
+    apaar_id: str = Form(None),
     phone: str = Form(None),
     dob: date = Form(None),
     address: str = Form(None),
@@ -310,11 +317,17 @@ def edit_me(
 
         if student1 and student.user_id!= student1.user_id:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Adhaar ID already registered")
+    if apaar_id:
+
+        student2=db.query(Student).filter(Student.adhaar_id==adhaar_id).first()
+
+        if student2 and student.user_id!= student2.user_id:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Apaar ID already registered")
 
     # Update fields if they are provided
     update_fields = locals()
     for key in [
-        'name', 'adhaar_id', 'phone', 'dob', 'address', 'state',
+        'name', 'adhaar_id','apaar_id', 'phone', 'dob', 'address', 'state',
         'guardianName', 'guardianRelation', 'guardianPhone',
         'institution', 'program', 'department', 'year',
         'instituteLocation', 'instituteState', 'currentSemesterCgpa',

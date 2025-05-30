@@ -45,6 +45,7 @@ def deptdata(db: Session=Depends(get_db),current_user: User= Depends(get_current
     for student in students:
         data.append({
             "SIP ID": student.sip_id,
+            "Apaar ID": student.apaar_id,
             "Email":student.user.email,
             "Name": student.name,
             "Institution": student.institution,

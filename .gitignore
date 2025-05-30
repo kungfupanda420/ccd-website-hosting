@@ -40,5 +40,6 @@ fastapi-backend/makepassword.py
 fastapi-backend/makepassword.py
 fastapi-backend/people_curlreq.txt
 fastapi-backend/testmail.py
+fastapi-backend/id_gen.py
 
 /uploads

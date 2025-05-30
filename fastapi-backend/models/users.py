@@ -24,6 +24,7 @@ class Student(Base):
 
     sip_id= Column(String(255),unique=True, index=True)
     adhaar_id= Column(String(255), unique=True)
+    apaar_id= Column(String(255), unique=True)
     nitc_idcard_path = Column(String(1000))
     student_college_idcard_path = Column(String(1000))
     name = Column(String(255))
