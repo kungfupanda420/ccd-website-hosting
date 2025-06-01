@@ -29,26 +29,20 @@ function CandidateDashboard() {
         if (res.ok) {
           const data = await res.json();
           if (data.profile_photo_path) {
-            // Remove the leading '/' if present and add the base URL
-            const cleanedPath = data.profile_photo_path.startsWith('/') 
-              ? data.profile_photo_path.substring(1) 
+            const cleanedPath = data.profile_photo_path.startsWith("/")
+              ? data.profile_photo_path.substring(1)
               : data.profile_photo_path;
-            
-            // Use the correct base URL (adjust if your backend is hosted elsewhere)
+
             const fullUrl = `${window.location.origin}/${cleanedPath}`;
-            
-            // Add cache-busting parameter to force refresh
             setProfilePhoto(`${fullUrl}?${Date.now()}`);
           }
         } else if (res.status === 404) {
-          console.log("Profile photo not found, using default");
           setProfilePhoto("/images/default.png");
         } else {
           const err = await res.json();
           setError(err.detail || "Failed to fetch profile photo");
         }
       } catch (error) {
-        console.error("Error fetching profile photo:", error);
         setError("Error fetching profile photo");
         setProfilePhoto("/images/default.png");
       } finally {
@@ -58,29 +52,28 @@ function CandidateDashboard() {
 
     fetchProfilePhoto();
 
-    // Listen for profile updates from other components
     const handleStorageChange = () => {
-      if (localStorage.getItem('profileUpdated')) {
+      if (localStorage.getItem("profileUpdated")) {
         fetchProfilePhoto();
-        localStorage.removeItem('profileUpdated');
+        localStorage.removeItem("profileUpdated");
       }
     };
 
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
   return (
-    <div className="dashboard-container">
-      <div className="dashboard-sidebar">
-        <div className="profile-photo-wrapper">
+    <div className="cd-container">
+      <div className="cd-sidebar">
+        <div className="cd-profile-wrapper">
           {isLoading ? (
-            <div className="profile-photo-loading">Loading...</div>
+            <div className="cd-photo-loading">Loading...</div>
           ) : (
             <img
               src={profilePhoto}
               alt="Profile"
-              className="profile-photo"
+              className="cd-photo"
               onError={(e) => {
                 e.target.onerror = null;
                 e.target.src = "/images/default.png";
@@ -90,41 +83,31 @@ function CandidateDashboard() {
         </div>
 
         <button 
-          className="sidebar-btn" 
-          onClick={() => navigate('/candidate_profile')}
+          className="cd-btn" 
+          onClick={() => navigate("/candidate_profile")}
           disabled={isLoading}
         >
           Profile Page
         </button>
 
         <button 
-          className="sidebar-btn" 
-          onClick={() => navigate('/CandidatePreferences')}
+          className="cd-btn" 
+          onClick={() => navigate("/CandidatePreferences")}
           disabled={isLoading}
         >
           Project Preferences
         </button>
 
         <button 
-          className="sidebar-btn" 
+          className="cd-btn" 
           onClick={() => {
-            localStorage.removeItem('token');
-            navigate('/');
+            localStorage.removeItem("token");
+            navigate("/");
           }}
           disabled={isLoading}
         >
           Logout
         </button>
-      </div>
-
-      <div className="dashboard-main">
-        <h1>Candidate Dashboard</h1>
-        {error && <div className="error-message">{error}</div>}
-        {isLoading ? (
-          <div className="loading-indicator">Loading dashboard...</div>
-        ) : (
-          <p>Welcome to the candidate dashboard!</p>
-        )}
       </div>
     </div>
   );

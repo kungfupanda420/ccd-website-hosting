@@ -204,6 +204,7 @@ function CandidatePreferences() {
 
   return (
     <div className="preferences-container">
+      
       <h1>Project Preferences</h1>
       
       {selectedProjects.length > 0 && (

@@ -1,173 +1,154 @@
+:root {
+    --primary: #2c3e50;
+    --secondary: #3498db;
+    --light: #ecf0f1;
+    --dark: #34495e;
+    --success: #2ecc71;
+    --danger: #e74c3c;
+    --warning: #f39c12;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 body {
-  background: #e6f0ff;
+    background-color: #f5f7fa;
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+    font-family: "Segoe UI", sans-serif;
 }
 
-.dashboard-container {
-  display: flex;
-  min-height: 100vh;
-  background: #e6f0ff; /* subtle blue background for the whole page */
+.cd-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f5f7fa;
 }
 
-.dashboard-sidebar {
-  width: 260px;
-  background: #1976d2;
-  padding: 32px 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-shadow: 2px 0 16px rgba(25, 118, 210, 0.08);
-  border-radius: 0;
-  min-height: 100vh;
+.cd-sidebar {
+    width: 250px;
+    background-color: var(--primary);
+    color: white;
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    height: 100%;
 }
 
-.profile-photo-wrapper {
-  position: relative;
-  margin-bottom: 24px;
+.cd-profile-wrapper {
+    margin-bottom: 20px;
+    text-align: center;
+    width: 100%;
 }
 
-.profile-photo {
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #fff;
-  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
-  background: #fff;
+.cd-photo {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto 15px;
+    border: 2px solid var(--secondary);
+    display: block;
 }
 
-.profile-photo-edit {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  background: #fff;
-  color: #1976d2;
-  border-radius: 50%;
-  padding: 4px 7px;
-  cursor: pointer;
-  font-size: 18px;
-  border: 1.5px solid #1976d2;
-  box-shadow: 0 1px 4px rgba(25, 118, 210, 0.12);
-  transition: background 0.2s, color 0.2s;
+.cd-profile-wrapper h3 {
+    margin-bottom: 5px;
+    font-weight: 700;
 }
 
-.profile-photo-edit:hover {
-  background: #1976d2;
-  color: #fff;
+.cd-profile-wrapper p {
+    font-size: 14px;
+    color: var(--light);
 }
 
-.sidebar-btn {
-  margin: 8px 0;
-  width: 100%;
-  padding: 10px 0;
-  background: #fff;
-  border: 1.5px solid #1976d2;
-  color: #1976d2;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 15px;
-  letter-spacing: 0.5px;
-  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-  box-shadow: 0 1px 4px rgba(25, 118, 210, 0.07);
+.cd-btn {
+    margin: 8px 20px;
+    width: calc(100% - 40px);
+    padding: 12px 20px;
+    background: transparent;
+    border: none;
+    color: white;
+    text-align: left;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: 0.4px;
+    transition: background-color 0.3s ease, color 0.3s ease, border-left 0.3s ease;
+    border-left: 3px solid transparent;
+    display: block;
+    text-decoration: none;
 }
 
-.sidebar-btn:hover {
-  background: #125ea8;
-  color: #fff;
-  border-color: #125ea8;
+.cd-btn:hover,
+.cd-btn.active {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-left: 3px solid var(--secondary);
+    outline: none;
 }
 
-.dashboard-main {
-  flex: 1;
-  padding: 48px 40px;
-  background: transparent;
-  border-radius: 0;
-  margin: 0;
-  box-shadow: none;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+.cd-main-content {
+    margin-left: 250px;
+    padding: 30px;
+    width: calc(100% - 250px);
+    background: white;
+    border-radius: 8px;
+    margin: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    flex-grow: 1;
 }
 
-.dashboard-main h1 {
-  color: #1976d2;
-  margin-bottom: 8px;
-  font-size: 2.1rem;
+h1, h2, h3 {
+    margin-bottom: 20px;
+    color: var(--primary);
 }
 
-.dashboard-main p {
-  color: #444;
-  margin-bottom: 24px;
-  font-size: 1.1rem;
+.card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 25px;
+    margin-bottom: 30px;
 }
 
-.status-section {
-  margin: 32px 0 24px 0;
-  background: #f4f8fb;
-  border-radius: 10px;
-  padding: 18px 24px;
-  box-shadow: 0 1px 6px rgba(25, 118, 210, 0.06);
-}
-
-.status-section h3 {
-  margin: 0 0 10px 0;
-  font-size: 1.1rem;
-}
-
-.shortlist-status {
-  color: #1976d2;
-  font-weight: 600;
-}
-
-.fee-paid {
-  color: #43a047;
-  font-weight: 600;
-}
-
-.fee-pending {
-  color: #d32f2f;
-  font-weight: 600;
-}
-
-.dashboard-main input[type="file"] {
-  margin-top: 10px;
-  padding: 8px 0;
-  font-size: 15px;
+.form-group {
+    margin-bottom: 20px;
 }
 
 @media (max-width: 900px) {
-  .dashboard-container {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .dashboard-sidebar {
-    flex-direction: row;
-    width: 100%;
-    min-height: unset;
-    border-radius: 0;
-    margin-bottom: 0;
-    justify-content: center;
-    box-shadow: 0 2px 16px rgba(25, 118, 210, 0.08);
-  }
-  .sidebar-btn {
-    width: auto;
-    margin: 0 8px;
-    padding: 10px 18px;
-  }
-  .dashboard-main {
-    margin: 0;
-    border-radius: 0;
-    padding: 24px 8px;
-  }
-}
-
-@media (max-width: 600px) {
-  .dashboard-main {
-    padding: 12px 2vw;
-    margin: 0;
-    border-radius: 0;
-  }
-  .dashboard-sidebar {
-    padding: 12px 0;
-  }
+    .cd-container {
+        flex-direction: column;
+    }
+    .cd-sidebar {
+        flex-direction: row;
+        width: 100%;
+        height: auto;
+        padding: 16px;
+        box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1);
+        position: relative;
+    }
+    .cd-btn {
+        width: auto;
+        margin: 0 8px;
+        padding: 10px 18px;
+        border-left: none;
+    }
+    .cd-btn:hover,
+    .cd-btn.active {
+        border-left: none;
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+    .cd-main-content {
+        margin-left: 0;
+        width: 100%;
+        margin: 10px 0;
+    }
 }
