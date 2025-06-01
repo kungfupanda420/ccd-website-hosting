@@ -22,6 +22,7 @@ function DepartmentSIP() {
       }
 
       const data = await response.json();
+      console.log("Student data:", data); // Debug log
       setStudents(data);
     } catch (error) {
       console.error('Error fetching student data:', error);
@@ -31,7 +32,7 @@ function DepartmentSIP() {
   const handleAllot = async (user_id, project_id) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`/api/allotStudent/${user_id}/${project_id}`, {
+      const response = await fetch(`/api/departments/allotStudent/${user_id}/${project_id}`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -59,7 +60,6 @@ function DepartmentSIP() {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
         },
       });
 
@@ -129,13 +129,19 @@ function DepartmentSIP() {
               <td colSpan="6" style={{ textAlign: 'center' }}>No students found.</td>
             </tr>
           ) : (
-            students.map((student, index) => (
-              <tr key={index}>
-                <td style={cellStyle}>{student.sip_id}</td>
+            students.map((student) => (
+              <tr key={student.user_id}>
+                <td style={cellStyle}>{student.sip_id || '-'}</td>
                 <td style={cellStyle}>{student.name}</td>
-                <td style={cellStyle}>{student.preference1?.title || '-'}</td>
-                <td style={cellStyle}>{student.preference2?.title || '-'}</td>
-                <td style={cellStyle}>{student.preference3?.title || '-'}</td>
+                <td style={cellStyle}>
+                  {student.pref1 ? `${student.pref1.title} (${student.pref1.id})` : '-'}
+                </td>
+                <td style={cellStyle}>
+                  {student.pref2 ? `${student.pref2.title} (${student.pref2.id})` : '-'}
+                </td>
+                <td style={cellStyle}>
+                  {student.pref3 ? `${student.pref3.title} (${student.pref3.id})` : '-'}
+                </td>
                 <td style={cellStyle}>
                   <select
                     onChange={(e) => {
@@ -144,21 +150,22 @@ function DepartmentSIP() {
                       }
                     }}
                     defaultValue=""
+                    style={{ padding: '5px', borderRadius: '4px', border: '1px solid #ddd' }}
                   >
                     <option value="" disabled>Select Project</option>
-                    {student.preference1 && (
-                      <option value={student.preference1.id}>
-                        {student.preference1.title}
+                    {student.pref1 && (
+                      <option value={student.pref1.id}>
+                        {student.pref1.title} (Pref 1)
                       </option>
                     )}
-                    {student.preference2 && (
-                      <option value={student.preference2.id}>
-                        {student.preference2.title}
+                    {student.pref2 && (
+                      <option value={student.pref2.id}>
+                        {student.pref2.title} (Pref 2)
                       </option>
                     )}
-                    {student.preference3 && (
-                      <option value={student.preference3.id}>
-                        {student.preference3.title}
+                    {student.pref3 && (
+                      <option value={student.pref3.id}>
+                        {student.pref3.title} (Pref 3)
                       </option>
                     )}
                   </select>

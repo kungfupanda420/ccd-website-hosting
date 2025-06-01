@@ -11,6 +11,7 @@ function Login() {
   const [error, setError] = useState("");
   const [forgotMsg, setForgotMsg] = useState("");
   const [loading, setLoading] = useState(false);
+  const [forgotMode, setForgotMode] = useState(false);
   const navigate = useNavigate();
 
   function handleShow() {
@@ -22,8 +23,13 @@ function Login() {
     setError("");
     setForgotMsg("");
 
-    if (!email || !password) {
+    if (!email || (!password && !forgotMode)) {
       setError("Please fill in all fields");
+      return;
+    }
+
+    if (forgotMode) {
+      handleForgot(e);
       return;
     }
 
@@ -38,14 +44,11 @@ function Login() {
           if (data.access_token) {
             localStorage.setItem("token", data.access_token);
             const role = data.role;
-            // console.log(toke);
-            console.log(localStorage.getItem("access_token"));
             if (role === "admin") navigate("/admin_sip");
             else if (role === "student") navigate("/Candidatedashboard");
             else if (role === "professor") navigate("/professor_dashboard");
             else if (role === "department") navigate("/department_sip");
             else if (role === "Verified Email") navigate("/registerform");
-            
             else setError("Unknown role");
           }
         } else {
@@ -79,14 +82,20 @@ function Login() {
     setLoading(false);
   }
 
+  function toggleForgotMode() {
+    setForgotMode(!forgotMode);
+    setError("");
+    setForgotMsg("");
+  }
+
   return (
     <div className="loginContainer">
-      <div className="AdminLogIn">
-        <h1 className="mainHeading">SIP LOGIN</h1>
+      <div className={`AdminLogIn ${forgotMode ? "forgot-mode" : ""}`}>
+        <h1 className="mainHeading">{forgotMode ? "RESET PASSWORD" : "SIP LOGIN"}</h1>
         {error && <div className="error-message">{error}</div>}
         {forgotMsg && <div className="forgot-message">{forgotMsg}</div>}
         <form className="formLogIn" onSubmit={handleSubmit}>
-          <div className="fillBoxInput mediumHeading">
+          <div className="fillBoxInput email-field mediumHeading">
             <input
               type="text"
               placeholder="Email"
@@ -94,28 +103,30 @@ function Login() {
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-          <div className="fillBoxInput mediumHeading">
-            <input
-              type={showpwd ? "text" : "password"}
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <span className="eyeIcon" onClick={handleShow}>
-              {showpwd ? <AiFillEye /> : <AiFillEyeInvisible />}
-            </span>
-          </div>
+          {!forgotMode && (
+            <div className="fillBoxInput mediumHeading">
+              <input
+                type={showpwd ? "text" : "password"}
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <span className="eyeIcon" onClick={handleShow}>
+                {showpwd ? <AiFillEye /> : <AiFillEyeInvisible />}
+              </span>
+            </div>
+          )}
           <div className="login-btn-row">
             <button type="submit" className="loginBtn">
-              Log In
+              {forgotMode ? "Send Reset Link" : "Log In"}
             </button>
             <button
               type="button"
-              className="loginBtn "
-              onClick={handleForgot}
+              className="forgotBtn"
+              onClick={toggleForgotMode}
               disabled={loading}
             >
-              {loading ? "Sending..." : "Forgot Password"}
+              {forgotMode ? "Back to Login" : "Forgot Password"}
             </button>
           </div>
         </form>
