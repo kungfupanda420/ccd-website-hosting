@@ -324,6 +324,13 @@ def edit_me(
 
         if student2 and student.user_id!= student2.user_id:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Apaar ID already registered")
+        
+    if student.profilePhotoPath and profilePhoto:
+        # If a new profile photo is provided, delete the old one
+        old_profile_photo_path = student.profilePhotoPath
+        if old_profile_photo_path and os.path.exists(old_profile_photo_path):
+            os.remove(old_profile_photo_path)
+
 
     # Update fields if they are provided
     update_fields = locals()

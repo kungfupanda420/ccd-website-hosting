@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from ..schemas.token import Token
 # from ..schemas.admin import 
 from ..models.users import User,Admin, Professor, Department, Student
+from ..models.projects import Project
 from ..security.JWTtoken import create_access_token
 from ..database import get_db
 
@@ -107,34 +108,21 @@ def export_professors(db:Session=Depends(get_db),current_user: User=Depends(get_
     return StreamingResponse( stream, media_type='text/csv', headers={"Content-Disposition": "attachment; filename=professors.csv"})
 
 import glob
-
+from sqlalchemy.orm import joinedload
 
 @router.get("/generate_id_card")
 def get_id_card(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if current_user.role != 'admin':
         raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
 
-    # Example hardcoded student
-    student_name = "Kunduur Gnana Pratheek Reddy"
-    mobile_number = "9876543210"
-    sip_id = "SIP260000"
-    email = "pratheek18183@gmail.com"
 
     ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-    fileemail = email.replace("@", "at").replace(".", "dot")
-    Profile_PATH = os.path.join(ROOT_DIR, "uploads", "profilePhotos")
-    matching_files = glob.glob(os.path.join(Profile_PATH, f"{fileemail}.*"))
-
-    if not matching_files:
-        raise HTTPException(status_code=404, detail="Profile photo not found")
-    PFP_PATH = matching_files[0]
-
+    
     IDS_DIR = os.path.join(ROOT_DIR, "IDS")
     TEMPLATE_PATH = os.path.join(ROOT_DIR, "templates", "id_card_template.png")
     FONT_PATH = os.path.join(ROOT_DIR, "templates", "SemiBold20.otf")
 
-    template = Image.open(TEMPLATE_PATH).convert("RGBA")
-    draw = ImageDraw.Draw(template)
+    original_template = Image.open(TEMPLATE_PATH).convert("RGBA")
     font = ImageFont.truetype(FONT_PATH, size=45)
 
     # Paste profile photo
@@ -172,50 +160,80 @@ def get_id_card(db: Session = Depends(get_db), current_user: User = Depends(get_
             y += line_height
         return y
     
-    students=db.query(Student).filter()
-    try:
-        student_image = Image.open(PFP_PATH).convert("RGBA")
-        student_image = student_image.resize((500, 600))
-        student_image = round_corners(student_image, radius=15)
+    students=(
+        db.query(Student)
+        .join(Student.user)
+        .join(Student.selected_project)
+        .join(Project.professor)
+        .join(Professor.department)
+        .filter(Student.selected_project_id!=None)
+        .options(
+            joinedload(Student.selected_project)
+            .joinedload(Project.professor)
+            .joinedload(Professor.department),
+            joinedload(Student.user)
 
-        template.paste(student_image, (150, 350),student_image)
-    except FileNotFoundError:
-        print("Photo not found")
-
-    # Utility to wrap text
+        ).all()
+    )
     
+    for student in students:
+        
+        template=original_template.copy()
+        draw = ImageDraw.Draw(template)
+
+        email=student.user.email
+        fileemail = email.replace("@", "at").replace(".", "dot")
+        Profile_PATH = os.path.join(ROOT_DIR, "uploads", "profilePhotos")
+        matching_files = glob.glob(os.path.join(Profile_PATH, f"{fileemail}.*"))
+
+        if not matching_files:
+            raise HTTPException(status_code=404, detail="Profile photo not found")
+        PFP_PATH = matching_files[0]
+
+        try:
+            student_image = Image.open(PFP_PATH).convert("RGBA")
+            student_image = student_image.resize((500, 600))
+            student_image = round_corners(student_image, radius=15)
+
+            template.paste(student_image, (150, 350),student_image)
+        except FileNotFoundError:
+            print("Photo not found")
+
+        # Utility to wrap text
+        
+        professor=db.query(Student).join(Student.user).filter(Student.selected_project_id!=None).all()
 
 
-    max_text_width = 500
-    line_height = 40
-    start_y = 1060
+        max_text_width = 500
+        line_height = 40
+        start_y = 1060
 
-    # Line 1: Name wrapped
-    start_y = draw_wrapped_text(draw, "Kunduru Gnana Pratheek Reddy", (340, 1057), font, max_text_width, line_height)
-    start_y += 10
+        # Line 1: Name wrapped
+        start_y = draw_wrapped_text(draw,student.name, (340, 1057), font, max_text_width, line_height)
+        start_y += 10
 
-    # Line 2: Mobile number
-    draw.text((340, 1205),"SIP262000", font=font, fill=colour_code)
-    start_y += 50
+        # Line 2: Mobile number
+        draw.text((340, 1205),student.sip_id, font=font, fill=colour_code)
+        start_y += 50
 
-    # Line 3: Name again, wrapped
-    start_y = draw_wrapped_text(draw, "1234567890", (340, 1282), font, max_text_width, line_height)
-    start_y += 10
+        # Line 3: Name again, wrapped
+        start_y = draw_wrapped_text(draw, student.phone, (340, 1282), font, max_text_width, line_height)
+        start_y += 10
 
-    # Line 4: Name again, wrapped
-    start_y = draw_wrapped_text(draw, "Dr. Kunduru Gnana Pratheek Reddy", (340, 1346), font, max_text_width, line_height)
-    start_y += 10
+        # Line 4: Name again, wrapped
+        start_y = draw_wrapped_text(draw, student.selected_project.professor.name, (340, 1346), font, max_text_width, line_height)
+        start_y += 10
 
-    start_y = draw_wrapped_text(draw, "Computer Science and Engineering", (340, 1456), font, max_text_width, line_height)
-    start_y += 10
+        start_y = draw_wrapped_text(draw, student.selected_project.professor.department.name, (340, 1456), font, max_text_width, line_height)
+        start_y += 10
 
-    # Line 5: Date
-    draw.text((340, 1626), "31 June 2023", font=font, fill=colour_code)
+        # Line 5: Date
+        draw.text((340, 1626), "10 July 2025", font=font, fill=colour_code)
 
-    # Save the ID card
-    output_pdf = template.convert("RGB")
-    os.makedirs(IDS_DIR, exist_ok=True)
-    save_path = os.path.join(IDS_DIR, f"{sip_id}_id_card.pdf")
-    output_pdf.save(save_path, format="PDF")
+        # Save the ID card
+        output_pdf = template.convert("RGB")
+        os.makedirs(IDS_DIR, exist_ok=True)
+        save_path = os.path.join(IDS_DIR, f"{student.sip_id}_id_card.pdf")
+        output_pdf.save(save_path, format="PDF")
 
-    return {"message": f"ID card generated and saved as {sip_id}_id_card.pdf"}
+    return {"message": f"ID cards generated successfully"}
