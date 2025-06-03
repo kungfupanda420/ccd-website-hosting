@@ -27,7 +27,11 @@ function ConfirmEmail() {
           throw new Error(data.detail || "Confirmation failed");
         }
         setMsg("Email confirmed successfully!");
-
+        localStorage.setItem("access_token", data.access_token);
+        localStorage.setItem("refresh_token", data.refresh_token);
+        localStorage.setItem("role", data.role);
+        localStorage.setItem("email", data.email);
+        localStorage.setItem("data", JSON.stringify(data));
         // Redirect based on role
         if (data.role === "student") {
           navigate("/candidate_dashboard");
@@ -50,6 +54,10 @@ function ConfirmEmail() {
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-96">
         <h1 className="text-2xl font-bold mb-4">Email Confirmation</h1>
+         { console.log(localStorage.getItem("data.access_token"))}
+        { console.log(localStorage.getItem("data.refresh_token"))}
+
+        console.log(localStorage)
         {msg && <div className="text-green-600">{msg}</div>}
         {error && <div className="text-red-600">{error}</div>}
       </div>

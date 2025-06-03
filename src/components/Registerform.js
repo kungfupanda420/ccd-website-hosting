@@ -13,8 +13,8 @@ function Registerform() {
     guardianName: "",
     guardianRelation: "",
     guardianPhone: "",
-    password: "",
-    confirmPassword: "",
+    // password: "",
+    // confirmPassword: "",
     profilePhoto: null,
     institution: "",
     program: "",
@@ -49,6 +49,9 @@ function Registerform() {
       setErrors({ ...errors, [name]: null });
     }
   };
+  {
+
+  }
 
   const validateStep = () => {
     const newErrors = {};
@@ -62,8 +65,8 @@ function Registerform() {
       if (!formData.guardianRelation.trim()) newErrors.guardianRelation = "Guardian relation is required.";
       if (!/^[0-9]{10}$/.test(formData.guardianPhone)) newErrors.guardianPhone = "Valid 10-digit guardian phone number is required.";
     } else if (step === 2) {
-      if (formData.password.length < 6) newErrors.password = "Password must be at least 6 characters.";
-      if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = "Passwords do not match.";
+      // if (formData.password.length < 6) newErrors.password = "Password must be at least 6 characters.";
+      // if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = "Passwords do not match.";
     } else if (step === 3) {
       if (!formData.profilePhoto) newErrors.profilePhoto = "Profile photo is required.";
     } else if (step === 4) {
@@ -92,6 +95,10 @@ function Registerform() {
   };
 
   const handleNext = () => {
+        
+        console.log(localStorage.getItem("access_token"));
+        console.log(localStorage.getItem("refresh_token"));
+        console.log(localStorage.getItem("role"));
     if (validateStep()) {
       setStep(step + 1);
     }
@@ -112,7 +119,7 @@ function Registerform() {
     try {
       const form = new FormData();
       form.append("name", formData.name);
-      form.append("password", formData.password);
+      // form.append("password", formData.password);
       form.append("phone", formData.phone);
       form.append("dob", formData.dob);
       form.append("address", formData.address);
@@ -158,8 +165,8 @@ function Registerform() {
         guardianName: "",
         guardianRelation: "",
         guardianPhone: "",
-        password: "",
-        confirmPassword: "",
+        // password: "",
+        // confirmPassword: "",
         profilePhoto: null,
         institution: "",
         program: "",
@@ -192,6 +199,8 @@ function Registerform() {
 
   return (
     <div className="register-container">
+  
+      
       <div className="progress-bar">
         <div className={`step ${step >= 1 ? 'active' : ''}`}>1. Personal</div>
         <div className={`step ${step >= 2 ? 'active' : ''}`}>2. Account</div>
@@ -254,7 +263,7 @@ function Registerform() {
         {step === 2 && (
           <div className="form-step">
             <h2>Account Information</h2>
-            <div className="form-group">
+            {/* <div className="form-group">
               <label>Password* (min 6 characters)</label>
               <input type="password" name="password" value={formData.password} onChange={handleChange} className={errors.password ? 'error' : ''} />
               {errors.password && <span className="error-text">{errors.password}</span>}
@@ -263,7 +272,7 @@ function Registerform() {
               <label>Confirm Password*</label>
               <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} className={errors.confirmPassword ? 'error' : ''} />
               {errors.confirmPassword && <span className="error-text">{errors.confirmPassword}</span>}
-            </div>
+            </div> */}
           </div>
         )}
 

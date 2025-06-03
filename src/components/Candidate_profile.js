@@ -134,11 +134,12 @@ function CandidateProfile() {
           src={candidate.profilePhotoPath ? `/${candidate.profilePhotoPath}` : "/images/default.png"}
           alt="Profile"
         />
-        <h2>{candidate.name}</h2>
+        {/* <h2>{candidate.name}</h2> */}
         <nav>
           <a href="#" onClick={() => navigate("/candidatedashboard")}>Dashboard</a>
-          <a href="#" onClick={() => setEditMode(false)}>View Profile</a>
-          <a href="#" onClick={() => setEditMode(true)}>Edit Profile</a>
+          <a href="#" onClick={() => navigate("/")}>logout</a>
+          {/* <a href="#" onClick={() => setEditMode(false)}>View Profile</a> */}
+          {/* <a href="#" onClick={() => setEditMode(true)}>Edit Profile</a> */}
           {/* Add more links here if needed */}
         </nav>
       </aside>
@@ -149,7 +150,7 @@ function CandidateProfile() {
           <h1>Candidate Profile</h1>
           {!editMode ? (
             <>
-              <div className="profile-fields">
+              <div className="edit-profile-form">
                 <div><strong>Name:</strong> {candidate.name}</div>
                 <div><strong>Email:</strong> {candidate.user?.email}</div>
                 <div><strong>Phone:</strong> {candidate.phone}</div>
