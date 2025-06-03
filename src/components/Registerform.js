@@ -3,6 +3,9 @@ import '../css/Registerform.css';
 import { Navigate } from "react-router-dom";
 
 function Registerform() {
+
+
+   console.log("role:", localStorage.getItem("role"));
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     name: "",
@@ -151,6 +154,9 @@ function Registerform() {
       const response = await fetch("/api/students/register", {
         method: "POST",
         body: form,
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
+        },
       });
 
       const data = await response.json();
