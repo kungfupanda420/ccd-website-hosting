@@ -509,56 +509,84 @@ from PIL import Image, ImageDraw, ImageFont
 import io
 
 
+from PIL import Image, ImageDraw, ImageFont
+import textwrap
 
-@router.get("/generate_id_card")
-def get_id_card(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+def draw_line_with_bold(draw, line, bold_phrase, position, font, bold_font):
+    x, y = position
+    idx = line.find(bold_phrase)
+
+    if idx == -1:
+        draw.text((x, y), line, font=font, fill="black")
+        return
+
+    # Split and draw in parts
+    pre_text = line[:idx]
+    draw.text((x, y), pre_text, font=font, fill="black")
+    x += draw.textlength(pre_text, font=font)
+
+    draw.text((x, y), bold_phrase, font=bold_font, fill="black")
+    x += draw.textlength(bold_phrase, font=bold_font)
+
+    post_text = line[idx + len(bold_phrase):]
+    draw.text((x, y), post_text, font=font, fill="black")
+
+@router.get("/completion_certificate")
+def completion_certificate(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if current_user.role != 'student':
         raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
-    
+
     student = db.query(Student).filter(Student.user_id == current_user.id).first()
     if not student:
         raise HTTPException(status_code=404, detail="Student not found")
-    
-    ROOT_DIR= os.path.abspath(os.path.join(os.path.dirname(__file__),"..",".."))
-    fileemail=student.user.email.replace("@","at").replace(".","dot")
-    filename=f"{fileemail}.png"
 
-    PFP_PATH=os.path.join(ROOT_DIR,"uploads","profilePhotos",filename)
-    print (ROOT_DIR)
+    # Define file paths
+    ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+    TEMPLATE_PATH = os.path.join(ROOT_DIR, "templates", "Completion_Certificate.png")
+    FONT_PATH = os.path.join(ROOT_DIR, "templates", "OpenSans-Regular.ttf")
+    BOLD_FONT_PATH = os.path.join(ROOT_DIR, "templates", "OpenSans-Bold.ttf")
     IDS_DIR = os.path.join(ROOT_DIR, "IDS")
 
-    if not os.path.exists(PFP_PATH):
-        raise HTTPException(status_code=404, detail="Profile photo not found")
-    TEMPLATE_PATH = os.path.join(ROOT_DIR, "templates", "id_card_template.png")
-    FONT_PATH = os.path.join(ROOT_DIR, "templates", "Roboto-Bold.ttf")
+    # Load template and fonts
+    template = Image.open(TEMPLATE_PATH).convert("RGBA")
+    draw = ImageDraw.Draw(template)
+    font = ImageFont.truetype(FONT_PATH, size=32)
+    bold_font = ImageFont.truetype(BOLD_FONT_PATH, size=32)
 
-    template= Image.open(TEMPLATE_PATH).convert("RGBA")
-    draw =ImageDraw.Draw(template)
+    # Define text lines
+    lines = [
+        ("has successfully completed the internship", font),
+        ("Machine learning Model of gas hydrate", bold_font),
+        ("[10th June 2025 to 19th July 2026]", bold_font),
+        ("under the mentorship of Dr Mini Mol Mena at the", font),  # partial bold
+        ("National Institute of Technology, Calicut", font),
+    ]
 
-    font=ImageFont.truetype(FONT_PATH,size=32)
+    # Drawing settings
+    start_x = 400
+    start_y = 700
+    line_spacing = 40
+    y = start_y
+    bold_phrase_line4 = "Dr Mini Mol Mena"
 
+    # Draw lines
+    for i, (text, line_font) in enumerate(lines):
+        if i == 3:
+            draw_line_with_bold(draw, text, bold_phrase_line4, (start_x, y), font, bold_font)
+        else:
+            draw.text((start_x, y), text, font=line_font, fill="black")
+        y += line_spacing
 
-    try :
-        student_image=Image.open(PFP_PATH).convert("RGBA")
-        student_image=student_image.resize((100,120))
-        template.paste(student_image,(50,50))
-    except FileNotFoundError:
-        print(f"Photo not found ")
-
-
-    draw.text((500, 260), f"Name: {student.name}", font=font, fill="black")
-    draw.text((500, 310), f"SIP ID: {student.sip_id}", font=font, fill="black")
-
-    output_pdf=template.convert("RGB")
-    
+    # Convert image to PDF
+    output_pdf = template.convert("RGB")
     output = io.BytesIO()
     output_path = os.path.join(IDS_DIR, f"{student.sip_id}.pdf")
     output_pdf.save(output_path, format="PDF")
     output_pdf.save(output, format="PDF")
     output.seek(0)
-    
+
     return StreamingResponse(output, media_type="application/pdf", headers={
-        "Content-Disposition": f"inline; filename={student.sip_id}_id_card.pdf"
+        "Content-Disposition": f"inline; filename={student.sip_id}_offer_letter.pdf"
     })
     # rgb_template = template.convert("RGB")
     # output_path = os.path.join(IDS_DIR, f"{student.sip_id}.pdf")

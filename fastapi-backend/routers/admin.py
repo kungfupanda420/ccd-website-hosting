@@ -108,58 +108,114 @@ def export_professors(db:Session=Depends(get_db),current_user: User=Depends(get_
 
 import glob
 
+
 @router.get("/generate_id_card")
 def get_id_card(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if current_user.role != 'admin':
         raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
+
+    # Example hardcoded student
+    student_name = "Kunduur Gnana Pratheek Reddy"
+    mobile_number = "9876543210"
+    sip_id = "SIP260000"
+    email = "pratheek18183@gmail.com"
+
+    ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+    fileemail = email.replace("@", "at").replace(".", "dot")
+    Profile_PATH = os.path.join(ROOT_DIR, "uploads", "profilePhotos")
+    matching_files = glob.glob(os.path.join(Profile_PATH, f"{fileemail}.*"))
+
+    if not matching_files:
+        raise HTTPException(status_code=404, detail="Profile photo not found")
+    PFP_PATH = matching_files[0]
+
+    IDS_DIR = os.path.join(ROOT_DIR, "IDS")
+    TEMPLATE_PATH = os.path.join(ROOT_DIR, "templates", "id_card_template.png")
+    FONT_PATH = os.path.join(ROOT_DIR, "templates", "SemiBold20.otf")
+
+    template = Image.open(TEMPLATE_PATH).convert("RGBA")
+    draw = ImageDraw.Draw(template)
+    font = ImageFont.truetype(FONT_PATH, size=45)
+
+    # Paste profile photo
+    colour_code = "#3f0eaf"
+    def round_corners(image, radius):
+    # Create rounded mask
+        rounded_mask = Image.new("L", image.size, 0)
+        draw = ImageDraw.Draw(rounded_mask)
+        draw.rounded_rectangle([0, 0, image.size[0], image.size[1]], radius=radius, fill=255)
+
+        # Apply mask to the image alpha channel
+        rounded_image = image.copy()
+        rounded_image.putalpha(rounded_mask)
+        return rounded_image
+    def draw_wrapped_text(draw, text, position, font, max_width, line_height):
+        words = text.split()
+        lines = []
+        current_line = ""
+
+        for word in words:
+            test_line = f"{current_line} {word}".strip()
+            bbox = font.getbbox(test_line)
+            width = bbox[2] - bbox[0]  # x1 - x0
+            if width <= max_width:
+                current_line = test_line
+            else:
+                lines.append(current_line)
+                current_line = word
+        if current_line:
+            lines.append(current_line)
+
+        x, y = position
+        for line in lines:
+            draw.text((x, y), line, font=font, fill=colour_code)
+            y += line_height
+        return y
     
+    students=db.query(Student).filter()
+    try:
+        student_image = Image.open(PFP_PATH).convert("RGBA")
+        student_image = student_image.resize((500, 600))
+        student_image = round_corners(student_image, radius=15)
+
+        template.paste(student_image, (150, 350),student_image)
+    except FileNotFoundError:
+        print("Photo not found")
+
+    # Utility to wrap text
     
-    ROOT_DIR= os.path.abspath(os.path.join(os.path.dirname(__file__),"..",".."))
-    students= db.query(Student).filter(Student.selected_project_id!= None).all()
-    
-    for student in students:
-        fileemail=student.user.email.replace("@","at").replace(".","dot")
-        # fileemail = "pratheek18183atgmaildotcom"
-
-        Profile_PATH=os.path.join(ROOT_DIR,"uploads","profilePhotos")
-        print (Profile_PATH)
-        matching_files=glob.glob(os.path.join(Profile_PATH, f"{fileemail}.*"))
-
-        if not matching_files:
-            raise HTTPException(status_code=404, detail="Profile photo not found")
-        PFP_PATH = matching_files[0]
-        print (PFP_PATH)
-        IDS_DIR = os.path.join(ROOT_DIR, "IDS")
-
-        TEMPLATE_PATH = os.path.join(ROOT_DIR, "templates", "id_card_template.png")
-        FONT_PATH = os.path.join(ROOT_DIR, "templates", "Roboto-Bold.ttf")
-
-        template= Image.open(TEMPLATE_PATH).convert("RGBA")
-        draw =ImageDraw.Draw(template)
-
-        font=ImageFont.truetype(FONT_PATH,size=32)
 
 
-        try :
-            student_image=Image.open(PFP_PATH).convert("RGBA")
-            student_image=student_image.resize((100,120))
-            template.paste(student_image,(50,50))
-        except FileNotFoundError:
-            print(f"Photo not found ")
+    max_text_width = 500
+    line_height = 40
+    start_y = 1060
 
+    # Line 1: Name wrapped
+    start_y = draw_wrapped_text(draw, "Kunduru Gnana Pratheek Reddy", (340, 1057), font, max_text_width, line_height)
+    start_y += 10
 
-        draw.text((500, 260), f"Name: {student.name}", font=font, fill="black")
-        draw.text((500, 310), f"SIP ID: {student.sip_id}", font=font, fill="black")
+    # Line 2: Mobile number
+    draw.text((340, 1205),"SIP262000", font=font, fill=colour_code)
+    start_y += 50
 
-        # draw.text((500, 260), f"Name: Pratheek", font=font, fill="black")
-        # draw.text((500, 310), f"SIP ID: SIP260000", font=font, fill="black")
+    # Line 3: Name again, wrapped
+    start_y = draw_wrapped_text(draw, "1234567890", (340, 1282), font, max_text_width, line_height)
+    start_y += 10
 
-        output_pdf=template.convert("RGB")
-        
-        os.makedirs(IDS_DIR, exist_ok=True)
+    # Line 4: Name again, wrapped
+    start_y = draw_wrapped_text(draw, "Dr. Kunduru Gnana Pratheek Reddy", (340, 1346), font, max_text_width, line_height)
+    start_y += 10
 
-        save_path = os.path.join(IDS_DIR, f"{student.sip_id}_id_card.pdf")
-        # save_path = os.path.join(IDS_DIR, f"SIP260000_id_card.pdf")
-        output_pdf.save(save_path, format="PDF")
+    start_y = draw_wrapped_text(draw, "Computer Science and Engineering", (340, 1456), font, max_text_width, line_height)
+    start_y += 10
 
-    return {"message": "ID card saved"}
+    # Line 5: Date
+    draw.text((340, 1626), "31 June 2023", font=font, fill=colour_code)
+
+    # Save the ID card
+    output_pdf = template.convert("RGB")
+    os.makedirs(IDS_DIR, exist_ok=True)
+    save_path = os.path.join(IDS_DIR, f"{sip_id}_id_card.pdf")
+    output_pdf.save(save_path, format="PDF")
+
+    return {"message": f"ID card generated and saved as {sip_id}_id_card.pdf"}
