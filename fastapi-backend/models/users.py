@@ -69,8 +69,12 @@ class Student(Base):
     selected_project_id = Column(Integer, ForeignKey("projects.id"), nullable=True)
     selected_project = relationship("Project",back_populates="selected_students", foreign_keys=[selected_project_id])
 
+    admin_conf=Column(Boolean,default=False)
     start_date=Column(Date,nullable=True)
     end_date=Column(Date,nullable=True)
+    
+    
+    
     user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
     user = relationship("User", back_populates="student")
 

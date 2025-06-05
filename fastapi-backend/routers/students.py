@@ -25,7 +25,7 @@ from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
 from pydantic import EmailStr, BaseModel
 
 from dotenv import load_dotenv
-
+from typing import List
 
 
 
@@ -272,7 +272,7 @@ async def get_profile_photo(
     
     return {"profile_photo_path": student.profilePhotoPath}
     
-@router.put("/me/edit",response_model=ShowStudent)
+@router.put("/me",response_model=ShowStudent)
 def edit_me(
     # Updatable fields (add/remove as per your needs)
     name: str = Form(None),
@@ -365,7 +365,7 @@ def edit_me(
     db.refresh(student)
     return student
 
-@router.get("/allProjects",response_model=list[ShowProject])
+@router.get("/all_projects",response_model=List[ShowProject])
 def show_projects(db: Session=Depends(get_db),current_user: User=Depends(get_current_user)):
     if current_user.role != 'student':
         raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
@@ -409,7 +409,7 @@ def show_projects(db: Session=Depends(get_db),current_user: User=Depends(get_cur
 
 
 
-@router.get("/appliedProjects",response_model=list[ShowProject])
+@router.get("/preferences",response_model=List[ShowProject])
 def show_applied_projects(db: Session=Depends(get_db),current_user: User=Depends(get_current_user)):
     if current_user.role != 'student':
         raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
@@ -456,7 +456,7 @@ def show_applied_projects(db: Session=Depends(get_db),current_user: User=Depends
 #     db.refresh(project)
 #     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
-@router.post("/preferences",response_model=list[ShowProject])
+@router.post("/preferences",response_model=List[ShowProject])
 def increase_preference(request:ProjectPreferencesId,db:Session=Depends(get_db),current_user:User=Depends(get_current_user)):
     if current_user.role != 'student':
         raise HTTPException(status_code=403, detail="You are not authorized to access this resource")

@@ -67,7 +67,7 @@ conf = ConnectionConfig(
 )
 
 
-@router.post('/forgotPassword')
+@router.post('/forgot_password')
 async def forgot_password(request: ForgotPasswordRequest ,db:Session=Depends(get_db)):
     user = db.query(User).filter(User.email == request.email).first()
     if not user:
@@ -97,7 +97,7 @@ async def forgot_password(request: ForgotPasswordRequest ,db:Session=Depends(get
     return {"msg": f"Password Reset email sent to {request.email}"}
 
 
-@router.post('/changePassword')
+@router.post('/change_password')
 async def change_password(request: ChangePasswordRequest,db:Session=Depends(get_db)):
 
     try:

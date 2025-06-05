@@ -19,6 +19,7 @@ from ..security.oauth2 import get_current_user
 import pandas as pd
 import io
 from fastapi.responses import StreamingResponse
+from typing import List
 
 router =APIRouter(
     prefix="/api/departments",
@@ -28,7 +29,7 @@ router =APIRouter(
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 get_db=get_db
-@router.get("/departmentData")
+@router.get("/department_data")
 def deptdata(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if current_user.role != 'department':
         raise HTTPException(status_code=403, detail="Not a Department User")
@@ -99,7 +100,7 @@ def deptdata(db: Session = Depends(get_db), current_user: User = Depends(get_cur
         media_type="text/csv",
         headers={"Content-Disposition": "attachment; filename=department_data.csv"}
     )
-@router.get("/deptStudents", response_model=list[StudentSIPName])
+@router.get("/dept_students", response_model=List[StudentSIPName])
 def dept_students(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if current_user.role != 'department':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not a Department User")
@@ -114,7 +115,7 @@ def dept_students(db: Session = Depends(get_db), current_user: User = Depends(ge
 
     return students
 
-@router.get("/studentPrefernces/{user_id}", response_model=ProjectPreferences)
+@router.get("/student_preferences/{user_id}", response_model=ProjectPreferences)
 def student_preferences(user_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if current_user.role != 'department':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not a Department User")
@@ -129,7 +130,7 @@ def student_preferences(user_id: int, db: Session = Depends(get_db), current_use
         pref3=student.pref3
     )   
 
-@router.post("/allotStudent/{user_id}/{project_id}")
+@router.post("/allotment/{user_id}/{project_id}")
 def allot_student(user_id:int, project_id:int, db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
     if current_user.role != 'department':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not a Department User")
@@ -155,7 +156,7 @@ def allot_student(user_id:int, project_id:int, db:Session=Depends(get_db), curre
     db.refresh(student)
     return {"message": "Student alloted to project successfully", "student": student, "project": project}
 
-@router.delete("/unallotStudent/{user_id}")
+@router.delete("/allotment/{user_id}")
 def unallot_student(user_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if current_user.role != 'department':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not a Department User")
@@ -172,3 +173,4 @@ def unallot_student(user_id: int, db: Session = Depends(get_db), current_user: U
     db.refresh(student)
     
     return {"message": "Student unalloted from project successfully", "student": student}
+

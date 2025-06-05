@@ -2,7 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException, status, Response, UploadF
 from sqlalchemy.orm import Session
 
 from ..schemas.token import Token
-# from ..schemas.admin import 
+from ..schemas.admin import DeptDataMessage
+from ..schemas.projects import ProjectStudents
 from ..models.users import User,Admin, Professor, Department, Student
 from ..models.projects import Project
 from ..security.JWTtoken import create_access_token
@@ -24,6 +25,7 @@ from PIL import Image, ImageDraw, ImageFont
 import io
 import os
 
+from typing import List
 router =APIRouter(
     prefix="/api/admin",
     tags=["Admin"]
@@ -33,7 +35,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 get_db=get_db
 
-@router.post("/makeProfessor")
+@router.post("/professors")
 def make_professor(file: UploadFile= File(...),db: Session=Depends(get_db), current_user: User= Depends(get_current_user)):
     if current_user.role != 'admin':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not an Admin")
@@ -81,7 +83,7 @@ def make_professor(file: UploadFile= File(...),db: Session=Depends(get_db), curr
     return {"status":"success", "message":"Professors added successfully"}
 
 
-@router.get('/exportProfessors')
+@router.get('/professors')
 def export_professors(db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
     if current_user.role != 'admin':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not an Admin")
@@ -236,4 +238,40 @@ def get_id_card(db: Session = Depends(get_db), current_user: User = Depends(get_
         save_path = os.path.join(IDS_DIR, f"{student.sip_id}_id_card.pdf")
         output_pdf.save(save_path, format="PDF")
 
-    return {"message": f"ID cards generated successfully"}
+    return {"message": "ID cards generated successfully"}
+
+
+@router.get("/department_data/{id}",response_model=List[ProjectStudents])
+def dept_data(id:int, db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
+
+    if(current_user.role != 'admin'):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to delete project")
+    
+    projects=db.query(Project).join(Project.professor).join(Professor.department).filter(Department.user_id==id).all()
+
+    return projects
+
+@router.post("/department_data/{id}")
+def conf_dept_data(id:int,request:DeptDataMessage, db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
+
+    if(current_user.role != 'admin'):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to delete project")
+    
+    if(request.message=='confirmed'):    
+        
+        students=(db.query(Student)
+                          .join(Student.selected_project)
+                          .join(Project.professor)
+                          .join(Professor.department)
+                          .filter(Student.selected_project_id.isnot(None))
+                          .filter(Department.user_id==id)
+                          .all()
+                          )
+        for student in students:
+            student.admin_conf=True
+        
+        return {"message":"The student have been alloted their projects"}
+
+
+    if(request.message=="rejected"):
+        return {"message":"The Project intern allotments have been rejected"}

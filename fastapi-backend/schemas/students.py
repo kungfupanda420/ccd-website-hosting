@@ -8,6 +8,8 @@ from .users import ShowUser
 
 from typing import Optional
 
+from sqlalchemy.sql.sqltypes import Date
+
 class VerifyEmail(BaseModel):
     email: EmailStr
     password: str
@@ -95,6 +97,13 @@ class StudentUpdate(BaseModel):
 class StudentSIPName(BaseModel):
     sip_id: str
     name: str
+
+    model_config = {
+        "from_attributes": True
+    }
+
+class SetDate(BaseModel):
+    date:Date
 
     model_config = {
         "from_attributes": True

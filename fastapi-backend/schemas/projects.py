@@ -1,5 +1,7 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional
+from typing import List
+
 class DepartmentName(BaseModel):
     name:str
 
@@ -8,7 +10,7 @@ class DepartmentName(BaseModel):
     }
 
 
-class ProfessorName(BaseModel):
+class ProfessorNameDept(BaseModel):
     name:str
     department:DepartmentName
 
@@ -24,7 +26,7 @@ class ShowProject(BaseModel):
     mode:str
     prerequisites:str
     applied_count:int
-    professor:ProfessorName
+    professor:ProfessorNameDept
 
     model_config = {
         "from_attributes": True
@@ -59,3 +61,20 @@ class ProjectPreferencesId(BaseModel):
     model_config = {
         "from_attributes": True
     }
+
+class StudentSIP(BaseModel):
+    sip_id:str
+    model_config = {
+        "from_attributes": True
+    }
+
+class ProfessorName(BaseModel):
+    name:str
+    model_config = {
+        "from_attributes": True
+    }
+
+class ProjectStudents(BaseModel):
+    title:str
+    professor:ProfessorName
+    selected_students:List[StudentSIP]
