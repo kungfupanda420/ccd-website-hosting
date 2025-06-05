@@ -1,3 +1,5 @@
+
+
 from fastapi import APIRouter, Depends, HTTPException, status, Response, UploadFile, File,Form, Query
 from sqlalchemy.orm import Session
 from datetime import date
@@ -5,7 +7,8 @@ from datetime import date
 from ..schemas.token import Token
 from ..schemas.students import  ShowStudent, StudentUpdate, VerifyEmail
 from ..schemas.projects import ShowProject, ProjectPreferencesId
-from ..models.users import User, Student
+from ..models.users import User, Student, Professor, Department
+from ..models.projects import Project
 from ..models.projects import Project
 from ..security.JWTtoken import create_access_token, create_refresh_token
 from ..database import get_db
@@ -519,86 +522,248 @@ import io
 from PIL import Image, ImageDraw, ImageFont
 import textwrap
 
-def draw_line_with_bold(draw, line, bold_phrase, position, font, bold_font):
-    x, y = position
-    idx = line.find(bold_phrase)
+import glob
+from sqlalchemy.orm import joinedload
 
-    if idx == -1:
-        draw.text((x, y), line, font=font, fill="black")
-        return
-
-    # Split and draw in parts
-    pre_text = line[:idx]
-    draw.text((x, y), pre_text, font=font, fill="black")
-    x += draw.textlength(pre_text, font=font)
-
-    draw.text((x, y), bold_phrase, font=bold_font, fill="black")
-    x += draw.textlength(bold_phrase, font=bold_font)
-
-    post_text = line[idx + len(bold_phrase):]
-    draw.text((x, y), post_text, font=font, fill="black")
-
-@router.get("/completion_certificate")
-def completion_certificate(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+@router.get("/offer_letter")
+def get_offer_letter(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if current_user.role != 'student':
         raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
 
-    student = db.query(Student).filter(Student.user_id == current_user.id).first()
+    student = (
+        db.query(Student)
+        .join(Student.user)
+        .join(Student.selected_project)
+        .join(Project.professor)
+        .join(Professor.department)
+        .filter(Student.user_id == current_user.id)   # only current user
+        .filter(Student.selected_project_id != None)  # project selected
+        .options(
+            joinedload(Student.selected_project)
+            .joinedload(Project.professor)
+            .joinedload(Professor.department),
+            joinedload(Student.user)
+    )
+    .first()  # just one record for current user
+)
     if not student:
-        raise HTTPException(status_code=404, detail="Student not found")
 
-    # Define file paths
+        raise HTTPException(status_code=404, detail="Item not found")   
     ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-    TEMPLATE_PATH = os.path.join(ROOT_DIR, "templates", "Completion_Certificate.png")
-    FONT_PATH = os.path.join(ROOT_DIR, "templates", "OpenSans-Regular.ttf")
-    BOLD_FONT_PATH = os.path.join(ROOT_DIR, "templates", "OpenSans-Bold.ttf")
-    IDS_DIR = os.path.join(ROOT_DIR, "IDS")
+    
+    TEMPLATE_PATH = os.path.join(ROOT_DIR, "templates", "Offer_Letter.png")
+    FONT_PATH = os.path.join(ROOT_DIR, "templates", "SemiBold20.otf")
 
-    # Load template and fonts
-    template = Image.open(TEMPLATE_PATH).convert("RGBA")
+    original_template = Image.open(TEMPLATE_PATH).convert("RGBA")
+    font = ImageFont.truetype(FONT_PATH, size=45)
+
+    # Paste profile photo
+    colour_code = "#000000"
+
+    def draw_wrapped_text(draw, text, position, font, max_width, line_height):
+        words = text.split()
+        lines = []
+        current_line = ""
+
+        for word in words:
+            test_line = f"{current_line} {word}".strip()
+            bbox = font.getbbox(test_line)
+            width = bbox[2] - bbox[0]  # x1 - x0
+            if width <= max_width:
+                current_line = test_line
+            else:
+                lines.append(current_line)
+                current_line = word
+        if current_line:
+            lines.append(current_line)
+
+        x, y = position
+        for line in lines:
+            draw.text((x, y), line, font=font, fill=colour_code)
+            y += line_height
+        return y
+    
+    
+    
+    template=original_template.copy()
     draw = ImageDraw.Draw(template)
-    font = ImageFont.truetype(FONT_PATH, size=32)
-    bold_font = ImageFont.truetype(BOLD_FONT_PATH, size=32)
 
-    # Define text lines
-    lines = [
-        ("has successfully completed the internship", font),
-        ("Machine learning Model of gas hydrate", bold_font),
-        ("[10th June 2025 to 19th July 2026]", bold_font),
-        ("under the mentorship of Dr Mini Mol Mena at the", font),  # partial bold
-        ("National Institute of Technology, Calicut", font),
-    ]
 
-    # Drawing settings
-    start_x = 400
-    start_y = 700
-    line_spacing = 40
-    y = start_y
-    bold_phrase_line4 = "Dr Mini Mol Mena"
+    max_text_width = 1500
+    line_height = 40
+    start_y = 1060
 
-    # Draw lines
-    for i, (text, line_font) in enumerate(lines):
-        if i == 3:
-            draw_line_with_bold(draw, text, bold_phrase_line4, (start_x, y), font, bold_font)
-        else:
-            draw.text((start_x, y), text, font=line_font, fill="black")
-        y += line_spacing
+    # Line 1: Name wrapped
+    start_y = draw_wrapped_text(draw,student.name, (640, 850), font, max_text_width, line_height)
+    start_y += 10
+
+    # Line 2: Mobile number
+    draw.text((640, 1185),student.sip_id, font=font, fill=colour_code)
+    start_y += 50
+
+    # Line 3: Name again, wrapped
+    start_y = draw_wrapped_text(draw, student.selected_project.title, (640, 1352), font, max_text_width, line_height)
+    start_y += 10
+
+    # Line 4: Name again, wrapped
+    start_y = draw_wrapped_text(draw, student.selected_project.professor.name, (640, 1739), font, max_text_width, line_height)
+    start_y += 10
+
+    start_y = draw_wrapped_text(draw, student.selected_project.professor.department.name, (640, 2071), font, max_text_width, line_height)
+    start_y += 10
+
+    
 
     # Convert image to PDF
     output_pdf = template.convert("RGB")
     output = io.BytesIO()
-    output_path = os.path.join(IDS_DIR, f"{student.sip_id}.pdf")
-    output_pdf.save(output_path, format="PDF")
     output_pdf.save(output, format="PDF")
     output.seek(0)
 
     return StreamingResponse(output, media_type="application/pdf", headers={
         "Content-Disposition": f"inline; filename={student.sip_id}_offer_letter.pdf"
     })
-    # rgb_template = template.convert("RGB")
-    # output_path = os.path.join(IDS_DIR, f"{student.sip_id}.pdf")
-    # rgb_template.save(output_path, format="PDF")
-    # return {"message": "ID card generated successfully", "id_card_path": output_path}
+
+
+@router.get("/completion_certificate")
+def get_completion_certificate(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    if current_user.role != 'student':
+        raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
+
+    student = (
+        db.query(Student)
+        .join(Student.user)
+        .join(Student.selected_project)
+        .join(Project.professor)
+        .join(Professor.department)
+        .filter(Student.user_id == current_user.id)   # only current user
+        .filter(Student.selected_project_id != None)  # project selected
+        .options(
+            joinedload(Student.selected_project)
+            .joinedload(Project.professor)
+            .joinedload(Professor.department),
+            joinedload(Student.user)
+    )
+    .first()  # just one record for current user
+)
+    if not student:
+
+        raise HTTPException(status_code=404, detail="Item not found")   
+    ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+    
+    
+    TEMPLATE_PATH = os.path.join(ROOT_DIR, "templates", "Completion_Certificate.png")
+    FONT_PATH = os.path.join(ROOT_DIR, "templates", "OpenSans-Regular.ttf")
+    BOLD_FONT_PATH = os.path.join(ROOT_DIR, "templates", "OpenSans-Bold.ttf")
+
+    original_template = Image.open(TEMPLATE_PATH).convert("RGBA")
+    regfont = ImageFont.truetype(FONT_PATH, size=36.5)
+    boldfont = ImageFont.truetype(BOLD_FONT_PATH, size=36.5)
+
+
+    LIBRE_FONT_PATH=os.path.join(ROOT_DIR, "templates", "libre-baskerville.bold.ttf")
+    namefont=ImageFont.truetype(LIBRE_FONT_PATH,size=46)
+    sipfont=ImageFont.truetype(LIBRE_FONT_PATH,size=40)
+
+    # Paste profile photo
+    colour_code = "#035288"
+    
+    def ordinal(n):
+        if 10 <= n % 100 <= 20:
+            suffix = 'th'
+        else:
+            suffix = {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')
+        return str(n) + suffix
+
+    def format_date(dt):
+        # dt is a datetime.date object
+        day = ordinal(dt.day)
+        month = dt.strftime("%B")   # Full month name, e.g. May
+        year = dt.year
+        return f"{day} {month} {year}"
+    
+
+    def draw_centered_wrapped_text(draw, text, y, font, max_width, line_height, x_center):
+        words = text.split()
+        lines = []
+        current_line = ""
+
+        for word in words:
+            test_line = f"{current_line} {word}".strip()
+            bbox = font.getbbox(test_line)
+            width = bbox[2] - bbox[0]
+            if width <= max_width:
+                current_line = test_line
+            else:
+                lines.append(current_line)
+                current_line = word
+        if current_line:
+            lines.append(current_line)
+
+        for line in lines:
+            bbox = font.getbbox(line)
+            line_width = bbox[2] - bbox[0]
+            draw.text((x_center - line_width // 2, y), line, font=font, fill=colour_code)
+            y += line_height
+        return y
+
+    
+    def draw_centered_mixed_style_line(draw, parts, y, x_center):
+        # parts = list of (text, font)
+        total_width = sum((font.getbbox(text)[2] - font.getbbox(text)[0]) for text, font in parts)
+        x = x_center - total_width // 2
+
+        for text, font in parts:
+            draw.text((x, y), text, font=font, fill=colour_code)
+            x += font.getbbox(text)[2] - font.getbbox(text)[0]
+    
+    
+    
+    template=original_template.copy()
+    draw = ImageDraw.Draw(template)
+
+
+    max_text_width = 1500
+    line_height = 40
+
+    name=student.name.upper()
+    draw_centered_wrapped_text(draw,name, 670, namefont, max_text_width, line_height,838)
+    draw_centered_wrapped_text(draw,student.sip_id, 750, sipfont, max_text_width, line_height,838)
+
+    # Line 1: Name wrapped
+    draw_centered_wrapped_text(draw,student.selected_project.title, 880, boldfont, max_text_width, line_height,838)
+    
+    # # Line 2: Mobile number
+    
+    start_date=format_date(student.start_date)
+    end_date=format_date(student.end_date)
+
+    draw_centered_wrapped_text(draw,f"[{start_date} - {end_date}]", 940, boldfont, max_text_width, line_height,838)
+    
+    # # Line 3: Name again, wrapped
+
+    mentorship_text = [
+        ("under the mentorship of ", regfont),
+        (f"Dr {student.selected_project.professor.name} ", boldfont),
+        ("department of,", regfont)
+    ]
+    draw_centered_mixed_style_line(draw, mentorship_text, y=1000, x_center=830)
+    
+    # # Line 4: Name again, wrapped 
+    draw_centered_wrapped_text(draw,student.selected_project.professor.department.name, 1060, boldfont, max_text_width, line_height,838)
+
+
+    
+
+    # Convert image to PDF
+    output_pdf = template.convert("RGB")
+    output = io.BytesIO()
+    output_pdf.save(output, format="PDF")
+    output.seek(0)
+
+    return StreamingResponse(output, media_type="application/pdf", headers={
+        "Content-Disposition": f"inline; filename={student.sip_id}_offer_letter.pdf"
+    })
 
 
 
