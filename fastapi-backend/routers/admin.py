@@ -251,12 +251,37 @@ def dept_data(id:int, db:Session=Depends(get_db),current_user: User=Depends(get_
 
     return projects
 
+import os
+
+from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
+from pydantic import EmailStr, BaseModel
+
+
+from dotenv import load_dotenv
+
+
+conf = ConnectionConfig(
+    MAIL_USERNAME='sip@nitc.ac.in',
+    MAIL_PASSWORD=os.getenv('MAIL_PASSWORD'),
+    MAIL_FROM='sip@nitc.ac.in',
+    MAIL_PORT=587,
+    MAIL_SERVER="smtp.gmail.com",
+    MAIL_STARTTLS=True,
+    MAIL_SSL_TLS= False,
+    USE_CREDENTIALS=True
+)
+
+
 @router.post("/department_data/{id}")
-def conf_dept_data(id:int,request:DeptDataMessage, db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
+async def conf_dept_data(id:int,request:DeptDataMessage, db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
 
     if(current_user.role != 'admin'):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to delete project")
     
+    department=db.query(Department).filter(Department.user_id==id).first()
+    if not department:
+        raise HTTPException(status_code=404, detail="Department not found")
+
     if(request.message=='confirmed'):    
         
         students=(db.query(Student)
@@ -268,10 +293,57 @@ def conf_dept_data(id:int,request:DeptDataMessage, db:Session=Depends(get_db),cu
                           .all()
                           )
         for student in students:
+            
             student.admin_conf=True
-        
-        return {"message":"The student have been alloted their projects"}
+            
+
+            offer_letter_link = f"http://localhost:3000/offer_letter_download"
+            
+            message=MessageSchema(
+                subject="NITC Summer Internship Programme selection",
+                recipients=[student.user.email],
+                body=f"""
+                <h3>Dear Student</h3>
+                <p>You have been selected for the internship under {student.selected_project.professor.name} for the project {student.selected_project.title} </p>
+                <p>You may contact your professor regarding the date of joining at {student.selected_project.professor.user.email}</p>
+                <p>You may download your offer letter at </p>
+                <a href="{offer_letter_link}">{offer_letter_link}</a>
+                """,
+                subtype="html"
+            )
+
+            db.commit()
+            db.refresh(student)
+            fm=FastMail(conf)
+            await fm.send_message(message)
+            
+        messagedept=MessageSchema(
+            subject="NITC Summer Internship Programme",
+            recipients=[department.user.email],
+            body=f"""
+            <h3>Dear Department</h3>
+            <p>Your allotments for the Summer Internship Programme have been acceptd</p>
+            """,
+            subtype="html"
+        )
+
+        fm=FastMail(conf)
+        await fm.send_message(messagedept)
+
+        return {"message":"The student have been alloted their projects and sent emails"}
 
 
     if(request.message=="rejected"):
-        return {"message":"The Project intern allotments have been rejected"}
+        message=MessageSchema(
+            subject="NITC Summer Internship Programme",
+            recipients=[department.user.email],
+            body=f"""
+            <h3>Dear Department</h3>
+            <p>Your allotments for the Summer Internship Programme have been rejected</p>
+            <p>Please update them again</p>
+            """,
+            subtype="html"
+        )
+        fm=FastMail(conf)
+        await fm.send_message(message)
+        return {"message":"The Project intern allotments have been rejected and departments have been sent emails"}

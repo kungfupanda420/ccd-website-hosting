@@ -537,7 +537,8 @@ def get_offer_letter(db: Session = Depends(get_db), current_user: User = Depends
         .join(Project.professor)
         .join(Professor.department)
         .filter(Student.user_id == current_user.id)   # only current user
-        .filter(Student.selected_project_id != None)  # project selected
+        .filter(Student.selected_project_id != None)
+        .filter(Student.admin_conf.isnot(None))  # project selected
         .options(
             joinedload(Student.selected_project)
             .joinedload(Project.professor)
@@ -637,7 +638,8 @@ def get_completion_certificate(db: Session = Depends(get_db), current_user: User
         .join(Project.professor)
         .join(Professor.department)
         .filter(Student.user_id == current_user.id)   # only current user
-        .filter(Student.selected_project_id != None)  # project selected
+        .filter(Student.selected_project_id != None) 
+        .filter(Student.admin_conf.isnot(None))  # project selected
         .options(
             joinedload(Student.selected_project)
             .joinedload(Project.professor)
