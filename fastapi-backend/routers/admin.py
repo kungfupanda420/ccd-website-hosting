@@ -347,5 +347,6 @@ async def conf_dept_data(id:int,request:DeptDataMessage, db:Session=Depends(get_
         fm=FastMail(conf)
         await fm.send_message(message)
         return {"message":"The Project intern allotments have been rejected and departments have been sent emails"}
+    
     else:
         raise HTTPException(status_code=400, detail="Invalid message value")
