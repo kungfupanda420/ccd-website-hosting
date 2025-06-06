@@ -8,7 +8,7 @@ from .users import ShowUser
 
 from typing import Optional
 
-from sqlalchemy.sql.sqltypes import Date
+from datetime import date
 
 class VerifyEmail(BaseModel):
     email: EmailStr
@@ -103,7 +103,7 @@ class StudentSIPName(BaseModel):
     }
 
 class SetDate(BaseModel):
-    date:Date
+    date:date
 
     model_config = {
         "from_attributes": True
