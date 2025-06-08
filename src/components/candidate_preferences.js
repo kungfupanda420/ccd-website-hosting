@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import { authFetch } from "../utils/authFetch";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { useNavigate } from "react-router-dom";
-import { faList } from "@fortawesome/free-solid-svg-icons";
 import { gsap } from "gsap";
 import "../css/CandidatePreferences.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser, faSignOutAlt, faHome, faEdit, faSave, faTimes, faList } from "@fortawesome/free-solid-svg-icons";
 
 function CandidatePreferences() {
   const [projects, setProjects] = useState([]);
@@ -186,24 +187,34 @@ function CandidatePreferences() {
     <div style={{ display: "flex" }}>
       {/* Sidebar */}
       <aside className="sidebar">
-        <img
-          className="profile-pic"
-          src={candidate?.profilePhotoPath ? `/${candidate.profilePhotoPath}` : "/images/default.png"}
-          alt="Profile"
-        />
-        <nav>
-          <a href="#" onClick={() => navigate("/candidatedashboard")}>Dashboard</a>
-          <a href="#" onClick={() => navigate("/candidateprofile")}>Profile</a>
-          <a href="#" className="active">Project Preferences</a>
-          <a href="#" onClick={() => {
-            localStorage.removeItem("access_token");
-            localStorage.removeItem("refresh_token");
-            navigate("/login");
-          }}>logout</a>
-
-        </nav>
-      </aside>
-
+  <img
+    className="profile-pic"
+    src={candidate?.profilePhotoPath ? `/${candidate.profilePhotoPath}` : "/images/default.png"}
+    alt="Profile"
+  />
+  <nav>
+    <button onClick={() => navigate("/candidatedashboard")}>
+      <FontAwesomeIcon icon={faHome} />
+      <span>Dashboard</span>
+    </button>
+    <button onClick={() => navigate("/candidate_profile")}>
+      <FontAwesomeIcon icon={faUser} />
+      <span>Profile</span>
+    </button>
+    <button className="active">
+      <FontAwesomeIcon icon={faList} />
+      <span>Project Preferences</span>
+    </button>
+    <button onClick={() => {
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
+      navigate("/login");
+    }}>
+      <FontAwesomeIcon icon={faSignOutAlt} />
+      <span>Logout</span>
+    </button>
+  </nav>
+</aside>
       {/* Main Content */}
       <div className="preferences-container">
         <h1>Project Preferences</h1>

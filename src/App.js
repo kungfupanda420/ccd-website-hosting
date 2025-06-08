@@ -85,6 +85,7 @@ function App() {
   const noNavFooterRoutes = [
     '/professor_dashboard',
     '/CandidatePreferences',
+    '/candidatePreferences',
     '/candidate_profile',
     '/Candidatedashboard',
     '/candidatedashboard',

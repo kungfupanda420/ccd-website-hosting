@@ -214,7 +214,7 @@ function CandidateProfile() {
               <FontAwesomeIcon icon={faHome} />
               <span>Dashboard</span>
             </button>
-              <button onClick={() => navigate("/candidate_preferences")}>
+              <button onClick={() => navigate("/candidatePreferences")}>
               {/* <FontAwesomeIcon icon={faList} /> */}
               <FontAwesomeIcon icon={faList} />
               {/* <FontAwesomeIcon icon={faHome} /> */}
