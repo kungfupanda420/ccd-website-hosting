@@ -23,7 +23,7 @@ function Admin_sip() {
 
       const token = localStorage.getItem('token');
 
-      const response = await authFetch("/api/admin/makeProfessor", {
+      const response = await authFetch("/api/admin/professors", {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`
@@ -47,7 +47,7 @@ function Admin_sip() {
     setMessage("Downloading...");
     try {
       const token = localStorage.getItem('token');
-      const response = await authFetch("/api/admin/exportProfessors", {
+      const response = await authFetch("/api/admin/professors", {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`

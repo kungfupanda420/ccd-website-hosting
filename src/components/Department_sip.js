@@ -10,7 +10,7 @@ function DepartmentSIP() {
   const fetchStudentData = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('/api/departments/deptStudents', {
+      const response = await fetch('/api/departments/dept_students', {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -32,7 +32,7 @@ function DepartmentSIP() {
   const handleAllot = async (user_id, project_id) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`/api/departments/allotStudent/${user_id}/${project_id}`, {
+      const response = await fetch(`/api/departments/allot_student/${user_id}/${project_id}`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -56,7 +56,7 @@ function DepartmentSIP() {
   const downloadCSV = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('/api/departments/departmentData', {
+      const response = await fetch('/api/departments/department_data', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,

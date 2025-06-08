@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { authFetch } from "../utils/authFetch";
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { useNavigate } from "react-router-dom";
+import { faList } from "@fortawesome/free-solid-svg-icons";
+import { gsap } from "gsap";
 import "../css/CandidatePreferences.css";
 
 function CandidatePreferences() {
@@ -16,7 +18,7 @@ function CandidatePreferences() {
     mode: "",
     duration: "",
     professor: "",
-    search: ""
+    search: "",
   });
   const [selectedProjects, setSelectedProjects] = useState([]);
   const [message, setMessage] = useState({ text: "", type: "" });
@@ -24,21 +26,35 @@ function CandidatePreferences() {
   const [candidate, setCandidate] = useState(null);
   const navigate = useNavigate();
 
-  // Fetch candidate data and projects on component mount
+  // GSAP animations
+  useEffect(() => {
+    gsap.from(".preferences-container", {
+      opacity: 0,
+      y: 50,
+      duration: 1,
+      ease: "power2.out",
+    });
+    gsap.from(".sidebar", {
+      opacity: 0,
+      x: -50,
+      duration: 1,
+      ease: "power2.out",
+    });
+  }, []);
+
+  // Fetch candidate data and projects
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        
-        // Fetch candidate data
+
         const candidateRes = await authFetch("/api/students/me");
         if (candidateRes.ok) {
           const candidateData = await candidateRes.json();
           setCandidate(candidateData);
         }
-        
-        // Fetch all available projects
-        const projectsRes = await authFetch("/api/students/allProjects");
+
+        const projectsRes = await authFetch("/api/students/all_projects");
         if (!projectsRes.ok) {
           throw new Error("Failed to load projects");
         }
@@ -46,106 +62,73 @@ function CandidatePreferences() {
         setProjects(projectsData);
         setFilteredProjects(projectsData);
 
-        // Extract filter options
-        setDepartments([...new Set(projectsData.map(p => p.professor?.department?.name || "N/A"))]);
-        setModes([...new Set(projectsData.map(p => p.mode || "N/A"))]);
-        setDurations([...new Set(projectsData.map(p => p.duration || "N/A"))]);
-        // setProfessors([...new Set(projectsData.map(p => p.professor?.name || "N/A"))];
+        setDepartments([...new Set(projectsData.map((p) => p.professor?.department?.name || "N/A"))]);
+        setModes([...new Set(projectsData.map((p) => p.mode || "N/A"))]);
+        setDurations([...new Set(projectsData.map((p) => p.duration || "N/A"))]);
+        setProfessors([...new Set(projectsData.map((p) => p.professor?.name || "N/A"))]);
 
-        // Fetch already applied projects
-        const appliedRes = await authFetch("/api/students/appliedProjects");
+        const appliedRes = await authFetch("/api/students/preferences");
         if (appliedRes.ok) {
           const appliedData = await appliedRes.json();
           if (appliedData.length > 0) {
             setSelectedProjects(appliedData);
-            setFilters(prev => ({
+            setFilters((prev) => ({
               ...prev,
-              department: appliedData[0].professor?.department?.name || ""
+              department: appliedData[0].professor?.department?.name || "",
             }));
           }
         }
       } catch (err) {
-        setMessage({ 
-          text: err.message || "Failed to load data", 
-          type: "error" 
+        setMessage({
+          text: err.message || "Failed to load data",
+          type: "error",
         });
       } finally {
         setIsLoading(false);
       }
     };
-    
+
     fetchData();
   }, []);
 
-  // Filter projects based on selected filters
-  useEffect(() => {
-    let result = [...projects];
-    if (filters.department && filters.department !== "N/A") {
-      result = result.filter(p => (p.professor?.department?.name || "N/A") === filters.department);
-    }
-    if (filters.mode && filters.mode !== "N/A") {
-      result = result.filter(p => (p.mode || "N/A") === filters.mode);
-    }
-    if (filters.duration && filters.duration !== "N/A") {
-      result = result.filter(p => (p.duration || "N/A") === filters.duration);
-    }
-    if (filters.professor && filters.professor !== "N/A") {
-      result = result.filter(p => (p.professor?.name || "N/A") === filters.professor);
-    }
-    if (filters.search) {
-      const searchTerm = (filters.search || "").toString().toLowerCase();
-      result = result.filter(p => {
-        const title = (p.title || "").toString().toLowerCase();
-        const description = (p.description || "").toString().toLowerCase();
-        const profName = (p.professor?.name || "").toString().toLowerCase();
-        return (
-          title.includes(searchTerm) ||
-          description.includes(searchTerm) ||
-          profName.includes(searchTerm)
-        );
-      });
-    }
-    setFilteredProjects(result);
-  }, [projects, filters]);
-
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleSearchChange = (e) => {
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
-      search: e.target.value
+      search: e.target.value,
     }));
   };
 
   const toggleProjectSelection = (project) => {
-    setSelectedProjects(prev => {
-      const isSelected = prev.some(p => p.id === project.id);
+    setSelectedProjects((prev) => {
+      const isSelected = prev.some((p) => p.id === project.id);
       if (isSelected) {
-        return prev.filter(p => p.id !== project.id);
+        return prev.filter((p) => p.id !== project.id);
       }
-      
+
       if (prev.length >= 3) {
         setMessage({
           text: "You can select a maximum of 3 projects.",
-          type: "error"
+          type: "error",
         });
         return prev;
       }
-      
+
       if (prev.length > 0 && project.professor?.department?.name !== prev[0].professor?.department?.name) {
         setMessage({
           text: "You can only select projects from the same department.",
-          type: "error"
+          type: "error",
         });
         return prev;
       }
-      
+
       return [...prev, project];
     });
   };
@@ -162,29 +145,29 @@ function CandidatePreferences() {
     if (selectedProjects.length !== 3) {
       setMessage({
         text: "Please select exactly 3 projects.",
-        type: "error"
+        type: "error",
       });
       return;
     }
-    
+
     try {
       setIsLoading(true);
       setMessage({ text: "", type: "" });
-      
+
       const res = await authFetch("/api/students/preferences", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           pref1_id: selectedProjects[0].id,
           pref2_id: selectedProjects[1].id,
-          pref3_id: selectedProjects[2].id
+          pref3_id: selectedProjects[2].id,
         }),
       });
-      
+
       if (res.ok) {
         setMessage({
           text: "Preferences submitted successfully!",
-          type: "success"
+          type: "success",
         });
       } else {
         const err = await res.json();
@@ -193,36 +176,12 @@ function CandidatePreferences() {
     } catch (err) {
       setMessage({
         text: err.message || "Network error",
-        type: "error"
+        type: "error",
       });
     } finally {
       setIsLoading(false);
     }
   };
-
-  if (isLoading) {
-    return (
-      <div style={{ display: "flex" }}>
-        <aside className="sidebar">
-          <img
-            className="profile-pic"
-            src={candidate?.profilePhotoPath ? `/${candidate.profilePhotoPath}` : "/images/default.png"}
-            alt="Profile"
-          />
-          <nav>
-            <a href="#" onClick={() => navigate("/candidatedashboard")}>Dashboard</a>
-            <a href="#" onClick={() => navigate("/candidateprofile")}>Profile</a>
-            <a href="#" className="active">Project Preferences</a>
-          </nav>
-        </aside>
-        <div className="preferences-container">
-          <h1>Project Preferences</h1>
-          <div className="loading-message">Loading projects...</div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div style={{ display: "flex" }}>
       {/* Sidebar */}

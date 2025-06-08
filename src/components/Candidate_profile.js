@@ -1,20 +1,83 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { authFetch } from "../utils/authFetch";
 import "../css/CandidateProfile.css";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser, faSignOutAlt, faHome, faEdit, faSave, faTimes,faList } from "@fortawesome/free-solid-svg-icons";
+import { gsap } from "gsap";
+
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollSmoother } from "gsap/ScrollSmoother";
 
 function CandidateProfile() {
   const [candidate, setCandidate] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [editMode, setEditMode] = useState(false);
-  const [form, setForm] = useState({});
+  const [projects, setProjects] = useState([]);
+  const [form, setForm] = useState({
+    name: "",
+    phone: "",
+    dob: "",
+    address: "",
+    state: "",
+    guardianName: "",
+    guardianRelation: "",
+    guardianPhone: "",
+    institution: "",
+    program: "",
+    department: "",
+    year: "",
+    instituteLocation: "",
+    instituteState: "",
+    currentSemesterCgpa: "",
+    UG: "",
+    cgpa12: "",
+    board12: "",
+    cgpa10: "",
+    board10: "",
+    adhaar_id: "",
+    apaar_id: "",
+    sip_id: "",
+    pref1_id: null,
+    pref2_id: null,
+    pref3_id: null,
+    professor: "",
+    start_date: "",
+    end_date: "",
+    nitc_idcard_path: "",
+    student_college_idcard_path: ""
+  });
   const [regPaymentScreenshot, setRegPaymentScreenshot] = useState(null);
   const [profilePhoto, setProfilePhoto] = useState(null);
+  const [nitcIdCard, setNitcIdCard] = useState(null);
+  const [collegeIdCard, setCollegeIdCard] = useState(null);
   const navigate = useNavigate();
+  const smootherRef = useRef();
+  const contentRef = useRef();
 
+  // Initialize smooth scrolling
   useEffect(() => {
-    const fetchCandidate = async () => {
+    gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+
+    smootherRef.current = ScrollSmoother.create({
+      wrapper: "#smooth-wrapper",
+      content: "#smooth-content",
+      smooth: 1,
+      effects: true,
+      smoothTouch: 0.1,
+    });
+
+    return () => {
+      if (smootherRef.current) {
+        smootherRef.current.kill();
+      }
+    };
+  }, []);
+
+  // Fetch candidate data and projects
+  useEffect(() => {
+    const fetchData = async () => {
       setLoading(true);
       setError("");
       const token = localStorage.getItem("token");
@@ -23,50 +86,39 @@ function CandidateProfile() {
         setLoading(false);
         return;
       }
+
       try {
-        const res = await authFetch("/api/students/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (res.ok) {
-          const data = await res.json();
-          setCandidate(data);
+        // Fetch candidate data
+        const [candidateRes, projectsRes] = await Promise.all([
+          authFetch("/api/students/me", {
+            headers: { Authorization: `Bearer ${token}` }
+          }),
+          authFetch("/api/students/all_projects", {
+            headers: { Authorization: `Bearer ${token}` }
+          })
+        ]);
+
+        if (candidateRes.ok && projectsRes.ok) {
+          const candidateData = await candidateRes.json();
+          const projectsData = await projectsRes.json();
+          
+          setCandidate(candidateData);
+          setProjects(projectsData);
           setForm({
-            name: data.name || "",
-            phone: data.phone || "",
-            dob: data.dob || "",
-            address: data.address || "",
-            state: data.state || "",
-            guardianName: data.guardianName || "",
-            guardianRelation: data.guardianRelation || "",
-            guardianPhone: data.guardianPhone || "",
-            institution: data.institution || "",
-            program: data.program || "",
-            department: data.department || "",
-            year: data.year || "",
-            instituteLocation: data.instituteLocation || "",
-            instituteState: data.instituteState || "",
-            currentSemesterCgpa: data.currentSemesterCgpa || "",
-            UG: data.UG || "",
-            cgpa12: data.cgpa12 || "",
-            board12: data.board12 || "",
-            cgpa10: data.cgpa10 || "",
-            board10: data.board10 || "",
-            regPayment: data.regPayment || "",
-            paymentStatus: data.paymentStatus || "",
-            adhaar_id: data.adhaar_id || "",
+            ...candidateData,
+            start_date: candidateData.start_date || "",
+            end_date: candidateData.end_date || ""
           });
         } else {
-          const err = await res.json();
-          setError(err.detail || "Failed to fetch profile.");
+          const err = await candidateRes.json();
+          setError(err.detail || "Failed to fetch data.");
         }
       } catch (e) {
         setError("Network error.");
       }
       setLoading(false);
     };
-    fetchCandidate();
+    fetchData();
   }, []);
 
   const handleEditChange = (e) => {
@@ -74,11 +126,21 @@ function CandidateProfile() {
   };
 
   const handleFileChange = (e) => {
-    if (e.target.name === "regPaymentScreenshot") {
-      setRegPaymentScreenshot(e.target.files[0]);
-    }
-    if (e.target.name === "profilePhoto") {
-      setProfilePhoto(e.target.files[0]);
+    switch (e.target.name) {
+      case "regPaymentScreenshot":
+        setRegPaymentScreenshot(e.target.files[0]);
+        break;
+      case "profilePhoto":
+        setProfilePhoto(e.target.files[0]);
+        break;
+      case "nitc_idcard":
+        setNitcIdCard(e.target.files[0]);
+        break;
+      case "student_college_idcard":
+        setCollegeIdCard(e.target.files[0]);
+        break;
+      default:
+        break;
     }
   };
 
@@ -89,28 +151,36 @@ function CandidateProfile() {
     try {
       const token = localStorage.getItem("token");
       const formData = new FormData();
+      
+      // Append all form fields
       Object.entries(form).forEach(([key, value]) => {
-        formData.append(key, value);
+        if (value !== null && value !== undefined) {
+          formData.append(key, value);
+        }
       });
-      if (regPaymentScreenshot) {
-        formData.append("regPaymentScreenshot", regPaymentScreenshot);
-      }
-      if (profilePhoto) {
-        formData.append("profilePhoto", profilePhoto);
-      }
-      const res = await authFetch("/api/students/me/edit", {
+
+      // Append files
+      if (regPaymentScreenshot) formData.append("regPaymentScreenshot", regPaymentScreenshot);
+      if (profilePhoto) formData.append("profilePhoto", profilePhoto);
+      if (nitcIdCard) formData.append("nitc_idcard", nitcIdCard);
+      if (collegeIdCard) formData.append("student_college_idcard", collegeIdCard);
+
+      const res = await authFetch("/api/students/me", {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
         },
         body: formData,
       });
+
       if (res.ok) {
         const updated = await res.json();
         setCandidate(updated);
         setEditMode(false);
         setRegPaymentScreenshot(null);
         setProfilePhoto(null);
+        setNitcIdCard(null);
+        setCollegeIdCard(null);
       } else {
         const err = await res.json();
         setError(err.detail || "Failed to update profile.");
@@ -121,198 +191,367 @@ function CandidateProfile() {
     setLoading(false);
   };
 
-  if (loading) return <div className="candidate-profile-container"><h2>Loading...</h2></div>;
-  if (error) return <div className="candidate-profile-container"><h2>{error}</h2></div>;
+  if (loading) return <div className="loading-spinner">Loading...</div>;
+  if (error) return <div className="error-message">{error}</div>;
   if (!candidate) return null;
 
   return (
-    <div style={{ display: "flex" }}>
-      {/* Sidebar */}
-      <aside className="sidebar">
-        <img
-          className="profile-pic"
-          src={candidate.profilePhotoPath ? `/${candidate.profilePhotoPath}` : "/images/default.png"}
-          alt="Profile"
-        />
-        {/* <h2>{candidate.name}</h2> */}
-        <nav>
-          <a href="#" onClick={() => navigate("/candidatedashboard")}>Dashboard</a>
-          <a href="#" onClick={() => navigate("/")}>logout</a>
-          {/* <a href="#" onClick={() => setEditMode(false)}>View Profile</a> */}
-          {/* <a href="#" onClick={() => setEditMode(true)}>Edit Profile</a> */}
-          {/* Add more links here if needed */}
-        </nav>
-      </aside>
+    <div id="smooth-wrapper">
+      <div id="smooth-content" ref={contentRef}>
+        {/* Sidebar */}
+        <aside className="sidebar">
+          <img
+            className="profile-pic"
+            src={candidate.profilePhotoPath ? `/${candidate.profilePhotoPath}?${Date.now()}` : "/images/default.png"}
+            alt="Profile"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "/images/default.png";
+            }}
+          />
+          <nav>
+            <button onClick={() => navigate("/candidatedashboard")}>
+              <FontAwesomeIcon icon={faHome} />
+              <span>Dashboard</span>
+            </button>
+              <button onClick={() => navigate("/candidate_preferences")}>
+              {/* <FontAwesomeIcon icon={faList} /> */}
+              <FontAwesomeIcon icon={faList} />
+              {/* <FontAwesomeIcon icon={faHome} /> */}
+              <span>Preferences</span>
+            </button>
+            <button onClick={() => navigate("/")}>
+              <FontAwesomeIcon icon={faSignOutAlt} />
+              <span>Logout</span>
+            </button>
+          </nav>
+        </aside>
 
-      {/* Main Profile Content */}
-      <main className="candidate-profile-container">
-        <div className="candidate-profile">
-          <h1>Candidate Profile</h1>
-          {!editMode ? (
-            <>
-              <div className="edit-profile-form">
-                <div><strong>Name:</strong> {candidate.name}</div>
-                <div><strong>Email:</strong> {candidate.user?.email}</div>
-                <div><strong>Phone:</strong> {candidate.phone}</div>
-                <div><strong>Date of Birth:</strong> {candidate.dob}</div>
-                <div><strong>Address:</strong> {candidate.address}</div>
-                <div><strong>State:</strong> {candidate.state}</div>
-                <div><strong>Guardian Name:</strong> {candidate.guardianName}</div>
-                <div><strong>Guardian Relation:</strong> {candidate.guardianRelation}</div>
-                <div><strong>Guardian Phone:</strong> {candidate.guardianPhone}</div>
-                <div><strong>Institution:</strong> {candidate.institution}</div>
-                <div><strong>Program:</strong> {candidate.program}</div>
-                <div><strong>Department:</strong> {candidate.department}</div>
-                <div><strong>Year:</strong> {candidate.year}</div>
-                <div><strong>Institute Location:</strong> {candidate.instituteLocation}</div>
-                <div><strong>Institute State:</strong> {candidate.instituteState}</div>
-                <div><strong>Current Semester CGPA:</strong> {candidate.currentSemesterCgpa}</div>
-                <div><strong>UG:</strong> {candidate.UG}</div>
-                <div><strong>12th CGPA:</strong> {candidate.cgpa12}</div>
-                <div><strong>12th Board:</strong> {candidate.board12}</div>
-                <div><strong>10th CGPA:</strong> {candidate.cgpa10}</div>
-                <div><strong>10th Board:</strong> {candidate.board10}</div>
-                <div><strong>Registration Payment:</strong> {candidate.regPayment}</div>
-                <div><strong>Payment Status:</strong> {candidate.paymentStatus}</div>
-                <div><strong>Aadhaar ID:</strong> {candidate.adhaar_id}</div>
-              </div>
-              <button className="edit-btn" onClick={() => setEditMode(true)}>Edit Profile</button>
-            </>
-          ) : (
-            <form className="edit-profile-form" onSubmit={handleEditSubmit} encType="multipart/form-data">
-              <div className="form-row">
-                <label>
-                  Name
-                  <input type="text" name="name" value={form.name} onChange={handleEditChange} required />
-                </label>
-                <label>
-                  Phone
-                  <input type="text" name="phone" value={form.phone} onChange={handleEditChange} />
-                </label>
-                <label>
-                  Date of Birth
-                  <input type="date" name="dob" value={form.dob} onChange={handleEditChange} />
-                </label>
-                <label>
-                  Address
-                  <input type="text" name="address" value={form.address} onChange={handleEditChange} />
-                </label>
-              </div>
-
-              <div className="form-row">
-                <label>
-                  State
-                  <input type="text" name="state" value={form.state} onChange={handleEditChange} />
-                </label>
-                <label>
-                  Guardian Name
-                  <input type="text" name="guardianName" value={form.guardianName} onChange={handleEditChange} />
-                </label>
-                <label>
-                  Guardian Relation
-                  <input type="text" name="guardianRelation" value={form.guardianRelation} onChange={handleEditChange} />
-                </label>
-                <label>
-                  Guardian Phone
-                  <input type="text" name="guardianPhone" value={form.guardianPhone} onChange={handleEditChange} />
-                </label>
-              </div>
-
-              <div className="form-row">
-                <label>
-                  Institution
-                  <input type="text" name="institution" value={form.institution} onChange={handleEditChange} />
-                </label>
-                <label>
-                  Program
-                  <input type="text" name="program" value={form.program} onChange={handleEditChange} />
-                </label>
-                <label>
-                  Department
-                  <input type="text" name="department" value={form.department} onChange={handleEditChange} />
-                </label>
-                <label>
-                  Year
-                  <input type="number" name="year" value={form.year} onChange={handleEditChange} />
-                </label>
-              </div>
-
-              <div className="form-row">
-                <label>
-                  Institute Location
-                  <input type="text" name="instituteLocation" value={form.instituteLocation} onChange={handleEditChange} />
-                </label>
-                <label>
-                  Institute State
-                  <input type="text" name="instituteState" value={form.instituteState} onChange={handleEditChange} />
-                </label>
-                <label>
-                  Current Semester CGPA
-                  <input type="text" name="currentSemesterCgpa" value={form.currentSemesterCgpa} onChange={handleEditChange} />
-                </label>
-                <label>
-                  UG
-                  <input type="text" name="UG" value={form.UG} onChange={handleEditChange} />
-                </label>
-              </div>
-
-              <div className="form-row">
-                <label>
-                  12th CGPA
-                  <input type="text" name="cgpa12" value={form.cgpa12} onChange={handleEditChange} />
-                </label>
-                <label>
-                  12th Board
-                  <input type="text" name="board12" value={form.board12} onChange={handleEditChange} />
-                </label>
-                <label>
-                  10th CGPA
-                  <input type="text" name="cgpa10" value={form.cgpa10} onChange={handleEditChange} />
-                </label>
-                <label>
-                  10th Board
-                  <input type="text" name="board10" value={form.board10} onChange={handleEditChange} />
-                </label>
-              </div>
-
-              <div className="form-row">
-                <label>
-                  Registration Payment
-                  <input type="text" name="regPayment" value={form.regPayment} onChange={handleEditChange} />
-                </label>
-                <label>
-                  Payment Status
-                  <input type="text" name="paymentStatus" value={form.paymentStatus} onChange={handleEditChange} />
-                </label>
-                <label>
-                  Aadhaar ID
-                  <input type="text" name="adhaar_id" value={form.adhaar_id} onChange={handleEditChange} />
-                </label>
-              </div>
-
-              <div className="form-row">
-                <label>
-                  Upload Registration Payment Screenshot
-                  <input type="file" name="regPaymentScreenshot" onChange={handleFileChange} accept="image/*" />
-                </label>
-                <label>
-                  Upload Profile Photo
-                  <input type="file" name="profilePhoto" onChange={handleFileChange} accept="image/*" />
-                </label>
-              </div>
-
-              <div className="form-actions">
-                <button type="submit" className="save-btn" disabled={loading}>
-                  {loading ? "Saving..." : "Save"}
+        {/* Main Profile Content */}
+        <main className="candidate-profile-container">
+          <div className="candidate-profile">
+            <header className="profile-header">
+              <h1>Candidate Profile</h1>
+              {!editMode && (
+                <button className="edit-btn" onClick={() => setEditMode(true)}>
+                  <FontAwesomeIcon icon={faEdit} />
+                  <span>Edit Profile</span>
                 </button>
-                <button type="button" className="cancel-btn" onClick={() => setEditMode(false)}>
-                  Cancel
-                </button>
+              )}
+            </header>
+
+            {!editMode ? (
+              <div className="profile-view">
+                <section className="profile-section">
+                  <h2>Personal Information</h2>
+                  <div className="profile-grid">
+                    <div><strong>Name:</strong> {candidate.name}</div>
+                    <div><strong>Email:</strong> {candidate.user?.email}</div>
+                    <div><strong>Phone:</strong> {candidate.phone}</div>
+                    <div><strong>Date of Birth:</strong> {candidate.dob}</div>
+                    <div><strong>Address:</strong> {candidate.address}</div>
+                    <div><strong>State:</strong> {candidate.state}</div>
+                  </div>
+                </section>
+
+                <section className="profile-section">
+                  <h2>Guardian Information</h2>
+                  <div className="profile-grid">
+                    <div><strong>Guardian Name:</strong> {candidate.guardianName}</div>
+                    <div><strong>Guardian Relation:</strong> {candidate.guardianRelation}</div>
+                    <div><strong>Guardian Phone:</strong> {candidate.guardianPhone}</div>
+                  </div>
+                </section>
+
+                <section className="profile-section">
+                  <h2>Academic Information</h2>
+                  <div className="profile-grid">
+                    <div><strong>Institution:</strong> {candidate.institution}</div>
+                    <div><strong>Program:</strong> {candidate.program}</div>
+                    <div><strong>Department:</strong> {candidate.department}</div>
+                    <div><strong>Year:</strong> {candidate.year}</div>
+                    <div><strong>Institute Location:</strong> {candidate.instituteLocation}</div>
+                    <div><strong>Institute State:</strong> {candidate.instituteState}</div>
+                    <div><strong>Current Semester CGPA:</strong> {candidate.currentSemesterCgpa}</div>
+                    <div><strong>UG:</strong> {candidate.UG}</div>
+                  </div>
+                </section>
+
+                <section className="profile-section">
+                  <h2>Educational Background</h2>
+                  <div className="profile-grid">
+                    <div><strong>12th CGPA:</strong> {candidate.cgpa12}</div>
+                    <div><strong>12th Board:</strong> {candidate.board12}</div>
+                    <div><strong>10th CGPA:</strong> {candidate.cgpa10}</div>
+                    <div><strong>10th Board:</strong> {candidate.board10}</div>
+                  </div>
+                </section>
+
+                <section className="profile-section">
+                  <h2>Identification</h2>
+                  <div className="profile-grid">
+                    <div><strong>SIP ID:</strong> {candidate.sip_id || "Not provided"}</div>
+                    <div><strong>Aadhaar ID:</strong> {candidate.adhaar_id || "Not provided"}</div>
+                    <div><strong>APAAR ID:</strong> {candidate.apaar_id || "Not provided"}</div>
+                  </div>
+                </section>
+
+                <section className="profile-section">
+                  <h2>Project Preferences</h2>
+                  <div className="profile-grid">
+                    <div><strong>First Preference:</strong> {candidate.pref1?.title || "Not selected"}</div>
+                    <div><strong>Second Preference:</strong> {candidate.pref2?.title || "Not selected"}</div>
+                    <div><strong>Third Preference:</strong> {candidate.pref3?.title || "Not selected"}</div>
+                    <div><strong>Assigned Professor:</strong> {candidate.professor || "Not assigned"}</div>
+                  </div>
+                </section>
+
+                <section className="profile-section">
+                  <h2>Internship Dates</h2>
+                  <div className="profile-grid">
+                    <div><strong>Start Date:</strong> {candidate.start_date || "Not set"}</div>
+                    <div><strong>End Date:</strong> {candidate.end_date || "Not set"}</div>
+                  </div>
+                </section>
+
+                <section className="profile-section">
+                  <h2>Documents</h2>
+                  <div className="profile-grid">
+                    <div>
+                      <strong>NITC ID Card:</strong> 
+                      {candidate.nitc_idcard_path ? (
+                        <a href={`/${candidate.nitc_idcard_path}`} target="_blank" rel="noopener noreferrer">View Document</a>
+                      ) : "Not uploaded"}
+                    </div>
+                    <div>
+                      <strong>College ID Card:</strong> 
+                      {candidate.student_college_idcard_path ? (
+                        <a href={`/${candidate.student_college_idcard_path}`} target="_blank" rel="noopener noreferrer">View Document</a>
+                      ) : "Not uploaded"}
+                    </div>
+                    <div>
+                      <strong>Profile Photo:</strong> 
+                      {candidate.profilePhotoPath ? (
+                        <a href={`/${candidate.profilePhotoPath}`} target="_blank" rel="noopener noreferrer">View Photo</a>
+                      ) : "Not uploaded"}
+                    </div>
+                  </div>
+                </section>
               </div>
-            </form>
-          )}
-        </div>
-      </main>
+            ) : (
+              <form className="edit-profile-form" onSubmit={handleEditSubmit} encType="multipart/form-data">
+                <div className="form-sections">
+                  <section className="form-section">
+                    <h2>Personal Information</h2>
+                    <div className="form-grid">
+                      <div className="form-group">
+                        <label>Name</label>
+                        <input type="text" name="name" value={form.name} onChange={handleEditChange} required />
+                      </div>
+                      <div className="form-group">
+                        <label>Phone</label>
+                        <input type="text" name="phone" value={form.phone} onChange={handleEditChange} />
+                      </div>
+                      <div className="form-group">
+                        <label>Date of Birth</label>
+                        <input type="date" name="dob" value={form.dob} onChange={handleEditChange} />
+                      </div>
+                      <div className="form-group">
+                        <label>Address</label>
+                        <input type="text" name="address" value={form.address} onChange={handleEditChange} />
+                      </div>
+                      <div className="form-group">
+                        <label>State</label>
+                        <input type="text" name="state" value={form.state} onChange={handleEditChange} />
+                      </div>
+                    </div>
+                  </section>
+
+                  <section className="form-section">
+                    <h2>Guardian Information</h2>
+                    <div className="form-grid">
+                      <div className="form-group">
+                        <label>Guardian Name</label>
+                        <input type="text" name="guardianName" value={form.guardianName} onChange={handleEditChange} />
+                      </div>
+                      <div className="form-group">
+                        <label>Guardian Relation</label>
+                        <input type="text" name="guardianRelation" value={form.guardianRelation} onChange={handleEditChange} />
+                      </div>
+                      <div className="form-group">
+                        <label>Guardian Phone</label>
+                        <input type="text" name="guardianPhone" value={form.guardianPhone} onChange={handleEditChange} />
+                      </div>
+                    </div>
+                  </section>
+
+                  <section className="form-section">
+                    <h2>Academic Information</h2>
+                    <div className="form-grid">
+                      <div className="form-group">
+                        <label>Institution</label>
+                        <input type="text" name="institution" value={form.institution} onChange={handleEditChange} />
+                      </div>
+                      <div className="form-group">
+                        <label>Program</label>
+                        <input type="text" name="program" value={form.program} onChange={handleEditChange} />
+                      </div>
+                      <div className="form-group">
+                        <label>Department</label>
+                        <input type="text" name="department" value={form.department} onChange={handleEditChange} />
+                      </div>
+                      <div className="form-group">
+                        <label>Year</label>
+                        <input type="number" name="year" value={form.year} onChange={handleEditChange} />
+                      </div>
+                      <div className="form-group">
+                        <label>Institute Location</label>
+                        <input type="text" name="instituteLocation" value={form.instituteLocation} onChange={handleEditChange} />
+                      </div>
+                      <div className="form-group">
+                        <label>Institute State</label>
+                        <input type="text" name="instituteState" value={form.instituteState} onChange={handleEditChange} />
+                      </div>
+                      <div className="form-group">
+                        <label>Current Semester CGPA</label>
+                        <input type="number" step="0.01" name="currentSemesterCgpa" value={form.currentSemesterCgpa} onChange={handleEditChange} />
+                      </div>
+                      <div className="form-group">
+                        <label>UG</label>
+                        <input type="text" name="UG" value={form.UG} onChange={handleEditChange} />
+                      </div>
+                    </div>
+                  </section>
+
+                  <section className="form-section">
+                    <h2>Educational Background</h2>
+                    <div className="form-grid">
+                      <div className="form-group">
+                        <label>12th CGPA</label>
+                        <input type="number" step="0.01" name="cgpa12" value={form.cgpa12} onChange={handleEditChange} />
+                      </div>
+                      <div className="form-group">
+                        <label>12th Board</label>
+                        <input type="text" name="board12" value={form.board12} onChange={handleEditChange} />
+                      </div>
+                      <div className="form-group">
+                        <label>10th CGPA</label>
+                        <input type="number" step="0.01" name="cgpa10" value={form.cgpa10} onChange={handleEditChange} />
+                      </div>
+                      <div className="form-group">
+                        <label>10th Board</label>
+                        <input type="text" name="board10" value={form.board10} onChange={handleEditChange} />
+                      </div>
+                    </div>
+                  </section>
+
+                  <section className="form-section">
+                    <h2>Identification</h2>
+                    <div className="form-grid">
+                      <div className="form-group">
+                        <label>SIP ID</label>
+                        <input type="text" name="sip_id" value={form.sip_id} onChange={handleEditChange} />
+                      </div>
+                      <div className="form-group">
+                        <label>Aadhaar ID</label>
+                        <input type="text" name="adhaar_id" value={form.adhaar_id} onChange={handleEditChange} />
+                      </div>
+                      <div className="form-group">
+                        <label>APAAR ID</label>
+                        <input type="text" name="apaar_id" value={form.apaar_id} onChange={handleEditChange} />
+                      </div>
+                    </div>
+                  </section>
+
+                  <section className="form-section">
+                    <h2>Project Preferences</h2>
+                    <div className="form-grid">
+                      <div className="form-group">
+                        <label>First Preference</label>
+                        <select name="pref1_id" value={form.pref1_id || ""} onChange={handleEditChange}>
+                          <option value="">Select Project</option>
+                          {projects.map(project => (
+                            <option key={project.id} value={project.id}>{project.title}</option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="form-group">
+                        <label>Second Preference</label>
+                        <select name="pref2_id" value={form.pref2_id || ""} onChange={handleEditChange}>
+                          <option value="">Select Project</option>
+                          {projects.map(project => (
+                            <option key={project.id} value={project.id}>{project.title}</option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="form-group">
+                        <label>Third Preference</label>
+                        <select name="pref3_id" value={form.pref3_id || ""} onChange={handleEditChange}>
+                          <option value="">Select Project</option>
+                          {projects.map(project => (
+                            <option key={project.id} value={project.id}>{project.title}</option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="form-group">
+                        <label>Assigned Professor</label>
+                        <input type="text" name="professor" value={form.professor} onChange={handleEditChange} />
+                      </div>
+                    </div>
+                  </section>
+
+                  <section className="form-section">
+                    <h2>Internship Dates</h2>
+                    <div className="form-grid">
+                      <div className="form-group">
+                        <label>Start Date</label>
+                        <input type="date" name="start_date" value={form.start_date} onChange={handleEditChange} />
+                      </div>
+                      <div className="form-group">
+                        <label>End Date</label>
+                        <input type="date" name="end_date" value={form.end_date} onChange={handleEditChange} />
+                      </div>
+                    </div>
+                  </section>
+
+                  <section className="form-section">
+                    <h2>Upload Files</h2>
+                    <div className="form-grid">
+                      <div className="form-group file-input">
+                        <label>Profile Photo</label>
+                        <input type="file" name="profilePhoto" onChange={handleFileChange} accept="image/*" />
+                      </div>
+                      <div className="form-group file-input">
+                        <label>NITC ID Card</label>
+                        <input type="file" name="nitc_idcard" onChange={handleFileChange} accept="image/*,.pdf" />
+                      </div>
+                      <div className="form-group file-input">
+                        <label>College ID Card</label>
+                        <input type="file" name="student_college_idcard" onChange={handleFileChange} accept="image/*,.pdf" />
+                      </div>
+                      <div className="form-group file-input">
+                        <label>Payment Screenshot</label>
+                        <input type="file" name="regPaymentScreenshot" onChange={handleFileChange} accept="image/*" />
+                      </div>
+                    </div>
+                  </section>
+                </div>
+
+                <div className="form-actions">
+  <button type="submit" className="save-btn" disabled={loading}>
+    <FontAwesomeIcon icon={faSave} />
+    <span>{loading ? "Saving..." : "Save Changes"}</span>
+  </button>
+  <button type="button" className="cancel-btn" onClick={() => setEditMode(false)} disabled={loading}>
+    <FontAwesomeIcon icon={faTimes} />
+    <span>Cancel</span>
+  </button>
+</div>
+              </form>
+            )}
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

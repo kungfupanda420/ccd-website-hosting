@@ -2,11 +2,22 @@ import React, { useState, useEffect } from "react";
 import "../css/Candidate_dashboard.css";
 import { useNavigate } from "react-router-dom";
 import { authFetch } from "../utils/authFetch";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { 
+  faUser, 
+  faList, 
+  faSignOutAlt,
+  faHome
+} from "@fortawesome/free-solid-svg-icons";
 
 function CandidateDashboard() {
   const [profilePhoto, setProfilePhoto] = useState("/images/default.png");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [userData, setUserData] = useState({
+    name: "John Doe",
+    email: "john@example.com"
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,6 +46,13 @@ function CandidateDashboard() {
 
             const fullUrl = `${window.location.origin}/${cleanedPath}`;
             setProfilePhoto(`${fullUrl}?${Date.now()}`);
+          }
+          // Update user data if available
+          if (data.name || data.email) {
+            setUserData({
+              name: data.name || userData.name,
+              email: data.email || userData.email
+            });
           }
         } else if (res.status === 404) {
           setProfilePhoto("/images/default.png");
@@ -70,24 +88,37 @@ function CandidateDashboard() {
           {isLoading ? (
             <div className="cd-photo-loading">Loading...</div>
           ) : (
-            <img
-              src={profilePhoto}
-              alt="Profile"
-              className="cd-photo"
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = "/images/default.png";
-              }}
-            />
+            <>
+              <img
+                src={profilePhoto}
+                alt="Profile"
+                className="cd-photo"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = "/images/default.png";
+                }}
+              />
+              {/* <h3>{userData.name}</h3>
+              <p>{userData.email}</p> */}
+            </>
           )}
         </div>
+
+        {/* <button 
+          className="cd-btn" 
+          onClick={() => navigate("/dashboard")}
+        >
+          <FontAwesomeIcon icon={faHome}/>
+          <span>Dashboard</span>
+        </button> */}
 
         <button 
           className="cd-btn" 
           onClick={() => navigate("/candidate_profile")}
           disabled={isLoading}
         >
-          Profile Page
+          <FontAwesomeIcon icon={faUser} />
+          <span>Profile Page</span>
         </button>
 
         <button 
@@ -95,7 +126,8 @@ function CandidateDashboard() {
           onClick={() => navigate("/CandidatePreferences")}
           disabled={isLoading}
         >
-          Project Preferences
+          <FontAwesomeIcon icon={faList} />
+          <span>Project Preferences</span>
         </button>
 
         <button 
@@ -106,8 +138,16 @@ function CandidateDashboard() {
           }}
           disabled={isLoading}
         >
-          Logout
+          <FontAwesomeIcon icon={faSignOutAlt} />
+          <span>Logout</span>
         </button>
+      </div>
+      
+      <div className="cd-main-content">
+        <h1>Welcome candidate!</h1>
+        <p>This is your candidate dashboard. Use the sidebar to navigate.</p>
+        
+      
       </div>
     </div>
   );

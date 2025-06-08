@@ -1,11 +1,14 @@
 :root {
-    --primary: #2c3e50;
-    --secondary: #3498db;
-    --light: #ecf0f1;
-    --dark: #34495e;
-    --success: #2ecc71;
-    --danger: #e74c3c;
-    --warning: #f39c12;
+  --primary: #2c3e50;
+  --secondary: #3498db;
+  --light: #ecf0f1;
+  --dark: #34495e;
+  --success: #2ecc71;
+  --danger: #e74c3c;
+  --warning: #f39c12;
+  --sidebar-width: 75px;
+  --sidebar-expanded: 250px;
+  --transition-speed: 0.3s;
 }
 
 * {
@@ -30,7 +33,7 @@ body {
 }
 
 .cd-sidebar {
-    width: 250px;
+    width: 75px;
     background-color: var(--secondary);
     color: white;
     padding: 20px 0;
@@ -40,115 +43,212 @@ body {
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
     position: fixed;
     height: 100%;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.cd-sidebar:hover {
+    width: 250px;
 }
 
 .cd-profile-wrapper {
     margin-bottom: 20px;
     text-align: center;
     width: 100%;
+    opacity: 0;
+    transition: opacity 0.2s ease 0.1s;
+}
+
+.cd-sidebar:hover .cd-profile-wrapper {
+    opacity: 1;
 }
 
 .cd-photo {
-    width: 100px;
-    height: 100px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     object-fit: cover;
     margin: 0 auto 15px;
-    border: 2px solid var(--secondary);
+    border: 2px solid white;
     display: block;
+    transition: all 0.3s ease;
+}
+
+.cd-sidebar:hover .cd-photo {
+    width: 100px;
+    height: 100px;
+}
+
+.cd-photo-loading {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.1);
+    margin: 0 auto 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 12px;
+}
+
+.cd-sidebar:hover .cd-photo-loading {
+    width: 100px;
+    height: 100px;
 }
 
 .cd-profile-wrapper h3 {
     margin-bottom: 5px;
     font-weight: 700;
+    white-space: nowrap;
 }
 
 .cd-profile-wrapper p {
     font-size: 14px;
     color: var(--light);
+    white-space: nowrap;
 }
 
 .cd-btn {
     margin: 8px 20px;
     width: calc(100% - 40px);
-    padding: 12px 20px;
+    padding: 12px;
     background: transparent;
     border: none;
     color: white;
-    text-align: left;
+    text-align: center;
     cursor: pointer;
     font-weight: 600;
     font-size: 16px;
     letter-spacing: 0.4px;
-    transition: background-color 0.3s ease, color 0.3s ease, border-left 0.3s ease;
+    transition: all 0.3s ease;
     border-left: 3px solid transparent;
-    display: block;
+    display: flex;
+    align-items: center;
     text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    border-radius: 4px;
 }
+
+.cd-sidebar:hover .cd-btn {
+    text-align: left;
+    padding: 12px 20px;
+    
+}
+
 
 .cd-btn:hover,
 .cd-btn.active {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.2);
     color: white;
-    border-left: 3px solid var(--secondary);
-    outline: none;
+    border-left: 3px solid white;
+}
+
+.cd-btn i {
+    margin-right: 0;
+    min-width: 24px;
+    text-align: center;
+    font-size: 20px;
+    transition: all 0.3s ease;
+}
+
+.cd-sidebar:hover .cd-btn i {
+    margin-right: 10px;
+    /* display: none; */
+}
+
+.cd-btn span {
+    display: none;
+}
+
+.cd-sidebar:hover .cd-btn span {
+    display: inline;
+    margin-left: 10px;
 }
 
 .cd-main-content {
-    margin-left: 250px;
-    padding: 30px;
-    width: calc(100% - 250px);
+    /* margin-left: 100px; */
+    margin:auto;
+
+    padding: 50px;
+    width: calc(100% - 80px);
+    min-height: calc(100vh - 20px);
     background: white;
     border-radius: 8px;
-    margin: 10px;
+    /* margin: 10px; */
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    flex-grow: 1;
+    transition: all 0.3s ease;
 }
 
-h1, h2, h3 {
-    margin-bottom: 20px;
-    color: var(--primary);
+.cd-sidebar:hover ~ .cd-main-content {
+    margin-left: 250px;
+    width: calc(100% - 270px);
 }
 
-.card {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    padding: 25px;
-    margin-bottom: 30px;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
+/* Responsive styles */
 @media (max-width: 900px) {
     .cd-container {
         flex-direction: column;
     }
+    
     .cd-sidebar {
-        flex-direction: row;
         width: 100%;
         height: auto;
-        padding: 16px;
-        box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1);
+        padding: 10px;
         position: relative;
+        flex-direction: row;
+        justify-content: space-around;
     }
+    
+    .cd-sidebar:hover {
+        width: 100%;
+    }
+    
+    .cd-profile-wrapper {
+        display: none;
+    }
+    
     .cd-btn {
         width: auto;
-        margin: 0 8px;
-        padding: 10px 18px;
+        margin: 0;
+        padding: 10px 15px;
         border-left: none;
+        justify-content: center;
+        flex-direction: column;
+        font-size: 12px;
     }
-    .cd-btn:hover,
-    .cd-btn.active {
-        border-left: none;
-        background-color: rgba(255, 255, 255, 0.1);
-        color: white;
+    
+    .cd-btn i {
+        margin-right: 0;
+        margin-bottom: 5px;
+        font-size: 18px;
     }
+    
+    .cd-btn span {
+        display: block;
+        font-size: 10px;
+    }
+    
+    .cd-sidebar:hover .cd-btn {
+        flex-direction: column;
+        text-align: center;
+        padding: 10px 15px;
+    }
+    
+    .cd-sidebar:hover .cd-btn i {
+        margin-right: 0;
+        margin-bottom: 5px;
+    }
+    
     .cd-main-content {
         margin-left: 0;
-        width: 100%;
-        margin: 10px 0;
+        width: calc(100% - 20px);
+    }
+    
+    .cd-sidebar:hover ~ .cd-main-content {
+        margin-left: 0;
+        width: calc(100% - 20px);
     }
 }

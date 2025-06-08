@@ -46,7 +46,7 @@ function Professor_dashboard() {
       return;
     }
     try {
-      const res = await authFetch("/api/professors/myProjects", {
+      const res = await authFetch("/api/professors/projects", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -88,7 +88,7 @@ function Professor_dashboard() {
       prerequisites,
     };
     try {
-      const res = await authFetch("/api/professors/makeProject", {
+      const res = await authFetch("/api/professors/projects", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -141,7 +141,7 @@ function Professor_dashboard() {
       return;
     }
     try {
-      const res = await authFetch(`/api/professors/editProject/${id}`, {
+      const res = await authFetch(`/api/professors/projects/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -172,7 +172,7 @@ function Professor_dashboard() {
       return;
     }
     try {
-      const res = await authFetch(`/api/professors/deleteProject/${id}`, {
+      const res = await authFetch(`/api/professors/project/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
