@@ -537,7 +537,8 @@ def get_offer_letter(db: Session = Depends(get_db), current_user: User = Depends
         .join(Project.professor)
         .join(Professor.department)
         .filter(Student.user_id == current_user.id)   # only current user
-        .filter(Student.selected_project_id != None)  # project selected
+        .filter(Student.selected_project_id != None)
+        .filter(Student.admin_conf==True)  # project selected
         .options(
             joinedload(Student.selected_project)
             .joinedload(Project.professor)
@@ -608,6 +609,9 @@ def get_offer_letter(db: Session = Depends(get_db), current_user: User = Depends
     # Line 4: Name again, wrapped
     start_y = draw_wrapped_text(draw, student.selected_project.professor.name, (640, 1739), font, max_text_width, line_height)
     start_y += 10
+    
+    start_y = draw_wrapped_text(draw, student.selected_project.professor.user.email, (640, 1925), font, max_text_width, line_height)
+    start_y += 10
 
     start_y = draw_wrapped_text(draw, student.selected_project.professor.department.name, (640, 2071), font, max_text_width, line_height)
     start_y += 10
@@ -638,6 +642,7 @@ def get_completion_certificate(db: Session = Depends(get_db), current_user: User
         .join(Professor.department)
         .filter(Student.user_id == current_user.id)   # only current user
         .filter(Student.selected_project_id != None)  # project selected
+        .filter(Student.admin_conf==True)
         .options(
             joinedload(Student.selected_project)
             .joinedload(Project.professor)
@@ -647,8 +652,8 @@ def get_completion_certificate(db: Session = Depends(get_db), current_user: User
     .first()  # just one record for current user
 )
     if not student:
-
         raise HTTPException(status_code=404, detail="Item not found")   
+    
     ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
     
     
@@ -660,7 +665,7 @@ def get_completion_certificate(db: Session = Depends(get_db), current_user: User
     regfont = ImageFont.truetype(FONT_PATH, size=36.5)
     boldfont = ImageFont.truetype(BOLD_FONT_PATH, size=36.5)
 
-
+    
     LIBRE_FONT_PATH=os.path.join(ROOT_DIR, "templates", "libre-baskerville.bold.ttf")
     namefont=ImageFont.truetype(LIBRE_FONT_PATH,size=46)
     sipfont=ImageFont.truetype(LIBRE_FONT_PATH,size=40)
