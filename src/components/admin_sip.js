@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import "../css/admin_sip.css"; // Assuming you have a CSS file for styling
-import { authFetch } from "../utils/authFetch"; // Assuming you have a utility for authenticated fetch
+import "../css/Candidate_dashboard.css"; // Using the provided CSS styles
 
 function Admin_sip() {
+  const [activeSection, setActiveSection] = useState("upload"); // Tracks the active section
   const [file, setFile] = useState(null);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -24,7 +24,7 @@ function Admin_sip() {
 
       const token = localStorage.getItem("token");
 
-      const response = await authFetch("/api/admin/professors", {
+      const response = await fetch("/api/admin/professors", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -47,7 +47,7 @@ function Admin_sip() {
     setMessage("Downloading...");
     try {
       const token = localStorage.getItem("token");
-      const response = await authFetch("/api/admin/professors", {
+      const response = await fetch("/api/admin/professors", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -109,65 +109,106 @@ function Admin_sip() {
   };
 
   return (
-    <div className="admin-sip">
-      <h1>Admin SIP - Professor Registration</h1>
-      <div className="upload-section">
-        <input
-          type="file"
-          accept=".xlsx, .xls, .csv"
-          onChange={handleFileChange}
-          style={{
-            padding: "10px",
-            marginBottom: "10px",
-            borderRadius: "4px",
-            border: "1px solid #ddd",
-          }}
-        />
+    <div className="cd-container">
+      {/* Sidebar */}
+      <div className="cd-sidebar">
         <button
-          onClick={handleFileUpload}
-          disabled={!file}
-          style={{
-            padding: "10px 20px",
-            backgroundColor: "#3498db",
-            color: "white",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-            marginRight: "10px",
-          }}
+          className={`cd-btn ${activeSection === "upload" ? "active" : ""}`}
+          onClick={() => setActiveSection("upload")}
         >
-          Upload File
+          <i className="fas fa-upload"></i>
+          <span>Upload Professors</span>
         </button>
         <button
-          onClick={handleDownload}
-          style={{
-            padding: "10px 20px",
-            backgroundColor: "#2ecc71",
-            color: "white",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-            marginRight: "10px",
-          }}
+          className={`cd-btn ${activeSection === "download" ? "active" : ""}`}
+          onClick={() => setActiveSection("download")}
         >
-          Download Professors
+          <i className="fas fa-download"></i>
+          <span>Download Professors</span>
         </button>
         <button
-          onClick={handleGenerateIDCards}
-          disabled={loading}
-          style={{
-            padding: "10px 20px",
-            backgroundColor: "#e74c3c",
-            color: "white",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-          }}
+          className={`cd-btn ${activeSection === "generate" ? "active" : ""}`}
+          onClick={() => setActiveSection("generate")}
         >
-          {loading ? "Generating..." : "Generate ID Cards"}
+          <i className="fas fa-id-card"></i>
+          <span>Generate ID Cards</span>
         </button>
       </div>
-      {message && <div className="message">{message}</div>}
+
+      {/* Main Content */}
+      <div className="cd-main-content">
+        {activeSection === "upload" && (
+          <div className="upload-section">
+            <h1>Upload Professors</h1>
+            <input
+              type="file"
+              accept=".xlsx, .xls, .csv"
+              onChange={handleFileChange}
+              style={{
+                padding: "10px",
+                marginBottom: "10px",
+                borderRadius: "4px",
+                border: "1px solid #ddd",
+              }}
+            />
+            <button
+              onClick={handleFileUpload}
+              disabled={!file}
+              style={{
+                padding: "10px 20px",
+                backgroundColor: "#3498db",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+              }}
+            >
+              Upload File
+            </button>
+          </div>
+        )}
+
+        {activeSection === "download" && (
+          <div className="download-section">
+            <h1>Download Professors</h1>
+            <button
+              onClick={handleDownload}
+              style={{
+                padding: "10px 20px",
+                backgroundColor: "#2ecc71",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+              }}
+            >
+              Download Professors
+            </button>
+          </div>
+        )}
+
+        {activeSection === "generate" && (
+          <div className="generate-section">
+            <h1>Generate ID Cards</h1>
+            <button
+              onClick={handleGenerateIDCards}
+              disabled={loading}
+              style={{
+                padding: "10px 20px",
+                backgroundColor: "#e74c3c",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+              }}
+            >
+              {loading ? "Generating..." : "Generate ID Cards"}
+            </button>
+          </div>
+        )}
+
+        {message && <div className="message">{message}</div>}
+      </div>
     </div>
   );
 }
