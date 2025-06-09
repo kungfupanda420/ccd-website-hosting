@@ -201,10 +201,10 @@ function CandidatePreferences() {
       <FontAwesomeIcon icon={faUser} />
       <span>Profile</span>
     </button>
-    <button className="active">
+    {/* <button className="active">
       <FontAwesomeIcon icon={faList} />
-      <span>Project Preferences</span>
-    </button>
+      {/* <span>Project Preferences</span> */}
+    {/* </button>  */}
     <button onClick={() => {
       localStorage.removeItem("access_token");
       localStorage.removeItem("refresh_token");
