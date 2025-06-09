@@ -143,9 +143,9 @@ function CandidatePreferences() {
   };
 
   const submitPreferences = async () => {
-    if (selectedProjects.length !== 3) {
+    if (selectedProjects.length === 0) {
       setMessage({
-        text: "Please select exactly 3 projects.",
+        text: "Please select at least one project.",
         type: "error",
       });
       return;
@@ -155,14 +155,16 @@ function CandidatePreferences() {
       setIsLoading(true);
       setMessage({ text: "", type: "" });
 
+      const body = {
+        pref1_id: selectedProjects[0]?.id || null,
+        pref2_id: selectedProjects[1]?.id || null,
+        pref3_id: selectedProjects[2]?.id || null,
+      };
+
       const res = await authFetch("/api/students/preferences", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          pref1_id: selectedProjects[0].id,
-          pref2_id: selectedProjects[1].id,
-          pref3_id: selectedProjects[2].id,
-        }),
+        body: JSON.stringify(body),
       });
 
       if (res.ok) {
@@ -183,49 +185,44 @@ function CandidatePreferences() {
       setIsLoading(false);
     }
   };
+
   return (
     <div style={{ display: "flex" }}>
       {/* Sidebar */}
       <aside className="sidebar">
-  <img
-    className="profile-pic"
-    src={candidate?.profilePhotoPath ? `/${candidate.profilePhotoPath}` : "/images/default.png"}
-    alt="Profile"
-  />
-  <nav>
-    <button onClick={() => navigate("/candidatedashboard")}>
-      <FontAwesomeIcon icon={faHome} />
-      <span>Dashboard</span>
-    </button>
-    <button onClick={() => navigate("/candidate_profile")}>
-      <FontAwesomeIcon icon={faUser} />
-      <span>Profile</span>
-    </button>
-    {/* <button className="active">
-      <FontAwesomeIcon icon={faList} />
-      {/* <span>Project Preferences</span> */}
-    {/* </button>  */}
-    <button onClick={() => {
-      localStorage.removeItem("access_token");
-      localStorage.removeItem("refresh_token");
-      navigate("/login");
-    }}>
-      <FontAwesomeIcon icon={faSignOutAlt} />
-      <span>Logout</span>
-    </button>
-  </nav>
-</aside>
+        <img
+          className="profile-pic"
+          src={candidate?.profilePhotoPath ? `/${candidate.profilePhotoPath}` : "/images/default.png"}
+          alt="Profile"
+        />
+        <nav>
+          <button onClick={() => navigate("/candidatedashboard")}>
+            <FontAwesomeIcon icon={faHome} />
+            <span>Dashboard</span>
+          </button>
+          <button onClick={() => navigate("/candidate_profile")}>
+            <FontAwesomeIcon icon={faUser} />
+            <span>Profile</span>
+          </button>
+          <button
+            onClick={() => {
+              localStorage.removeItem("access_token");
+              localStorage.removeItem("refresh_token");
+              navigate("/login");
+            }}
+          >
+            <FontAwesomeIcon icon={faSignOutAlt} />
+            <span>Logout</span>
+          </button>
+        </nav>
+      </aside>
       {/* Main Content */}
       <div className="preferences-container">
         <h1>Project Preferences</h1>
-        
+
         {selectedProjects.length > 0 && (
           <div className="info-message">
-            You have {selectedProjects.length} project(s) selected. {
-              selectedProjects.length < 3 ? 
-              "Please select 3 projects to submit your preferences." : 
-              "Drag to reorder your preferences."
-            }
+            You have {selectedProjects.length} project(s) selected. Drag to reorder your preferences.
           </div>
         )}
 
@@ -241,46 +238,42 @@ function CandidatePreferences() {
               >
                 <option value="">All Departments</option>
                 {departments.map((dept, index) => (
-                  <option key={index} value={dept}>{dept}</option>
+                  <option key={index} value={dept}>
+                    {dept}
+                  </option>
                 ))}
               </select>
             </div>
             <div className="filter-group">
               <label>Mode:</label>
-              <select
-                name="mode"
-                value={filters.mode}
-                onChange={handleFilterChange}
-              >
+              <select name="mode" value={filters.mode} onChange={handleFilterChange}>
                 <option value="">All Modes</option>
                 {modes.map((mode, index) => (
-                  <option key={index} value={mode}>{mode}</option>
+                  <option key={index} value={mode}>
+                    {mode}
+                  </option>
                 ))}
               </select>
             </div>
             <div className="filter-group">
               <label>Duration:</label>
-              <select
-                name="duration"
-                value={filters.duration}
-                onChange={handleFilterChange}
-              >
+              <select name="duration" value={filters.duration} onChange={handleFilterChange}>
                 <option value="">All Durations</option>
                 {durations.map((duration, index) => (
-                  <option key={index} value={duration}>{duration}</option>
+                  <option key={index} value={duration}>
+                    {duration}
+                  </option>
                 ))}
               </select>
             </div>
             <div className="filter-group">
               <label>Professor:</label>
-              <select
-                name="professor"
-                value={filters.professor}
-                onChange={handleFilterChange}
-              >
+              <select name="professor" value={filters.professor} onChange={handleFilterChange}>
                 <option value="">All Professors</option>
                 {professors.map((prof, index) => (
-                  <option key={index} value={prof}>{prof}</option>
+                  <option key={index} value={prof}>
+                    {prof}
+                  </option>
                 ))}
               </select>
             </div>
@@ -317,20 +310,22 @@ function CandidatePreferences() {
                       <td colSpan="7">No projects found matching your filters.</td>
                     </tr>
                   ) : (
-                    filteredProjects.map(project => (
+                    filteredProjects.map((project) => (
                       <tr
                         key={project.id}
-                        className={selectedProjects.some(p => p.id === project.id) ? "selected" : ""}
+                        className={selectedProjects.some((p) => p.id === project.id) ? "selected" : ""}
                       >
                         <td>
                           <input
                             type="checkbox"
-                            checked={selectedProjects.some(p => p.id === project.id)}
+                            checked={selectedProjects.some((p) => p.id === project.id)}
                             onChange={() => toggleProjectSelection(project)}
                             disabled={
-                              (selectedProjects.length >= 3 && !selectedProjects.some(p => p.id === project.id)) ||
-                              (selectedProjects.length > 0 && 
-                               project.professor?.department?.name !== selectedProjects[0].professor?.department?.name)
+                              (selectedProjects.length >= 3 &&
+                                !selectedProjects.some((p) => p.id === project.id)) ||
+                              (selectedProjects.length > 0 &&
+                                project.professor?.department?.name !==
+                                  selectedProjects[0].professor?.department?.name)
                             }
                           />
                         </td>
@@ -353,14 +348,14 @@ function CandidatePreferences() {
             {selectedProjects.length === 0 ? (
               <div className="empty-selection">
                 <p>No projects selected yet.</p>
-                <p>Select projects from the same department (max 3)</p>
+                <p>Select projects from the same department (max 3).</p>
               </div>
             ) : (
               <div className="selected-list">
                 <div className="department-warning">
                   All projects from {selectedProjects[0].professor?.department?.name || "N/A"} department
                 </div>
-                
+
                 <DragDropContext onDragEnd={handleDragEnd}>
                   <Droppable droppableId="selected-projects-list">
                     {(provided) => (
@@ -405,26 +400,20 @@ function CandidatePreferences() {
                     )}
                   </Droppable>
                 </DragDropContext>
-                
-                {selectedProjects.length === 3 && (
-                  <button
-                    onClick={submitPreferences}
-                    className="submit-btn"
-                    disabled={isLoading}
-                  >
-                    {isLoading ? "Submitting..." : "Submit Preferences"}
-                  </button>
-                )}
+
+                <button
+                  onClick={submitPreferences}
+                  className="submit-btn"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Submitting..." : "Submit Preferences"}
+                </button>
               </div>
             )}
           </div>
         </div>
 
-        {message.text && (
-          <div className={`message ${message.type}`}>
-            {message.text}
-          </div>
-        )}
+        {message.text && <div className={`message ${message.type}`}>{message.text}</div>}
       </div>
     </div>
   );

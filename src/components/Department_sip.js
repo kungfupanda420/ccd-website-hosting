@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 
 function DepartmentSIP() {
   const [students, setStudents] = useState([]);
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchStudentData();
+    fetchData();
   }, []);
 
-  const fetchStudentData = async () => {
+  const fetchData = async () => {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
@@ -16,29 +18,42 @@ function DepartmentSIP() {
         return;
       }
 
-      const response = await fetch('/api/departments/dept_students', {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      // Fetch students and projects in parallel
+      const [studentsRes, projectsRes] = await Promise.all([
+        fetch('/api/departments/dept_students', {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        fetch('/api/departments/dept_projects', {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+      ]);
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || 'Failed to fetch student data');
+      if (!studentsRes.ok || !projectsRes.ok) {
+        const errorData = await studentsRes.json().catch(() => ({}));
+        throw new Error(errorData.detail || 'Failed to fetch data');
       }
 
-      const data = await response.json();
-      setStudents(data);
+      const studentsData = await studentsRes.json();
+      const projectsData = await projectsRes.json();
+
+      setStudents(studentsData);
+      setProjects(projectsData);
+      setLoading(false);
     } catch (error) {
-      console.error('Error fetching student data:', error);
+      console.error('Error fetching data:', error);
       alert(`Error: ${error.message}`);
+      setLoading(false);
     }
   };
 
   const renderPreference = (preference) => {
     if (!preference) return '-';
     return `${preference.title || 'No Title'} (${preference.id}) - ${preference.professor?.name || 'No Professor'}`;
+  };
+
+  const renderAllottedProject = (student) => {
+    if (!student.selected_project) return 'Not allotted';
+    return `${student.selected_project.title} (${student.selected_project.id})`;
   };
 
   const handleAllot = async (sip_id, project_id) => {
@@ -54,9 +69,7 @@ function DepartmentSIP() {
 
       const response = await fetch(`/api/departments/allotment/${sip_id}/${project_id}`, {
         method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (!response.ok) {
@@ -66,9 +79,37 @@ function DepartmentSIP() {
 
       const result = await response.json();
       alert(result.message);
-      fetchStudentData(); // Refresh data
+      fetchData(); // Refresh data
     } catch (error) {
       console.error('Allot error:', error);
+      alert(`Error: ${error.message}`);
+    }
+  };
+
+  const handleUnallot = async (sip_id) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('Authorization token is missing.');
+        alert('Please log in to access this page.');
+        return;
+      }
+
+      const response = await fetch(`/api/departments/unallotment/${sip_id}`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Failed to unallot project');
+      }
+
+      const result = await response.json();
+      alert(result.message);
+      fetchData(); // Refresh data
+    } catch (error) {
+      console.error('Unallot error:', error);
       alert(`Error: ${error.message}`);
     }
   };
@@ -83,9 +124,7 @@ function DepartmentSIP() {
       }
 
       const response = await fetch('/api/departments/department_data', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (!response.ok) {
@@ -112,6 +151,10 @@ function DepartmentSIP() {
     textAlign: 'center',
   };
 
+  if (loading) {
+    return <div style={{ padding: '20px', textAlign: 'center' }}>Loading...</div>;
+  }
+
   return (
     <div style={{ padding: '20px' }}>
       <button
@@ -137,13 +180,14 @@ function DepartmentSIP() {
             <th style={cellStyle}>Preference 1</th>
             <th style={cellStyle}>Preference 2</th>
             <th style={cellStyle}>Preference 3</th>
-            <th style={cellStyle}>Allot</th>
+            <th style={cellStyle}>Allotted Project</th>
+            <th style={cellStyle}>Actions</th>
           </tr>
         </thead>
         <tbody>
           {students.length === 0 ? (
             <tr>
-              <td colSpan="6" style={{ textAlign: 'center' }}>No students found.</td>
+              <td colSpan="7" style={{ textAlign: 'center' }}>No students found.</td>
             </tr>
           ) : (
             students.map((student) => (
@@ -153,29 +197,58 @@ function DepartmentSIP() {
                 <td style={cellStyle}>{renderPreference(student.pref1)}</td>
                 <td style={cellStyle}>{renderPreference(student.pref2)}</td>
                 <td style={cellStyle}>{renderPreference(student.pref3)}</td>
+                <td style={cellStyle}>{renderAllottedProject(student)}</td>
                 <td style={cellStyle}>
-                  <select
-                    onChange={(e) => handleAllot(student.sip_id, e.target.value)}
-                    defaultValue=""
-                    style={{ padding: '5px', borderRadius: '4px', border: '1px solid #ddd' }}
-                  >
-                    <option value="" disabled>Select Project</option>
-                    {student.pref1 && (
-                      <option value={student.pref1.id}>
-                        {student.pref1.title || 'No Title'} (Pref 1)
-                      </option>
-                    )}
-                    {student.pref2 && (
-                      <option value={student.pref2.id}>
-                        {student.pref2.title || 'No Title'} (Pref 2)
-                      </option>
-                    )}
-                    {student.pref3 && (
-                      <option value={student.pref3.id}>
-                        {student.pref3.title || 'No Title'} (Pref 3)
-                      </option>
-                    )}
-                  </select>
+                  {student.selected_project ? (
+                    <button
+                      onClick={() => handleUnallot(student.sip_id)}
+                      style={{
+                        padding: '5px 10px',
+                        backgroundColor: '#e74c3c',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      Unallot
+                    </button>
+                  ) : (
+                    <select
+                      onChange={(e) => handleAllot(student.sip_id, e.target.value)}
+                      defaultValue=""
+                      style={{ padding: '5px', borderRadius: '4px', border: '1px solid #ddd' }}
+                    >
+                      <option value="" disabled>Select Project</option>
+                      {student.pref1 && (
+                        <option value={student.pref1.id}>
+                          {student.pref1.title || 'No Title'} (Pref 1)
+                        </option>
+                      )}
+                      {student.pref2 && (
+                        <option value={student.pref2.id}>
+                          {student.pref2.title || 'No Title'} (Pref 2)
+                        </option>
+                      )}
+                      {student.pref3 && (
+                        <option value={student.pref3.id}>
+                          {student.pref3.title || 'No Title'} (Pref 3)
+                        </option>
+                      )}
+                      {/* Additional projects from department */}
+                      {projects
+                        .filter(project => 
+                          project.id !== student.pref1?.id && 
+                          project.id !== student.pref2?.id && 
+                          project.id !== student.pref3?.id
+                        )
+                        .map(project => (
+                          <option key={project.id} value={project.id}>
+                            {project.title} (Other)
+                          </option>
+                        ))}
+                    </select>
+                  )}
                 </td>
               </tr>
             ))
