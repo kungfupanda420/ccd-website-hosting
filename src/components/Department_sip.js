@@ -10,6 +10,12 @@ function DepartmentSIP() {
   const fetchStudentData = async () => {
     try {
       const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('Authorization token is missing.');
+        alert('Please log in to access this page.');
+        return;
+      }
+
       const response = await fetch('/api/departments/dept_students', {
         method: 'GET',
         headers: {
@@ -18,21 +24,34 @@ function DepartmentSIP() {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to fetch student data');
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Failed to fetch student data');
       }
 
       const data = await response.json();
-      console.log("Student data:", data); // Debug log
+      console.log("Full student data with nested preferences:", data);
       setStudents(data);
     } catch (error) {
       console.error('Error fetching student data:', error);
+      alert(`Error: ${error.message}`);
     }
+  };
+
+  const renderPreference = (preference) => {
+    if (!preference) return '-';
+    return `${preference.title} (${preference.id}) - ${preference.professor?.name || 'No Professor'}`;
   };
 
   const handleAllot = async (user_id, project_id) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`/api/departments/allot_student/${user_id}/${project_id}`, {
+      if (!token) {
+        console.error('Authorization token is missing.');
+        alert('Please log in to access this page.');
+        return;
+      }
+
+      const response = await fetch(`/api/departments/allotment/${user_id}/${project_id}`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -53,35 +72,6 @@ function DepartmentSIP() {
     }
   };
 
-  const downloadCSV = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('/api/departments/department_data', {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to download CSV');
-      }
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'department_data.csv';
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-    } catch (error) {
-      console.error('Error downloading CSV:', error);
-      alert('Failed to download CSV. Please try again.');
-    }
-  };
-
   const cellStyle = {
     border: '1px solid #ddd',
     padding: '8px',
@@ -90,29 +80,22 @@ function DepartmentSIP() {
 
   return (
     <div style={{ padding: '20px' }}>
-      <button 
-        onClick={downloadCSV}
+      <button
+        onClick={() => window.location.href = '/api/departments/department_data'}
         style={{
-          padding: '8px 16px',
-          backgroundColor: '#4CAF50',
+          padding: '10px 20px',
+          backgroundColor: '#3498db',
           color: 'white',
           border: 'none',
           borderRadius: '4px',
           cursor: 'pointer',
-          fontSize: '14px',
           marginBottom: '20px',
         }}
       >
         Export as CSV
       </button>
 
-      <table 
-        style={{
-          width: '100%',
-          borderCollapse: 'collapse',
-          marginBottom: '20px'
-        }}
-      >
+      <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '20px' }}>
         <thead>
           <tr>
             <th style={cellStyle}>SIP ID</th>
@@ -130,18 +113,12 @@ function DepartmentSIP() {
             </tr>
           ) : (
             students.map((student) => (
-              <tr key={student.user_id}>
+              <tr key={student.user_id || student.sip_id}>
                 <td style={cellStyle}>{student.sip_id || '-'}</td>
                 <td style={cellStyle}>{student.name}</td>
-                <td style={cellStyle}>
-                  {student.pref1 ? `${student.pref1.title} (${student.pref1.id})` : '-'}
-                </td>
-                <td style={cellStyle}>
-                  {student.pref2 ? `${student.pref2.title} (${student.pref2.id})` : '-'}
-                </td>
-                <td style={cellStyle}>
-                  {student.pref3 ? `${student.pref3.title} (${student.pref3.id})` : '-'}
-                </td>
+                <td style={cellStyle}>{renderPreference(student.pref1)}</td>
+                <td style={cellStyle}>{renderPreference(student.pref2)}</td>
+                <td style={cellStyle}>{renderPreference(student.pref3)}</td>
                 <td style={cellStyle}>
                   <select
                     onChange={(e) => {
