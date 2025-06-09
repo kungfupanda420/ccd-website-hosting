@@ -25,7 +25,6 @@ class Student(Base):
     sip_id= Column(String(255),unique=True, index=True)
     adhaar_id= Column(String(255), unique=True)
     apaar_id= Column(String(255), unique=True)
-    nitc_idcard_path = Column(String(1000))
     student_college_idcard_path = Column(String(1000))
     name = Column(String(255))
     phone = Column(String(255))
@@ -49,15 +48,14 @@ class Student(Base):
     cgpa10 = Column(Float)
     board10 = Column(String(255))
 
-    regPayment = Column(String(255))
-    regPaymentScreenshotPath = Column(String(1000))
-
-    certificatePayment = Column(String(255))
-    certificatePaymentScreenshotPath = Column(String(1000))
-
     documents_path = Column(String(1000))
+
+    nitc_idcard_path = Column(String(1000))
     
-    paymentStatus= Column(Integer,default=0)
+    reg_payment_conf=Column(Boolean,default=False)
+    offer_payment_conf=Column(Boolean,default=False)
+    
+    
     pref1_id=Column(Integer, ForeignKey('projects.id'))
     pref2_id=Column(Integer, ForeignKey('projects.id'))
     pref3_id=Column(Integer, ForeignKey('projects.id'))
@@ -66,6 +64,8 @@ class Student(Base):
     pref2=relationship("Project",foreign_keys=[pref2_id])
     pref3=relationship("Project",foreign_keys=[pref3_id])
     
+
+
     selected_project_id = Column(Integer, ForeignKey("projects.id"), nullable=True)
     selected_project = relationship("Project",back_populates="selected_students", foreign_keys=[selected_project_id])
 

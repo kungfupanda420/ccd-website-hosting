@@ -169,6 +169,8 @@ def get_id_card(db: Session = Depends(get_db), current_user: User = Depends(get_
         .join(Project.professor)
         .join(Professor.department)
         .filter(Student.selected_project_id!=None)
+        .filter(Student.admin_conf==True)
+        .filter(Student.offer_payment_conf==True)
         .options(
             joinedload(Student.selected_project)
             .joinedload(Project.professor)
@@ -306,7 +308,7 @@ async def conf_dept_data(id:int,request:DeptDataMessage, db:Session=Depends(get_
                 <h3>Dear Student</h3>
                 <p>You have been selected for the internship under {student.selected_project.professor.name} for the project {student.selected_project.title} </p>
                 <p>You may contact your professor regarding the date of joining at {student.selected_project.professor.user.email}</p>
-                <p>You may download your offer letter at </p>
+                <p>You may download your offer letter at the given link after completing the payment</p>
                 <a href="{offer_letter_link}">{offer_letter_link}</a>
                 """,
                 subtype="html"

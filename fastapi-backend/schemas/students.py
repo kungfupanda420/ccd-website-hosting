@@ -46,11 +46,6 @@ class ShowStudent(BaseModel):
     cgpa10: float
     board10: str
 
-    regPayment: str
-    regPaymentScreenshotPath: Optional[str]
-    certificatePayment: Optional[str]
-    certificatePaymentScreenshotPath: Optional[str]
-    paymentStatus: int
     student_college_idcard_path: Optional[str]
     pref1: Optional[ShowProject]
     pref2: Optional[ShowProject]
@@ -88,7 +83,6 @@ class StudentUpdate(BaseModel):
     board12: Optional[str]  = None
     cgpa10: Optional[float]  = None
     board10: Optional[str]  = None
-    regPayment: Optional[str]  = None
 
     model_config = {
         "from_attributes": True

@@ -166,14 +166,13 @@ def register(
     board12: str = Form(...),
     cgpa10: float = Form(...),
     board10: str = Form(...),
-    regPayment: str = Form(...),
 
     # Files
-    regPaymentScreenshot: UploadFile = File(...),
     profilePhoto: UploadFile = File(...),
     student_college_idcard: UploadFile = File(...),
     documents: UploadFile = File(...),
 
+    reg_payment_conf=Form(...),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
@@ -186,7 +185,9 @@ def register(
     if student:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Apaar ID already registered")
 
-    reg_screenshot_path=saveFile(file=regPaymentScreenshot,folder="regPaymentScreenshots",email=current_user.email)
+    if(reg_payment_conf==False):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Payment Failed")
+
     profile_photo_path=saveFile(file=profilePhoto,folder="profilePhotos",email=current_user.email)
     student_college_idcard_path=saveFile(file=student_college_idcard,folder="studentCollegeIdcards",email=current_user.email)
     documents_path = saveFile(file=documents, folder="studentDocuments", email=current_user.email) 
@@ -217,12 +218,11 @@ def register(
         board12=board12,
         cgpa10=cgpa10,
         board10=board10,
-        regPayment=regPayment,
-
-        regPaymentScreenshotPath=reg_screenshot_path,
         profilePhotoPath=profile_photo_path,
         student_college_idcard_path=student_college_idcard_path,
         documents_path=documents_path,
+        reg_payment_conf=reg_payment_conf,
+
         # add other fields if needed
     )
     db.add(new_student)
@@ -297,10 +297,7 @@ def edit_me(
     board12: str = Form(None),
     cgpa10: float = Form(None),
     board10: str = Form(None),
-    regPayment: str = Form(None),
 
-    
-    regPaymentScreenshot: UploadFile = File(None),
     profilePhoto: UploadFile = File(None),
     student_college_idcard: UploadFile = File(None),
     documents: UploadFile = File(None),
@@ -342,15 +339,13 @@ def edit_me(
         'guardianName', 'guardianRelation', 'guardianPhone',
         'institution', 'program', 'department', 'year',
         'instituteLocation', 'instituteState', 'currentSemesterCgpa',
-        'UG', 'cgpa12', 'board12', 'cgpa10', 'board10', 'regPayment'
+        'UG', 'cgpa12', 'board12', 'cgpa10', 'board10'
     ]:
         value = update_fields.get(key)
         if value is not None:
             setattr(student, key, value)
 
     # Save new files if provided
-    if regPaymentScreenshot:
-        student.regPaymentScreenshotPath = saveFile(file=regPaymentScreenshot,folder="regPaymentScreenshots",email= current_user.email)
 
     if profilePhoto:
         student.profilePhotoPath = saveFile(profilePhoto, "profilePhotos", current_user.email)
