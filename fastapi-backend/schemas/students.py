@@ -94,7 +94,7 @@ class StudentSIPNameProj(BaseModel):
     pref1:Optional[ShowProject] = None
     pref2:Optional[ShowProject] = None
     pref3:Optional[ShowProject] = None
-
+    selected_project:Optional[ShowProject] = None
 
     model_config = {
         "from_attributes": True
