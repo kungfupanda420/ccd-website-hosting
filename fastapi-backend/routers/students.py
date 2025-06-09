@@ -172,7 +172,7 @@ def register(
     student_college_idcard: UploadFile = File(...),
     documents: UploadFile = File(...),
 
-    reg_payment_conf=Form(...),
+    reg_payment_conf: bool =Form(...),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):

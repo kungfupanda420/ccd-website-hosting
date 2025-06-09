@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import '../css/Registerform.css';
-import { Navigate } from "react-router-dom";
 
 function Registerform() {
-
-
-   console.log("role:", localStorage.getItem("role"));
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     name: "",
@@ -16,8 +12,6 @@ function Registerform() {
     guardianName: "",
     guardianRelation: "",
     guardianPhone: "",
-    // password: "",
-    // confirmPassword: "",
     profilePhoto: null,
     institution: "",
     program: "",
@@ -35,9 +29,7 @@ function Registerform() {
     apaar_id: "",
     student_college_idcard_path: null,
     documents_path: null,
-    // paymentId: "",
-    // paymentScreenshot: null,
-    role: "student",
+    role: "student"
   });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -52,9 +44,6 @@ function Registerform() {
       setErrors({ ...errors, [name]: null });
     }
   };
-  {
-
-  }
 
   const validateStep = () => {
     const newErrors = {};
@@ -68,11 +57,8 @@ function Registerform() {
       if (!formData.guardianRelation.trim()) newErrors.guardianRelation = "Guardian relation is required.";
       if (!/^[0-9]{10}$/.test(formData.guardianPhone)) newErrors.guardianPhone = "Valid 10-digit guardian phone number is required.";
     } else if (step === 2) {
-      // if (formData.password.length < 6) newErrors.password = "Password must be at least 6 characters.";
-      // if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = "Passwords do not match.";
-    } else if (step === 3) {
       if (!formData.profilePhoto) newErrors.profilePhoto = "Profile photo is required.";
-    } else if (step === 4) {
+    } else if (step === 3) {
       if (!formData.institution.trim()) newErrors.institution = "Institution is required.";
       if (!formData.program.trim()) newErrors.program = "Program is required.";
       if (!formData.department.trim()) newErrors.department = "Department is required.";
@@ -85,26 +71,17 @@ function Registerform() {
       if (!formData.board12.trim()) newErrors.board12 = "12th board is required.";
       if (!formData.cgpa10.trim()) newErrors.cgpa10 = "10th CGPA is required.";
       if (!formData.board10.trim()) newErrors.board10 = "10th board is required.";
-    } else if (step === 5) {
+    } else if (step === 4) {
       if (!formData.adhaar_id.trim()) newErrors.adhaar_id = "Aadhaar number is required.";
       if (!formData.apaar_id.trim()) newErrors.apaar_id = "APAAR ID is required.";
       if (!formData.student_college_idcard_path) newErrors.student_college_idcard_path = "Student college ID card is required.";
-    } else if (step === 6) {
-      if (!formData.paymentId.trim()) newErrors.paymentId = "Payment ID is required.";
-      if (!formData.paymentScreenshot) newErrors.paymentScreenshot = "Payment screenshot is required.";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleNext = () => {
-        
-        console.log(localStorage.getItem("access_token"));
-        console.log(localStorage.getItem("refresh_token"));
-        console.log(localStorage.getItem("role"));
-    if (validateStep()) {
-      setStep(step + 1);
-    }
+    if (validateStep()) setStep(step + 1);
   };
 
   const handleBack = () => {
@@ -113,7 +90,7 @@ function Registerform() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (step !== 7) return;
+    if (step !== 5) return;
 
     if (!window.confirm("Are you sure you want to submit your registration?")) return;
 
@@ -122,7 +99,6 @@ function Registerform() {
     try {
       const form = new FormData();
       form.append("name", formData.name);
-      // form.append("password", formData.password);
       form.append("phone", formData.phone);
       form.append("dob", formData.dob);
       form.append("address", formData.address);
@@ -144,12 +120,10 @@ function Registerform() {
       form.append("board10", formData.board10);
       form.append("adhaar_id", formData.adhaar_id);
       form.append("apaar_id", formData.apaar_id);
+      form.append("reg_payment_conf", true); // Required by backend
+      if (formData.profilePhoto) form.append("profilePhoto", formData.profilePhoto);
       if (formData.student_college_idcard_path) form.append("student_college_idcard", formData.student_college_idcard_path);
       if (formData.documents_path) form.append("documents", formData.documents_path);
-      form.append("regPayment", formData.paymentId);
-      if (formData.profilePhoto) form.append("profilePhoto", formData.profilePhoto);
-      if (formData.paymentScreenshot) form.append("regPaymentScreenshot", formData.paymentScreenshot);
-      form.append("role", formData.role);
 
       const response = await fetch("/api/students/register", {
         method: "POST",
@@ -162,6 +136,7 @@ function Registerform() {
       const data = await response.json();
       if (!response.ok) throw new Error(data.detail || data.message || "Registration failed");
 
+      // Reset form
       setFormData({
         name: "",
         phone: "",
@@ -171,8 +146,6 @@ function Registerform() {
         guardianName: "",
         guardianRelation: "",
         guardianPhone: "",
-        // password: "",
-        // confirmPassword: "",
         profilePhoto: null,
         institution: "",
         program: "",
@@ -190,9 +163,7 @@ function Registerform() {
         apaar_id: "",
         student_college_idcard_path: null,
         documents_path: null,
-        paymentId: "",
-        paymentScreenshot: null,
-        role: "student",
+        role: "student"
       });
       setStep(1);
       alert("Registration successful!");
@@ -205,18 +176,13 @@ function Registerform() {
 
   return (
     <div className="register-container">
-  
-      
       <div className="progress-bar">
         <div className={`step ${step >= 1 ? 'active' : ''}`}>1. Personal</div>
-        <div className={`step ${step >= 2 ? 'active' : ''}`}>2. Account</div>
-        <div className={`step ${step >= 3 ? 'active' : ''}`}>3. Photo</div>
-        <div className={`step ${step >= 4 ? 'active' : ''}`}>4. Academic</div>
-        <div className={`step ${step >= 5 ? 'active' : ''}`}>5. IDs</div>
-        <div className={`step ${step >= 6 ? 'active' : ''}`}>6. Payment</div>
-        <div className={`step ${step >= 7 ? 'active' : ''}`}>7. Review</div>
+        <div className={`step ${step >= 2 ? 'active' : ''}`}>2. Photo</div>
+        <div className={`step ${step >= 3 ? 'active' : ''}`}>3. Academic</div>
+        <div className={`step ${step >= 4 ? 'active' : ''}`}>4. IDs</div>
+        <div className={`step ${step >= 5 ? 'active' : ''}`}>5. Review</div>
       </div>
-
       <form onSubmit={handleSubmit} className="registration-form">
         {/* Step 1: Personal */}
         {step === 1 && (
@@ -265,25 +231,8 @@ function Registerform() {
           </div>
         )}
 
-        {/* Step 2: Account */}
+        {/* Step 2: Photo */}
         {step === 2 && (
-          <div className="form-step">
-            <h2>Account Information</h2>
-            {/* <div className="form-group">
-              <label>Password* (min 6 characters)</label>
-              <input type="password" name="password" value={formData.password} onChange={handleChange} className={errors.password ? 'error' : ''} />
-              {errors.password && <span className="error-text">{errors.password}</span>}
-            </div>
-            <div className="form-group">
-              <label>Confirm Password*</label>
-              <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} className={errors.confirmPassword ? 'error' : ''} />
-              {errors.confirmPassword && <span className="error-text">{errors.confirmPassword}</span>}
-            </div> */}
-          </div>
-        )}
-
-        {/* Step 3: Photo */}
-        {step === 3 && (
           <div className="form-step">
             <h2>Profile Photo</h2>
             <div className="form-group">
@@ -294,8 +243,8 @@ function Registerform() {
           </div>
         )}
 
-        {/* Step 4: Academic */}
-        {step === 4 && (
+        {/* Step 3: Academic */}
+        {step === 3 && (
           <div className="form-step">
             <h2>Academic Information</h2>
             <div className="form-group">
@@ -361,8 +310,8 @@ function Registerform() {
           </div>
         )}
 
-        {/* Step 5: Aadhaar and APAAR ID */}
-        {step === 5 && (
+        {/* Step 4: Aadhaar and APAAR ID */}
+        {step === 4 && (
           <div className="form-step">
             <h2>Aadhaar and APAAR ID</h2>
             <div className="form-group">
@@ -387,25 +336,8 @@ function Registerform() {
           </div>
         )}
 
-        {/* Step 6: Payment */}
-        {step === 6 && (
-          <div className="form-step">
-            <h2>Payment Details</h2>
-            <div className="form-group">
-              <label>Payment ID*</label>
-              <input type="text" name="paymentId" value={formData.paymentId} onChange={handleChange} className={errors.paymentId ? 'error' : ''} />
-              {errors.paymentId && <span className="error-text">{errors.paymentId}</span>}
-            </div>
-            <div className="form-group">
-              <label>Upload Payment Screenshot*</label>
-              <input type="file" name="paymentScreenshot" accept="image/*" onChange={handleChange} className={errors.paymentScreenshot ? 'error' : ''} />
-              {errors.paymentScreenshot && <span className="error-text">{errors.paymentScreenshot}</span>}
-            </div>
-          </div>
-        )}
-
-        {/* Step 7: Review */}
-        {step === 7 && (
+        {/* Step 5: Review */}
+        {step === 5 && (
           <div className="form-step">
             <h2>Review Your Information</h2>
             <div className="review-section">
@@ -418,7 +350,6 @@ function Registerform() {
               <p><strong>Guardian Name:</strong> {formData.guardianName}</p>
               <p><strong>Guardian Relation:</strong> {formData.guardianRelation}</p>
               <p><strong>Guardian Phone:</strong> {formData.guardianPhone}</p>
-              
               <h3>Academic Information</h3>
               <p><strong>Institution:</strong> {formData.institution}</p>
               <p><strong>Program:</strong> {formData.program}</p>
@@ -432,15 +363,11 @@ function Registerform() {
               <p><strong>12th Board:</strong> {formData.board12}</p>
               <p><strong>10th CGPA:</strong> {formData.cgpa10}</p>
               <p><strong>10th Board:</strong> {formData.board10}</p>
-              
               <h3>IDs</h3>
               <p><strong>Aadhaar Number:</strong> {formData.adhaar_id}</p>
               <p><strong>APAAR ID:</strong> {formData.apaar_id}</p>
               <p><strong>Student College ID Card:</strong> {formData.student_college_idcard_path ? formData.student_college_idcard_path.name : "Not uploaded"}</p>
               <p><strong>Other Documents:</strong> {formData.documents_path ? formData.documents_path.name : "Not uploaded"}</p>
-              
-              <h3>Payment Information</h3>
-              <p><strong>Payment ID:</strong> {formData.paymentId}</p>
             </div>
           </div>
         )}
@@ -451,7 +378,7 @@ function Registerform() {
               Back
             </button>
           )}
-          {step < 7 ? (
+          {step < 5 ? (
             <button type="button" onClick={handleNext} className="next-button">
               Next
             </button>
