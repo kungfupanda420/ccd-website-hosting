@@ -194,7 +194,7 @@ function Professor_dashboard() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     setIsAuthenticated(false);
-    navigate("/");
+    navigate("/login");
   };
 
   if (!isAuthenticated) {

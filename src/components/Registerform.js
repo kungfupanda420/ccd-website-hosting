@@ -35,8 +35,8 @@ function Registerform() {
     apaar_id: "",
     student_college_idcard_path: null,
     documents_path: null,
-    paymentId: "",
-    paymentScreenshot: null,
+    // paymentId: "",
+    // paymentScreenshot: null,
     role: "student",
   });
   const [errors, setErrors] = useState({});

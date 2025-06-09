@@ -29,7 +29,6 @@ function DepartmentSIP() {
       }
 
       const data = await response.json();
-      console.log("Full student data with nested preferences:", data);
       setStudents(data);
     } catch (error) {
       console.error('Error fetching student data:', error);
@@ -39,10 +38,12 @@ function DepartmentSIP() {
 
   const renderPreference = (preference) => {
     if (!preference) return '-';
-    return `${preference.title} (${preference.id}) - ${preference.professor?.name || 'No Professor'}`;
+    return `${preference.title || 'No Title'} (${preference.id}) - ${preference.professor?.name || 'No Professor'}`;
   };
 
-  const handleAllot = async (user_id, project_id) => {
+  const handleAllot = async (sip_id, project_id) => {
+    if (!project_id) return;
+    
     try {
       const token = localStorage.getItem('token');
       if (!token) {
@@ -51,7 +52,7 @@ function DepartmentSIP() {
         return;
       }
 
-      const response = await fetch(`/api/departments/allotment/${user_id}/${project_id}`, {
+      const response = await fetch(`/api/departments/allotment/${sip_id}/${project_id}`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -72,6 +73,39 @@ function DepartmentSIP() {
     }
   };
 
+  const handleCSVExport = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('Authorization token is missing.');
+        alert('Please log in to access this page.');
+        return;
+      }
+
+      const response = await fetch('/api/departments/department_data', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to export data');
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'department_data.csv';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (error) {
+      console.error('Export error:', error);
+      alert(`Error: ${error.message}`);
+    }
+  };
+
   const cellStyle = {
     border: '1px solid #ddd',
     padding: '8px',
@@ -81,7 +115,7 @@ function DepartmentSIP() {
   return (
     <div style={{ padding: '20px' }}>
       <button
-        onClick={() => window.location.href = '/api/departments/department_data'}
+        onClick={handleCSVExport}
         style={{
           padding: '10px 20px',
           backgroundColor: '#3498db',
@@ -113,7 +147,7 @@ function DepartmentSIP() {
             </tr>
           ) : (
             students.map((student) => (
-              <tr key={student.user_id || student.sip_id}>
+              <tr key={student.sip_id}>
                 <td style={cellStyle}>{student.sip_id || '-'}</td>
                 <td style={cellStyle}>{student.name}</td>
                 <td style={cellStyle}>{renderPreference(student.pref1)}</td>
@@ -121,28 +155,24 @@ function DepartmentSIP() {
                 <td style={cellStyle}>{renderPreference(student.pref3)}</td>
                 <td style={cellStyle}>
                   <select
-                    onChange={(e) => {
-                      if (e.target.value) {
-                        handleAllot(student.user_id, e.target.value);
-                      }
-                    }}
+                    onChange={(e) => handleAllot(student.sip_id, e.target.value)}
                     defaultValue=""
                     style={{ padding: '5px', borderRadius: '4px', border: '1px solid #ddd' }}
                   >
                     <option value="" disabled>Select Project</option>
                     {student.pref1 && (
                       <option value={student.pref1.id}>
-                        {student.pref1.title} (Pref 1)
+                        {student.pref1.title || 'No Title'} (Pref 1)
                       </option>
                     )}
                     {student.pref2 && (
                       <option value={student.pref2.id}>
-                        {student.pref2.title} (Pref 2)
+                        {student.pref2.title || 'No Title'} (Pref 2)
                       </option>
                     )}
                     {student.pref3 && (
                       <option value={student.pref3.id}>
-                        {student.pref3.title} (Pref 3)
+                        {student.pref3.title || 'No Title'} (Pref 3)
                       </option>
                     )}
                   </select>
