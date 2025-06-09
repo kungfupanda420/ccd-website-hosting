@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from datetime import date
 
 from ..schemas.token import Token
-from ..schemas.students import  ShowStudent, StudentUpdate, StudentSIPName
+from ..schemas.students import  ShowStudent, StudentUpdate, StudentSIPNameProj
 from ..schemas.projects import ShowProject, ProjectPreferences
 from ..models.users import User, Student, Professor, Department
 from ..models.projects import Project
@@ -100,7 +100,7 @@ def deptdata(db: Session = Depends(get_db), current_user: User = Depends(get_cur
         media_type="text/csv",
         headers={"Content-Disposition": "attachment; filename=department_data.csv"}
     )
-@router.get("/dept_students", response_model=List[StudentSIPName])
+@router.get("/dept_students", response_model=List[StudentSIPNameProj])
 def dept_students(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if current_user.role != 'department':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not a Department User")
@@ -115,27 +115,12 @@ def dept_students(db: Session = Depends(get_db), current_user: User = Depends(ge
 
     return students
 
-@router.get("/student_preferences/{user_id}", response_model=ProjectPreferences)
-def student_preferences(user_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+@router.post("/allotment/{sip_id}/{project_id}")
+def allot_student(sip_id:int, project_id:int, db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
     if current_user.role != 'department':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not a Department User")
     
-    student = db.query(Student).filter(Student.user_id == user_id).first()
-    if not student:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Student not found")
-    
-    return ProjectPreferences(
-        pref1=student.pref1,
-        pref2=student.pref2,
-        pref3=student.pref3
-    )   
-
-@router.post("/allotment/{user_id}/{project_id}")
-def allot_student(user_id:int, project_id:int, db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
-    if current_user.role != 'department':
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not a Department User")
-    
-    student = db.query(Student).filter(Student.user_id == user_id).first()
+    student = db.query(Student).filter(Student.sip_id == sip_id).first()
     if not student:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Student not found")
     

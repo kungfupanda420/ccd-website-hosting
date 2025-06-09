@@ -88,9 +88,13 @@ class StudentUpdate(BaseModel):
         "from_attributes": True
     }
 
-class StudentSIPName(BaseModel):
+class StudentSIPNameProj(BaseModel):
     sip_id: str
     name: str
+    pref1:Optional[ShowProject] = None
+    pref2:Optional[ShowProject] = None
+    pref3:Optional[ShowProject] = None
+
 
     model_config = {
         "from_attributes": True
