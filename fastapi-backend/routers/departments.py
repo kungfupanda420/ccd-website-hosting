@@ -124,9 +124,6 @@ def allot_student(sip_id:str, project_id:int, db:Session=Depends(get_db), curren
     if not student:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Student not found")
     
-    if student.selected_project_id is not None:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Student already has already been alloted")
-    
     project = db.query(Project).filter(Project.id == project_id).first()
     if not project:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Project not found")
