@@ -67,7 +67,7 @@ def start_next_round(db:Session=Depends(get_db), current_user: User=Depends(get_
     if not round:
         raise HTTPException(status_code=404, detail="Round not found")
     
-    if round.number==3:
+    if round.number>=3:
         raise HTTPException(status_code=403, detail="Final Round has been completed")
 
     round.number+=1
@@ -76,7 +76,7 @@ def start_next_round(db:Session=Depends(get_db), current_user: User=Depends(get_
     db.refresh(round)
     return round
 
-@router.post("stop_registrations",response_model=RoundDetails)
+@router.post("/stop_registrations",response_model=RoundDetails)
 def stop_registrations(db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
     if current_user.role != 'admin':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not an Admin")
