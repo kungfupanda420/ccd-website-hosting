@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 
 function DepartmentSIP() {
   const [students, setStudents] = useState([]);
-  const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -18,26 +17,17 @@ function DepartmentSIP() {
         return;
       }
 
-      // Fetch students and projects in parallel
-      const [studentsRes, projectsRes] = await Promise.all([
-        fetch('/api/departments/dept_students', {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-        fetch('/api/departments/dept_projects', {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-      ]);
+      const studentsRes = await fetch('/api/departments/studentwise-data', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-      if (!studentsRes.ok || !projectsRes.ok) {
+      if (!studentsRes.ok) {
         const errorData = await studentsRes.json().catch(() => ({}));
         throw new Error(errorData.detail || 'Failed to fetch data');
       }
 
       const studentsData = await studentsRes.json();
-      const projectsData = await projectsRes.json();
-
       setStudents(studentsData);
-      setProjects(projectsData);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -95,8 +85,8 @@ function DepartmentSIP() {
         return;
       }
 
-      const response = await fetch(`/api/departments/unallotment/${sip_id}`, {
-        method: 'POST',
+      const response = await fetch(`/api/departments/allotment/${sip_id}`, {
+        method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -235,18 +225,6 @@ function DepartmentSIP() {
                           {student.pref3.title || 'No Title'} (Pref 3)
                         </option>
                       )}
-                      {/* Additional projects from department */}
-                      {projects
-                        .filter(project => 
-                          project.id !== student.pref1?.id && 
-                          project.id !== student.pref2?.id && 
-                          project.id !== student.pref3?.id
-                        )
-                        .map(project => (
-                          <option key={project.id} value={project.id}>
-                            {project.title} (Other)
-                          </option>
-                        ))}
                     </select>
                   )}
                 </td>
