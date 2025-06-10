@@ -44,7 +44,7 @@ from pydantic import EmailStr, BaseModel
 
 
 from dotenv import load_dotenv
-
+load_dotenv()
 
 conf = ConnectionConfig(
     MAIL_USERNAME='sip@nitc.ac.in',
