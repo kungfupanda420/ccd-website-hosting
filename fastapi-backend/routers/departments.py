@@ -100,7 +100,7 @@ def deptdata(db: Session = Depends(get_db), current_user: User = Depends(get_cur
         media_type="text/csv",
         headers={"Content-Disposition": "attachment; filename=department_data.csv"}
     )
-@router.get("/dept_students", response_model=List[StudentSIPNameProj])
+@router.get("/studentwise-data", response_model=List[StudentSIPNameProj])
 def dept_students(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if current_user.role != 'department':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not a Department User")
