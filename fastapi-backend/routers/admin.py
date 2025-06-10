@@ -59,7 +59,7 @@ conf = ConnectionConfig(
 
 
 @router.post("/start_next_round", response_model= RoundDetails)
-def start_next_round(db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
+async def start_next_round(db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
     if current_user.role != 'admin':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not an Admin")
 
@@ -72,8 +72,87 @@ def start_next_round(db:Session=Depends(get_db), current_user: User=Depends(get_
 
     round.number+=1
     round.allow_reg=1
+
     db.commit()
     db.refresh(round)
+
+    if round.number==2:
+        students=(db.query(Student)
+                  .join(Student.user)
+                  .filter(Student.admin_conf==None)
+                  .all()
+                  )
+
+        for student in students:
+            
+            message=MessageSchema(
+                subject="NITC Summer Internship Programme Round 2",
+                recipients=[student.user.email],
+                body=f"""
+                <h3>Dear Student</h3>
+                <p>The second round of the project selections have started.</p>
+                <p>Please add your preffered projects once again</p>
+                <p></p>
+                <a href="https://placement.nitc.ac.in">placement.nitc.ac.in</a>
+                """,
+                subtype="html"
+            )
+
+            fm=FastMail(conf)
+            await fm.send_message(message)
+    
+
+    if round.number==3:
+
+        students=(db.query(Student)
+                  .join(Student.user)
+                  .filter(Student.admin_conf==None)
+                  .all()
+                  )
+
+        for student in students:
+            
+            message=MessageSchema(
+                subject="NITC Summer Internship Programme Round 2",
+                recipients=[student.user.email],
+                body=f"""
+                <h3>Dear Student</h3>
+                <p>The final round of the project selections have started.</p>
+                <p>Please add your preffered projects once again</p>
+                <p></p>
+                <a href="https://placement.nitc.ac.in">placement.nitc.ac.in</a>
+                """,
+                subtype="html"
+            )
+
+            fm=FastMail(conf)
+            await fm.send_message(message)
+
+        users=(db.query(User)
+               .filter(User.role=='student')
+               .filter(User.student==None)
+               .all()
+               )
+        
+        for user in users:
+            
+            message=MessageSchema(
+                subject="NITC Summer Internship Programme Round 2",
+                recipients=[user.email],
+                body=f"""
+                <h3>Dear Student</h3>
+                <p>The Round of the registrations have started again.</p>
+                <p>Please complete your registration and select your preffered projects</p>
+                <p></p>
+                <a href="https://placement.nitc.ac.in">placement.nitc.ac.in</a>
+                """,
+                subtype="html"
+            )
+
+            fm=FastMail(conf)
+            await fm.send_message(message)
+        
+
     return round
 
 @router.post("/stop_registrations",response_model=RoundDetails)
