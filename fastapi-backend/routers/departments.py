@@ -115,20 +115,6 @@ def dept_students(db: Session = Depends(get_db), current_user: User = Depends(ge
 
     return students
 
-@router.get("/dept_projects")
-def dept_projects(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-    if current_user.role != 'department':
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not a Department User")
-    
-    projects = (
-        db.query(Project)
-        .join(Project.professor)
-        .filter(Professor.dept_id == current_user.id)
-        .all()
-    )
-    
-    return projects
-
 @router.post("/allotment/{sip_id}/{project_id}")
 def allot_student(sip_id:str, project_id:int, db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
     if current_user.role != 'department':
@@ -145,17 +131,14 @@ def allot_student(sip_id:str, project_id:int, db:Session=Depends(get_db), curren
     if project not in (student.pref1, student.pref2, student.pref3):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Project not in student's preferences")
     
-    student.selected_project = project
+
+    student.selected_project= project
+
     db.commit()
     db.refresh(student)
-    
-    return {
-        "message": "Student allotted to project successfully",
-        "student": student,
-        "project": project
-    }
+    return {"message": "Student alloted to project successfully", "student": student, "project": project}
 
-@router.post("/unallotment/{sip_id}")
+@router.delete("/allotment/{sip_id}")
 def unallot_student(sip_id: str, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if current_user.role != 'department':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not a Department User")
@@ -165,67 +148,10 @@ def unallot_student(sip_id: str, db: Session = Depends(get_db), current_user: Us
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Student not found")
     
     if student.selected_project_id is None:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Student has not been allotted any project")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Student has not been alloted any project")
     
     student.selected_project = None
     db.commit()
     db.refresh(student)
     
-    return {
-        "message": "Student unallotted from project successfully",
-        "student": student
-    }
-
-
-@router.get("/allotted_students/{department_id}")
-def get_allotted_students(department_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-    if current_user.role != 'department':
-        raise HTTPException(status_code=403, detail="Not a Department User")
-    
-    # Verify department existence
-    department = db.query(Department).filter(Department.id == department_id).first()
-    if not department:
-        raise HTTPException(status_code=404, detail="Department not found")
-
-    # Query students with allotted projects
-    students = (
-        db.query(Student)
-        .join(Student.selected_project, isouter=True)  # Include allotted project
-        .filter(Student.department_id == department_id)
-        .all()
-    )
-
-    data = []
-    for student in students:
-        data.append({
-            "SIP ID": student.sip_id,
-            "Name": student.name,
-            "Allotted Project": student.selected_project.title if student.selected_project else "Not Allotted",
-            "Project ID": student.selected_project.id if student.selected_project else None,
-        })
-
-    return data
-
-@router.post("/confirm_allotments/{department_id}")
-def confirm_allotments(department_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-    if current_user.role != 'department':
-        raise HTTPException(status_code=403, detail="Not a Department User")
-    
-    # Verify department existence
-    department = db.query(Department).filter(Department.id == department_id).first()
-    if not department:
-        raise HTTPException(status_code=404, detail="Department not found")
-
-    # Confirm allotments for students in the department
-    students = (
-        db.query(Student)
-        .filter(Student.department_id == department_id, Student.selected_project_id.isnot(None))
-        .all()
-    )
-
-    for student in students:
-        student.admin_conf = True  # Mark allotment as confirmed
-        db.commit()
-        db.refresh(student)
-
-    return {"message": "Allotments confirmed successfully!"}
+    return {"message": "Student unalloted from project successfully", "student": student}
