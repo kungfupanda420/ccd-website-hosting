@@ -9,7 +9,7 @@ from ..schemas.students import  ShowStudent, StudentUpdate, VerifyEmail
 from ..schemas.projects import ShowProject, ProjectPreferencesId
 from ..models.users import User, Student, Professor, Department
 from ..models.projects import Project
-from ..models.projects import Project
+from ..models.rounds import Round
 from ..security.JWTtoken import create_access_token, create_refresh_token
 from ..database import get_db
 
@@ -177,6 +177,14 @@ def register(
     current_user: User = Depends(get_current_user)
 ):
     
+    round=db.query(Round).filter(Round.id==1).first()
+    if not round:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No Round found")
+    
+    if round.allow_reg==False:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Please wait for registrations to start, You will be sent an email")
+    
+
     student=db.query(Student).filter(Student.adhaar_id==adhaar_id).first()
     if student:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Adhaar ID already registered")
