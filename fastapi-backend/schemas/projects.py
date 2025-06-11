@@ -60,6 +60,7 @@ class ProjectPreferencesId(BaseModel):
 
 class StudentSIP(BaseModel):
     sip_id:str
+    name: str
     model_config = {
         "from_attributes": True
     }
