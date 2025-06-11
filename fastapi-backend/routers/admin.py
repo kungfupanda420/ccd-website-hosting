@@ -4,8 +4,10 @@ from sqlalchemy.orm import Session
 from ..schemas.token import Token
 from ..schemas.admin import DeptDataMessage
 from ..schemas.projects import ProjectStudents
+from ..schemas.rounds import RoundDetails
 from ..models.users import User,Admin, Professor, Department, Student
 from ..models.projects import Project
+from ..models.rounds import Round
 from ..security.JWTtoken import create_access_token
 from ..database import get_db
 
@@ -34,6 +36,138 @@ router =APIRouter(
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 get_db=get_db
+
+import os
+
+from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
+from pydantic import EmailStr, BaseModel
+
+
+from dotenv import load_dotenv
+load_dotenv()
+
+conf = ConnectionConfig(
+    MAIL_USERNAME='sip@nitc.ac.in',
+    MAIL_PASSWORD=os.getenv('MAIL_PASSWORD'),
+    MAIL_FROM='sip@nitc.ac.in',
+    MAIL_PORT=587,
+    MAIL_SERVER="smtp.gmail.com",
+    MAIL_STARTTLS=True,
+    MAIL_SSL_TLS= False,
+    USE_CREDENTIALS=True
+)
+
+
+@router.post("/start_next_round", response_model= RoundDetails)
+async def start_next_round(db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
+    if current_user.role != 'admin':
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not an Admin")
+
+    round=db.query(Round).filter(Round.id==1).first()
+    if not round:
+        raise HTTPException(status_code=404, detail="Round not found")
+    
+    if round.number>=3:
+        raise HTTPException(status_code=403, detail="Final Round has been completed")
+
+    round.number+=1
+    round.allow_reg=1
+
+    db.commit()
+    db.refresh(round)
+
+    if round.number==2:
+        students=(db.query(Student)
+                  .join(Student.user)
+                  .filter(Student.admin_conf==None)
+                  .all()
+                  )
+
+        for student in students:
+            
+            message=MessageSchema(
+                subject="NITC Summer Internship Programme Round 2",
+                recipients=[student.user.email],
+                body=f"""
+                <h3>Dear Student</h3>
+                <p>The second round of the project selections have started.</p>
+                <p>Please add your preffered projects once again</p>
+                <p></p>
+                <a href="https://placement.nitc.ac.in">placement.nitc.ac.in</a>
+                """,
+                subtype="html"
+            )
+
+            fm=FastMail(conf)
+            await fm.send_message(message)
+    
+
+    if round.number==3:
+
+        students=(db.query(Student)
+                  .join(Student.user)
+                  .filter(Student.admin_conf==None)
+                  .all()
+                  )
+
+        for student in students:
+            
+            message=MessageSchema(
+                subject="NITC Summer Internship Programme Round 2",
+                recipients=[student.user.email],
+                body=f"""
+                <h3>Dear Student</h3>
+                <p>The final round of the project selections have started.</p>
+                <p>Please add your preffered projects once again</p>
+                <p></p>
+                <a href="https://placement.nitc.ac.in">placement.nitc.ac.in</a>
+                """,
+                subtype="html"
+            )
+
+            fm=FastMail(conf)
+            await fm.send_message(message)
+
+        users=(db.query(User)
+               .filter(User.role=='student')
+               .filter(User.student==None)
+               .all()
+               )
+        
+        for user in users:
+            
+            message=MessageSchema(
+                subject="NITC Summer Internship Programme Round 2",
+                recipients=[user.email],
+                body=f"""
+                <h3>Dear Student</h3>
+                <p>The Round of the registrations have started again.</p>
+                <p>Please complete your registration and select your preffered projects</p>
+                <p></p>
+                <a href="https://placement.nitc.ac.in">placement.nitc.ac.in</a>
+                """,
+                subtype="html"
+            )
+
+            fm=FastMail(conf)
+            await fm.send_message(message)
+        
+
+    return round
+
+@router.post("/stop_registrations",response_model=RoundDetails)
+def stop_registrations(db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
+    if current_user.role != 'admin':
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not an Admin")
+
+    round=db.query(Round).filter(Round.id==1).first()
+    if not round:
+        raise HTTPException(status_code=404, detail="Round not found")
+    
+    round.allow_reg=0
+    db.commit()
+    db.refresh(round)
+    return round
 
 @router.post("/professors")
 def make_professor(file: UploadFile= File(...),db: Session=Depends(get_db), current_user: User= Depends(get_current_user)):
@@ -253,25 +387,6 @@ def dept_data(id:int, db:Session=Depends(get_db),current_user: User=Depends(get_
 
     return projects
 
-import os
-
-from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
-from pydantic import EmailStr, BaseModel
-
-
-from dotenv import load_dotenv
-
-
-conf = ConnectionConfig(
-    MAIL_USERNAME='sip@nitc.ac.in',
-    MAIL_PASSWORD=os.getenv('MAIL_PASSWORD'),
-    MAIL_FROM='sip@nitc.ac.in',
-    MAIL_PORT=587,
-    MAIL_SERVER="smtp.gmail.com",
-    MAIL_STARTTLS=True,
-    MAIL_SSL_TLS= False,
-    USE_CREDENTIALS=True
-)
 
 
 @router.post("/department_data/{id}")
