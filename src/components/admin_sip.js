@@ -2,12 +2,123 @@ import React, { useState, useEffect } from "react";
 import "../css/Candidate_dashboard.css"; // Using the provided CSS styles
 
 function Admin_sip() {
-  const [activeSection, setActiveSection] = useState("upload"); // Tracks the active section
+  const [activeSection, setActiveSection] = useState("upload");
   const [file, setFile] = useState(null);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const [students, setStudents] = useState([]); // Stores the list of students
+  const [students, setStudents] = useState([]);
+  const [departments, setDepartments] = useState([]);
+  const [selectedDept, setSelectedDept] = useState("");
+  const [deptStudents, setDeptStudents] = useState([]);
 
+  // Fetch departments for dropdown
+  const fetchDepartments = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch("/api/admin/departments", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Failed to fetch departments");
+      }
+      const data = await response.json();
+      setDepartments(data);
+    } catch (error) {
+      setMessage(`An error occurred: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch students for a department
+  const fetchDeptStudents = async (deptId) => {
+    setLoading(true);
+    setDeptStudents([]);
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`/api/admin/department_data/${deptId}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Failed to fetch students");
+      }
+      const data = await response.json();
+      setDeptStudents(data);
+    } catch (error) {
+      setMessage(`An error occurred: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Confirm allotments for a department
+  const handleConfirmAllotments = async () => {
+    if (!selectedDept) {
+      setMessage("Please select a department.");
+      return;
+    }
+    setLoading(true);
+    setMessage("");
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`/api/admin/department_data/${selectedDept}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message: "confirmed" }),
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Failed to confirm allotments");
+      }
+      const data = await response.json();
+      setMessage(data.message || "Allotments confirmed successfully!");
+      // Refresh students after confirmation
+      fetchDeptStudents(selectedDept);
+    } catch (error) {
+      setMessage(`An error occurred: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle department selection change
+  const handleDeptChange = (e) => {
+    const deptId = e.target.value;
+    setSelectedDept(deptId);
+    if (deptId) {
+      fetchDeptStudents(deptId);
+    } else {
+      setDeptStudents([]);
+    }
+    setMessage("");
+  };
+
+  // Fetch departments when Confirm section is opened
+  useEffect(() => {
+    if (activeSection === "confirm") {
+      fetchDepartments();
+      setSelectedDept("");
+      setDeptStudents([]);
+    }
+    if (activeSection === "students") {
+      fetchAllottedStudents();
+    }
+  }, [activeSection]);
+
+  // Existing functions for upload/download/generate/students...
+  // (Copy from your original code for brevity)
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
     setMessage("");
@@ -102,7 +213,6 @@ function Admin_sip() {
       const data = await response.json();
       setMessage(data.message || "ID cards generated successfully!");
     } catch (error) {
-      console.error("Error generating ID cards:", error);
       setMessage(`An error occurred: ${error.message}`);
     } finally {
       setLoading(false);
@@ -121,7 +231,7 @@ function Admin_sip() {
         return;
       }
 
-      const response = await fetch(`/api/admin/department_data/1`, { // Replace `1` with the actual department ID
+      const response = await fetch(`/api/admin/department_data/1`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -137,54 +247,11 @@ function Admin_sip() {
       setStudents(data);
       setMessage("Students fetched successfully!");
     } catch (error) {
-      console.error("Error fetching students:", error);
       setMessage(`An error occurred: ${error.message}`);
     } finally {
       setLoading(false);
     }
   };
-
-  const handleConfirmAllotments = async () => {
-    setLoading(true);
-    setMessage("");
-
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        alert("Authorization token is missing. Please log in.");
-        setLoading(false);
-        return;
-      }
-
-      const response = await fetch(`/api/admin/department_data/1`, { // Replace `1` with the actual department ID
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ message: "confirmed" }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || "Failed to confirm allotments");
-      }
-
-      const data = await response.json();
-      setMessage(data.message || "Allotments confirmed successfully!");
-    } catch (error) {
-      console.error("Error confirming allotments:", error);
-      setMessage(`An error occurred: ${error.message}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (activeSection === "students") {
-      fetchAllottedStudents();
-    }
-  }, [activeSection]);
 
   return (
     <div className="cd-container">
@@ -229,7 +296,7 @@ function Admin_sip() {
           className="cd-btn"
           onClick={() => {
             localStorage.removeItem("token");
-            window.location.href = "/login"; // Redirect to login page
+            window.location.href = "/login";
           }}
         >
           <i className="fas fa-sign-out-alt"></i>
@@ -342,20 +409,81 @@ function Admin_sip() {
         {activeSection === "confirm" && (
           <div className="confirm-section">
             <h1>Confirm Allotments</h1>
-            <button
-              onClick={handleConfirmAllotments}
-              disabled={loading}
-              style={{
-                padding: "10px 20px",
-                backgroundColor: "#f39c12",
-                color: "white",
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer",
-              }}
-            >
-              {loading ? "Confirming..." : "Confirm Allotments"}
-            </button>
+            <div style={{ marginBottom: "20px" }}>
+              <label htmlFor="dept-select" style={{ marginRight: "10px" }}>
+                Select Department:
+              </label>
+              <select
+                id="dept-select"
+                value={selectedDept}
+                onChange={handleDeptChange}
+                style={{
+                  padding: "8px",
+                  borderRadius: "4px",
+                  border: "1px solid #ddd",
+                  minWidth: "200px",
+                }}
+              >
+                <option value="">-- Select Department --</option>
+                {departments.map((dept) => (
+                  <option key={dept.id} value={dept.id}>
+                    {typeof dept.name === "string" ? dept.name : JSON.stringify(dept.name)}
+                  </option>
+                ))}
+              </select>
+            </div>
+            {selectedDept && (
+              <div>
+                <h2>Allotted Students</h2>
+                {deptStudents.length === 0 ? (
+                  <p>No students found for this department.</p>
+                ) : (
+                  <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                    <thead>
+                      <tr>
+                        <th style={{ border: "1px solid #ddd", padding: "8px" }}>Name</th>
+                        <th style={{ border: "1px solid #ddd", padding: "8px" }}>Email</th>
+                        <th style={{ border: "1px solid #ddd", padding: "8px" }}>Project</th>
+                        <th style={{ border: "1px solid #ddd", padding: "8px" }}>Professor</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {deptStudents.map((student) => (
+                        <tr key={student.id}>
+                          <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                            {typeof student.name === "string" ? student.name : JSON.stringify(student.name)}
+                          </td>
+                          <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                            {typeof student.email === "string" ? student.email : JSON.stringify(student.email)}
+                          </td>
+                          <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                            {typeof student.project === "string" ? student.project : JSON.stringify(student.project)}
+                          </td>
+                          <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                            {typeof student.professor === "string" ? student.professor : JSON.stringify(student.professor)}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+                <button
+                  onClick={handleConfirmAllotments}
+                  disabled={loading}
+                  style={{
+                    marginTop: "20px",
+                    padding: "10px 20px",
+                    backgroundColor: "#f39c12",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                  }}
+                >
+                  {loading ? "Confirming..." : "Confirm Allotments"}
+                </button>
+              </div>
+            )}
           </div>
         )}
 

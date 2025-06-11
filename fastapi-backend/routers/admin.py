@@ -352,3 +352,18 @@ async def conf_dept_data(id:int,request:DeptDataMessage, db:Session=Depends(get_
     
     else:
         raise HTTPException(status_code=400, detail="Invalid message value")
+    
+
+
+
+@router.get("/departments", response_model=List[dict])
+def get_departments(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    if current_user.role != 'admin':
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to access this resource")
+    
+    departments = db.query(Department).all()
+
+    if not departments:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No departments found")
+
+    return [{"id": department.user_id, "name": department.name} for department in departments]
