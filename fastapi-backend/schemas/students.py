@@ -22,9 +22,10 @@ class VerifyEmail(BaseModel):
 class ShowStudent(BaseModel):
     
     user: ShowUser
-
+    sip_id:str
     name: str
     adhaar_id:str
+    apaar_id:str
     phone: str
     dob: date
     address: str
@@ -47,8 +48,8 @@ class ShowStudent(BaseModel):
     board10: str
 
     admin_conf:bool
-    start_date:date
-    end_date:date
+    start_date:Optional[date]
+    end_date:Optional[date]
     student_college_idcard_path: Optional[str]
     pref1: Optional[ShowProject]
     pref2: Optional[ShowProject]

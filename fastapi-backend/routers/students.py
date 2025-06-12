@@ -82,7 +82,7 @@ conf = ConnectionConfig(
     USE_CREDENTIALS=True
 )
 
-@router.post("/verify_email")
+@router.post("/verify_email")  #Working
 async def verify_email(request:VerifyEmail,db:Session=Depends(get_db)):
     user = db.query(User).filter(User.email == request.email).first()
     if user:
@@ -105,7 +105,7 @@ async def verify_email(request:VerifyEmail,db:Session=Depends(get_db)):
     await fm.send_message(message)
     return {"msg": f"Verification email sent to {request.email}. Please check your inbox."}
 
-@router.post("/confirm_email", response_model=Token)
+@router.post("/confirm_email", response_model=Token) #Working
 def confirm_email(email: str=Query(...), password: str=Query(...), db: Session = Depends(get_db)):
     
     user = db.query(User).filter(User.email == email).first()
@@ -139,7 +139,7 @@ def confirm_email(email: str=Query(...), password: str=Query(...), db: Session =
     )
         
 
-@router.post("/register",response_model=Token)
+@router.post("/register",response_model=Token) #Working
 def register(
     # Basic info
     name: str = Form(...),
@@ -176,6 +176,9 @@ def register(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
+    
+    if(current_user.student):
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Student already registered")
     
     round=db.query(Round).filter(Round.id==1).first()
     if not round:
@@ -252,7 +255,7 @@ def register(
 
 
 
-@router.get("/me",response_model=ShowStudent)
+@router.get("/me",response_model=ShowStudent) #Working
 def get_me(db: Session=Depends(get_db),current_user: User=Depends(get_current_user)):
     if current_user.role != 'student':
         raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
@@ -263,7 +266,7 @@ def get_me(db: Session=Depends(get_db),current_user: User=Depends(get_current_us
     return student
 
 
-@router.get("/profile_photo")
+@router.get("/profile_photo") #Working
 async def get_profile_photo(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
@@ -280,7 +283,7 @@ async def get_profile_photo(
     
     return {"profile_photo_path": student.profilePhotoPath}
     
-@router.put("/me",response_model=ShowStudent)
+@router.put("/me",response_model=ShowStudent) #Working
 def edit_me(
     # Updatable fields (add/remove as per your needs)
     name: str = Form(None),
@@ -368,7 +371,7 @@ def edit_me(
     db.refresh(student)
     return student
 
-@router.get("/all_projects",response_model=List[ShowProject])
+@router.get("/all_projects",response_model=List[ShowProject]) 
 def show_projects(db: Session=Depends(get_db),current_user: User=Depends(get_current_user)):
     if current_user.role != 'student':
         raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
@@ -378,7 +381,7 @@ def show_projects(db: Session=Depends(get_db),current_user: User=Depends(get_cur
     return projects
 
 
-@router.get("/preferences",response_model=List[ShowProject])
+@router.get("/preferences",response_model=List[ShowProject]) #Working
 def show_applied_projects(db: Session=Depends(get_db),current_user: User=Depends(get_current_user)):
     if current_user.role != 'student':
         raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
@@ -397,7 +400,7 @@ def show_applied_projects(db: Session=Depends(get_db),current_user: User=Depends
     return applied_projects
 
 
-@router.post("/preferences",response_model=List[ShowProject])
+@router.post("/preferences",response_model=List[ShowProject]) #Working
 def increase_preference(request:ProjectPreferencesId,db:Session=Depends(get_db),current_user:User=Depends(get_current_user)):
     if current_user.role != 'student':
         raise HTTPException(status_code=403, detail="You are not authorized to access this resource")

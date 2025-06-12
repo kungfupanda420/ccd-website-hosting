@@ -207,7 +207,7 @@ def export_professors(db:Session=Depends(get_db),current_user: User=Depends(get_
 # 
 # 
 # #
-@router.post("/start_next_round", response_model= RoundDetails)
+@router.post("/start_next_round", response_model= RoundDetails) # round 1 works
 def start_next_round(db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
     if current_user.role != 'admin':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not an Admin")
@@ -233,28 +233,31 @@ def start_next_round(db:Session=Depends(get_db), current_user: User=Depends(get_
                     .all()
                     )
         
+        for student in students:
+            student.selected_project = None
         student_emails=[student.user.email for student in students]
         user_emails=[]
         
         if round.number==3:
             users=(db.query(User)
-                    .filter(User.role=='student')
-                    .filter(User.student==None)
+                    .filter(User.role=='Verified Email')
                     .all()
                     )
             user_emails=[user.email for user in users]
         asyncio.create_task(send_round_emails(round.number,student_emails,user_emails))
 
-    db.query(Student).update({
-        Student.pref1: None,
-        Student.pref2: None,
-        Student.pref3: None,
-    },synchronize_session=False)   
-    db.commit()
+        
+        db.query(Student).update({
+            Student.pref1: None,
+            Student.pref2: None,
+            Student.pref3: None,
+        },synchronize_session=False)   
+        
+        db.commit()
 
     return round
 
-@router.post("/stop_registrations",response_model=RoundDetails)
+@router.post("/stop_registrations",response_model=RoundDetails) # working
 def stop_registrations(db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
     if current_user.role != 'admin':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not an Admin")

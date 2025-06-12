@@ -26,7 +26,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 get_db=get_db
 
-@router.post('/projects',response_model=ShowProject) #
+@router.post('/projects',response_model=ShowProject) #Working
 def create_project(request:ProjectCreation,db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
     
     if(current_user.role != 'professor'):
