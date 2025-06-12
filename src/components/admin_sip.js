@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../css/Candidate_dashboard.css"; // Using the provided CSS styles
+import "../css/Candidate_dashboard.css";
 
 function Admin_sip() {
   const [activeSection, setActiveSection] = useState("upload");
@@ -60,17 +60,13 @@ function Admin_sip() {
     }
   };
 
-  // Confirm allotments for a department
-  const handleConfirmAllotments = async () => {
-    if (!selectedDept) {
-      setMessage("Please select a department.");
-      return;
-    }
+  // Confirm individual student allotment
+  const handleConfirmStudent = async (studentId) => {
     setLoading(true);
     setMessage("");
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`/api/admin/department_data/${selectedDept}`, {
+      const response = await fetch(`/api/admin/confirm_student/${studentId}`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -78,14 +74,19 @@ function Admin_sip() {
         },
         body: JSON.stringify({ message: "confirmed" }),
       });
+
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.detail || "Failed to confirm allotments");
+        throw new Error(errorData.detail || "Failed to confirm student");
       }
+
       const data = await response.json();
-      setMessage(data.message || "Allotments confirmed successfully!");
+      setMessage(data.message || "Student confirmed successfully!");
+
       // Refresh students after confirmation
-      fetchDeptStudents(selectedDept);
+      if (selectedDept) {
+        fetchDeptStudents(selectedDept);
+      }
     } catch (error) {
       setMessage(`An error occurred: ${error.message}`);
     } finally {
@@ -93,6 +94,42 @@ function Admin_sip() {
     }
   };
 
+  // Confirm all students in a department
+  const handleConfirmAllStudents = async () => {
+  if (!selectedDept) {
+    setMessage("Please select a department first.");
+    return;
+  }
+
+  setLoading(true);
+  setMessage("");
+  try {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`/api/admin/department_data/${selectedDept}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ message: "confirmed" }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.detail || "Failed to confirm all students");
+    }
+
+    const data = await response.json();
+    setMessage(data.message || "All students confirmed successfully!");
+
+    // Refresh students after confirmation
+    fetchDeptStudents(selectedDept);
+  } catch (error) {
+    setMessage(`An error occurred: ${error.message}`);
+  } finally {
+    setLoading(false);
+  }
+};
   // Handle department selection change
   const handleDeptChange = (e) => {
     const deptId = e.target.value;
@@ -105,20 +142,7 @@ function Admin_sip() {
     setMessage("");
   };
 
-  // Fetch departments when Confirm section is opened
-  useEffect(() => {
-    if (activeSection === "confirm") {
-      fetchDepartments();
-      setSelectedDept("");
-      setDeptStudents([]);
-    }
-    if (activeSection === "students") {
-      fetchAllottedStudents();
-    }
-  }, [activeSection]);
-
-  // Existing functions for upload/download/generate/students...
-  // (Copy from your original code for brevity)
+  // File upload functions
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
     setMessage("");
@@ -154,7 +178,45 @@ function Admin_sip() {
       setMessage(`An error occurred: ${error.message}`);
     }
   };
+const handleRejectAllStudents = async () => {
+    if (!selectedDept) {
+      setMessage("Please select a department first.");
+      return;
+    }
 
+    const confirmReject = window.confirm("Are you sure you want to reject all allotments for this department?");
+    if (!confirmReject) return;
+
+    setLoading(true);
+    setMessage("");
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`/api/admin/department_data/${selectedDept}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message: "rejected" }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Failed to reject all students");
+      }
+
+      const data = await response.json();
+      setMessage(data.message || "All students rejected successfully!");
+
+      // Refresh students after rejection
+      fetchDeptStudents(selectedDept);
+    } catch (error) {
+      setMessage(`An error occurred: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+  // Download professors
   const handleDownload = async () => {
     setMessage("Downloading...");
     try {
@@ -186,6 +248,7 @@ function Admin_sip() {
     }
   };
 
+  // Generate ID cards
   const handleGenerateIDCards = async () => {
     setLoading(true);
     setMessage("");
@@ -219,6 +282,7 @@ function Admin_sip() {
     }
   };
 
+  // Fetch all allotted students
   const fetchAllottedStudents = async () => {
     setLoading(true);
     setMessage("");
@@ -252,6 +316,18 @@ function Admin_sip() {
       setLoading(false);
     }
   };
+
+  // Fetch departments when Confirm section is opened
+  useEffect(() => {
+    if (activeSection === "confirm") {
+      fetchDepartments();
+      setSelectedDept("");
+      setDeptStudents([]);
+    }
+    if (activeSection === "students") {
+      fetchAllottedStudents();
+    }
+  }, [activeSection]);
 
   return (
     <div className="cd-container">
@@ -318,11 +394,13 @@ function Admin_sip() {
                 marginBottom: "10px",
                 borderRadius: "4px",
                 border: "1px solid #ddd",
+                width: "100%",
+                maxWidth: "400px",
               }}
             />
             <button
               onClick={handleFileUpload}
-              disabled={!file}
+              disabled={!file || loading}
               style={{
                 padding: "10px 20px",
                 backgroundColor: "#3498db",
@@ -332,7 +410,7 @@ function Admin_sip() {
                 cursor: "pointer",
               }}
             >
-              Upload File
+              {loading ? "Uploading..." : "Upload File"}
             </button>
           </div>
         )}
@@ -342,6 +420,7 @@ function Admin_sip() {
             <h1>Download Professors</h1>
             <button
               onClick={handleDownload}
+              disabled={loading}
               style={{
                 padding: "10px 20px",
                 backgroundColor: "#2ecc71",
@@ -351,7 +430,7 @@ function Admin_sip() {
                 cursor: "pointer",
               }}
             >
-              Download Professors
+              {loading ? "Preparing..." : "Download Professors"}
             </button>
           </div>
         )}
@@ -382,26 +461,28 @@ function Admin_sip() {
             {students.length === 0 ? (
               <p>No students found.</p>
             ) : (
-              <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                <thead>
-                  <tr>
-                    <th style={{ border: "1px solid #ddd", padding: "8px" }}>Name</th>
-                    <th style={{ border: "1px solid #ddd", padding: "8px" }}>Email</th>
-                    <th style={{ border: "1px solid #ddd", padding: "8px" }}>Project</th>
-                    <th style={{ border: "1px solid #ddd", padding: "8px" }}>Professor</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {students.map((student) => (
-                    <tr key={student.id}>
-                      <td style={{ border: "1px solid #ddd", padding: "8px" }}>{student.name}</td>
-                      <td style={{ border: "1px solid #ddd", padding: "8px" }}>{student.email}</td>
-                      <td style={{ border: "1px solid #ddd", padding: "8px" }}>{student.project}</td>
-                      <td style={{ border: "1px solid #ddd", padding: "8px" }}>{student.professor}</td>
+              <div style={{ overflowX: "auto" }}>
+                <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                  <thead>
+                    <tr style={{ backgroundColor: "#f2f2f2" }}>
+                      <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Name</th>
+                      {/* <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Email</th> */}
+                      <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Project</th>
+                      <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Professor</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {students.map((student) => (
+                      <tr key={student.id}>
+                        <td style={{ border: "1px solid #ddd", padding: "8px" }}>{student.name}</td>
+                        {/* <td style={{ border: "1px solid #ddd", padding: "8px" }}>{student.email}</td> */}
+                        <td style={{ border: "1px solid #ddd", padding: "8px" }}>{student.project}</td>
+                        <td style={{ border: "1px solid #ddd", padding: "8px" }}>{student.professor}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             )}
           </div>
         )}
@@ -423,71 +504,141 @@ function Admin_sip() {
                   border: "1px solid #ddd",
                   minWidth: "200px",
                 }}
+                disabled={loading}
               >
                 <option value="">-- Select Department --</option>
                 {departments.map((dept) => (
                   <option key={dept.id} value={dept.id}>
-                    {typeof dept.name === "string" ? dept.name : JSON.stringify(dept.name)}
+                    {dept.name}
                   </option>
                 ))}
               </select>
             </div>
             {selectedDept && (
               <div>
-                <h2>Allotted Students</h2>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <h2>Allotted Students</h2>
+
+
+
+                  <button
+                onClick={handleRejectAllStudents}
+                disabled={loading || deptStudents.length === 0}
+                style={{
+                  padding: "8px 16px",
+                  backgroundColor: "#e74c3c",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                  // marginRight: "10px"
+                }}
+              >
+                {loading ? "Processing..." : "Reject All"}
+              </button>
+                  <button
+                    onClick={handleConfirmAllStudents}
+                    disabled={loading || deptStudents.length === 0}
+                    style={{
+                      padding: "8px 16px",
+                      backgroundColor: "#27ae60",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "4px",
+                      cursor: "pointer",
+                    }}
+                  >
+                  
+                    {loading ? "Processing..." : "Confirm All Students"}
+                  </button>
+                </div>
                 {deptStudents.length === 0 ? (
                   <p>No students found for this department.</p>
                 ) : (
-                  <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                    <thead>
-                      <tr>
-                        <th style={{ border: "1px solid #ddd", padding: "8px" }}>Name</th>
-                        <th style={{ border: "1px solid #ddd", padding: "8px" }}>Email</th>
-                        <th style={{ border: "1px solid #ddd", padding: "8px" }}>Project</th>
-                        <th style={{ border: "1px solid #ddd", padding: "8px" }}>Professor</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {deptStudents.map((student) => (
-                        <tr key={student.id}>
-                          <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                            {typeof student.name === "string" ? student.name : JSON.stringify(student.name)}
-                          </td>
-                          <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                            {typeof student.email === "string" ? student.email : JSON.stringify(student.email)}
-                          </td>
-                          <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                            {typeof student.project === "string" ? student.project : JSON.stringify(student.project)}
-                          </td>
-                          <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                            {typeof student.professor === "string" ? student.professor : JSON.stringify(student.professor)}
-                          </td>
+                  <div style={{ overflowX: "auto" }}>
+                    <table style={{ width: "100%", borderCollapse: "collapse", marginTop: "10px" }}>
+                      <thead>
+                        <tr style={{ backgroundColor: "#f2f2f2" }}>
+                          <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>SIP ID</th>
+                          <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Name</th>
+                          {/* <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Email</th> */}
+                          <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Project</th>
+                          <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Professor</th>
+                          {/* <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Status</th> */}
+                          {/* <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Action</th> */}
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {deptStudents.map((project) =>
+                          project.selected_students.map((student) => (
+                            <tr key={student.sip_id}>
+                              <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                                {student.sip_id}
+                              </td>
+                              <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                                {student.name}
+                              </td>
+                              {/* <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                                {student.email}
+                              </td> */}
+                              <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                                {project.title}
+                              </td>
+                              <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                                {project.professor.name}
+                              </td>
+                              {/* <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                                {student.is_confirmed ? (
+                                  <span style={{ color: "green" }}>Confirmed</span>
+                                ) : (
+                                  <span style={{ color: "orange" }}>Pending</span>
+                                )}
+                              </td> */}
+                              {/* <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                                {!student.is_confirmed && (
+                                  <button
+                                    onClick={() => handleConfirmStudent(student.sip_id)}
+                                    disabled={loading}
+                                    style={{
+                                      padding: "5px 10px",
+                                      backgroundColor: "#27ae60",
+                                      color: "white",
+                                      border: "none",
+                                      borderRadius: "4px",
+                                      cursor: "pointer",
+                                    }}
+                                  >
+                                    Confirm
+                                  </button>
+                                )}
+                              </td> */}
+                            </tr>
+                          ))
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
                 )}
-                <button
-                  onClick={handleConfirmAllotments}
-                  disabled={loading}
-                  style={{
-                    marginTop: "20px",
-                    padding: "10px 20px",
-                    backgroundColor: "#f39c12",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "4px",
-                    cursor: "pointer",
-                  }}
-                >
-                  {loading ? "Confirming..." : "Confirm Allotments"}
-                </button>
               </div>
             )}
           </div>
         )}
 
-        {message && <div className="message">{message}</div>}
+        {message && (
+          <div 
+            className="message" 
+            style={{
+              marginTop: "20px",
+              padding: "10px",
+              borderRadius: "4px",
+              backgroundColor: message.includes("success") ? "#d4edda" : "#f8d7da",
+              color: message.includes("success") ? "#155724" : "#721c24",
+              border: `1px solid ${message.includes("success") ? "#c3e6cb" : "#f5c6cb"}`,
+            }}
+          >
+            {message}
+          </div>
+        )}
       </div>
     </div>
   );
