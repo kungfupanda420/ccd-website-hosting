@@ -40,7 +40,7 @@ class ProjectCreation(BaseModel):
     description:str
     duration:str
     mode:str
-    prerequisites:str
+    prerequisites: Optional[str] = None 
     no_of_interns:int
 
     model_config = {

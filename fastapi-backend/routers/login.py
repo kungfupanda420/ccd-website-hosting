@@ -32,12 +32,25 @@ get_db=get_db
 
 load_dotenv()
 
-@router.post('/login')
+
+conf = ConnectionConfig(
+    MAIL_USERNAME='sip@nitc.ac.in',
+    MAIL_PASSWORD=os.getenv('MAIL_PASSWORD'),
+    MAIL_FROM='sip@nitc.ac.in',
+    MAIL_PORT=587,
+    MAIL_SERVER="smtp.gmail.com",
+    MAIL_STARTTLS=True,
+    MAIL_SSL_TLS= False,
+    USE_CREDENTIALS=True
+)
+
+@router.post('/login')  #Working
 def login(request: UserLogin, db: Session=Depends(get_db)):
     user = db.query(User).filter(User.email== request.email).first()
     if not user:
         raise HTTPException(status_code=404, detail="Invalid Credentials")
     if not pwd_context.verify(request.password,user.password):
+        print ("HI")
         raise HTTPException(status_code=404, detail="Invalid Credentials")
     
     access_token= create_access_token(
@@ -55,19 +68,9 @@ def login(request: UserLogin, db: Session=Depends(get_db)):
         role=user.role
     )
 
-conf = ConnectionConfig(
-    MAIL_USERNAME='sip@nitc.ac.in',
-    MAIL_PASSWORD=os.getenv('MAIL_PASSWORD'),
-    MAIL_FROM='sip@nitc.ac.in',
-    MAIL_PORT=587,
-    MAIL_SERVER="smtp.gmail.com",
-    MAIL_STARTTLS=True,
-    MAIL_SSL_TLS= False,
-    USE_CREDENTIALS=True
-)
 
 
-@router.post('/forgot_password')
+@router.post('/forgot_password') #Working
 async def forgot_password(request: ForgotPasswordRequest ,db:Session=Depends(get_db)):
     user = db.query(User).filter(User.email == request.email).first()
     if not user:
@@ -97,7 +100,7 @@ async def forgot_password(request: ForgotPasswordRequest ,db:Session=Depends(get
     return {"msg": f"Password Reset email sent to {request.email}"}
 
 
-@router.post('/change_password')
+@router.post('/change_password') #Working
 async def change_password(request: ChangePasswordRequest,db:Session=Depends(get_db)):
 
     try:
@@ -117,3 +120,5 @@ async def change_password(request: ChangePasswordRequest,db:Session=Depends(get_
     db.commit() 
     db.refresh(user)    
     return {"msg": "Password changed successfully"}
+
+# Tested all working

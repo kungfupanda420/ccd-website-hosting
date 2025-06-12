@@ -12,8 +12,8 @@ class Project(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String(255), nullable=False)
-    description = Column(String(1000))
-    duration = Column(String(255), nullable=False)  # e.g., "3 months"
+    description = Column(String(3000))
+    duration = Column(String(2000), nullable=False)  # e.g., "3 months"
     mode = Column(String(255), nullable=False)  # e.g., "online", "offline", "hybrid"
     professor_id = Column(Integer, ForeignKey("professors.user_id"), nullable=False)
     applied_count = Column(Integer, default=0)

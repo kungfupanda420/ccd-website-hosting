@@ -26,7 +26,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 get_db=get_db
 
-@router.post('/projects',response_model=ShowProject)
+@router.post('/projects',response_model=ShowProject) #
 def create_project(request:ProjectCreation,db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
     
     if(current_user.role != 'professor'):
@@ -51,7 +51,7 @@ def create_project(request:ProjectCreation,db:Session=Depends(get_db),current_us
     db.refresh(new_project)
     return new_project
 
-@router.get('/projects',response_model=List[ShowProject])
+@router.get('/projects',response_model=List[ShowProject]) #Working
 def show_projects(db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
     if(current_user.role != 'professor'):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to view projects")
@@ -59,7 +59,7 @@ def show_projects(db:Session=Depends(get_db),current_user: User=Depends(get_curr
     projects=db.query(Project).filter(Project.professor_id==current_user.id).all()
     return projects
 
-@router.put("/projects/{id}",response_model=ShowProject)
+@router.put("/projects/{id}",response_model=ShowProject) #Working
 def edit_project(id:int,request:ProjectCreation,db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
     
     
@@ -89,7 +89,7 @@ def edit_project(id:int,request:ProjectCreation,db:Session=Depends(get_db),curre
     db.refresh(project)
     return project
 
-@router.delete('/project/{id}',status_code=status.HTTP_204_NO_CONTENT)
+@router.delete('/project/{id}',status_code=status.HTTP_204_NO_CONTENT) #Working
 def delete_project(id:int,db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
     if(current_user.role != 'professor'):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to delete project")
