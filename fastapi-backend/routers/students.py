@@ -430,34 +430,6 @@ def show_applied_projects(db: Session=Depends(get_db),current_user: User=Depends
     
     return applied_projects
 
-# @router.delete("/withdrawProject/{project_id}",status_code=status.HTTP_204_NO_CONTENT)
-# def withdraw_project(project_id:int,db:Session=Depends(get_db),current_user:User=Depends(get_current_user)):
-#     if current_user.role != 'student':
-#         raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
-#     student=db.query(Student).filter(Student.user_id==current_user.id).first()
-#     if not student:
-#         raise HTTPException(status_code=404, detail="Student not found")
-#     project=db.query(Project).filter(Project.id==project_id).first()
-#     if not project:
-#         raise HTTPException(status_code=404, detail="Project not found")
-    
-#     if(student.pref1 != project and student.pref2 != project and student.pref3 != project):
-#         raise HTTPException(status_code=400, detail="You have not applied for this project")
-    
-#     if(student.pref1==project):
-#         student.pref1=student.pref2
-#         student.pref2=student.pref3
-#         student.pref3=None
-#     elif(student.pref2==project):
-#         student.pref2=student.pref3
-#         student.pref3=None
-#     elif(student.pref3==project):
-#         student.pref3=None
-#     project.applied_count-=1
-#     db.commit()
-#     db.refresh(student)
-#     db.refresh(project)
-#     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 @router.post("/preferences",response_model=List[ShowProject])
 def increase_preference(request:ProjectPreferencesId,db:Session=Depends(get_db),current_user:User=Depends(get_current_user)):
@@ -773,37 +745,4 @@ def get_completion_certificate(db: Session = Depends(get_db), current_user: User
         "Content-Disposition": f"inline; filename={student.sip_id}_offer_letter.pdf"
     })
 
-
-
-# if student.pref1_id:
-#         if project.professor.dept_id != student.pref1.professor.dept_id:
-#             raise HTTPException(status_code=400, detail="All project applied to have to be from the same department")
-        
-#         if student.pref1 == project:
-#             raise HTTPException(status_code=400, detail="Already applied for this project")
-
-#         if student.pref2:
-#             if student.pref2 == project:
-#                 raise HTTPException(status_code=400, detail="Already applied for this project")
-
-#             if student.pref3:
-#                 if student.pref3 == project:
-#                     raise HTTPException(status_code=400, detail="Already applied for this project")
-#                 else:
-#                     raise HTTPException(status_code=400, detail="Maximum 3 projects can be applied")
-#             else:
-#                 student.pref3=project
-#                 # student.pref3_id=project.id Dont Do this bc sqlalchemy will automatically set it as we have put foreign key in relationship
-#                 project.applied_count+=1
-#         else:
-#             student.pref2=project
-            
-#             project.applied_count+=1
-#     else:
-#         student.pref1=project
-#         project.applied_count+=1
-#     db.commit()
-#     db.refresh(student)
-#     db.refresh(project)   
-#     return project
 

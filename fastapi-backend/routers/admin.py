@@ -153,6 +153,7 @@ async def start_next_round(db:Session=Depends(get_db), current_user: User=Depend
                     .filter(Student.admin_conf==None)
                     .all()
                     )
+        
         student_emails=[student.user.email for student in students]
         user_emails=[]
         
@@ -164,7 +165,13 @@ async def start_next_round(db:Session=Depends(get_db), current_user: User=Depend
                     )
             user_emails=[user.email for user in users]
         asyncio.create_task(send_round_emails(round.number,student_emails,user_emails))
-       
+
+    db.query(Student).update({
+        Student.pref1: None,
+        Student.pref2: None,
+        Student.pref3: None,
+    },synchronize_session=False)   
+    db.commit()
 
     return round
 
