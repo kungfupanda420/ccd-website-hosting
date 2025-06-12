@@ -43,7 +43,7 @@ def create_project(request:ProjectCreation,db:Session=Depends(get_db),current_us
         mode=request.mode,
         prerequisites=request.prerequisites,
         no_of_interns=request.no_of_interns,
-        vacany_remaining=request.no_of_interns,
+        vacancy_remaining=request.no_of_interns,
         professor_id=current_user.id
     )
     db.add(new_project)

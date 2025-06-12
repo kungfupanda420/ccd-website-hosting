@@ -82,7 +82,7 @@ function Professor_dashboard() {
     const data = {
       title,
       description,
-      // no_of_interns,
+      no_of_interns,
       duration,
       mode,
       prerequisites,
@@ -119,7 +119,7 @@ function Professor_dashboard() {
     setEditFields({
       title: project.title,
       description: project.description,
-      // no_of_interns: project.no_of_interns,
+      no_of_interns: project.no_of_interns,
       duration: project.duration,
       mode: project.mode,
       prerequisites: project.prerequisites,
@@ -231,13 +231,13 @@ function Professor_dashboard() {
                 onChange={(e) => setDescription(e.target.value)}
                 required
               />
-              {/* <input
+              <input
                 type="number"
                 placeholder="Number of Interns"
-                // value={no_of_interns}
+                value={no_of_interns}
                 onChange={(e) => setNoOfInterns(e.target.value)}
                 required
-              /> */}
+              />
               {/* Duration dropdown */}
               <select
                 value={duration}
@@ -304,13 +304,13 @@ function Professor_dashboard() {
                           onChange={handleEditChange}
                           required
                         />
-                        {/* <input
+                        <input
                           type="number"
                           name="no_of_interns"
                           value={editFields.no_of_interns}
                           onChange={handleEditChange}
                           required
-                        /> */}
+                        />
                         {/* Duration dropdown */}
                         <select
                           name="duration"
@@ -355,11 +355,11 @@ function Professor_dashboard() {
                     ) : (
                       <>
                         <strong>{project.title}</strong> - {project.description}
-                        {/* <br />
+                        <br />
                         <span>
                           Interns: {project.no_of_interns} | Duration: {project.duration} | Mode: {project.mode} | Prerequisites: {project.prerequisites}
                         </span>
-                        <br /> */}
+                        <br />
                         <div style={{ display: "flex", gap: "12px", marginTop: "12px" }}>
                           <button
                             className="sidebar-btn"

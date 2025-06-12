@@ -26,6 +26,7 @@ class ShowProject(BaseModel):
     mode:str
     prerequisites:str
     applied_count:int
+    no_of_interns :int
     vacancy_remaining:int
     professor:ProfessorNameDept
 
