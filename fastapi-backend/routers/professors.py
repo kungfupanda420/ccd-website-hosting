@@ -36,6 +36,8 @@ def create_project(request:ProjectCreation,db:Session=Depends(get_db),current_us
         duration=request.duration,
         mode=request.mode,
         prerequisites=request.prerequisites,
+        no_of_interns=request.no_of_interns,
+        vacany_remaining=request.no_of_interns,
         professor_id=current_user.id
     )
     db.add(new_project)
@@ -67,6 +69,9 @@ def edit_project(id:int,request:ProjectCreation,db:Session=Depends(get_db),curre
     project.duration=request.duration
     project.mode=request.mode
     project.prerequisites=request.prerequisites
+
+    project.no_of_interns=request.no_of_interns
+    project.vacancy_remaining=request.no_of_interns
 
     db.commit()
     db.refresh(project)

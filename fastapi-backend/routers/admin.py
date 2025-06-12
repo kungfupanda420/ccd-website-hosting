@@ -57,6 +57,76 @@ conf = ConnectionConfig(
     USE_CREDENTIALS=True
 )
 
+import asyncio
+
+async def send_round_emails(round_no:int, student_emails, user_emails):
+
+    fm=FastMail(conf)
+
+
+    if round_no==2:
+        
+        subject="NITC Summer Internship Programme Round 2"
+        body="""
+                <h3>Dear Student</h3>
+                <p>The second round of the project selections have started.</p>
+                <p>Please add your preffered projects once again</p>
+                <p></p>
+                <a href="https://placement.nitc.ac.in">placement.nitc.ac.in</a>
+                """
+        for email in student_emails:
+            
+            message=MessageSchema(
+                subject=subject,
+                recipients=[email],
+                body=body,
+                subtype="html"
+            )
+            await fm.send_message(message)
+        
+    if round_no==3:
+
+        subject_stud="NITC Summer Internship Programme Round 2"
+        body_stud="""
+                <h3>Dear Student</h3>
+                <p>The final round of the project selections have started.</p>
+                <p>Please add your preffered projects once again</p>
+                <p></p>
+                <a href="https://placement.nitc.ac.in">placement.nitc.ac.in</a>
+                """
+        
+        for email in student_emails:
+            
+
+            message=MessageSchema(
+                subject=subject_stud,
+                recipients=[email],
+                body=body_stud,
+                subtype="html"
+            )
+            
+            await fm.send_message(message)
+
+        subject_user="NITC Summer Internship Programme Round 2"
+        body_user="""
+                <h3>Dear Student</h3>
+                <p>The Round of the registrations have started again.</p>
+                <p>Please complete your registration and select your preffered projects</p>
+                <p></p>
+                <a href="https://placement.nitc.ac.in">placement.nitc.ac.in</a>
+                """
+        for email in user_emails:
+            
+            message=MessageSchema(
+                subject=subject_user,
+                recipients=[email],
+                body=body_user,
+                subtype="html"
+            )
+
+            await fm.send_message(message)
+            
+
 
 @router.post("/start_next_round", response_model= RoundDetails)
 async def start_next_round(db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
@@ -76,82 +146,25 @@ async def start_next_round(db:Session=Depends(get_db), current_user: User=Depend
     db.commit()
     db.refresh(round)
 
-    if round.number==2:
-        students=(db.query(Student)
-                  .join(Student.user)
-                  .filter(Student.admin_conf==None)
-                  .all()
-                  )
-
-        for student in students:
-            
-            message=MessageSchema(
-                subject="NITC Summer Internship Programme Round 2",
-                recipients=[student.user.email],
-                body=f"""
-                <h3>Dear Student</h3>
-                <p>The second round of the project selections have started.</p>
-                <p>Please add your preffered projects once again</p>
-                <p></p>
-                <a href="https://placement.nitc.ac.in">placement.nitc.ac.in</a>
-                """,
-                subtype="html"
-            )
-
-            fm=FastMail(conf)
-            await fm.send_message(message)
-    
-
-    if round.number==3:
+    if round.number in [2,3]:
 
         students=(db.query(Student)
-                  .join(Student.user)
-                  .filter(Student.admin_conf==None)
-                  .all()
-                  )
-
-        for student in students:
-            
-            message=MessageSchema(
-                subject="NITC Summer Internship Programme Round 2",
-                recipients=[student.user.email],
-                body=f"""
-                <h3>Dear Student</h3>
-                <p>The final round of the project selections have started.</p>
-                <p>Please add your preffered projects once again</p>
-                <p></p>
-                <a href="https://placement.nitc.ac.in">placement.nitc.ac.in</a>
-                """,
-                subtype="html"
-            )
-
-            fm=FastMail(conf)
-            await fm.send_message(message)
-
-        users=(db.query(User)
-               .filter(User.role=='student')
-               .filter(User.student==None)
-               .all()
-               )
+                    .join(Student.user)
+                    .filter(Student.admin_conf==None)
+                    .all()
+                    )
+        student_emails=[student.user.email for student in students]
+        user_emails=[]
         
-        for user in users:
-            
-            message=MessageSchema(
-                subject="NITC Summer Internship Programme Round 2",
-                recipients=[user.email],
-                body=f"""
-                <h3>Dear Student</h3>
-                <p>The Round of the registrations have started again.</p>
-                <p>Please complete your registration and select your preffered projects</p>
-                <p></p>
-                <a href="https://placement.nitc.ac.in">placement.nitc.ac.in</a>
-                """,
-                subtype="html"
-            )
-
-            fm=FastMail(conf)
-            await fm.send_message(message)
-        
+        if round.number==3:
+            users=(db.query(User)
+                    .filter(User.role=='student')
+                    .filter(User.student==None)
+                    .all()
+                    )
+            user_emails=[user.email for user in users]
+        asyncio.create_task(send_round_emails(round.number,student_emails,user_emails))
+       
 
     return round
 
@@ -381,11 +394,19 @@ def get_id_card(db: Session = Depends(get_db), current_user: User = Depends(get_
 def dept_data(id:int, db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
 
     if(current_user.role != 'admin'):
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to delete project")
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized")
     
     projects=db.query(Project).join(Project.professor).join(Professor.department).filter(Department.user_id==id).all()
 
-    return projects
+    ret_projects=[]
+    for project in projects:
+        students=[s for s in project.selected_students if not s.admin_conf]
+
+        if students:
+            project.selected_students=students
+            ret_projects.append(project)
+
+    return ret_projects
 
 
 
@@ -412,7 +433,7 @@ async def conf_dept_data(id:int,request:DeptDataMessage, db:Session=Depends(get_
         for student in students:
             
             student.admin_conf=True
-            
+            student.selected_project.vacancy_remaining-=1
 
             offer_letter_link = f"http://localhost:3000/offer_letter_download"
             

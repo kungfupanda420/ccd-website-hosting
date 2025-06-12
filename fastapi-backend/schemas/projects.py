@@ -26,6 +26,7 @@ class ShowProject(BaseModel):
     mode:str
     prerequisites:str
     applied_count:int
+    vacancy_remaining:int
     professor:ProfessorNameDept
 
     model_config = {
@@ -39,6 +40,7 @@ class ProjectCreation(BaseModel):
     duration:str
     mode:str
     prerequisites:str
+    no_of_interns:int
 
     model_config = {
         "from_attributes": True

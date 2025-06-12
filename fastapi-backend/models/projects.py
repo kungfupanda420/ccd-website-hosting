@@ -19,6 +19,9 @@ class Project(Base):
     applied_count = Column(Integer, default=0)
     prerequisites = Column(String(1000))  # Can be a JSON string or simple text
 
+    no_of_interns=Column(Integer)
+    vacancy_remaining=Column(Integer)
+
     professor = relationship("Professor", back_populates="projects")
 
     selected_students= relationship(
