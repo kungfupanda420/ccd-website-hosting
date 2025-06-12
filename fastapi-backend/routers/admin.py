@@ -86,7 +86,7 @@ async def send_round_emails(round_no:int, student_emails, user_emails):
         
     if round_no==3:
 
-        subject_stud="NITC Summer Internship Programme Round 2"
+        subject_stud="NITC Summer Internship Programme Round 3"
         body_stud="""
                 <h3>Dear Student</h3>
                 <p>The final round of the project selections have started.</p>
@@ -107,7 +107,7 @@ async def send_round_emails(round_no:int, student_emails, user_emails):
             
             await fm.send_message(message)
 
-        subject_user="NITC Summer Internship Programme Round 2"
+        subject_user="Registrations Open: NITC Summer Internship Programme"
         body_user="""
                 <h3>Dear Student</h3>
                 <p>The Round of the registrations have started again.</p>
@@ -129,7 +129,7 @@ async def send_round_emails(round_no:int, student_emails, user_emails):
 
 
 @router.post("/start_next_round", response_model= RoundDetails)
-async def start_next_round(db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
+def start_next_round(db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
     if current_user.role != 'admin':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not an Admin")
 

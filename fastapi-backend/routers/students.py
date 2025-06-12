@@ -377,40 +377,6 @@ def show_projects(db: Session=Depends(get_db),current_user: User=Depends(get_cur
     
     return projects
 
-# @router.post("/apply/{project_id}",response_model=ShowProject)
-# def apply_project(project_id:int,db:Session=Depends(get_db),current_user:User=Depends(get_current_user)):
-#     if current_user.role!= 'student':
-#         raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
-#     student=db.query(Student).filter(Student.user_id==current_user.id).first()
-#     if not student:
-#         raise HTTPException(status_code=404, detail="Student not found")
-    
-#     project=db.query(Project).filter(Project.id==project_id).first()
-#     if not project:
-#         raise HTTPException(status_code=404, detail="Project not found")
-    
-#     prefs=["pref1","pref2","pref3"]
-
-#     if any(getattr(student,pref)==project for pref in prefs):
-#         raise HTTPException(status_code=400, detail="Already applied for this project")
-    
-#     if student.pref1:
-#         if project.professor.dept_id != student.pref1.professor.dept_id:
-#             raise HTTPException(status_code=400, detail="All project applied to have to be from the same department")
-    
-#     for pref in prefs:
-#         if not getattr(student,pref):
-#             setattr(student,pref,project)
-#             project.applied_count+=1
-#             db.commit()
-#             db.refresh(student)
-#             db.refresh(project)
-#             return project
-        
-#     raise HTTPException(status_code=400, detail="Maximum 3 projects can be applied")
-    
-
-
 
 @router.get("/preferences",response_model=List[ShowProject])
 def show_applied_projects(db: Session=Depends(get_db),current_user: User=Depends(get_current_user)):
@@ -456,6 +422,9 @@ def increase_preference(request:ProjectPreferencesId,db:Session=Depends(get_db),
         pref1 = db.query(Project).filter(Project.id == request.pref1_id).first()
         if not pref1:
             raise HTTPException(status_code=404, detail="Project for pref1 not found")
+        
+        if pref1.vacancy_remaining<1:
+            raise HTTPException(status_code=404, detail="Slot not available")
         student.pref1 = pref1
         pref1.applied_count += 1
         updated_projects.append(pref1)
@@ -467,6 +436,8 @@ def increase_preference(request:ProjectPreferencesId,db:Session=Depends(get_db),
         pref2 = db.query(Project).filter(Project.id == request.pref2_id).first()
         if not pref2:
             raise HTTPException(status_code=404, detail="Project for pref2 not found")
+        if pref2.vacancy_remaining<1:
+            raise HTTPException(status_code=404, detail="Slot not available")
         student.pref2 = pref2
         pref2.applied_count += 1
         updated_projects.append(pref2)
@@ -478,6 +449,8 @@ def increase_preference(request:ProjectPreferencesId,db:Session=Depends(get_db),
         pref3 = db.query(Project).filter(Project.id == request.pref3_id).first()
         if not pref3:
             raise HTTPException(status_code=404, detail="Project for pref3 not found")
+        if pref3.vacancy_remaining<1:
+            raise HTTPException(status_code=404, detail="Slot not available")
         student.pref3 = pref3
         pref3.applied_count += 1
         updated_projects.append(pref3)
@@ -514,6 +487,7 @@ def get_offer_letter(db: Session = Depends(get_db), current_user: User = Depends
         .filter(Student.user_id == current_user.id)   # only current user
         .filter(Student.selected_project_id != None)
         .filter(Student.admin_conf==True)  # project selected
+        .filter(Student.offer_payment_conf==True)
         .options(
             joinedload(Student.selected_project)
             .joinedload(Project.professor)
@@ -618,6 +592,8 @@ def get_completion_certificate(db: Session = Depends(get_db), current_user: User
         .filter(Student.user_id == current_user.id)   # only current user
         .filter(Student.selected_project_id != None)  # project selected
         .filter(Student.admin_conf==True)
+        .filter(Student.offer_payment_conf==True)
+        .filter(Student.end_date.isnot(None))
         .options(
             joinedload(Student.selected_project)
             .joinedload(Project.professor)

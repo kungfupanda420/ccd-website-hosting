@@ -6,6 +6,7 @@ from ..schemas.projects import ShowProject, ProjectCreation
 from ..schemas.students import SetDate
 from ..models.users import User, Professor, Student, Department
 from ..models.projects import Project
+from ..models.rounds import Round
 from ..security.JWTtoken import create_access_token
 from ..database import get_db
 
@@ -27,8 +28,13 @@ get_db=get_db
 
 @router.post('/projects',response_model=ShowProject)
 def create_project(request:ProjectCreation,db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
+    
     if(current_user.role != 'professor'):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to create project")
+    
+    round=db.query(Round).filter(Round.id==1).first()
+    if round.number!=0:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Cannot create a project once allotment starts")
     
     new_project= Project(
         title=request.title,
@@ -55,8 +61,14 @@ def show_projects(db:Session=Depends(get_db),current_user: User=Depends(get_curr
 
 @router.put("/projects/{id}",response_model=ShowProject)
 def edit_project(id:int,request:ProjectCreation,db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
+    
+    
     if(current_user.role != 'professor'):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to edit project")
+    
+    round=db.query(Round).filter(Round.id==1).first()
+    if round.number!=0:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Cannot modify a project once allotment starts")
     
     project=db.query(Project).filter(Project.id==id).first()
     if not project:
@@ -81,6 +93,10 @@ def edit_project(id:int,request:ProjectCreation,db:Session=Depends(get_db),curre
 def delete_project(id:int,db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
     if(current_user.role != 'professor'):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to delete project")
+    
+    round=db.query(Round).filter(Round.id==1).first()
+    if round.number!=0:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Cannot delete a project once allotment starts")
     
     project=db.query(Project).filter(Project.id==id).first()
     if not project:

@@ -46,6 +46,9 @@ class ShowStudent(BaseModel):
     cgpa10: float
     board10: str
 
+    admin_conf:bool
+    start_date:date
+    end_date:date
     student_college_idcard_path: Optional[str]
     pref1: Optional[ShowProject]
     pref2: Optional[ShowProject]
