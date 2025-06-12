@@ -373,7 +373,7 @@ def show_projects(db: Session=Depends(get_db),current_user: User=Depends(get_cur
     if current_user.role != 'student':
         raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
     
-    projects=db.query(Project).all()
+    projects=db.query(Project).filter(Project.vacancy_remaining>0).all()
     
     return projects
 
