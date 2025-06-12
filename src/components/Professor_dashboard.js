@@ -10,7 +10,7 @@ function Professor_dashboard() {
   const [no_of_interns, setNoOfInterns] = useState("");
   const [duration, setDuration] = useState("");
   const [mode, setMode] = useState("");
-  const [prerequisites, setPrerequisites] = useState("");
+  const [prerequisites, setPrerequisites] = useState("NONE");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [message, setMessage] = useState("");
   const [projects, setProjects] = useState([]);
@@ -85,7 +85,7 @@ function Professor_dashboard() {
       no_of_interns,
       duration,
       mode,
-      prerequisites,
+      prerequisites:prerequisites || "NONE",
     };
     try {
       const res = await authFetch("/api/professors/projects", {
@@ -122,7 +122,7 @@ function Professor_dashboard() {
       no_of_interns: project.no_of_interns,
       duration: project.duration,
       mode: project.mode,
-      prerequisites: project.prerequisites,
+      prerequisites: project.prerequisites || "",
     });
   };
 
@@ -133,35 +133,37 @@ function Professor_dashboard() {
 
   // Handle edit form submit
   const handleEditSubmit = async (e, id) => {
-    e.preventDefault();
-    setMessage("");
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setMessage("You must be logged in as a professor to edit a project.");
-      return;
+  e.preventDefault();
+  setMessage("");
+  const token = localStorage.getItem("token");
+  if (!token) {
+    setMessage("You must be logged in as a professor to edit a project.");
+    return;
+  }
+  try {
+    const res = await authFetch(`/api/professors/projects/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        ...editFields,
+        prerequisites: editFields.prerequisites || "NONE", // Default to "NONE" if empty
+      }),
+    });
+    if (res.ok) {
+      setMessage("Project updated successfully!");
+      setEditingId(null);
+      fetchProjects();
+    } else {
+      const err = await res.json();
+      setMessage(err.detail || "Failed to update project.");
     }
-    try {
-      const res = await authFetch(`/api/professors/projects/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(editFields),
-      });
-      if (res.ok) {
-        setMessage("Project updated successfully!");
-        setEditingId(null);
-        fetchProjects();
-      } else {
-        const err = await res.json();
-        setMessage(err.detail || "Failed to update project.");
-      }
-    } catch (error) {
-      setMessage("Network error.");
-    }
-  };
-
+  } catch (error) {
+    setMessage("Network error.");
+  }
+};
   // Handle delete
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this project?")) return;
@@ -267,10 +269,10 @@ function Professor_dashboard() {
               </select>
               <input
                 type="text"
-                placeholder="Prerequisites"
+                placeholder="Prerequisites (optional)"
                 value={prerequisites}
                 onChange={(e) => setPrerequisites(e.target.value)}
-                required
+                // required
               />
               <button type="submit">Submit</button>
             </form>
@@ -345,7 +347,7 @@ function Professor_dashboard() {
                           name="prerequisites"
                           value={editFields.prerequisites}
                           onChange={handleEditChange}
-                          required
+                          // required
                         />
                         <button type="submit">Save</button>
                         <button type="button" onClick={() => setEditingId(null)}>
@@ -357,7 +359,7 @@ function Professor_dashboard() {
                         <strong>{project.title}</strong> - {project.description}
                         <br />
                         <span>
-                          Interns: {project.no_of_interns} | Duration: {project.duration} | Mode: {project.mode} | Prerequisites: {project.prerequisites}
+                          Interns: {project.no_of_interns} | Duration: {project.duration} | Mode: {project.mode} | Prerequisites: {project.prerequisites||"NONE"}
                         </span>
                         <br />
                         <div style={{ display: "flex", gap: "12px", marginTop: "12px" }}>
