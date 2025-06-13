@@ -207,6 +207,17 @@ def export_professors(db:Session=Depends(get_db),current_user: User=Depends(get_
 # 
 # 
 # #
+@router.get("/round_details")
+def round_details(db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
+    if current_user.role != 'admin':
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not an Admin")
+
+    round=db.query(Round).filter(Round.id==1).first()
+    if not round:
+        raise HTTPException(status_code=404, detail="Round not found")
+    return round
+
+
 @router.post("/start_next_round", response_model= RoundDetails) # round 1 works
 def start_next_round(db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
     if current_user.role != 'admin':
@@ -220,7 +231,10 @@ def start_next_round(db:Session=Depends(get_db), current_user: User=Depends(get_
         raise HTTPException(status_code=403, detail="Final Round has been completed")
 
     round.number+=1
-    round.allow_reg=1
+    round.lock_choices=0
+
+    if round.number!=2:
+        round.allow_reg=1
 
     db.commit()
     db.refresh(round)

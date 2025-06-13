@@ -11,3 +11,4 @@ class Round(Base):
     id = Column(Integer, primary_key=True, default=1)  # Always 1
     number = Column(Integer, default=0)
     allow_reg = Column(Boolean, default=False)
+    lock_choices=Column(Boolean, default=False)
