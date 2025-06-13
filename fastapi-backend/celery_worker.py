@@ -2,8 +2,8 @@ from celery import Celery
 
 celery_app=Celery(
     "id-card-worker",
-    broker="redis://localhost:63798/0",
-    backend="redis://localhost:63798/0"
+    broker="redis://localhost:6379/0",
+    backend="redis://localhost:6379/0"
 )
 
 celery_app.conf.task_routes={

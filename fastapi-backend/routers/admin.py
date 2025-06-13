@@ -213,7 +213,7 @@ async def send_round_emails(round_no:int, student_emails, user_emails):
 
             await fm.send_message(message)
 
-@router.post("/start_next_round", response_model= RoundDetails) # round 1 works, round 2 working,
+@router.post("/start_next_round", response_model= RoundDetails) # round 1 works, round 2 working, round 3 wokring
 async def start_next_round(request:InputPassword,db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
     if current_user.role != 'admin':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not an Admin")
@@ -330,7 +330,7 @@ def dept_data(id:int, db:Session=Depends(get_db),current_user: User=Depends(get_
 
 
 
-@router.post("/department_data/{id}")
+@router.post("/department_data/{id}") #Working
 async def conf_dept_data(id:int,request:DeptDataMessage, db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
 
     if(current_user.role != 'admin'):
@@ -420,7 +420,7 @@ from ..tasks.generate_id_cards import generate_id_cards
 def get_id_card(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if current_user.role != 'admin':
         raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
-
+    
     generate_id_cards.delay()
 
     return {"message": "ID cards generated successfully"}

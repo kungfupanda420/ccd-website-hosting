@@ -141,7 +141,7 @@ def dept_students(db: Session = Depends(get_db), current_user: User = Depends(ge
 
     return students
 
-@router.post("/allotment/{sip_id}/{project_id}")
+@router.post("/allotment/{sip_id}/{project_id}") #Working
 def allot_student(sip_id:str, project_id:int, db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
     if current_user.role != 'department':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not a Department User")
@@ -172,7 +172,7 @@ def allot_student(sip_id:str, project_id:int, db:Session=Depends(get_db), curren
     db.refresh(student)
     return {"message": "Student alloted to project successfully", "student": student, "project": project}
 
-@router.delete("/allotment/{sip_id}")
+@router.delete("/allotment/{sip_id}") #Working
 def unallot_student(sip_id: str, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if current_user.role != 'department':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not a Department User")

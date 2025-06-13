@@ -84,6 +84,12 @@ conf = ConnectionConfig(
 
 @router.post("/verify_email")  #Working
 async def verify_email(request:VerifyEmail,db:Session=Depends(get_db)):
+
+    round=db.query(Round).filter(Round.id==1).first()
+    
+    if round.number==3 and round.allow_reg==0:
+        raise HTTPException(status_code=403, detail="Deadline to register is over")
+    
     user = db.query(User).filter(User.email == request.email).first()
     if user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Email already registered")
@@ -176,7 +182,7 @@ def register(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    
+  
     if(current_user.student):
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Student already registered")
     
@@ -491,7 +497,7 @@ import textwrap
 import glob
 from sqlalchemy.orm import joinedload
 
-@router.get("/offer_letter")
+@router.get("/offer_letter") # Working
 def get_offer_letter(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if current_user.role != 'student':
         raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
@@ -520,7 +526,7 @@ def get_offer_letter(db: Session = Depends(get_db), current_user: User = Depends
     ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
     
     TEMPLATE_PATH = os.path.join(ROOT_DIR, "templates", "Offer_Letter.png")
-    FONT_PATH = os.path.join(ROOT_DIR, "templates", "SemiBold20.otf")
+    FONT_PATH = os.path.join(ROOT_DIR, "templates", "Nexa-Heavy.ttf")
 
     original_template = Image.open(TEMPLATE_PATH).convert("RGBA")
     font = ImageFont.truetype(FONT_PATH, size=45)
