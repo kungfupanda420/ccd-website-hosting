@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Response, UploadFile, File, Form
+from fastapi import APIRouter, Depends, HTTPException, status, Response, UploadFile, File, Form, Request
 from sqlalchemy.orm import Session
 
 from ..schemas.token import Token
 from ..schemas.admin import DeptDataMessage
 from ..schemas.projects import ProjectStudents
-from ..schemas.rounds import RoundDetails
+from ..schemas.rounds import RoundDetails, InputPassword
 from ..models.users import User,Admin, Professor, Department, Student
 from ..models.projects import Project
 from ..models.rounds import Round
@@ -207,7 +207,7 @@ def export_professors(db:Session=Depends(get_db),current_user: User=Depends(get_
 # 
 # 
 # #
-@router.get("/round_details")
+@router.get("/round_details",response_model=RoundDetails)
 def round_details(db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
     if current_user.role != 'admin':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not an Admin")
@@ -219,11 +219,14 @@ def round_details(db:Session=Depends(get_db), current_user: User=Depends(get_cur
 
 
 @router.post("/start_next_round", response_model= RoundDetails) # round 1 works
-def start_next_round(db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
+def start_next_round(request:InputPassword,db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
     if current_user.role != 'admin':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not an Admin")
 
-    round=db.query(Round).filter(Round.id==1).first()
+
+    if not pwd_context.verify(request.password,current_user.password):
+        raise HTTPException(status_code=404, detail="Invalid Credentials")
+    
     if not round:
         raise HTTPException(status_code=404, detail="Round not found")
     
@@ -271,11 +274,14 @@ def start_next_round(db:Session=Depends(get_db), current_user: User=Depends(get_
 
     return round
 
-@router.post("/stop_registrations",response_model=RoundDetails) # working
-def stop_registrations(db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
+@router.post("/stop_registrations",response_model=RoundDetails) # Working
+def stop_registrations(request:InputPassword, db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
     if current_user.role != 'admin':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not an Admin")
 
+    if not pwd_context.verify(request.password,current_user.password):
+        raise HTTPException(status_code=404, detail="Invalid Credentials")
+    
     round=db.query(Round).filter(Round.id==1).first()
     if not round:
         raise HTTPException(status_code=404, detail="Round not found")
@@ -286,10 +292,12 @@ def stop_registrations(db:Session=Depends(get_db), current_user: User=Depends(ge
     return round
 
 @router.post("/lock_choices",response_model=RoundDetails) # working
-def lock_choices(db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
+def lock_choices(request:InputPassword,db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
     if current_user.role != 'admin':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not an Admin")
 
+    if not pwd_context.verify(request.password,current_user.password):
+        raise HTTPException(status_code=404, detail="Invalid Credentials")
     round=db.query(Round).filter(Round.id==1).first()
     if not round:
         raise HTTPException(status_code=404, detail="Round not found")

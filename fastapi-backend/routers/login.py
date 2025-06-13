@@ -50,7 +50,6 @@ def login(request: UserLogin, db: Session=Depends(get_db)):
     if not user:
         raise HTTPException(status_code=404, detail="Invalid Credentials")
     if not pwd_context.verify(request.password,user.password):
-        print ("HI")
         raise HTTPException(status_code=404, detail="Invalid Credentials")
     
     access_token= create_access_token(

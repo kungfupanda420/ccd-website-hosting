@@ -8,3 +8,6 @@ class RoundDetails(BaseModel):
     model_config = {
         "from_attributes": True
     }
+
+class InputPassword(BaseModel):
+    password:str
