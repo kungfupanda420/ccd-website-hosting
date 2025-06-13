@@ -285,6 +285,20 @@ def stop_registrations(db:Session=Depends(get_db), current_user: User=Depends(ge
     db.refresh(round)
     return round
 
+@router.post("/lock_choices",response_model=RoundDetails) # working
+def lock_choices(db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
+    if current_user.role != 'admin':
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not an Admin")
+
+    round=db.query(Round).filter(Round.id==1).first()
+    if not round:
+        raise HTTPException(status_code=404, detail="Round not found")
+    
+    round.lock_choices=1
+    db.commit()
+    db.refresh(round)
+    return round
+
 
 from ..tasks.generate_id_cards import generate_id_cards 
 
