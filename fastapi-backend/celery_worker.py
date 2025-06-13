@@ -8,4 +8,7 @@ celery_app=Celery(
 
 celery_app.conf.task_routes={
     "fastapi-backend/tasks/generate_id_cards.generate_id_cards":{"queue":"default"},
+    "fastapi-backend/tasks/make_professor.prof_from_csv":{"queue":"default"},
 }
+
+from .tasks import generate_id_cards, make_professor
