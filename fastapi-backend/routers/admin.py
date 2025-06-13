@@ -107,77 +107,10 @@ def round_details(db:Session=Depends(get_db), current_user: User=Depends(get_cur
     return round
 
 
-import asyncio
 
-async def send_round_emails(round_no:int, student_emails, user_emails):
-
-    fm=FastMail(conf)
-
-
-    if round_no==2:
-        
-        subject="NITC Summer Internship Programme Round 2"
-        body="""
-                <h3>Dear Student</h3>
-                <p>The second round of the project selections have started.</p>
-                <p>Please add your preffered projects once again</p>
-                <p></p>
-                <a href="https://placement.nitc.ac.in">placement.nitc.ac.in</a>
-                """
-        for email in student_emails:
-            
-            message=MessageSchema(
-                subject=subject,
-                recipients=[email],
-                body=body,
-                subtype="html"
-            )
-            await fm.send_message(message)
-        
-    if round_no==3:
-
-        subject_stud="NITC Summer Internship Programme Round 3"
-        body_stud="""
-                <h3>Dear Student</h3>
-                <p>The final round of the project selections have started.</p>
-                <p>Please add your preffered projects once again</p>
-                <p></p>
-                <a href="https://placement.nitc.ac.in">placement.nitc.ac.in</a>
-                """
-        
-        for email in student_emails:
-            
-
-            message=MessageSchema(
-                subject=subject_stud,
-                recipients=[email],
-                body=body_stud,
-                subtype="html"
-            )
-            
-            await fm.send_message(message)
-
-        subject_user="Registrations Open: NITC Summer Internship Programme"
-        body_user="""
-                <h3>Dear Student</h3>
-                <p>The Round of the registrations have started again.</p>
-                <p>Please complete your registration and select your preffered projects</p>
-                <p></p>
-                <a href="https://placement.nitc.ac.in">placement.nitc.ac.in</a>
-                """
-        for email in user_emails:
-            
-            message=MessageSchema(
-                subject=subject_user,
-                recipients=[email],
-                body=body_user,
-                subtype="html"
-            )
-
-            await fm.send_message(message)
-
+from ..tasks.next_round import send_round_emails
 @router.post("/start_next_round", response_model= RoundDetails) # round 1 works, round 2 working, round 3 wokring
-async def start_next_round(request:InputPassword,db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
+def start_next_round(request:InputPassword,db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
     if current_user.role != 'admin':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not an Admin")
 
@@ -220,7 +153,7 @@ async def start_next_round(request:InputPassword,db:Session=Depends(get_db), cur
                     .all()
                     )
             user_emails=[user.email for user in users]
-        asyncio.create_task(send_round_emails(round.number,student_emails,user_emails))
+        send_round_emails.delay(round.number,student_emails,user_emails)
 
         
         students=db.query(Student).all()
@@ -291,7 +224,7 @@ def dept_data(id:int, db:Session=Depends(get_db),current_user: User=Depends(get_
 
     return projects
 
-
+from ..tasks.confirm_allotments import send_decision_emails
 
 @router.post("/department_data/{id}") #Working
 async def conf_dept_data(id:int,request:DeptDataMessage, db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
@@ -303,75 +236,9 @@ async def conf_dept_data(id:int,request:DeptDataMessage, db:Session=Depends(get_
     if not department:
         raise HTTPException(status_code=404, detail="Department not found")
 
-    if(request.message=='confirmed'):    
-        
-        students=(db.query(Student)
-                          .join(Student.selected_project)
-                          .join(Project.professor)
-                          .join(Professor.department)
-                          .filter(Student.selected_project_id.isnot(None))
-                          .filter(Student.admin_conf==False)
-                          .filter(Department.user_id==id)
-                          .all()
-                          )
-        for student in students:
-            
-            student.admin_conf=True
-            student.selected_project.vacancy_remaining-=1
+    send_decision_emails.delay(request.message,id)
 
-            offer_letter_link = f"http://localhost:3000/offer_letter_download"
-            
-            message=MessageSchema(
-                subject="NITC Summer Internship Programme selection",
-                recipients=[student.user.email],
-                body=f"""
-                <h3>Dear Student</h3>
-                <p>You have been selected for the internship under {student.selected_project.professor.name} for the project {student.selected_project.title} </p>
-                <p>You may contact your professor regarding the date of joining at {student.selected_project.professor.user.email}</p>
-                <p>You may download your offer letter at the given link after completing the payment</p>
-                <a href="{offer_letter_link}">{offer_letter_link}</a>
-                """,
-                subtype="html"
-            )
-
-            db.commit()
-            db.refresh(student)
-            fm=FastMail(conf)
-            await fm.send_message(message)
-            
-        messagedept=MessageSchema(
-            subject="NITC Summer Internship Programme",
-            recipients=[department.user.email],
-            body=f"""
-            <h3>Dear Department</h3>
-            <p>Your allotments for the Summer Internship Programme have been acceptd</p>
-            """,
-            subtype="html"
-        )
-
-        fm=FastMail(conf)
-        await fm.send_message(messagedept)
-
-        return {"message":"The student have been alloted their projects and sent emails"}
-
-
-    elif(request.message=="rejected"):
-        message=MessageSchema(
-            subject="NITC Summer Internship Programme",
-            recipients=[department.user.email],
-            body=f"""
-            <h3>Dear Department</h3>
-            <p>Your allotments for the Summer Internship Programme have been rejected</p>
-            <p>Please update them again</p>
-            """,
-            subtype="html"
-        )
-        fm=FastMail(conf)
-        await fm.send_message(message)
-        return {"message":"The Project intern allotments have been rejected and departments have been sent emails"}
-    
-    else:
-        raise HTTPException(status_code=400, detail="Invalid message value")
+    return {"message": "Emails being sent"}
     
 
 
@@ -386,4 +253,4 @@ def get_id_card(db: Session = Depends(get_db), current_user: User = Depends(get_
     
     generate_id_cards.delay()
 
-    return {"message": "ID cards generated successfully"}
+    return {"message": "ID cards are being generated"}

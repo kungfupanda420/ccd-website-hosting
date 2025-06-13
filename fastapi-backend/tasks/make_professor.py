@@ -42,7 +42,6 @@ from ..celery_worker import celery_app
 
 @celery_app.task(name="fastapi-backend/tasks/make_professor.prof_from_csv")
 def prof_from_csv(csv_content:str):
-    print("HI")
     db=SessionLocal()
     
     try:
