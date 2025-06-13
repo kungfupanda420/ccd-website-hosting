@@ -17,7 +17,7 @@ function DepartmentSIP() {
         return;
       }
 
-      const studentsRes = await fetch('/api/departments/studentwise-data', {
+      const studentsRes = await fetch('/api/departments/unalloted_studentwise_data', {
         headers: { Authorization: `Bearer ${token}` },
       });
 

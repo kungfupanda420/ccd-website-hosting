@@ -57,74 +57,6 @@ conf = ConnectionConfig(
     USE_CREDENTIALS=True
 )
 
-import asyncio
-
-async def send_round_emails(round_no:int, student_emails, user_emails):
-
-    fm=FastMail(conf)
-
-
-    if round_no==2:
-        
-        subject="NITC Summer Internship Programme Round 2"
-        body="""
-                <h3>Dear Student</h3>
-                <p>The second round of the project selections have started.</p>
-                <p>Please add your preffered projects once again</p>
-                <p></p>
-                <a href="https://placement.nitc.ac.in">placement.nitc.ac.in</a>
-                """
-        for email in student_emails:
-            
-            message=MessageSchema(
-                subject=subject,
-                recipients=[email],
-                body=body,
-                subtype="html"
-            )
-            await fm.send_message(message)
-        
-    if round_no==3:
-
-        subject_stud="NITC Summer Internship Programme Round 3"
-        body_stud="""
-                <h3>Dear Student</h3>
-                <p>The final round of the project selections have started.</p>
-                <p>Please add your preffered projects once again</p>
-                <p></p>
-                <a href="https://placement.nitc.ac.in">placement.nitc.ac.in</a>
-                """
-        
-        for email in student_emails:
-            
-
-            message=MessageSchema(
-                subject=subject_stud,
-                recipients=[email],
-                body=body_stud,
-                subtype="html"
-            )
-            
-            await fm.send_message(message)
-
-        subject_user="Registrations Open: NITC Summer Internship Programme"
-        body_user="""
-                <h3>Dear Student</h3>
-                <p>The Round of the registrations have started again.</p>
-                <p>Please complete your registration and select your preffered projects</p>
-                <p></p>
-                <a href="https://placement.nitc.ac.in">placement.nitc.ac.in</a>
-                """
-        for email in user_emails:
-            
-            message=MessageSchema(
-                subject=subject_user,
-                recipients=[email],
-                body=body_user,
-                subtype="html"
-            )
-
-            await fm.send_message(message)
             
 @router.post("/professors") #Working
 def make_professor(file: UploadFile= File(...),db: Session=Depends(get_db), current_user: User= Depends(get_current_user)):
@@ -200,13 +132,7 @@ def export_professors(db:Session=Depends(get_db),current_user: User=Depends(get_
 
     return StreamingResponse( stream, media_type='text/csv', headers={"Content-Disposition": "attachment; filename=professors.csv"})
 
-# tested all working
-#
-# 
-# 
-# 
-# 
-# #
+
 @router.get("/round_details",response_model=RoundDetails)
 def round_details(db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
     if current_user.role != 'admin':
@@ -218,8 +144,77 @@ def round_details(db:Session=Depends(get_db), current_user: User=Depends(get_cur
     return round
 
 
-@router.post("/start_next_round", response_model= RoundDetails) # round 1 works
-def start_next_round(request:InputPassword,db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
+import asyncio
+
+async def send_round_emails(round_no:int, student_emails, user_emails):
+
+    fm=FastMail(conf)
+
+
+    if round_no==2:
+        
+        subject="NITC Summer Internship Programme Round 2"
+        body="""
+                <h3>Dear Student</h3>
+                <p>The second round of the project selections have started.</p>
+                <p>Please add your preffered projects once again</p>
+                <p></p>
+                <a href="https://placement.nitc.ac.in">placement.nitc.ac.in</a>
+                """
+        for email in student_emails:
+            
+            message=MessageSchema(
+                subject=subject,
+                recipients=[email],
+                body=body,
+                subtype="html"
+            )
+            await fm.send_message(message)
+        
+    if round_no==3:
+
+        subject_stud="NITC Summer Internship Programme Round 3"
+        body_stud="""
+                <h3>Dear Student</h3>
+                <p>The final round of the project selections have started.</p>
+                <p>Please add your preffered projects once again</p>
+                <p></p>
+                <a href="https://placement.nitc.ac.in">placement.nitc.ac.in</a>
+                """
+        
+        for email in student_emails:
+            
+
+            message=MessageSchema(
+                subject=subject_stud,
+                recipients=[email],
+                body=body_stud,
+                subtype="html"
+            )
+            
+            await fm.send_message(message)
+
+        subject_user="Registrations Open: NITC Summer Internship Programme"
+        body_user="""
+                <h3>Dear Student</h3>
+                <p>The Round of the registrations have started again.</p>
+                <p>Please complete your registration and select your preffered projects</p>
+                <p></p>
+                <a href="https://placement.nitc.ac.in">placement.nitc.ac.in</a>
+                """
+        for email in user_emails:
+            
+            message=MessageSchema(
+                subject=subject_user,
+                recipients=[email],
+                body=body_user,
+                subtype="html"
+            )
+
+            await fm.send_message(message)
+
+@router.post("/start_next_round", response_model= RoundDetails) # round 1 works, round 2 working,
+async def start_next_round(request:InputPassword,db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
     if current_user.role != 'admin':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not an Admin")
 
@@ -231,7 +226,7 @@ def start_next_round(request:InputPassword,db:Session=Depends(get_db), current_u
         raise HTTPException(status_code=404, detail="Round not found")
     
     if round.number>=3:
-        raise HTTPException(status_code=403, detail="Final Round has been completed")
+        raise HTTPException(status_code=403, detail="Cannot Proceed. Final Round has been completed")
 
     round.number+=1
     round.lock_choices=0
@@ -241,18 +236,19 @@ def start_next_round(request:InputPassword,db:Session=Depends(get_db), current_u
 
     db.commit()
     db.refresh(round)
-
-    if round.number in [2,3]:
+    print("HI")
+    if round.number ==2 or round.number==3 :
 
         students=(db.query(Student)
                     .join(Student.user)
-                    .filter(Student.offer_payment_conf==None)
+                    .filter(Student.admin_conf==False) # change this function for now
                     .all()
                     )
         
         for student in students:
             student.selected_project = None
         student_emails=[student.user.email for student in students]
+        print(len(student_emails))
         user_emails=[]
         
         if round.number==3:
@@ -264,12 +260,12 @@ def start_next_round(request:InputPassword,db:Session=Depends(get_db), current_u
         asyncio.create_task(send_round_emails(round.number,student_emails,user_emails))
 
         
-        db.query(Student).update({
-            Student.pref1: None,
-            Student.pref2: None,
-            Student.pref3: None,
-        },synchronize_session=False)   
-        
+        students=db.query(Student).all()
+        for student in students:
+            student.pref1=None
+            student.pref2=None
+            student.pref3=None
+            
         db.commit()
 
     return round
@@ -321,7 +317,7 @@ def get_departments(db: Session = Depends(get_db), current_user: User = Depends(
     return [{"id": department.user_id, "name": department.name} for department in departments]
 
 
-@router.get("/department_data/{id}",response_model=List[ProjectStudents]) #Add on admin conf
+@router.get("/department_data/{id}",response_model=List[ProjectStudents]) #Add on admin conf in frontend
 def dept_data(id:int, db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
 
     if(current_user.role != 'admin'):
@@ -351,6 +347,7 @@ async def conf_dept_data(id:int,request:DeptDataMessage, db:Session=Depends(get_
                           .join(Project.professor)
                           .join(Professor.department)
                           .filter(Student.selected_project_id.isnot(None))
+                          .filter(Student.admin_conf==False)
                           .filter(Department.user_id==id)
                           .all()
                           )

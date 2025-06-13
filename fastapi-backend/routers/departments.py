@@ -30,7 +30,7 @@ router =APIRouter(
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 get_db=get_db
-@router.get("/department_data")  
+@router.get("/department_data")  #Working
 def deptdata(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if current_user.role != 'department':
         raise HTTPException(status_code=403, detail="Not a Department User")
@@ -108,7 +108,7 @@ def deptdata(db: Session = Depends(get_db), current_user: User = Depends(get_cur
         headers={"Content-Disposition": "attachment; filename=department_data.csv"}
     )
 
-@router.get("/unalloted_studentwise-data", response_model=List[StudentSIPNameProj]) 
+@router.get("/unalloted_studentwise_data", response_model=List[StudentSIPNameProj]) #Working
 def dept_students(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if current_user.role != 'department':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not a Department User")
@@ -125,7 +125,7 @@ def dept_students(db: Session = Depends(get_db), current_user: User = Depends(ge
     return students
 
 
-@router.get("/alloted_studentwise-data", response_model=List[StudentSIPNameProj]) 
+@router.get("/alloted_studentwise_data", response_model=List[StudentSIPNameProj]) 
 def dept_students(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if current_user.role != 'department':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not a Department User")

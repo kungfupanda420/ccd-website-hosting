@@ -375,7 +375,11 @@ def edit_me(
 def show_projects(db: Session=Depends(get_db),current_user: User=Depends(get_current_user)):
     if current_user.role != 'student':
         raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
-    
+    student=db.query(Student).filter(Student.user_id==current_user.id).first()
+    if not student:
+        raise HTTPException(status_code=404, detail="Student not found")
+    if (student.admin_conf==True):
+        raise HTTPException(status_code=403, detail="Not allowed to view")
     projects=db.query(Project).filter(Project.vacancy_remaining>0).all()
     
     return projects
@@ -389,6 +393,10 @@ def show_applied_projects(db: Session=Depends(get_db),current_user: User=Depends
     student=db.query(Student).filter(Student.user_id==current_user.id).first()
     if not student:
         raise HTTPException(status_code=404, detail="Student not found")
+    
+    if (student.admin_conf==True):
+        raise HTTPException(status_code=403, detail="Not allowed to view")
+    
     applied_projects=[]
     if student.pref1:
         applied_projects.append(student.pref1)
@@ -408,6 +416,10 @@ def increase_preference(request:ProjectPreferencesId,db:Session=Depends(get_db),
     student=db.query(Student).filter(Student.user_id==current_user.id).first()
     if not student:
         raise HTTPException(status_code=404, detail="Student not found")
+    
+    if (student.admin_conf==True):
+        raise HTTPException(status_code=403, detail="Not allowed to view")
+    
     round=db.query(Round).filter(Round.id==1).first()
     
     if(round.lock_choices==1):
