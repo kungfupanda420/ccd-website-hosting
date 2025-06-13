@@ -252,3 +252,42 @@ body {
         width: calc(100% - 20px);
     }
 }
+
+
+.cd-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.cd-table th,
+.cd-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+.cd-table th {
+  background-color: var(--secondary);
+  color: white;
+}
+
+.cd-table-empty {
+  text-align: center;
+  padding: 20px;
+  font-size: 16px;
+  color: var(--dark);
+}
+
+.cd-btn.danger {
+  background-color: var(--danger);
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cd-btn.danger:hover {
+  background-color: #c0392b;
+}
