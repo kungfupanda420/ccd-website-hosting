@@ -108,7 +108,7 @@ def deptdata(db: Session = Depends(get_db), current_user: User = Depends(get_cur
         headers={"Content-Disposition": "attachment; filename=department_data.csv"}
     )
 
-@router.get("/unalloted-studentwise-data", response_model=List[StudentSIPNameProj]) 
+@router.get("/unalloted_studentwise-data", response_model=List[StudentSIPNameProj]) 
 def dept_students(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if current_user.role != 'department':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not a Department User")
@@ -125,7 +125,7 @@ def dept_students(db: Session = Depends(get_db), current_user: User = Depends(ge
     return students
 
 
-@router.get("/alloted-studentwise-data", response_model=List[StudentSIPNameProj]) 
+@router.get("/alloted_studentwise-data", response_model=List[StudentSIPNameProj]) 
 def dept_students(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if current_user.role != 'department':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not a Department User")
