@@ -10,6 +10,16 @@ function Admin_sip() {
   const [departments, setDepartments] = useState([]);
   const [selectedDept, setSelectedDept] = useState("");
   const [deptStudents, setDeptStudents] = useState([]);
+  const [roundDetails, setRoundDetails] = useState({
+    number: 0,
+    allow_reg: false,
+    lock_choices: false
+  });
+  const [isUpdatingRound, setIsUpdatingRound] = useState(false);
+  const [showStartRoundModal, setShowStartRoundModal] = useState(false);
+  const [showStopRegModal, setShowStopRegModal] = useState(false);
+  const [showLockChoicesModal, setShowLockChoicesModal] = useState(false);
+  const [password, setPassword] = useState("");
 
   // Fetch departments for dropdown
   const fetchDepartments = async () => {
@@ -32,6 +42,144 @@ function Admin_sip() {
       setMessage(`An error occurred: ${error.message}`);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Fetch current round details
+  const fetchRoundDetails = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch("/api/admin/round_details", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Failed to fetch round details");
+      }
+      const data = await response.json();
+      setRoundDetails(data);
+    } catch (error) {
+      setMessage(`An error occurred: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Start a new round with password
+  const handleStartRound = async () => {
+    if (!password) {
+      setMessage("Please enter password");
+      return;
+    }
+
+    setIsUpdatingRound(true);
+    setMessage("");
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch("/api/admin/start_next_round", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          password: password,
+          round_number: roundDetails.number + 1
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Failed to start round");
+      }
+
+      const data = await response.json();
+      setMessage(data.message || `Round ${roundDetails.number + 1} started successfully!`);
+      setShowStartRoundModal(false);
+      setPassword("");
+      fetchRoundDetails();
+    } catch (error) {
+      setMessage(`An error occurred: ${error.message}`);
+    } finally {
+      setIsUpdatingRound(false);
+    }
+  };
+
+  // Stop registrations with password
+  const handleStopRegistrations = async () => {
+    if (!password) {
+      setMessage("Please enter password");
+      return;
+    }
+
+    setIsUpdatingRound(true);
+    setMessage("");
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch("/api/admin/stop_registrations", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ password }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Failed to stop registrations");
+      }
+
+      const data = await response.json();
+      setMessage("Registrations stopped successfully!");
+      setShowStopRegModal(false);
+      setPassword("");
+      fetchRoundDetails();
+    } catch (error) {
+      setMessage(`An error occurred: ${error.message}`);
+    } finally {
+      setIsUpdatingRound(false);
+    }
+  };
+
+  // Lock choices with password
+  const handleLockChoices = async () => {
+    if (!password) {
+      setMessage("Please enter password");
+      return;
+    }
+
+    setIsUpdatingRound(true);
+    setMessage("");
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch("/api/admin/lock_choices", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ password }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Failed to lock choices");
+      }
+
+      const data = await response.json();
+      setMessage("Choices locked successfully!");
+      setShowLockChoicesModal(false);
+      setPassword("");
+      fetchRoundDetails();
+    } catch (error) {
+      setMessage(`An error occurred: ${error.message}`);
+    } finally {
+      setIsUpdatingRound(false);
     }
   };
 
@@ -96,40 +244,41 @@ function Admin_sip() {
 
   // Confirm all students in a department
   const handleConfirmAllStudents = async () => {
-  if (!selectedDept) {
-    setMessage("Please select a department first.");
-    return;
-  }
-
-  setLoading(true);
-  setMessage("");
-  try {
-    const token = localStorage.getItem("token");
-    const response = await fetch(`/api/admin/department_data/${selectedDept}`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ message: "confirmed" }),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.detail || "Failed to confirm all students");
+    if (!selectedDept) {
+      setMessage("Please select a department first.");
+      return;
     }
 
-    const data = await response.json();
-    setMessage(data.message || "All students confirmed successfully!");
+    setLoading(true);
+    setMessage("");
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`/api/admin/department_data/${selectedDept}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message: "confirmed" }),
+      });
 
-    // Refresh students after confirmation
-    fetchDeptStudents(selectedDept);
-  } catch (error) {
-    setMessage(`An error occurred: ${error.message}`);
-  } finally {
-    setLoading(false);
-  }
-};
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Failed to confirm all students");
+      }
+
+      const data = await response.json();
+      setMessage(data.message || "All students confirmed successfully!");
+
+      // Refresh students after confirmation
+      fetchDeptStudents(selectedDept);
+    } catch (error) {
+      setMessage(`An error occurred: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Handle department selection change
   const handleDeptChange = (e) => {
     const deptId = e.target.value;
@@ -178,7 +327,8 @@ function Admin_sip() {
       setMessage(`An error occurred: ${error.message}`);
     }
   };
-const handleRejectAllStudents = async () => {
+
+  const handleRejectAllStudents = async () => {
     if (!selectedDept) {
       setMessage("Please select a department first.");
       return;
@@ -216,6 +366,7 @@ const handleRejectAllStudents = async () => {
       setLoading(false);
     }
   };
+
   // Download professors
   const handleDownload = async () => {
     setMessage("Downloading...");
@@ -317,7 +468,7 @@ const handleRejectAllStudents = async () => {
     }
   };
 
-  // Fetch departments when Confirm section is opened
+  // Fetch data when sections are opened
   useEffect(() => {
     if (activeSection === "confirm") {
       fetchDepartments();
@@ -326,6 +477,9 @@ const handleRejectAllStudents = async () => {
     }
     if (activeSection === "students") {
       fetchAllottedStudents();
+    }
+    if (activeSection === "rounds") {
+      fetchRoundDetails();
     }
   }, [activeSection]);
 
@@ -367,6 +521,13 @@ const handleRejectAllStudents = async () => {
         >
           <i className="fas fa-check-circle"></i>
           <span>Confirm Allotments</span>
+        </button>
+        <button
+          className={`cd-btn ${activeSection === "rounds" ? "active" : ""}`}
+          onClick={() => setActiveSection("rounds")}
+        >
+          <i className="fas fa-sync-alt"></i>
+          <span>Manage Rounds</span>
         </button>
         <button
           className="cd-btn"
@@ -466,7 +627,6 @@ const handleRejectAllStudents = async () => {
                   <thead>
                     <tr style={{ backgroundColor: "#f2f2f2" }}>
                       <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Name</th>
-                      {/* <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Email</th> */}
                       <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Project</th>
                       <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Professor</th>
                     </tr>
@@ -475,7 +635,6 @@ const handleRejectAllStudents = async () => {
                     {students.map((student) => (
                       <tr key={student.id}>
                         <td style={{ border: "1px solid #ddd", padding: "8px" }}>{student.name}</td>
-                        {/* <td style={{ border: "1px solid #ddd", padding: "8px" }}>{student.email}</td> */}
                         <td style={{ border: "1px solid #ddd", padding: "8px" }}>{student.project}</td>
                         <td style={{ border: "1px solid #ddd", padding: "8px" }}>{student.professor}</td>
                       </tr>
@@ -518,24 +677,20 @@ const handleRejectAllStudents = async () => {
               <div>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <h2>Allotted Students</h2>
-
-
-
                   <button
-                onClick={handleRejectAllStudents}
-                disabled={loading || deptStudents.length === 0}
-                style={{
-                  padding: "8px 16px",
-                  backgroundColor: "#e74c3c",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "4px",
-                  cursor: "pointer",
-                  // marginRight: "10px"
-                }}
-              >
-                {loading ? "Processing..." : "Reject All"}
-              </button>
+                    onClick={handleRejectAllStudents}
+                    disabled={loading || deptStudents.length === 0}
+                    style={{
+                      padding: "8px 16px",
+                      backgroundColor: "#e74c3c",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "4px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    {loading ? "Processing..." : "Reject All"}
+                  </button>
                   <button
                     onClick={handleConfirmAllStudents}
                     disabled={loading || deptStudents.length === 0}
@@ -548,7 +703,6 @@ const handleRejectAllStudents = async () => {
                       cursor: "pointer",
                     }}
                   >
-                  
                     {loading ? "Processing..." : "Confirm All Students"}
                   </button>
                 </div>
@@ -561,11 +715,8 @@ const handleRejectAllStudents = async () => {
                         <tr style={{ backgroundColor: "#f2f2f2" }}>
                           <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>SIP ID</th>
                           <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Name</th>
-                          {/* <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Email</th> */}
                           <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Project</th>
                           <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Professor</th>
-                          {/* <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Status</th> */}
-                          {/* <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Action</th> */}
                         </tr>
                       </thead>
                       <tbody>
@@ -578,40 +729,12 @@ const handleRejectAllStudents = async () => {
                               <td style={{ border: "1px solid #ddd", padding: "8px" }}>
                                 {student.name}
                               </td>
-                              {/* <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                                {student.email}
-                              </td> */}
                               <td style={{ border: "1px solid #ddd", padding: "8px" }}>
                                 {project.title}
                               </td>
                               <td style={{ border: "1px solid #ddd", padding: "8px" }}>
                                 {project.professor.name}
                               </td>
-                              {/* <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                                {student.is_confirmed ? (
-                                  <span style={{ color: "green" }}>Confirmed</span>
-                                ) : (
-                                  <span style={{ color: "orange" }}>Pending</span>
-                                )}
-                              </td> */}
-                              {/* <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                                {!student.is_confirmed && (
-                                  <button
-                                    onClick={() => handleConfirmStudent(student.sip_id)}
-                                    disabled={loading}
-                                    style={{
-                                      padding: "5px 10px",
-                                      backgroundColor: "#27ae60",
-                                      color: "white",
-                                      border: "none",
-                                      borderRadius: "4px",
-                                      cursor: "pointer",
-                                    }}
-                                  >
-                                    Confirm
-                                  </button>
-                                )}
-                              </td> */}
                             </tr>
                           ))
                         )}
@@ -624,21 +747,292 @@ const handleRejectAllStudents = async () => {
           </div>
         )}
 
-        {message && (
-          <div 
-            className="message" 
-            style={{
-              marginTop: "20px",
-              padding: "10px",
+        {activeSection === "rounds" && roundDetails.number<4 && (
+          <div className="rounds-section">
+            <h1>Round Management</h1>
+
+            <div style={{
+              marginBottom: "20px",
+              padding: "20px",
+              border: "1px solid #ddd",
               borderRadius: "4px",
-              backgroundColor: message.includes("success") ? "#d4edda" : "#f8d7da",
-              color: message.includes("success") ? "#155724" : "#721c24",
-              border: `1px solid ${message.includes("success") ? "#c3e6cb" : "#f5c6cb"}`,
-            }}
-          >
-            {message}
+              backgroundColor: "#f9f9f9"
+            }}>
+              <h2>Current Round: {roundDetails.number > 0 ? roundDetails.number : "Not started"}</h2>
+
+              // Update the round management section to better handle round progression
+              {roundDetails.number === 0 ? (
+                <div style={{ marginTop: "20px" }}>
+                  <button
+                    onClick={() => setShowStartRoundModal(true)}
+                    style={{
+                      padding: "10px 20px",
+                      backgroundColor: "#27ae60",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "4px",
+                      cursor: "pointer",
+                      fontWeight: "bold"
+                    }}
+                  >
+                    Start Round 1
+                  </button>
+                </div>
+              ) : (
+                <div style={{ marginTop: "20px" }}>
+                  {/* Registration Control - Only show in odd rounds (1, 3, etc.) */}
+                  {roundDetails.number % 2 === 1 && (
+                    <div style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      marginBottom: "15px",
+                      padding: "15px",
+                      backgroundColor: "#fff",
+                      borderRadius: "4px",
+                      boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+                    }}>
+                      <div>
+                        <h3 style={{ margin: "0 0 5px 0" }}>Registration</h3>
+                        <p style={{ margin: "0", color: "#666" }}>
+                          Status: {roundDetails.allow_reg ? (
+                            <span style={{ color: "green", fontWeight: "bold" }}>OPEN</span>
+                          ) : (
+                            <span style={{ color: "red", fontWeight: "bold" }}>CLOSED</span>
+                          )}
+                        </p>
+                      </div>
+                      {roundDetails.allow_reg && (
+                        <button
+                          onClick={() => setShowStopRegModal(true)}
+                          disabled={isUpdatingRound}
+                          style={{
+                            padding: "8px 16px",
+                            backgroundColor: "#e74c3c",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "4px",
+                            cursor: "pointer",
+                            fontWeight: "bold"
+                          }}
+                        >
+                          Stop Registration
+                        </button>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Choice Locking Control - Show in all rounds except when registration is open */}
+                  {(!roundDetails.allow_reg || roundDetails.number % 2 === 0) && (
+                    <div style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      padding: "15px",
+                      backgroundColor: "#fff",
+                      borderRadius: "4px",
+                      boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+                    }}>
+                      <div>
+                        <h3 style={{ margin: "0 0 5px 0" }}>Choice Locking</h3>
+                        <p style={{ margin: "0", color: "#666" }}>
+                          Status: {roundDetails.lock_choices ? (
+                            <span style={{ color: "red", fontWeight: "bold" }}>LOCKED</span>
+                          ) : (
+                            <span style={{ color: "green", fontWeight: "bold" }}>UNLOCKED</span>
+                          )}
+                        </p>
+                      </div>
+                      {!roundDetails.lock_choices && (
+                        <button
+                          onClick={() => setShowLockChoicesModal(true)}
+                          disabled={isUpdatingRound}
+                          style={{
+                            padding: "8px 16px",
+                            backgroundColor: "#e74c3c",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "4px",
+                            cursor: "pointer",
+                            fontWeight: "bold"
+                          }}
+                        >
+                          Lock Choices
+                        </button>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Next Round Button - Show when appropriate */}
+                  {(roundDetails.number % 2 === 0 ||
+                    (roundDetails.number % 2 === 1 && !roundDetails.allow_reg && roundDetails.lock_choices)) && (
+                      <div style={{ marginTop: "20px", textAlign: "center" }}>
+                        <button
+                          onClick={() => setShowStartRoundModal(true)}
+                          disabled={isUpdatingRound}
+                          style={{
+                            padding: "10px 20px",
+                            backgroundColor: "#3498db",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "4px",
+                            cursor: "pointer",
+                            fontWeight: "bold",
+                            fontSize: "16px"
+                          }}
+                        >
+                          Start Round {roundDetails.number + 1}
+                        </button>
+                      </div>
+                    )}
+                </div>
+              )}
+              
+            </div>
+
+            {/* Start Round Modal */}
+            {showStartRoundModal && (
+              <PasswordModal
+                title={`Start Round ${roundDetails.number + 1}`}
+                onConfirm={handleStartRound}
+                onCancel={() => {
+                  setShowStartRoundModal(false);
+                  setPassword("");
+                }}
+                password={password}
+                setPassword={setPassword}
+                isLoading={isUpdatingRound}
+              />
+            )}
+
+            {/* Stop Registration Modal */}
+            {showStopRegModal && (
+              <PasswordModal
+                title="Stop Registrations"
+                onConfirm={handleStopRegistrations}
+                onCancel={() => {
+                  setShowStopRegModal(false);
+                  setPassword("");
+                }}
+                password={password}
+                setPassword={setPassword}
+                isLoading={isUpdatingRound}
+              />
+            )}
+
+            {/* Lock Choices Modal */}
+            {showLockChoicesModal && (
+              <PasswordModal
+                title="Lock Choices"
+                onConfirm={handleLockChoices}
+                onCancel={() => {
+                  setShowLockChoicesModal(false);
+                  setPassword("");
+                }}
+                password={password}
+                setPassword={setPassword}
+                isLoading={isUpdatingRound}
+              />
+            )}
+
+            {message && (
+              <div style={{
+                marginTop: "20px",
+                padding: "10px",
+                borderRadius: "4px",
+                backgroundColor: message.includes("success") ? "#d4edda" : "#f8d7da",
+                color: message.includes("success") ? "#155724" : "#721c24",
+                border: `1px solid ${message.includes("success") ? "#c3e6cb" : "#f5c6cb"}`,
+              }}>
+                {message}
+              </div>
+            )}
           </div>
         )}
+      </div>
+    </div>
+  );
+}
+
+// Password Modal Component
+// Update the PasswordModal component to ensure cursor appears
+function PasswordModal({ title, onConfirm, onCancel, password, setPassword, isLoading }) {
+  const inputRef = React.useRef(null);
+
+  // Focus the input when modal opens
+  React.useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
+  return (
+    <div style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: "rgba(0,0,0,0.5)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 1000
+    }}>
+      <div style={{
+        backgroundColor: "white",
+        padding: "20px",
+        borderRadius: "8px",
+        width: "400px",
+        maxWidth: "90%"
+      }}>
+        <h3>Confirm Password to {title}</h3>
+        <input
+          ref={inputRef}
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Enter admin password"
+          style={{
+            width: "100%",
+            padding: "10px",
+            margin: "10px 0",
+            borderRadius: "4px",
+            border: "1px solid #ddd",
+            outline: "none" // Ensure focus is visible
+          }}
+          autoFocus // Ensure focus is set
+        />
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+          <button
+            onClick={onCancel}
+            style={{
+              padding: "8px 16px",
+              backgroundColor: "#6c757d",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer"
+            }}
+          >
+            Cancel
+          </button>
+          <button
+            onClick={onConfirm}
+            disabled={isLoading || !password}
+            style={{
+              padding: "8px 16px",
+              backgroundColor: "#28a745",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+              opacity: isLoading || !password ? 0.7 : 1
+            }}
+          >
+            {isLoading ? "Processing..." : "Confirm"}
+          </button>
+        </div>
       </div>
     </div>
   );
