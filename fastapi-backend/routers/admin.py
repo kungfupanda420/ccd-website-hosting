@@ -226,7 +226,7 @@ def start_next_round(request:InputPassword,db:Session=Depends(get_db), current_u
 
     if not pwd_context.verify(request.password,current_user.password):
         raise HTTPException(status_code=404, detail="Invalid Credentials")
-    
+    round=db.query(Round).filter(Round.id==1).first()
     if not round:
         raise HTTPException(status_code=404, detail="Round not found")
     
@@ -246,7 +246,7 @@ def start_next_round(request:InputPassword,db:Session=Depends(get_db), current_u
 
         students=(db.query(Student)
                     .join(Student.user)
-                    .filter(Student.admin_conf==None)
+                    .filter(Student.offer_payment_conf==None)
                     .all()
                     )
         
@@ -291,7 +291,7 @@ def stop_registrations(request:InputPassword, db:Session=Depends(get_db), curren
     db.refresh(round)
     return round
 
-@router.post("/lock_choices",response_model=RoundDetails) # working
+@router.post("/lock_choices",response_model=RoundDetails) # Working
 def lock_choices(request:InputPassword,db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
     if current_user.role != 'admin':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not an Admin")
@@ -308,19 +308,20 @@ def lock_choices(request:InputPassword,db:Session=Depends(get_db), current_user:
     return round
 
 
-from ..tasks.generate_id_cards import generate_id_cards 
-
-@router.get("/generate_id_card")
-def get_id_card(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+@router.get("/departments", response_model=List[dict])  #Working
+def get_departments(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if current_user.role != 'admin':
-        raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to access this resource")
+    
+    departments = db.query(Department).all()
 
-    generate_id_cards.delay()
+    if not departments:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No departments found")
 
-    return {"message": "ID cards generated successfully"}
+    return [{"id": department.user_id, "name": department.name} for department in departments]
 
 
-@router.get("/department_data/{id}",response_model=List[ProjectStudents])
+@router.get("/department_data/{id}",response_model=List[ProjectStudents]) #Add on admin conf
 def dept_data(id:int, db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
 
     if(current_user.role != 'admin'):
@@ -328,15 +329,8 @@ def dept_data(id:int, db:Session=Depends(get_db),current_user: User=Depends(get_
     
     projects=db.query(Project).join(Project.professor).join(Professor.department).filter(Department.user_id==id).all()
 
-    ret_projects=[]
-    for project in projects:
-        students=[s for s in project.selected_students if not s.admin_conf]
 
-        if students:
-            project.selected_students=students
-            ret_projects.append(project)
-
-    return ret_projects
+    return projects
 
 
 
@@ -422,14 +416,14 @@ async def conf_dept_data(id:int,request:DeptDataMessage, db:Session=Depends(get_
 
 
 
-@router.get("/departments", response_model=List[dict])
-def get_departments(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+
+from ..tasks.generate_id_cards import generate_id_cards 
+
+@router.get("/generate_id_card")
+def get_id_card(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if current_user.role != 'admin':
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to access this resource")
-    
-    departments = db.query(Department).all()
+        raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
 
-    if not departments:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No departments found")
+    generate_id_cards.delay()
 
-    return [{"id": department.user_id, "name": department.name} for department in departments]
+    return {"message": "ID cards generated successfully"}

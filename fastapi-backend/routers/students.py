@@ -371,7 +371,7 @@ def edit_me(
     db.refresh(student)
     return student
 
-@router.get("/all_projects",response_model=List[ShowProject]) 
+@router.get("/all_projects",response_model=List[ShowProject]) #Working
 def show_projects(db: Session=Depends(get_db),current_user: User=Depends(get_current_user)):
     if current_user.role != 'student':
         raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
@@ -408,7 +408,10 @@ def increase_preference(request:ProjectPreferencesId,db:Session=Depends(get_db),
     student=db.query(Student).filter(Student.user_id==current_user.id).first()
     if not student:
         raise HTTPException(status_code=404, detail="Student not found")
+    round=db.query(Round).filter(Round.id==1).first()
     
+    if(round.lock_choices==1):
+        raise HTTPException(status_code=403, detail="Cannot change choices. Choices have been locked")
     updated_projects = []
 
     if student.pref1:

@@ -64,6 +64,7 @@ class ProjectPreferencesId(BaseModel):
 class StudentSIP(BaseModel):
     sip_id:str
     name: str
+    admin_conf:bool
     model_config = {
         "from_attributes": True
     }

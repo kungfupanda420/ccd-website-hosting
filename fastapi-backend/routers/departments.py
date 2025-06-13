@@ -7,6 +7,7 @@ from ..schemas.students import  ShowStudent, StudentUpdate, StudentSIPNameProj
 from ..schemas.projects import ShowProject, ProjectPreferences
 from ..models.users import User, Student, Professor, Department
 from ..models.projects import Project
+from ..models.rounds import Round
 from ..security.JWTtoken import create_access_token, create_refresh_token
 from ..database import get_db
 
@@ -29,7 +30,7 @@ router =APIRouter(
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 get_db=get_db
-@router.get("/department_data")
+@router.get("/department_data")  
 def deptdata(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if current_user.role != 'department':
         raise HTTPException(status_code=403, detail="Not a Department User")
@@ -38,13 +39,19 @@ def deptdata(db: Session = Depends(get_db), current_user: User = Depends(get_cur
     department = db.query(User).filter(User.id == current_user.id).first().department
     if not department:
         raise HTTPException(status_code=404, detail="Department not found")
+    
+    round=db.query(Round).filter(Round.id==1).first()
+    if(round.lock_choices==0):
+        raise HTTPException(status_code=403, detail="Cannot get data as choices have not been locked")
+    updated_projects = []
 
     # Corrected query with explicit joins
     students = (
         db.query(Student)
         .join(Student.pref1)  # Join to Project (pref1)
         .join(Project.professor)  # Join to Professor
-        .filter(Professor.dept_id == current_user.id)
+        .filter(Professor.dept_id == current_user.id).
+        filter(Student.admin_conf==False)
         .all()
     )
 
@@ -100,7 +107,8 @@ def deptdata(db: Session = Depends(get_db), current_user: User = Depends(get_cur
         media_type="text/csv",
         headers={"Content-Disposition": "attachment; filename=department_data.csv"}
     )
-@router.get("/studentwise-data", response_model=List[StudentSIPNameProj])
+
+@router.get("/unalloted-studentwise-data", response_model=List[StudentSIPNameProj]) 
 def dept_students(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if current_user.role != 'department':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not a Department User")
@@ -110,6 +118,24 @@ def dept_students(db: Session = Depends(get_db), current_user: User = Depends(ge
         .join(Student.pref1)  # Join to Project (pref1)
         .join(Project.professor)  # Join to Professor
         .filter(Professor.dept_id == current_user.id)
+        .filter(Student.admin_conf==False)
+        .all()
+    )
+
+    return students
+
+
+@router.get("/alloted-studentwise-data", response_model=List[StudentSIPNameProj]) 
+def dept_students(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    if current_user.role != 'department':
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not a Department User")
+    
+    students = (
+        db.query(Student)
+        .join(Student.pref1)  # Join to Project (pref1)
+        .join(Project.professor)  # Join to Professor
+        .filter(Professor.dept_id == current_user.id)
+        .filter(Student.admin_conf==True)
         .all()
     )
 
@@ -120,9 +146,17 @@ def allot_student(sip_id:str, project_id:int, db:Session=Depends(get_db), curren
     if current_user.role != 'department':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not a Department User")
     
+    round=db.query(Round).filter(Round.id==1).first()
+    if(round.lock_choices==0):
+        raise HTTPException(status_code=403, detail="Cannot allot students as choices have not been locked")
+    updated_projects = []
+    
     student = db.query(Student).filter(Student.sip_id == sip_id).first()
     if not student:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Student not found")
+    
+    if student.admin_conf == True:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Student has already been approved by admin")
     
     project = db.query(Project).filter(Project.id == project_id).first()
     if not project:
@@ -147,8 +181,15 @@ def unallot_student(sip_id: str, db: Session = Depends(get_db), current_user: Us
     if not student:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Student not found")
     
+    round=db.query(Round).filter(Round.id==1).first()
+    if(round.lock_choices==0):
+        raise HTTPException(status_code=403, detail="Cannot deallot students as choices have not been locked")
+    
     if student.selected_project_id is None:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Student has not been alloted any project")
+    
+    if student.admin_conf == True:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Student has already been approved by admin")
     
     student.selected_project = None
     db.commit()
