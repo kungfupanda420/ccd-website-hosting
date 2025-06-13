@@ -3,9 +3,8 @@ import { authFetch } from "../utils/authFetch";
 import "../css/CandidateProfile.css";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faSignOutAlt, faHome, faEdit, faSave, faTimes,faList } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faSignOutAlt, faHome, faEdit, faSave, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { gsap } from "gsap";
-
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
 
@@ -14,7 +13,6 @@ function CandidateProfile() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [editMode, setEditMode] = useState(false);
-  const [projects, setProjects] = useState([]);
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -38,14 +36,11 @@ function CandidateProfile() {
     board10: "",
     adhaar_id: "",
     apaar_id: "",
-    sip_id: "",
-    pref1_id: null,
-    pref2_id: null,
-    pref3_id: null,
-    professor: "",
-    start_date: "",
-    end_date: "",
-    nitc_idcard_path: "",
+    // sip_id: "",
+    // professor: "",
+    // start_date: "",
+    // end_date: "",
+    // nitc_idcard_path: "",
     student_college_idcard_path: ""
   });
   const [regPaymentScreenshot, setRegPaymentScreenshot] = useState(null);
@@ -75,7 +70,7 @@ function CandidateProfile() {
     };
   }, []);
 
-  // Fetch candidate data and projects
+  // Fetch candidate data
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -88,22 +83,13 @@ function CandidateProfile() {
       }
 
       try {
-        // Fetch candidate data
-        const [candidateRes, projectsRes] = await Promise.all([
-          authFetch("/api/students/me", {
-            headers: { Authorization: `Bearer ${token}` }
-          }),
-          authFetch("/api/students/all_projects", {
-            headers: { Authorization: `Bearer ${token}` }
-          })
-        ]);
+        const candidateRes = await authFetch("/api/students/me", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
 
-        if (candidateRes.ok && projectsRes.ok) {
+        if (candidateRes.ok) {
           const candidateData = await candidateRes.json();
-          const projectsData = await projectsRes.json();
-          
           setCandidate(candidateData);
-          setProjects(projectsData);
           setForm({
             ...candidateData,
             start_date: candidateData.start_date || "",
@@ -214,12 +200,6 @@ function CandidateProfile() {
               <FontAwesomeIcon icon={faHome} />
               <span>Dashboard</span>
             </button>
-              <button onClick={() => navigate("/candidatePreferences")}>
-              {/* <FontAwesomeIcon icon={faList} /> */}
-              <FontAwesomeIcon icon={faList} />
-              {/* <FontAwesomeIcon icon={faHome} /> */}
-              <span>Preferences</span>
-            </button>
             <button onClick={() => navigate("/")}>
               <FontAwesomeIcon icon={faSignOutAlt} />
               <span>Logout</span>
@@ -293,16 +273,6 @@ function CandidateProfile() {
                     <div><strong>SIP ID:</strong> {candidate.sip_id || "Not provided"}</div>
                     <div><strong>Aadhaar ID:</strong> {candidate.adhaar_id || "Not provided"}</div>
                     <div><strong>APAAR ID:</strong> {candidate.apaar_id || "Not provided"}</div>
-                  </div>
-                </section>
-
-                <section className="profile-section">
-                  <h2>Project Preferences</h2>
-                  <div className="profile-grid">
-                    <div><strong>First Preference:</strong> {candidate.pref1?.title || "Not selected"}</div>
-                    <div><strong>Second Preference:</strong> {candidate.pref2?.title || "Not selected"}</div>
-                    <div><strong>Third Preference:</strong> {candidate.pref3?.title || "Not selected"}</div>
-                    <div><strong>Assigned Professor:</strong> {candidate.professor || "Not assigned"}</div>
                   </div>
                 </section>
 
@@ -448,10 +418,10 @@ function CandidateProfile() {
                   <section className="form-section">
                     <h2>Identification</h2>
                     <div className="form-grid">
-                      <div className="form-group">
+                      {/* <div className="form-group">
                         <label>SIP ID</label>
                         <input type="text" name="sip_id" value={form.sip_id} onChange={handleEditChange} />
-                      </div>
+                      </div> */}
                       <div className="form-group">
                         <label>Aadhaar ID</label>
                         <input type="text" name="adhaar_id" value={form.adhaar_id} onChange={handleEditChange} />
@@ -462,44 +432,7 @@ function CandidateProfile() {
                       </div>
                     </div>
                   </section>
-
-                  <section className="form-section">
-                    <h2>Project Preferences</h2>
-                    <div className="form-grid">
-                      <div className="form-group">
-                        <label>First Preference</label>
-                        <select name="pref1_id" value={form.pref1_id || ""} onChange={handleEditChange}>
-                          <option value="">Select Project</option>
-                          {projects.map(project => (
-                            <option key={project.id} value={project.id}>{project.title}</option>
-                          ))}
-                        </select>
-                      </div>
-                      <div className="form-group">
-                        <label>Second Preference</label>
-                        <select name="pref2_id" value={form.pref2_id || ""} onChange={handleEditChange}>
-                          <option value="">Select Project</option>
-                          {projects.map(project => (
-                            <option key={project.id} value={project.id}>{project.title}</option>
-                          ))}
-                        </select>
-                      </div>
-                      <div className="form-group">
-                        <label>Third Preference</label>
-                        <select name="pref3_id" value={form.pref3_id || ""} onChange={handleEditChange}>
-                          <option value="">Select Project</option>
-                          {projects.map(project => (
-                            <option key={project.id} value={project.id}>{project.title}</option>
-                          ))}
-                        </select>
-                      </div>
-                      <div className="form-group">
-                        <label>Assigned Professor</label>
-                        <input type="text" name="professor" value={form.professor} onChange={handleEditChange} />
-                      </div>
-                    </div>
-                  </section>
-
+{/* 
                   <section className="form-section">
                     <h2>Internship Dates</h2>
                     <div className="form-grid">
@@ -512,7 +445,7 @@ function CandidateProfile() {
                         <input type="date" name="end_date" value={form.end_date} onChange={handleEditChange} />
                       </div>
                     </div>
-                  </section>
+                  </section> */}
 
                   <section className="form-section">
                     <h2>Upload Files</h2>
@@ -521,10 +454,10 @@ function CandidateProfile() {
                         <label>Profile Photo</label>
                         <input type="file" name="profilePhoto" onChange={handleFileChange} accept="image/*" />
                       </div>
-                      <div className="form-group file-input">
+                      {/* <div className="form-group file-input">
                         <label>NITC ID Card</label>
                         <input type="file" name="nitc_idcard" onChange={handleFileChange} accept="image/*,.pdf" />
-                      </div>
+                      </div> */}
                       <div className="form-group file-input">
                         <label>College ID Card</label>
                         <input type="file" name="student_college_idcard" onChange={handleFileChange} accept="image/*,.pdf" />
@@ -538,15 +471,15 @@ function CandidateProfile() {
                 </div>
 
                 <div className="form-actions">
-  <button type="submit" className="save-btn" disabled={loading}>
-    <FontAwesomeIcon icon={faSave} />
-    <span>{loading ? "Saving..." : "Save Changes"}</span>
-  </button>
-  <button type="button" className="cancel-btn" onClick={() => setEditMode(false)} disabled={loading}>
-    <FontAwesomeIcon icon={faTimes} />
-    <span>Cancel</span>
-  </button>
-</div>
+                  <button type="submit" className="save-btn" disabled={loading}>
+                    <FontAwesomeIcon icon={faSave} />
+                    <span>{loading ? "Saving..." : "Save Changes"}</span>
+                  </button>
+                  <button type="button" className="cancel-btn" onClick={() => setEditMode(false)} disabled={loading}>
+                    <FontAwesomeIcon icon={faTimes} />
+                    <span>Cancel</span>
+                  </button>
+                </div>
               </form>
             )}
           </div>
