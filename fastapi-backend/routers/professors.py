@@ -107,12 +107,26 @@ def delete_project(id:int,db:Session=Depends(get_db),current_user: User=Depends(
     db.commit()
     return
 
-@router.post('/set_start_date/{id}')
-def set_start_date(id:int, request:SetDate, db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
+@router.get("/allotted_student")
+def get_alloted_students(db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
+    if(current_user.role != 'professor'):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to view this ")
+    students=db.query(Student).join(Student.selected_project).filter(Project.professor_id==current_user.id).all()
+    return [
+        {
+            "sip_id":student.sip_id,
+            "name":student.name,
+            "project_title":student.selected_project.title
+        }
+        for student in students
+    ]
+
+@router.post('/set_start_date/{sip_id}')
+def set_start_date(sip_id:str, request:SetDate, db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
     if(current_user.role != 'professor'):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to delete project")
     
-    student=db.query(Student).filter(Student.user_id==id).first()
+    student=db.query(Student).filter(Student.sip_id==sip_id).first()
     if not student:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Student not found")
     
@@ -128,12 +142,12 @@ def set_start_date(id:int, request:SetDate, db:Session=Depends(get_db),current_u
     return {"message": f"Student has started internship on {student.start_date}"}
 
 
-@router.post('/set_end_date/{id}')
-def set_end_date(id:int, request:SetDate, db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
+@router.post('/set_end_date/{sip_id}')
+def set_end_date(sip_id:str, request:SetDate, db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
     if(current_user.role != 'professor'):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to delete project")
     
-    student=db.query(Student).filter(Student.user_id==id).first()
+    student=db.query(Student).filter(Student.sip_id==sip_id).first()
     if not student:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Project not found")
     
