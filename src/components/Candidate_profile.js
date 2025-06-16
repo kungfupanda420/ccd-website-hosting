@@ -3,7 +3,7 @@ import { authFetch } from "../utils/authFetch";
 import "../css/CandidateProfile.css";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faSignOutAlt, faHome, faEdit, faSave, faTimes,faList } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faSignOutAlt, faHome, faEdit, faSave, faTimes,faList,faDownload } from "@fortawesome/free-solid-svg-icons";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
@@ -106,6 +106,14 @@ function CandidateProfile() {
     };
     fetchData();
   }, []);
+    const handleDownload = (filePath) => {
+    const link = document.createElement('a');
+    link.href = `/${filePath}`;
+    link.download = filePath.split('/').pop();
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   const handleEditChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -292,22 +300,33 @@ function CandidateProfile() {
                 <section className="profile-section">
                   <h2>Documents</h2>
                   <div className="profile-grid">
-                    <div>
+                    {/* <div>
                       <strong>NITC ID Card:</strong> 
                       {candidate.nitc_idcard_path ? (
                         <a href={`/${candidate.nitc_idcard_path}`} target="_blank" rel="noopener noreferrer">View Document</a>
                       ) : "Not uploaded"}
-                    </div>
+                    </div> */}
                     <div>
                       <strong>College ID Card:</strong> 
                       {candidate.student_college_idcard_path ? (
-                        <a href={`/${candidate.student_college_idcard_path}`} target="_blank" rel="noopener noreferrer">View Document</a>
+                        <div className="document-actions">
+                          <span>{candidate.student_college_idcard_path.split('/').pop()}</span>
+                          <button 
+                            onClick={() => handleDownload(candidate.student_college_idcard_path)}
+                            className="download-btn"
+                          >
+                            <FontAwesomeIcon icon={faDownload} /> Download
+                          </button>
+                        </div>
                       ) : "Not uploaded"}
                     </div>
                     <div>
                       <strong>Profile Photo:</strong> 
-                      {candidate.profilePhotoPath ? (
-                        <a href={`/${candidate.profilePhotoPath}`} target="_blank" rel="noopener noreferrer">View Photo</a>
+                     {candidate.profilePhotoPath ? (
+                        <div className="document-actions">
+                          <span>{candidate.profilePhotoPath.split('/').pop()}</span>
+                         
+                        </div>
                       ) : "Not uploaded"}
                     </div>
                   </div>
@@ -467,10 +486,10 @@ function CandidateProfile() {
                         <label>College ID Card</label>
                         <input type="file" name="student_college_idcard" onChange={handleFileChange} accept="image/*,.pdf" />
                       </div>
-                      <div className="form-group file-input">
+                      {/* <div className="form-group file-input">
                         <label>Payment Screenshot</label>
                         <input type="file" name="regPaymentScreenshot" onChange={handleFileChange} accept="image/*" />
-                      </div>
+                      </div> */}
                     </div>
                   </section>
                 </div>

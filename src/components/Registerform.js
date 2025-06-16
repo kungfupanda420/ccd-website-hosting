@@ -74,7 +74,10 @@ function Registerform() {
     } else if (step === 4) {
       if (!formData.adhaar_id.trim()) newErrors.adhaar_id = "Aadhaar number is required.";
       if (!formData.apaar_id.trim()) newErrors.apaar_id = "APAAR ID is required.";
+      if(!/^[0-9]{12}$/.test(formData.adhaar_id)) newErrors.adhaar_id = "Valid 12-digit Aadhaar number is required.";
+      if (!/^[0-9]{13}$/.test(formData.apaar_id)) newErrors.apaar_id = "Valid 13-digit APAAR ID is required.";
       if (!formData.student_college_idcard_path) newErrors.student_college_idcard_path = "Student college ID card is required.";
+      if (!formData.documents_path) newErrors.documents_path = "Documents are required.";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -331,8 +334,9 @@ function Registerform() {
               {errors.student_college_idcard_path && <span className="error-text">{errors.student_college_idcard_path}</span>}
             </div>
             <div className="form-group">
-              <label>Other Documents (optional)</label>
+              <label>Other Documents (all marksheets in your UG and all the certificates)</label>
               <input type="file" name="documents_path" onChange={handleChange} accept="image/*,application/pdf" />
+
             </div>
           </div>
         )}

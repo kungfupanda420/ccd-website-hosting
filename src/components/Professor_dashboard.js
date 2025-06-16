@@ -15,6 +15,8 @@ function Professor_dashboard() {
   const [message, setMessage] = useState("");
   const [projects, setProjects] = useState([]);
   const [loadingProjects, setLoadingProjects] = useState(false);
+  const [allottedStudents, setAllottedStudents] = useState([]);
+  const [loadingStudents, setLoadingStudents] = useState(false);
 
   // For editing
   const [editingId, setEditingId] = useState(null);
@@ -64,9 +66,40 @@ function Professor_dashboard() {
     setLoadingProjects(false);
   };
 
+  // Fetch allotted students
+  const fetchAllottedStudents = async () => {
+    setLoadingStudents(true);
+    setMessage("");
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setMessage("You must be logged in as a professor to view allotted students.");
+      setLoadingStudents(false);
+      return;
+    }
+    try {
+      const res = await authFetch("/api/professors/allotted_students", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setAllottedStudents(data);
+      } else {
+        const err = await res.json();
+        setMessage(err.detail || "Failed to fetch allotted students.");
+      }
+    } catch (error) {
+      setMessage("Network error.");
+    }
+    setLoadingStudents(false);
+  };
+
   useEffect(() => {
     if (activeTab === "view") {
       fetchProjects();
+    } else if (activeTab === "students") {
+      fetchAllottedStudents();
     }
     // eslint-disable-next-line
   }, [activeTab]);
@@ -85,7 +118,7 @@ function Professor_dashboard() {
       no_of_interns,
       duration,
       mode,
-      prerequisites:prerequisites || "NONE",
+      prerequisites: prerequisites || "NONE",
     };
     try {
       const res = await authFetch("/api/professors/projects", {
@@ -133,37 +166,38 @@ function Professor_dashboard() {
 
   // Handle edit form submit
   const handleEditSubmit = async (e, id) => {
-  e.preventDefault();
-  setMessage("");
-  const token = localStorage.getItem("token");
-  if (!token) {
-    setMessage("You must be logged in as a professor to edit a project.");
-    return;
-  }
-  try {
-    const res = await authFetch(`/api/professors/projects/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        ...editFields,
-        prerequisites: editFields.prerequisites || "NONE", // Default to "NONE" if empty
-      }),
-    });
-    if (res.ok) {
-      setMessage("Project updated successfully!");
-      setEditingId(null);
-      fetchProjects();
-    } else {
-      const err = await res.json();
-      setMessage(err.detail || "Failed to update project.");
+    e.preventDefault();
+    setMessage("");
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setMessage("You must be logged in as a professor to edit a project.");
+      return;
     }
-  } catch (error) {
-    setMessage("Network error.");
-  }
-};
+    try {
+      const res = await authFetch(`/api/professors/projects/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          ...editFields,
+          prerequisites: editFields.prerequisites || "NONE",
+        }),
+      });
+      if (res.ok) {
+        setMessage("Project updated successfully!");
+        setEditingId(null);
+        fetchProjects();
+      } else {
+        const err = await res.json();
+        setMessage(err.detail || "Failed to update project.");
+      }
+    } catch (error) {
+      setMessage("Network error.");
+    }
+  };
+
   // Handle delete
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this project?")) return;
@@ -212,10 +246,11 @@ function Professor_dashboard() {
       <div className="dashboard-sidebar">
         <button className="sidebar-btn" onClick={() => setActiveTab("add")}>Add Project</button>
         <button className="sidebar-btn" onClick={() => setActiveTab("view")}>View Projects</button>
+        <button className="sidebar-btn" onClick={() => setActiveTab("students")}>Allotted Students</button>
         <button className="sidebar-btn" onClick={handleLogout}>Logout</button>
       </div>
 
-            <div className="dashboard-main">
+      <div className="dashboard-main">
         {activeTab === "add" && (
           <div className="add-project-form">
             <h2>Add Project</h2>
@@ -240,7 +275,6 @@ function Professor_dashboard() {
                 onChange={(e) => setNoOfInterns(e.target.value)}
                 required
               />
-              {/* Duration dropdown */}
               <select
                 value={duration}
                 onChange={(e) => setDuration(e.target.value)}
@@ -253,7 +287,6 @@ function Professor_dashboard() {
                 <option value="1 month">1 month</option>
                 <option value="2 months">2 months</option>
               </select>
-              {/* Mode dropdown */}
               <select
                 value={mode}
                 onChange={(e) => setMode(e.target.value)}
@@ -272,7 +305,6 @@ function Professor_dashboard() {
                 placeholder="Prerequisites (optional)"
                 value={prerequisites}
                 onChange={(e) => setPrerequisites(e.target.value)}
-                // required
               />
               <button type="submit">Submit</button>
             </form>
@@ -292,74 +324,89 @@ function Professor_dashboard() {
                 {projects.map((project) => (
                   <li key={project.id} style={{ marginBottom: "20px" }}>
                     {editingId === project.id ? (
-                      <form onSubmit={(e) => handleEditSubmit(e, project.id)}>
-                        <input
-                          type="text"
-                          name="title"
-                          value={editFields.title}
-                          onChange={handleEditChange}
-                          required
-                        />
-                        <textarea
-                          name="description"
-                          value={editFields.description}
-                          onChange={handleEditChange}
-                          required
-                        />
-                        <input
-                          type="number"
-                          name="no_of_interns"
-                          value={editFields.no_of_interns}
-                          onChange={handleEditChange}
-                          required
-                        />
-                        {/* Duration dropdown */}
-                        <select
-                          name="duration"
-                          value={editFields.duration}
-                          onChange={handleEditChange}
-                          required
-                          style={{ marginBottom: "14px", padding: "10px", borderRadius: "5px", border: "1.5px solid #bdbdbd", fontSize: "15px", width: "100%" }}
-                        >
-                          <option value="" disabled>
-                            Select Duration
-                          </option>
-                          <option value="1 month">1 month</option>
-                          <option value="2 months">2 months</option>
-                        </select>
-                        {/* Mode dropdown */}
-                        <select
-                          name="mode"
-                          value={editFields.mode}
-                          onChange={handleEditChange}
-                          required
-                          style={{ marginBottom: "14px", padding: "10px", borderRadius: "5px", border: "1.5px solid #bdbdbd", fontSize: "15px", width: "100%" }}
-                        >
-                          <option value="" disabled>
-                            Select Mode
-                          </option>
-                          <option value="Remote">Remote</option>
-                          <option value="Onsite">Onsite</option>
-                          <option value="Hybrid">Hybrid</option>
-                        </select>
-                        <input
-                          type="text"
-                          name="prerequisites"
-                          value={editFields.prerequisites}
-                          onChange={handleEditChange}
-                          // required
-                        />
-                        <button type="submit">Save</button>
-                        <button type="button" onClick={() => setEditingId(null)}>
-                          Cancel
-                        </button>
-                      </form>
+                      <div className="edit-project-container">
+                        <h3>Editing: {project.title}</h3>
+                        <form onSubmit={(e) => handleEditSubmit(e, project.id)}>
+                          <div className="form-group">
+                            <label>Title:</label>
+                            <input
+                              type="text"
+                              name="title"
+                              value={editFields.title}
+                              onChange={handleEditChange}
+                              required
+                            />
+                          </div>
+                          <div className="form-group">
+                            <label>Description:</label>
+                            <textarea
+                              name="description"
+                              value={editFields.description}
+                              onChange={handleEditChange}
+                              required
+                            />
+                          </div>
+                          <div className="form-group">
+                            <label>Number of Interns:</label>
+                            <input
+                              type="number"
+                              name="no_of_interns"
+                              value={editFields.no_of_interns}
+                              onChange={handleEditChange}
+                              required
+                            />
+                          </div>
+                          <div className="form-group">
+                            <label>Duration:</label>
+                            <select
+                              name="duration"
+                              value={editFields.duration}
+                              onChange={handleEditChange}
+                              required
+                            >
+                              <option value="" disabled>Select Duration</option>
+                              <option value="1 month">1 month</option>
+                              <option value="2 months">2 months</option>
+                            </select>
+                          </div>
+                          <div className="form-group">
+                            <label>Mode:</label>
+                            <select
+                              name="mode"
+                              value={editFields.mode}
+                              onChange={handleEditChange}
+                              required
+                            >
+                              <option value="" disabled>Select Mode</option>
+                              <option value="Remote">Remote</option>
+                              <option value="Onsite">Onsite</option>
+                              <option value="Hybrid">Hybrid</option>
+                            </select>
+                          </div>
+                          <div className="form-group">
+                            <label>Prerequisites:</label>
+                            <input
+                              type="text"
+                              name="prerequisites"
+                              value={editFields.prerequisites}
+                              onChange={handleEditChange}
+                            />
+                          </div>
+                          <div className="edit-buttons">
+                            <button type="submit">Save Changes</button>
+                            <button type="button" onClick={() => setEditingId(null)}>
+                              Cancel
+                            </button>
+                          </div>
+                        </form>
+                      </div>
                     ) : (
                       <>
                         <strong>{project.title}</strong> - {project.description}
                         <br />
                         <span>
-                          Interns: {project.no_of_interns} | Duration: {project.duration} | Mode: {project.mode} | Prerequisites: {project.prerequisites||"NONE"}
+                          Interns: {project.no_of_interns} | Duration: {project.duration} | 
+                          Mode: {project.mode} | Prerequisites: {project.prerequisites||"NONE"}
                         </span>
                         <br />
                         <div style={{ display: "flex", gap: "12px", marginTop: "12px" }}>
@@ -393,8 +440,44 @@ function Professor_dashboard() {
             {message && <p style={{ marginTop: "10px", color: "red" }}>{message}</p>}
           </div>
         )}
+
+        {activeTab === "students" && (
+          <div className="allotted-students">
+            <h2>Allotted Students</h2>
+            {loadingStudents ? (
+              <p>Loading...</p>
+            ) : allottedStudents.length === 0 ? (
+              <p>No students have been allotted to your projects yet.</p>
+            ) : (
+              <table className="students-table">
+                <thead>
+                  <tr>
+                    <th>Student Name</th>
+                    <th>SIP ID</th>
+                    <th>Project Title</th>
+                    <th>Department</th>
+                    <th>Contact</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {allottedStudents.map((student) => (
+                    <tr key={student.sip_id}>
+                      <td>{student.name}</td>
+                      <td>{student.sip_id}</td>
+                      <td>{student.project_title}</td>
+                      <td>{student.department}</td>
+                      <td>{student.email}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+            {message && <p style={{ marginTop: "10px", color: "red" }}>{message}</p>}
+          </div>
+        )}
+
         {!activeTab && (
-          <div >
+          <div>
             <h2>Welcome to Professor Dashboard</h2>
             <p>Select an option from the left menu.</p>
           </div>

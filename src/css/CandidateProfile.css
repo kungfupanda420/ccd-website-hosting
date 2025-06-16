@@ -387,3 +387,32 @@
     width: 100%;
   }
 }
+
+/* Add these styles to your existing CSS */
+.document-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.document-actions span {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.download-btn {
+  padding: 5px 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s;
+}
+
+.download-btn:hover {
+  background-color: #45a049;
+}
