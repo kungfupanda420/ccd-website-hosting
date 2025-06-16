@@ -377,6 +377,8 @@ def edit_me(
     db.refresh(student)
     return student
 
+@router.get("/me/my_clg_id",)
+
 @router.get("/all_projects",response_model=List[ShowProject]) #Working
 def show_projects(db: Session=Depends(get_db),current_user: User=Depends(get_current_user)):
     if current_user.role != 'student':
