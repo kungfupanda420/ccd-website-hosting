@@ -107,7 +107,19 @@ def delete_project(id:int,db:Session=Depends(get_db),current_user: User=Depends(
     db.commit()
     return
 
-
+@router.get("/allotted_student")
+def get_alloted_students(db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
+    if(current_user.role != 'professor'):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to view this ")
+    students=db.query(Student).join(Student.selected_project).filter(Project.professor_id==current_user.id).all()
+    return [
+        {
+            "sip_id":student.sip_id,
+            "name":student.name,
+            "project_title":student.selected_project.title
+        }
+        for student in students
+    ]
 
 @router.post('/set_start_date/{sip_id}')
 def set_start_date(sip_id:str, request:SetDate, db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
