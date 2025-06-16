@@ -116,7 +116,9 @@ def get_alloted_students(db:Session=Depends(get_db),current_user: User=Depends(g
         {
             "sip_id":student.sip_id,
             "name":student.name,
-            "project_title":student.selected_project.title
+            "project_title":student.selected_project.title,
+            "start_date":student.start_date,
+            "end_date":student.end_date
         }
         for student in students
     ]
