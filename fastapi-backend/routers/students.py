@@ -1,5 +1,3 @@
-
-
 from fastapi import APIRouter, Depends, HTTPException, status, Response, UploadFile, File,Form, Query
 from sqlalchemy.orm import Session
 from datetime import date
@@ -288,7 +286,47 @@ async def get_profile_photo(
         raise HTTPException(status_code=404, detail="Profile photo not found")
     
     return {"profile_photo_path": student.profilePhotoPath}
+
+
+from fastapi.responses import StreamingResponse, FileResponse
+
+@router.get("/me/my_clg_id",)
+def get_clg_id(db: Session=Depends(get_db),current_user: User=Depends(get_current_user)):
+    if current_user.role != 'student':
+        raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
+    student=db.query(Student).filter(Student.user_id==current_user.id).first()
+    if not student:   
+        raise HTTPException(status_code=404, detail="Student not found")
+    file_path=student.student_college_idcard_path
+
+    if not os.path.isfile(file_path):
+        raise HTTPException(status_code=404, detail="Student College Id card not found")
     
+    return FileResponse(
+        path=file_path,
+        filename=os.path.basename(file_path)
+    )
+
+
+@router.get("/me/my_docs",)
+def get_clg_id(db: Session=Depends(get_db),current_user: User=Depends(get_current_user)):
+    if current_user.role != 'student':
+        raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
+    student=db.query(Student).filter(Student.user_id==current_user.id).first()
+    if not student:   
+        raise HTTPException(status_code=404, detail="Student not found")
+    file_path=student.documents_path
+
+    if not os.path.isfile(file_path):
+        raise HTTPException(status_code=404, detail="Student College Id card not found")
+    
+    return FileResponse(
+        path=file_path,
+        filename=os.path.basename(file_path)
+    )
+
+
+
 @router.put("/me",response_model=ShowStudent) #Working
 def edit_me(
     # Updatable fields (add/remove as per your needs)
@@ -377,7 +415,6 @@ def edit_me(
     db.refresh(student)
     return student
 
-@router.get("/me/my_clg_id",)
 
 @router.get("/all_projects",response_model=List[ShowProject]) #Working
 def show_projects(db: Session=Depends(get_db),current_user: User=Depends(get_current_user)):
