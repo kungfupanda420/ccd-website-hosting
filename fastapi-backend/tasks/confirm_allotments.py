@@ -67,7 +67,7 @@ def send_decision_emails(message:str,id:int):
             return {"message": "Department not found"}
         
         if(message=='confirmed'):    
-                
+            frontend_url=os.getenv('FRONTEND_URL')
             students=(db.query(Student)
                             .join(Student.selected_project)
                             .join(Project.professor)
@@ -83,7 +83,7 @@ def send_decision_emails(message:str,id:int):
                     student.selected_project.vacancy_remaining-=1
                     db.commit()  
 
-                    offer_letter_link = f"http://localhost:3000/offer_letter_download"
+                    offer_letter_link = f"{frontend_url}/offer_letter_download"
                     
                     message=MessageSchema(
                         subject="NITC Summer Internship Programme selection",

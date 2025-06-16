@@ -54,6 +54,7 @@ conf = ConnectionConfig(
     USE_CREDENTIALS=True
 )
 
+frontend_url=os.getenv('FRONTEND_URL')
 
 @celery_app.task(name="fastapi-backend/tasks/next_round.send_round_emails")
 def send_round_emails(round_no:int,student_emails,user_emails):
@@ -63,12 +64,12 @@ def send_round_emails(round_no:int,student_emails,user_emails):
     if round_no==2:
         
         subject="NITC Summer Internship Programme Round 2"
-        body="""
+        body=f"""
                 <h3>Dear Student</h3>
                 <p>The second round of the project selections have started.</p>
                 <p>Please add your preffered projects once again</p>
                 <p></p>
-                <a href="https://placement.nitc.ac.in">placement.nitc.ac.in</a>
+                <a href="{frontend_url}">{frontend_url}</a>
                 """
         for email in student_emails:
             
@@ -88,7 +89,7 @@ def send_round_emails(round_no:int,student_emails,user_emails):
                 <p>The final round of the project selections have started.</p>
                 <p>Please add your preffered projects once again</p>
                 <p></p>
-                <a href="https://placement.nitc.ac.in">placement.nitc.ac.in</a>
+                <a href="{frontend_url}">{frontend_url}</a>
                 """
         
         for email in student_emails:
@@ -109,7 +110,7 @@ def send_round_emails(round_no:int,student_emails,user_emails):
                 <p>The Round of the registrations have started again.</p>
                 <p>Please complete your registration and select your preffered projects</p>
                 <p></p>
-                <a href="https://placement.nitc.ac.in">placement.nitc.ac.in</a>
+                <a href="{frontend_url}">{frontend_url}</a>
                 """
         for email in user_emails:
             

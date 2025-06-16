@@ -80,8 +80,8 @@ async def forgot_password(request: ForgotPasswordRequest ,db:Session=Depends(get
         data={"sub":request.email},
         expires_delta=timedelta(minutes=30)
     )
-
-    reset_link = f"http://localhost:3000/reset_password?token={reset_token}"
+    frontend_url=os.getenv('FRONTEND_URL')
+    reset_link = f"{frontend_url}/reset_password?token={reset_token}"
 
     message=MessageSchema(
         subject="Chage password on NITC SIP Portal",

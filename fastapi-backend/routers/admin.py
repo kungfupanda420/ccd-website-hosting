@@ -95,8 +95,23 @@ def export_professors(db:Session=Depends(get_db),current_user: User=Depends(get_
 
     return StreamingResponse( stream, media_type='text/csv', headers={"Content-Disposition": "attachment; filename=professors.csv"})
 
+from ..tasks.professor_pwd_emails import send_prof_emails
+@router.post("/send_professor_emails")
+def send_professor_emails(db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
+    if current_user.role != 'admin':
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not an Admin")
 
-@router.get("/round_details",response_model=RoundDetails)
+    professor_data=[]
+    professors=db.query(Professor).join(Professor.user).all()
+
+    for professor in professors:
+        professor_data.append([professor.user.email,professor.initial_password])
+    
+    send_prof_emails.delay(professor_data)
+    return{"message": f"Emails are being sent to {len(professor_data)} professors"}
+    
+
+@router.get("/round_details",response_model=RoundDetails) #Working
 def round_details(db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
     if current_user.role != 'admin':
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not an Admin")

@@ -93,8 +93,8 @@ async def verify_email(request:VerifyEmail,db:Session=Depends(get_db)):
     user = db.query(User).filter(User.email == request.email).first()
     if user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Email already registered")
-
-    verify_link = f"http://localhost:3000/verify_email?email={request.email}&password={request.password}"
+    frontend_url=os.getenv('FRONTEND_URL')
+    verify_link = f"{frontend_url}/verify_email?email={request.email}&password={request.password}"
 
     message=MessageSchema(
         subject="Verify email on NITC SIP Portal",
