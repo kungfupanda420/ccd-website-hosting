@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import "../css/Candidate_dashboard.css";
 
 function Admin_sip() {
-  const [activeSection, setActiveSection] = useState("upload");
+  const [activeSection, setActiveSection] = useState("professors");
   const [file, setFile] = useState(null);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const [students, setStudents] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [selectedDept, setSelectedDept] = useState("");
   const [deptStudents, setDeptStudents] = useState([]);
@@ -20,6 +19,11 @@ function Admin_sip() {
   const [showStopRegModal, setShowStopRegModal] = useState(false);
   const [showLockChoicesModal, setShowLockChoicesModal] = useState(false);
   const [password, setPassword] = useState("");
+  const [emailData, setEmailData] = useState({
+    subject: "",
+    body: "",
+    recipientType: "all"
+  });
 
   // Fetch departments for dropdown
   const fetchDepartments = async () => {
@@ -334,7 +338,7 @@ function Admin_sip() {
       return;
     }
 
-    const confirmReject = window.confirm("Are you sure you want to reject all allotments for this department?");
+    const confirmReject = window.confirm("Are you sure you want to reject new allotments for this department?");
     if (!confirmReject) return;
 
     setLoading(true);
@@ -433,34 +437,27 @@ function Admin_sip() {
     }
   };
 
-  // Fetch all allotted students
-  const fetchAllottedStudents = async () => {
+  // Handle email sending
+  const handleSendEmail = async () => {
     setLoading(true);
     setMessage("");
-
     try {
       const token = localStorage.getItem("token");
-      if (!token) {
-        alert("Authorization token is missing. Please log in.");
-        setLoading(false);
-        return;
-      }
-
-      const response = await fetch(`/api/admin/department_data/1`, {
-        method: "GET",
+      const response = await fetch("/api/admin/send_professor_emails", {
+        method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.detail || "Failed to fetch students");
+        throw new Error(errorData.detail || "Failed to send emails");
       }
 
       const data = await response.json();
-      setStudents(data);
-      setMessage("Students fetched successfully!");
+      setMessage(data.message || "Notification emails sent successfully!");
     } catch (error) {
       setMessage(`An error occurred: ${error.message}`);
     } finally {
@@ -475,9 +472,6 @@ function Admin_sip() {
       setSelectedDept("");
       setDeptStudents([]);
     }
-    if (activeSection === "students") {
-      fetchAllottedStudents();
-    }
     if (activeSection === "rounds") {
       fetchRoundDetails();
     }
@@ -488,18 +482,11 @@ function Admin_sip() {
       {/* Sidebar */}
       <div className="cd-sidebar">
         <button
-          className={`cd-btn ${activeSection === "upload" ? "active" : ""}`}
-          onClick={() => setActiveSection("upload")}
+          className={`cd-btn ${activeSection === "professors" ? "active" : ""}`}
+          onClick={() => setActiveSection("professors")}
         >
-          <i className="fas fa-upload"></i>
-          <span>Upload Professors</span>
-        </button>
-        <button
-          className={`cd-btn ${activeSection === "download" ? "active" : ""}`}
-          onClick={() => setActiveSection("download")}
-        >
-          <i className="fas fa-download"></i>
-          <span>Download Professors</span>
+          <i className="fas fa-user-tie"></i>
+          <span>Professors</span>
         </button>
         <button
           className={`cd-btn ${activeSection === "generate" ? "active" : ""}`}
@@ -507,13 +494,6 @@ function Admin_sip() {
         >
           <i className="fas fa-id-card"></i>
           <span>Generate ID Cards</span>
-        </button>
-        <button
-          className={`cd-btn ${activeSection === "students" ? "active" : ""}`}
-          onClick={() => setActiveSection("students")}
-        >
-          <i className="fas fa-users"></i>
-          <span>View Allotted Students</span>
         </button>
         <button
           className={`cd-btn ${activeSection === "confirm" ? "active" : ""}`}
@@ -543,56 +523,105 @@ function Admin_sip() {
 
       {/* Main Content */}
       <div className="cd-main-content">
-        {activeSection === "upload" && (
-          <div className="upload-section">
-            <h1>Upload Professors</h1>
-            <input
-              type="file"
-              accept=".xlsx, .xls, .csv"
-              onChange={handleFileChange}
-              style={{
-                padding: "10px",
-                marginBottom: "10px",
+        {activeSection === "professors" && (
+          <div className="professors-section">
+            <h1>Professors Management</h1>
+            <div style={{ 
+              display: "grid", 
+              gridTemplateColumns: "1fr 1fr 1fr", 
+              gap: "20px", 
+              marginBottom: "20px" 
+            }}>
+              <div style={{ 
+                padding: "20px", 
+                border: "1px solid #ddd", 
                 borderRadius: "4px",
-                border: "1px solid #ddd",
-                width: "100%",
-                maxWidth: "400px",
-              }}
-            />
-            <button
-              onClick={handleFileUpload}
-              disabled={!file || loading}
-              style={{
-                padding: "10px 20px",
-                backgroundColor: "#3498db",
-                color: "white",
-                border: "none",
+                display: "flex",
+                flexDirection: "column"
+              }}>
+                <h2>Upload Professors</h2>
+                <input
+                  type="file"
+                  accept=".xlsx, .xls, .csv"
+                  onChange={handleFileChange}
+                  style={{
+                    padding: "10px",
+                    marginBottom: "10px",
+                    borderRadius: "4px",
+                    border: "1px solid #ddd",
+                    width: "100%",
+                  }}
+                />
+                <button
+                  onClick={handleFileUpload}
+                  disabled={!file || loading}
+                  style={{
+                    padding: "10px 20px",
+                    backgroundColor: "#3498db",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                    width: "100%",
+                    marginTop: "auto"
+                  }}
+                >
+                  {loading ? "Uploading..." : "Upload File"}
+                </button>
+              </div>
+              
+              <div style={{ 
+                padding: "20px", 
+                border: "1px solid #ddd", 
                 borderRadius: "4px",
-                cursor: "pointer",
-              }}
-            >
-              {loading ? "Uploading..." : "Upload File"}
-            </button>
-          </div>
-        )}
-
-        {activeSection === "download" && (
-          <div className="download-section">
-            <h1>Download Professors</h1>
-            <button
-              onClick={handleDownload}
-              disabled={loading}
-              style={{
-                padding: "10px 20px",
-                backgroundColor: "#2ecc71",
-                color: "white",
-                border: "none",
+                display: "flex",
+                flexDirection: "column"
+              }}>
+                <h2>Download Professors</h2>
+                <button
+                  onClick={handleDownload}
+                  disabled={loading}
+                  style={{
+                    padding: "10px 20px",
+                    backgroundColor: "#2ecc71",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                    width: "100%",
+                    marginTop: "auto"
+                  }}
+                >
+                  {loading ? "Preparing..." : "Download Professors"}
+                </button>
+              </div>
+              
+              <div style={{ 
+                padding: "20px", 
+                border: "1px solid #ddd", 
                 borderRadius: "4px",
-                cursor: "pointer",
-              }}
-            >
-              {loading ? "Preparing..." : "Download Professors"}
-            </button>
+                display: "flex",
+                flexDirection: "column"
+              }}>
+                <h2>Send Emails to professors</h2>
+                <button
+                  onClick={handleSendEmail}
+                  disabled={loading}
+                  style={{
+                    padding: "10px 20px",
+                    backgroundColor: "#f39c12",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                    width: "100%",
+                    marginTop: "auto"
+                  }}
+                >
+                  {loading ? "Sending..." : "Send Emails"}
+                </button>
+              </div>
+            </div>
           </div>
         )}
 
@@ -613,36 +642,6 @@ function Admin_sip() {
             >
               {loading ? "Generating..." : "Generate ID Cards"}
             </button>
-          </div>
-        )}
-
-        {activeSection === "students" && (
-          <div className="students-section">
-            <h1>Allotted Students</h1>
-            {students.length === 0 ? (
-              <p>No students found.</p>
-            ) : (
-              <div style={{ overflowX: "auto" }}>
-                <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                  <thead>
-                    <tr style={{ backgroundColor: "#f2f2f2" }}>
-                      <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Name</th>
-                      <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Project</th>
-                      <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Professor</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {students.map((student) => (
-                      <tr key={student.id}>
-                        <td style={{ border: "1px solid #ddd", padding: "8px" }}>{student.name}</td>
-                        <td style={{ border: "1px solid #ddd", padding: "8px" }}>{student.project}</td>
-                        <td style={{ border: "1px solid #ddd", padding: "8px" }}>{student.professor}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
           </div>
         )}
 
@@ -760,7 +759,6 @@ function Admin_sip() {
             }}>
               <h2>Current Round: {roundDetails.number > 0 ? roundDetails.number : "Not started"}</h2>
 
-              // Update the round management section to better handle round progression
               {roundDetails.number === 0 ? (
                 <div style={{ marginTop: "20px" }}>
                   <button
@@ -865,7 +863,7 @@ function Admin_sip() {
 
                   {/* Next Round Button - Show when appropriate */}
                   {(roundDetails.number % 2 === 0 ||
-                    (roundDetails.number % 2 === 1 && !roundDetails.allow_reg && roundDetails.lock_choices)) && (
+                    (roundDetails.number % 2 === 1 && !roundDetails.allow_reg && roundDetails.lock_choices&& roundDetails.number<3&&(roundDetails.number==2&&roundDetails.lock_choices))) && (
                       <div style={{ marginTop: "20px", textAlign: "center" }}>
                         <button
                           onClick={() => setShowStartRoundModal(true)}
@@ -955,7 +953,6 @@ function Admin_sip() {
 }
 
 // Password Modal Component
-// Update the PasswordModal component to ensure cursor appears
 function PasswordModal({ title, onConfirm, onCancel, password, setPassword, isLoading }) {
   const inputRef = React.useRef(null);
 
@@ -999,9 +996,9 @@ function PasswordModal({ title, onConfirm, onCancel, password, setPassword, isLo
             margin: "10px 0",
             borderRadius: "4px",
             border: "1px solid #ddd",
-            outline: "none" // Ensure focus is visible
+            outline: "none"
           }}
-          autoFocus // Ensure focus is set
+          autoFocus
         />
         <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
           <button
