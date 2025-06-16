@@ -17,6 +17,7 @@ function Professor_dashboard() {
   const [loadingProjects, setLoadingProjects] = useState(false);
   const [allottedStudents, setAllottedStudents] = useState([]);
   const [loadingStudents, setLoadingStudents] = useState(false);
+  const [dateInputs, setDateInputs] = useState({});
 
   // For editing
   const [editingId, setEditingId] = useState(null);
@@ -77,7 +78,7 @@ function Professor_dashboard() {
       return;
     }
     try {
-      const res = await authFetch("/api/professors/allotted_students", {
+      const res = await authFetch("/api/professors/allotted_student", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -85,6 +86,15 @@ function Professor_dashboard() {
       if (res.ok) {
         const data = await res.json();
         setAllottedStudents(data);
+        // Initialize date inputs for each student
+        const inputs = {};
+        data.forEach(student => {
+          inputs[student.sip_id] = {
+            start_date: student.start_date || '',
+            end_date: student.end_date || ''
+          };
+        });
+        setDateInputs(inputs);
       } else {
         const err = await res.json();
         setMessage(err.detail || "Failed to fetch allotted students.");
@@ -220,6 +230,81 @@ function Professor_dashboard() {
       } else {
         const err = await res.json();
         setMessage(err.detail || "Failed to delete project.");
+      }
+    } catch (error) {
+      setMessage("Network error.");
+    }
+  };
+
+  // Handle date input change
+  const handleDateChange = (sipId, field, value) => {
+    setDateInputs(prev => ({
+      ...prev,
+      [sipId]: {
+        ...prev[sipId],
+        [field]: value
+      }
+    }));
+  };
+
+  // Set start date
+  const handleSetStartDate = async (sipId) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setMessage("You must be logged in to perform this action.");
+      return;
+    }
+    
+    try {
+      const res = await authFetch(`/api/professors/set_start_date/${sipId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          date: dateInputs[sipId]?.start_date
+        }),
+      });
+      
+      if (res.ok) {
+        setMessage(`Start date set successfully for student ${sipId}`);
+        fetchAllottedStudents(); // Refresh the list
+      } else {
+        const err = await res.json();
+        setMessage(err.detail || "Failed to set start date.");
+      }
+    } catch (error) {
+      setMessage("Network error.");
+    }
+  };
+
+  // Set end date
+  const handleSetEndDate = async (sipId) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setMessage("You must be logged in to perform this action.");
+      return;
+    }
+    
+    try {
+      const res = await authFetch(`/api/professors/set_end_date/${sipId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          date: dateInputs[sipId]?.end_date
+        }),
+      });
+      
+      if (res.ok) {
+        setMessage(`End date set successfully for student ${sipId}`);
+        fetchAllottedStudents(); // Refresh the list
+      } else {
+        const err = await res.json();
+        setMessage(err.detail || "Failed to set end date.");
       }
     } catch (error) {
       setMessage("Network error.");
@@ -457,6 +542,9 @@ function Professor_dashboard() {
                     <th>Project Title</th>
                     <th>Department</th>
                     <th>Contact</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -465,8 +553,48 @@ function Professor_dashboard() {
                       <td>{student.name}</td>
                       <td>{student.sip_id}</td>
                       <td>{student.project_title}</td>
-                      <td>{student.department}</td>
+                      {/* <td>{student.department}</td> */}
                       <td>{student.email}</td>
+                      <td>
+                        {student.start_date ? (
+                          new Date(student.start_date).toLocaleDateString()
+                        ) : (
+                          <input
+                            type="date"
+                            value={dateInputs[student.sip_id]?.start_date || ''}
+                            onChange={(e) => handleDateChange(student.sip_id, 'start_date', e.target.value)}
+                          />
+                        )}
+                      </td>
+                      <td>
+                        {student.end_date ? (
+                          new Date(student.end_date).toLocaleDateString()
+                        ) : (
+                          <input
+                            type="date"
+                            value={dateInputs[student.sip_id]?.end_date || ''}
+                            onChange={(e) => handleDateChange(student.sip_id, 'end_date', e.target.value)}
+                          />
+                        )}
+                      </td>
+                      <td>
+                        {!student.start_date && (
+                          <button 
+                            onClick={() => handleSetStartDate(student.sip_id)}
+                            className="date-btn"
+                          >
+                            Set Start
+                          </button>
+                        )}
+                        {!student.end_date && student.start_date && (
+                          <button 
+                            onClick={() => handleSetEndDate(student.sip_id)}
+                            className="date-btn"
+                          >
+                            Set End
+                          </button>
+                        )}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
