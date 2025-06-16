@@ -21,6 +21,7 @@ import ResetPassword from './components/Reset_password.js';
 import Register from './components/Register.js';
 import VerifyEmail from './components/Verify_email.js';
 import GenerateID from './components/Generate_id.js';
+import DownloadDocuments from './components/Candidate_certificates.js';
 
 // Lazy-loaded components
 const SipTable = lazy(() => import('./components/SipTable.js'));
@@ -94,6 +95,7 @@ function App() {
     '/department_sip',
     '/generate_id',
     '/admin_sip',
+    "/download_documents",
   ];
   const hideNavFooter = noNavFooterRoutes.includes(pathname);
 
@@ -157,6 +159,7 @@ function App() {
             <Route path='/register' element={<Register />} />
             <Route path='/confirm_email' element={<ConfirmEmail />} />
             <Route path='/department_sip' element={<DepartmentSIP />} />
+            <Route path='/download_documents' element={<DownloadDocuments />} />
           </Routes>
         </Suspense>
       </ErrorBoundary>

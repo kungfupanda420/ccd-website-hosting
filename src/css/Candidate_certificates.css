@@ -1,0 +1,54 @@
+
+
+/* Download Buttons CSS */
+.download-btn {
+  min-width: 280px;
+  padding: 12px 24px;
+  margin: 15px 0;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.download-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.download-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.download-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Offer Letter Button */
+.download-btn.offer-letter {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+  border: 1px solid #2980b9;
+}
+
+/* Completion Certificate Button */
+.download-btn.completion-cert {
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  color: white;
+  border: 1px solid #27ae60;
+}
+
+/* Button Icons */
+.download-btn .fa-download {
+  font-size: 18px;
+}

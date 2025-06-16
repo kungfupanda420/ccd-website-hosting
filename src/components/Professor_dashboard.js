@@ -541,8 +541,8 @@ function Professor_dashboard() {
                       <th>Student Name</th>
                       <th>SIP ID</th>
                       <th>Project Title</th>
-                      <th>Department</th>
-                      <th>Contact</th>
+                      {/* <th>Department</th> */}
+                      {/* <th>Contact</th> */}
                       <th>Start Date</th>
                       <th>End Date</th>
                       {allottedStudents.some(student => !student.start_date || !student.end_date) && (
@@ -561,8 +561,8 @@ function Professor_dashboard() {
                           <td>{student.name}</td>
                           <td>{student.sip_id}</td>
                           <td>{student.project_title}</td>
-                          <td>{student.department}</td>
-                          <td>{student.email}</td>
+                          {/* <td>{student.department}</td> */}
+                          {/* <td>{student.email}</td> */}
                           <td>
                             {student.start_date
                               ? new Date(student.start_date).toLocaleDateString()

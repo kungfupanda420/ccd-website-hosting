@@ -526,15 +526,15 @@ function Admin_sip() {
         {activeSection === "professors" && (
           <div className="professors-section">
             <h1>Professors Management</h1>
-            <div style={{ 
-              display: "grid", 
-              gridTemplateColumns: "1fr 1fr 1fr", 
-              gap: "20px", 
-              marginBottom: "20px" 
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr 1fr",
+              gap: "20px",
+              marginBottom: "20px"
             }}>
-              <div style={{ 
-                padding: "20px", 
-                border: "1px solid #ddd", 
+              <div style={{
+                padding: "20px",
+                border: "1px solid #ddd",
                 borderRadius: "4px",
                 display: "flex",
                 flexDirection: "column"
@@ -569,10 +569,10 @@ function Admin_sip() {
                   {loading ? "Uploading..." : "Upload File"}
                 </button>
               </div>
-              
-              <div style={{ 
-                padding: "20px", 
-                border: "1px solid #ddd", 
+
+              <div style={{
+                padding: "20px",
+                border: "1px solid #ddd",
                 borderRadius: "4px",
                 display: "flex",
                 flexDirection: "column"
@@ -595,10 +595,10 @@ function Admin_sip() {
                   {loading ? "Preparing..." : "Download Professors"}
                 </button>
               </div>
-              
-              <div style={{ 
-                padding: "20px", 
-                border: "1px solid #ddd", 
+
+              <div style={{
+                padding: "20px",
+                border: "1px solid #ddd",
                 borderRadius: "4px",
                 display: "flex",
                 flexDirection: "column"
@@ -676,34 +676,37 @@ function Admin_sip() {
               <div>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <h2>Allotted Students</h2>
-                  <button
-                    onClick={handleRejectAllStudents}
-                    disabled={loading || deptStudents.length === 0}
-                    style={{
-                      padding: "8px 16px",
-                      backgroundColor: "#e74c3c",
-                      color: "white",
-                      border: "none",
-                      borderRadius: "4px",
-                      cursor: "pointer",
-                    }}
-                  >
-                    {loading ? "Processing..." : "Reject All"}
-                  </button>
-                  <button
-                    onClick={handleConfirmAllStudents}
-                    disabled={loading || deptStudents.length === 0}
-                    style={{
-                      padding: "8px 16px",
-                      backgroundColor: "#27ae60",
-                      color: "white",
-                      border: "none",
-                      borderRadius: "4px",
-                      cursor: "pointer",
-                    }}
-                  >
-                    {loading ? "Processing..." : "Confirm All Students"}
-                  </button>
+                  <div>
+                    <button
+                      onClick={handleRejectAllStudents}
+                      disabled={loading || deptStudents.length === 0}
+                      style={{
+                        padding: "8px 16px",
+                        backgroundColor: "#e74c3c",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                        marginRight: "10px"
+                      }}
+                    >
+                      {loading ? "Processing..." : "Reject All"}
+                    </button>
+                    <button
+                      onClick={handleConfirmAllStudents}
+                      disabled={loading || deptStudents.length === 0}
+                      style={{
+                        padding: "8px 16px",
+                        backgroundColor: "#27ae60",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {loading ? "Processing..." : "Confirm All Students"}
+                    </button>
+                  </div>
                 </div>
                 {deptStudents.length === 0 ? (
                   <p>No students found for this department.</p>
@@ -716,6 +719,7 @@ function Admin_sip() {
                           <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Name</th>
                           <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Project</th>
                           <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Professor</th>
+                          <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Status</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -734,6 +738,14 @@ function Admin_sip() {
                               <td style={{ border: "1px solid #ddd", padding: "8px" }}>
                                 {project.professor.name}
                               </td>
+                              <td style={{
+                                border: "1px solid #ddd",
+                                padding: "8px",
+                                textAlign: "center",
+                                color: student.confirmed ? "green" : "red"
+                              }}>
+                                {student.confirmed ? "Confirmed" : "Not Confirmed"}
+                              </td>
                             </tr>
                           ))
                         )}
@@ -745,8 +757,7 @@ function Admin_sip() {
             )}
           </div>
         )}
-
-        {activeSection === "rounds" && roundDetails.number<4 && (
+        {activeSection === "rounds" && roundDetails.number < 4 && (
           <div className="rounds-section">
             <h1>Round Management</h1>
 
@@ -863,7 +874,7 @@ function Admin_sip() {
 
                   {/* Next Round Button - Show when appropriate */}
                   {(roundDetails.number % 2 === 0 ||
-                    (roundDetails.number % 2 === 1 && !roundDetails.allow_reg && roundDetails.lock_choices&& roundDetails.number<3&&(roundDetails.number==2&&roundDetails.lock_choices))) && (
+                    (roundDetails.number % 2 === 1 && !roundDetails.allow_reg && roundDetails.lock_choices && roundDetails.number < 3 && (roundDetails.number == 2 && roundDetails.lock_choices))) && (
                       <div style={{ marginTop: "20px", textAlign: "center" }}>
                         <button
                           onClick={() => setShowStartRoundModal(true)}
@@ -885,7 +896,7 @@ function Admin_sip() {
                     )}
                 </div>
               )}
-              
+
             </div>
 
             {/* Start Round Modal */}
