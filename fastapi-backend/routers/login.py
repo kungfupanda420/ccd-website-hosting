@@ -48,9 +48,9 @@ conf = ConnectionConfig(
 def login(request: UserLogin, db: Session=Depends(get_db)):
     user = db.query(User).filter(User.email== request.email).first()
     if not user:
-        raise HTTPException(status_code=404, detail="Invalid Credentials")
+        raise HTTPException(status_code=401, detail="User not Found")
     if not pwd_context.verify(request.password,user.password):
-        raise HTTPException(status_code=404, detail="Invalid Credentials")
+        raise HTTPException(status_code=401, detail="Invalid Credentials")
     
     access_token= create_access_token(
         data={"sub":user.email}
