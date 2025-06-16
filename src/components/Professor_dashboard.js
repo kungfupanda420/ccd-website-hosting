@@ -254,7 +254,7 @@ function Professor_dashboard() {
       setMessage("You must be logged in to perform this action.");
       return;
     }
-    
+
     try {
       const res = await authFetch(`/api/professors/set_start_date/${sipId}`, {
         method: "POST",
@@ -266,7 +266,7 @@ function Professor_dashboard() {
           date: dateInputs[sipId]?.start_date
         }),
       });
-      
+
       if (res.ok) {
         setMessage(`Start date set successfully for student ${sipId}`);
         fetchAllottedStudents(); // Refresh the list
@@ -286,7 +286,7 @@ function Professor_dashboard() {
       setMessage("You must be logged in to perform this action.");
       return;
     }
-    
+
     try {
       const res = await authFetch(`/api/professors/set_end_date/${sipId}`, {
         method: "POST",
@@ -298,7 +298,7 @@ function Professor_dashboard() {
           date: dateInputs[sipId]?.end_date
         }),
       });
-      
+
       if (res.ok) {
         setMessage(`End date set successfully for student ${sipId}`);
         fetchAllottedStudents(); // Refresh the list
@@ -490,8 +490,8 @@ function Professor_dashboard() {
                         <strong>{project.title}</strong> - {project.description}
                         <br />
                         <span>
-                          Interns: {project.no_of_interns} | Duration: {project.duration} | 
-                          Mode: {project.mode} | Prerequisites: {project.prerequisites||"NONE"}
+                          Interns: {project.no_of_interns} | Duration: {project.duration} |
+                          Mode: {project.mode} | Prerequisites: {project.prerequisites || "NONE"}
                         </span>
                         <br />
                         <div style={{ display: "flex", gap: "12px", marginTop: "12px" }}>
@@ -534,73 +534,87 @@ function Professor_dashboard() {
             ) : allottedStudents.length === 0 ? (
               <p>No students have been allotted to your projects yet.</p>
             ) : (
-              <table className="students-table">
-                <thead>
-                  <tr>
-                    <th>Student Name</th>
-                    <th>SIP ID</th>
-                    <th>Project Title</th>
-                    <th>Department</th>
-                    <th>Contact</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {allottedStudents.map((student) => (
-                    <tr key={student.sip_id}>
-                      <td>{student.name}</td>
-                      <td>{student.sip_id}</td>
-                      <td>{student.project_title}</td>
-                      {/* <td>{student.department}</td> */}
-                      <td>{student.email}</td>
-                      <td>
-                        {student.start_date ? (
-                          new Date(student.start_date).toLocaleDateString()
-                        ) : (
-                          <input
-                            type="date"
-                            value={dateInputs[student.sip_id]?.start_date || ''}
-                            onChange={(e) => handleDateChange(student.sip_id, 'start_date', e.target.value)}
-                          />
-                        )}
-                      </td>
-                      <td>
-                        {student.end_date ? (
-                          new Date(student.end_date).toLocaleDateString()
-                        ) : (
-                          <input
-                            type="date"
-                            value={dateInputs[student.sip_id]?.end_date || ''}
-                            onChange={(e) => handleDateChange(student.sip_id, 'end_date', e.target.value)}
-                          />
-                        )}
-                      </td>
-                      <td>
-                        {!student.start_date && (
-                          <button 
-                            onClick={() => handleSetStartDate(student.sip_id)}
-                            className="date-btn"
-                          >
-                            Set Start
-                          </button>
-                        )}
-                        {!student.end_date && student.start_date && (
-                          <button 
-                            onClick={() => handleSetEndDate(student.sip_id)}
-                            className="date-btn"
-                          >
-                            Set End
-                          </button>
-                        )}
-                      </td>
+              <div className="students-table-container">
+                <table className="students-table">
+                  <thead>
+                    <tr>
+                      <th>Student Name</th>
+                      <th>SIP ID</th>
+                      <th>Project Title</th>
+                      <th>Department</th>
+                      <th>Contact</th>
+                      <th>Start Date</th>
+                      <th>End Date</th>
+                      {allottedStudents.some(student => !student.start_date || !student.end_date) && (
+                        <th className="actions-column">Actions</th>
+                      )}
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {allottedStudents.map((student) => {
+                      const needsStartDate = !student.start_date;
+                      const needsEndDate = student.start_date && !student.end_date;
+                      const showActions = needsStartDate || needsEndDate;
+
+                      return (
+                        <tr key={student.sip_id}>
+                          <td>{student.name}</td>
+                          <td>{student.sip_id}</td>
+                          <td>{student.project_title}</td>
+                          <td>{student.department}</td>
+                          <td>{student.email}</td>
+                          <td>
+                            {student.start_date
+                              ? new Date(student.start_date).toLocaleDateString()
+                              : showActions && (
+                                <input
+                                  type="date"
+                                  className="date-input"
+                                  value={dateInputs[student.sip_id]?.start_date || ''}
+                                  onChange={(e) => handleDateChange(student.sip_id, 'start_date', e.target.value)}
+                                />
+                              )}
+                          </td>
+                          <td>
+                            {student.end_date
+                              ? new Date(student.end_date).toLocaleDateString()
+                              : showActions && needsEndDate && (
+                                <input
+                                  type="date"
+                                  className="date-input"
+                                  value={dateInputs[student.sip_id]?.end_date || ''}
+                                  onChange={(e) => handleDateChange(student.sip_id, 'end_date', e.target.value)}
+                                />
+                              )}
+                          </td>
+                          {showActions && (
+                            <td className="actions-cell">
+                              {needsStartDate && (
+                                <button
+                                  onClick={() => handleSetStartDate(student.sip_id)}
+                                  className="date-btn"
+                                >
+                                  Set Start
+                                </button>
+                              )}
+                              {needsEndDate && (
+                                <button
+                                  onClick={() => handleSetEndDate(student.sip_id)}
+                                  className="date-btn"
+                                >
+                                  Set End
+                                </button>
+                              )}
+                            </td>
+                          )}
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             )}
-            {message && <p style={{ marginTop: "10px", color: "red" }}>{message}</p>}
+            {message && <p className="message">{message}</p>}
           </div>
         )}
 
