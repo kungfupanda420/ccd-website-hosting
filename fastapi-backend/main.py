@@ -24,12 +24,14 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))  #getting the full absolute path of the directory where your main.py file is located
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  #getting the full absolute path of the directory where your main.py file is located
+print (BASE_DIR)
 UPLOAD_DIR = os.path.join(BASE_DIR, "uploads")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 # app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
-app.mount("/uploads", StaticFiles(directory=os.path.join(os.getcwd(), "uploads")), name="uploads")
+app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
+
 
 
 app.include_router(auth.router)
