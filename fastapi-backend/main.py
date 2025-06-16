@@ -25,7 +25,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  #getting the full absolute path of the directory where your main.py file is located
-print (BASE_DIR)
 UPLOAD_DIR = os.path.join(BASE_DIR, "uploads")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
