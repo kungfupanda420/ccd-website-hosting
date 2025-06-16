@@ -12,6 +12,10 @@ function Login() {
   const [forgotMsg, setForgotMsg] = useState("");
   const [loading, setLoading] = useState(false);
   const [forgotMode, setForgotMode] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState({
+    email: false,
+    password: false
+  });
   const navigate = useNavigate();
 
   function handleShow() {
@@ -22,8 +26,16 @@ function Login() {
     e.preventDefault();
     setError("");
     setForgotMsg("");
-
-    if (!email || (!password && !forgotMode)) {
+    
+    // Validate fields
+    const errors = {
+      email: !email,
+      password: !forgotMode && !password
+    };
+    
+    setFieldErrors(errors);
+    
+    if (errors.email || errors.password) {
       setError("Please fill in all fields");
       return;
     }
@@ -64,6 +76,7 @@ function Login() {
     setError("");
     setForgotMsg("");
     if (!email) {
+      setFieldErrors({...fieldErrors, email: true});
       setError("Please enter your email to reset password.");
       return;
     }
@@ -86,6 +99,7 @@ function Login() {
     setForgotMode(!forgotMode);
     setError("");
     setForgotMsg("");
+    setFieldErrors({ email: false, password: false });
   }
 
   return (
@@ -95,30 +109,38 @@ function Login() {
         {error && <div className="error-message">{error}</div>}
         {forgotMsg && <div className="forgot-message">{forgotMsg}</div>}
         <form className="formLogIn" onSubmit={handleSubmit}>
-          <div className="fillBoxInput email-field mediumHeading">
+          <div className={`fillBoxInput ${fieldErrors.email ? "error" : ""}`}>
             <input
               type="text"
               placeholder="Email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setFieldErrors({...fieldErrors, email: false});
+              }}
             />
+            {fieldErrors.email && <span className="error-text">Email is required</span>}
           </div>
           {!forgotMode && (
-            <div className="fillBoxInput mediumHeading">
+            <div className={`fillBoxInput ${fieldErrors.password ? "error" : ""}`}>
               <input
                 type={showpwd ? "text" : "password"}
                 placeholder="Password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setFieldErrors({...fieldErrors, password: false});
+                }}
               />
               <span className="eyeIcon" onClick={handleShow}>
                 {showpwd ? <AiFillEye /> : <AiFillEyeInvisible />}
               </span>
+              {fieldErrors.password && <span className="error-text">Password is required</span>}
             </div>
           )}
           <div className="login-btn-row">
-            <button type="submit" className="loginBtn">
-              {forgotMode ? "Send Reset Link" : "Log In"}
+            <button type="submit" className="loginBtn" disabled={loading}>
+              {loading ? "Processing..." : forgotMode ? "Send Reset Link" : "Log In"}
             </button>
             <button
               type="button"

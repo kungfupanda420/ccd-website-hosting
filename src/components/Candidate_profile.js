@@ -3,7 +3,7 @@ import { authFetch } from "../utils/authFetch";
 import "../css/CandidateProfile.css";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faSignOutAlt, faHome, faEdit, faSave, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faSignOutAlt, faHome, faEdit, faSave, faTimes,faList } from "@fortawesome/free-solid-svg-icons";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
@@ -200,10 +200,15 @@ function CandidateProfile() {
               <FontAwesomeIcon icon={faHome} />
               <span>Dashboard</span>
             </button>
+              <button onClick={() => navigate("/candidatepreferences")}>
+              <FontAwesomeIcon icon={faList} />
+              <span>Preferences</span>
+            </button>
             <button onClick={() => navigate("/")}>
               <FontAwesomeIcon icon={faSignOutAlt} />
               <span>Logout</span>
             </button>
+          
           </nav>
         </aside>
 

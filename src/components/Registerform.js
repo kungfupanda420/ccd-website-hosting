@@ -165,8 +165,8 @@ function Registerform() {
         documents_path: null,
         role: "student"
       });
-      // setStep(1);
-      window.location.href = "/candidate_dashboard"; // Redirect to login after successful registration
+      
+      window.location.href = "/candidatedashboard"; 
       alert("Registration successful!");
     } catch (error) {
       alert("Registration failed: " + error.message);

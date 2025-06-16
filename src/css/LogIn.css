@@ -1,6 +1,9 @@
 :root {
   --grayBorderColor: #ccc;
   --textColor: #000000;
+  --errorColor: #ff6b6b;
+  --errorBg: rgba(255, 107, 107, 0.1);
+  --successColor: #4caf50;
 }
 
 .loginContainer {
@@ -54,11 +57,8 @@
   border-bottom: 1px solid var(--textColor);
 }
 
-.fillBoxInput p {
-  color: red;
-  text-align-last: right;
-  margin: 0.25rem 0.1rem;
-  display: none;
+.fillBoxInput.error input {
+  border-bottom: 1px solid var(--errorColor);
 }
 
 .fillBoxInput .eyeIcon {
@@ -66,6 +66,34 @@
   color: var(--grayBorderColor);
   right: 10px;
   top: 12px;
+  cursor: pointer;
+}
+
+/* Messages */
+.error-message,
+.forgot-message {
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  border-radius: 4px;
+  width: 100%;
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.error-message {
+  color: var(--errorColor);
+  background-color: var(--errorBg);
+}
+
+.forgot-message {
+  color: var(--successColor);
+  background-color: rgba(76, 175, 80, 0.1);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* BUTTON STYLES */
@@ -85,33 +113,24 @@
   cursor: pointer;
   border: none;
   border-radius: 0.25rem;
-  /* border-radius: 0.5rem; */
   background-color: var(--textColor);
   color: white;
-  /* transition: background-color 0.2s ease; */
-  transition: background-color 0.5s ease,border 0.5s ease;
+  transition: all 0.3s ease;
 }
 
 .loginBtn:hover,
 .forgotBtn:hover {
   background-color: #3614ca;
-  transition: background-color 1ms ease;
-  transform: scale(1.1);
-  box-shadow:  0 0 15px rgba(0, 205, 175, 0.4);
-  transition: background-color 0.3s ease,border 0.3s ease;
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(0, 205, 175, 0.4);
 }
 
-/* ERROR & FORGOT MESSAGE STYLES */
-.error-message {
-  color: red;
-  margin-bottom: 1rem;
-  text-align: center;
-}
-
-.forgot-message {
-  color: green;
-  margin-bottom: 1rem;
-  text-align: center;
+.loginBtn:disabled,
+.forgotBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 /* RESPONSIVE STYLES */
@@ -145,4 +164,23 @@
   .login-btn-row {
     flex-direction: column;
   }
+}
+
+
+/* Add these styles to your existing CSS */
+.fillBoxInput .error-text {
+  color: var(--errorColor);
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  text-align: right;
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.fillBoxInput.error .error-text {
+  display: block;
+}
+
+.fillBoxInput.error input {
+  border-bottom: 1px solid var(--errorColor);
 }

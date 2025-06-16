@@ -87,6 +87,7 @@ function App() {
     '/professor_dashboard',
     '/CandidatePreferences',
     '/candidatePreferences',
+    '/candidatepreferences',
     '/candidate_profile',
     '/Candidatedashboard',
     '/candidatedashboard',
