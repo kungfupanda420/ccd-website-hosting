@@ -47,3 +47,4 @@ fastapi-backend/id_gen.py
 
 /uploads
 /IDS
+dump.rdb
