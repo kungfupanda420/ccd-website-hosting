@@ -164,9 +164,7 @@ function CandidateProfile() {
 
   const handleFileChange = (e) => {
     switch (e.target.name) {
-      case "regPaymentScreenshot":
-        setRegPaymentScreenshot(e.target.files[0]);
-        break;
+     
       case "profilePhoto":
         setProfilePhoto(e.target.files[0]);
         break;
