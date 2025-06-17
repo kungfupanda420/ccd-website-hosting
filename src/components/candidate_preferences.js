@@ -25,6 +25,8 @@ function CandidatePreferences() {
   const [message, setMessage] = useState({ text: "", type: "" });
   const [isLoading, setIsLoading] = useState(true);
   const [candidate, setCandidate] = useState(null);
+  const [adminConf, setAdminConf] = useState(false);
+  const [allottedProject, setAllottedProject] = useState(null);
   const navigate = useNavigate();
 
   // GSAP animations
@@ -49,6 +51,25 @@ function CandidatePreferences() {
       try {
         setIsLoading(true);
 
+        // Check admin confirmation status first
+        const adminConfRes = await authFetch("/api/students/admin_conf");
+        if (adminConfRes.ok) {
+          const adminConfData = await adminConfRes.json();
+          setAdminConf(adminConfData.admin_conf);
+          
+          if (adminConfData.admin_conf) {
+            // If admin confirmed, fetch allotted project
+            const allottedRes = await authFetch("/api/students/me/allotted_project");
+            if (allottedRes.ok) {
+              const allottedData = await allottedRes.json();
+              setAllottedProject(allottedData);
+            }
+            setIsLoading(false);
+            return;
+          }
+        }
+
+        // If not admin confirmed, proceed with normal flow
         const candidateRes = await authFetch("/api/students/me");
         if (candidateRes.ok) {
           const candidateData = await candidateRes.json();
@@ -186,6 +207,68 @@ function CandidatePreferences() {
     }
   };
 
+  // If admin has confirmed, show allotted project
+  if (adminConf) {
+    return (
+      <div style={{ display: "flex" }}>
+        <aside className="sidebar">
+          <img
+            className="profile-pic"
+            src={candidate?.profilePhotoPath ? `/${candidate.profilePhotoPath}` : "/images/default.png"}
+            alt="Profile"
+          />
+          <nav>
+            <button onClick={() => navigate("/candidatedashboard")}>
+              <FontAwesomeIcon icon={faHome} />
+              <span>Dashboard</span>
+            </button>
+            <button onClick={() => navigate("/candidate_profile")}>
+              <FontAwesomeIcon icon={faUser} />
+              <span>Profile</span>
+            </button>
+            <button
+              onClick={() => {
+                localStorage.removeItem("access_token");
+                localStorage.removeItem("refresh_token");
+                navigate("/login");
+              }}
+            >
+              <FontAwesomeIcon icon={faSignOutAlt} />
+              <span>Logout</span>
+            </button>
+          </nav>
+        </aside>
+        
+        <div className="preferences-container">
+          <h1>Your Allotted Project</h1>
+          
+          {isLoading ? (
+            <div>Loading...</div>
+          ) : allottedProject ? (
+            <div className="allotted-project-card">
+              <h2>{allottedProject.title || "N/A"}</h2>
+              <div className="project-details">
+                <p><strong>Description:</strong> {allottedProject.description || "N/A"}</p>
+                <p><strong>Department:</strong> {allottedProject.professor?.department?.name || "N/A"}</p>
+                <p><strong>Professor:</strong> {allottedProject.professor?.name || "N/A"}</p>
+                <p><strong>Mode:</strong> {allottedProject.mode || "N/A"}</p>
+                <p><strong>Duration:</strong> {allottedProject.duration || "N/A"}</p>
+              </div>
+              <div className="confirmation-message">
+                Your project has been confirmed by the admin. Please contact your professor for further instructions.
+              </div>
+            </div>
+          ) : (
+            <div className="no-project-message">
+              No project has been allotted to you yet. Please check back later.
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // Normal preferences selection flow
   return (
     <div style={{ display: "flex" }}>
       {/* Sidebar */}
