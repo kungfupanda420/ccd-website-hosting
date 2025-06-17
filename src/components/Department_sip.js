@@ -16,7 +16,7 @@ function DepartmentSIP() {
 
   const fetchData = async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("access_token");
       if (!token) {
         console.error("Authorization token is missing.");
         alert("Please log in to access this page.");
@@ -63,7 +63,7 @@ function DepartmentSIP() {
     if (!project_id) return;
 
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("access_token");
       if (!token) {
         console.error("Authorization token is missing.");
         alert("Please log in to access this page.");
@@ -91,7 +91,7 @@ function DepartmentSIP() {
 
   const handleUnallot = async (sip_id) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("access_token");
       if (!token) {
         console.error("Authorization token is missing.");
         alert("Please log in to access this page.");
@@ -119,7 +119,7 @@ function DepartmentSIP() {
 
   const handleCSVExport = async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("access_token");
       if (!token) {
         console.error("Authorization token is missing.");
         alert("Please log in to access this page.");

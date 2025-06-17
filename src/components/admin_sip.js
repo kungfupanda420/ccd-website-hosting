@@ -186,7 +186,7 @@ function Admin_sip() {
   const fetchDepartments = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("access_token");
       const response = await fetch("/api/admin/departments", {
         method: "GET",
         headers: {
@@ -210,7 +210,7 @@ function Admin_sip() {
   const fetchRoundDetails = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("access_token");
       const response = await fetch("/api/admin/round_details", {
         method: "GET",
         headers: {
@@ -240,7 +240,7 @@ function Admin_sip() {
     setIsUpdatingRound(true);
     setMessage("");
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("access_token");
       const response = await fetch("/api/admin/start_next_round", {
         method: "POST",
         headers: {
@@ -280,7 +280,7 @@ function Admin_sip() {
     setIsUpdatingRound(true);
     setMessage("");
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("access_token");
       const response = await fetch("/api/admin/stop_registrations", {
         method: "POST",
         headers: {
@@ -317,7 +317,7 @@ function Admin_sip() {
     setIsUpdatingRound(true);
     setMessage("");
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("access_token");
       const response = await fetch("/api/admin/lock_choices", {
         method: "POST",
         headers: {
@@ -349,7 +349,7 @@ function Admin_sip() {
     setLoading(true);
     setDeptStudents([]);
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("access_token");
       const response = await fetch(`/api/admin/department_data/${deptId}`, {
         method: "GET",
         headers: {
@@ -374,7 +374,7 @@ function Admin_sip() {
     setLoading(true);
     setMessage("");
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("access_token");
       const response = await fetch(`/api/admin/confirm_student/${studentId}`, {
         method: "POST",
         headers: {
@@ -418,7 +418,7 @@ function Admin_sip() {
         setLoading(true);
         setMessage("");
         try {
-          const token = localStorage.getItem("token");
+          const token = localStorage.getItem("access_token");
           const response = await fetch(`/api/admin/department_data/${selectedDept}`, {
             method: "POST",
             headers: {
@@ -475,7 +475,7 @@ function Admin_sip() {
       const formData = new FormData();
       formData.append("file", file);
 
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("access_token");
 
       const response = await fetch("/api/admin/professors", {
         method: "POST",
@@ -510,7 +510,7 @@ function Admin_sip() {
         setLoading(true);
         setMessage("");
         try {
-          const token = localStorage.getItem("token");
+          const token = localStorage.getItem("access_token");
           const response = await fetch(`/api/admin/department_data/${selectedDept}`, {
             method: "POST",
             headers: {
@@ -543,7 +543,7 @@ function Admin_sip() {
   const handleDownload = async () => {
     setMessage("Downloading...");
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("access_token");
       const response = await fetch("/api/admin/professors", {
         method: "GET",
         headers: {
@@ -582,7 +582,7 @@ function Admin_sip() {
         setMessage("");
 
         try {
-          const token = localStorage.getItem("token");
+          const token = localStorage.getItem("access_token");
           if (!token) {
             alert("Authorization token is missing. Please log in.");
             setLoading(false);
@@ -622,7 +622,7 @@ function Admin_sip() {
         setLoading(true);
         setMessage("");
         try {
-          const token = localStorage.getItem("token");
+          const token = localStorage.getItem("access_token");
           const response = await fetch("/api/admin/send_professor_emails", {
             method: "POST",
             headers: {

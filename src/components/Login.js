@@ -54,9 +54,11 @@ function Login() {
         if (response.ok) {
           const data = await response.json();
           if (data.access_token) {
-            localStorage.setItem("acces_token", data.access_token);
+            localStorage.setItem("access_token", data.access_token);
             localStorage.setItem("refresh_token", data.refresh_token);
             const role = data.role;
+            console.log("Login successful, role:", role);
+            console.log(data.access_token)
             if (role === "admin") navigate("/admin_sip");
             else if (role === "student") navigate("/Candidatedashboard");
             else if (role === "professor") navigate("/professor_dashboard");

@@ -25,7 +25,7 @@ function CandidateDashboard() {
       setIsLoading(true);
       setError(null);
       try {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("access_token");
         if (!token) {
           setError("No authentication token found");
           return;

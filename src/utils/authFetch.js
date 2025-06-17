@@ -1,5 +1,5 @@
 export async function authFetch(url, options = {}) {
-  let accessToken = localStorage.getItem('token');
+  let accessToken = localStorage.getItem('access_token');
   let refreshToken = localStorage.getItem('refresh_token');
 
   // Attach Authorization header

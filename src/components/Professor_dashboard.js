@@ -34,7 +34,7 @@ function Professor_dashboard() {
 
   // Check authentication on mount
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("access_token");
     setIsAuthenticated(!!token);
   }, []);
 
@@ -42,7 +42,7 @@ function Professor_dashboard() {
   const fetchProjects = async () => {
     setLoadingProjects(true);
     setMessage("");
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("access_token");
     if (!token) {
       setMessage("You must be logged in as a professor to view projects.");
       setLoadingProjects(false);
@@ -71,7 +71,7 @@ function Professor_dashboard() {
   const fetchAllottedStudents = async () => {
     setLoadingStudents(true);
     setMessage("");
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("access_token");
     if (!token) {
       setMessage("You must be logged in as a professor to view allotted students.");
       setLoadingStudents(false);
@@ -117,7 +117,7 @@ function Professor_dashboard() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("acces_token");
     if (!token) {
       setMessage("You must be logged in as a professor to add a project.");
       return;
@@ -178,7 +178,7 @@ function Professor_dashboard() {
   const handleEditSubmit = async (e, id) => {
     e.preventDefault();
     setMessage("");
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("access_token");
     if (!token) {
       setMessage("You must be logged in as a professor to edit a project.");
       return;
@@ -212,7 +212,7 @@ function Professor_dashboard() {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this project?")) return;
     setMessage("");
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("access_token");
     if (!token) {
       setMessage("You must be logged in as a professor to delete a project.");
       return;
@@ -249,7 +249,7 @@ function Professor_dashboard() {
 
   // Set start date
   const handleSetStartDate = async (sipId) => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("access_token");
     if (!token) {
       setMessage("You must be logged in to perform this action.");
       return;
@@ -281,7 +281,7 @@ function Professor_dashboard() {
 
   // Set end date
   const handleSetEndDate = async (sipId) => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("access_token");
     if (!token) {
       setMessage("You must be logged in to perform this action.");
       return;

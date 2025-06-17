@@ -76,7 +76,7 @@ function CandidateProfile() {
     const fetchData = async () => {
       setLoading(true);
       setError("");
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("access_token");
       if (!token) {
         setError("You must be logged in.");
         setLoading(false);
@@ -110,7 +110,7 @@ function CandidateProfile() {
   const handleDownload = async (type) => {
     try {
       setError(""); // Clear previous errors
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("access_token");
       let endpoint;
 
       // Determine the endpoint based on the type
@@ -185,7 +185,7 @@ function CandidateProfile() {
     setLoading(true);
     setError("");
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("access_token");
       const formData = new FormData();
 
       // Append all form fields
