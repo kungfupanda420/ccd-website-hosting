@@ -30,20 +30,17 @@ function CandidatePreferences() {
   const navigate = useNavigate();
 
   // GSAP animations
-  useEffect(() => {
-    gsap.from(".preferences-container", {
-      opacity: 0,
-      y: 50,
-      duration: 1,
-      ease: "power2.out",
-    });
-    gsap.from(".sidebar", {
-      opacity: 0,
-      x: -50,
-      duration: 1,
-      ease: "power2.out",
-    });
-  }, []);
+ useEffect(() => {
+    if (selectedProjects.length > 0) {
+      gsap.from('.selected-item', {
+        y: 20,
+        opacity: 0,
+        stagger: 0.1,
+        duration: 0.3,
+        ease: "power2.out"
+      });
+    }
+  }, [selectedProjects.length]);
 
   // Fetch candidate data and projects
   useEffect(() => {
@@ -154,14 +151,59 @@ function CandidatePreferences() {
       return [...prev, project];
     });
   };
+const handleDragEnd = (result) => {
+  if (!result.destination) return;
 
-  const handleDragEnd = (result) => {
-    if (!result.destination) return;
-    const items = Array.from(selectedProjects);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-    setSelectedProjects(items);
-  };
+  // Get the current list
+  const items = Array.from(selectedProjects);
+  const [reorderedItem] = items.splice(result.source.index, 1);
+  items.splice(result.destination.index, 0, reorderedItem);
+
+  // Update state immediately
+  setSelectedProjects(items);
+
+  // Animate the movement
+  const listItems = Array.from(document.querySelectorAll('.selected-item'));
+  
+  // Calculate direction of movement
+  const movingUp = result.destination.index < result.source.index;
+  
+  listItems.forEach((item, index) => {
+    const itemId = item.dataset.id;
+    const itemNode = item;
+    
+    if (itemId === reorderedItem.id.toString()) {
+      // Animation for the moved item
+      gsap.fromTo(itemNode,
+        { 
+          y: movingUp ? -30 : 30,
+          backgroundColor: 'rgba(52, 152, 219, 0.2)',
+          scale: 1.02
+        },
+        { 
+          y: 0,
+          backgroundColor: 'white',
+          scale: 1,
+          duration: 0.3,
+          ease: "power2.out"
+        }
+      );
+    } else if (
+      (movingUp && index >= result.destination.index && index < result.source.index) ||
+      (!movingUp && index > result.source.index && index <= result.destination.index)
+    ) {
+      // Animation for items that need to move down/up to make space
+      gsap.fromTo(itemNode,
+        { y: movingUp ? 30 : -30 },
+        { 
+          y: 0,
+          duration: 0.3,
+          ease: "power2.out"
+        }
+      );
+    }
+  });
+};
 
   const submitPreferences = async () => {
     if (selectedProjects.length === 0) {
@@ -448,35 +490,38 @@ function CandidatePreferences() {
                         className="draggable-list"
                       >
                         {selectedProjects.map((project, index) => (
-                          <Draggable
-                            key={project.id}
-                            draggableId={project.id.toString()}
-                            index={index}
-                          >
-                            {(provided, snapshot) => (
-                              <li
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                className={`selected-item ${snapshot.isDragging ? "dragging" : ""}`}
-                              >
-                                <div className="drag-handle">☰</div>
-                                <div className="selected-content">
-                                  <div className="selected-rank">Preference {index + 1}</div>
-                                  <div className="selected-title">{project.title || "N/A"}</div>
-                                  <div className="selected-prof">
-                                    {project.professor?.name || "N/A"}
-                                  </div>
-                                </div>
-                                <button
-                                  onClick={() => toggleProjectSelection(project)}
-                                  className="remove-btn"
-                                >
-                                  Remove
-                                </button>
-                              </li>
-                            )}
-                          </Draggable>
+                           <Draggable
+    key={project.id}
+    draggableId={project.id.toString()}
+    index={index}
+  >
+    {(provided, snapshot) => (
+      <li
+        ref={provided.innerRef}
+        {...provided.draggableProps}
+        {...provided.dragHandleProps}
+        className={`selected-item ${snapshot.isDragging ? "dragging" : ""}`}
+        data-id={project.id.toString()}
+      >
+        <div className="drag-handle">
+          <FontAwesomeIcon icon={faList} />
+        </div>
+        <div className="selected-content">
+          <div className="selected-rank">Preference {index + 1}</div>
+          <div className="selected-title">{project.title || "N/A"}</div>
+          <div className="selected-prof">
+            {project.professor?.name || "N/A"}
+          </div>
+        </div>
+        <button
+          onClick={() => toggleProjectSelection(project)}
+          className="remove-btn"
+        >
+          Remove
+        </button>
+      </li>
+    )}
+  </Draggable>
                         ))}
                         {provided.placeholder}
                       </ol>
