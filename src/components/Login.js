@@ -54,7 +54,8 @@ function Login() {
         if (response.ok) {
           const data = await response.json();
           if (data.access_token) {
-            localStorage.setItem("token", data.access_token);
+            localStorage.setItem("acces_token", data.access_token);
+            localStorage.setItem("refresh_token", data.refresh_token);
             const role = data.role;
             if (role === "admin") navigate("/admin_sip");
             else if (role === "student") navigate("/Candidatedashboard");
