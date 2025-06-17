@@ -259,6 +259,16 @@ def register(
 
 
 
+@router.get("/admin_conf") #Working
+def get_me(db: Session=Depends(get_db),current_user: User=Depends(get_current_user)):
+    if current_user.role != 'student':
+        raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
+    
+    student=db.query(Student).filter(Student.user_id==current_user.id).first()
+    if not student:
+        raise HTTPException(status_code=404, detail="Student not found")
+    return {"admin_conf":student.admin_conf}
+
 @router.get("/me",response_model=ShowStudent) #Working
 def get_me(db: Session=Depends(get_db),current_user: User=Depends(get_current_user)):
     if current_user.role != 'student':
