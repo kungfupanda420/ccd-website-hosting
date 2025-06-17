@@ -1,6 +1,147 @@
 import React, { useState, useEffect } from "react";
 import "../css/Candidate_dashboard.css";
 
+function ConfirmModal({ title, message, confirmText, onConfirm, onCancel, isLoading }) {
+  return (
+    <div style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: "rgba(0,0,0,0.5)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 1
+    }}>
+      <div style={{
+        backgroundColor: "white",
+        padding: "20px",
+        borderRadius: "8px",
+        width: "400px",
+        maxWidth: "90%"
+      }}>
+        <h3>{title}</h3>
+        <p>{message}</p>
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+          <button
+            onClick={onCancel}
+            disabled={isLoading}
+            style={{
+              padding: "8px 16px",
+              backgroundColor: "#6c757d",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+              opacity: isLoading ? 0.7 : 1
+            }}
+          >
+            Cancel
+          </button>
+          <button
+            onClick={onConfirm}
+            disabled={isLoading}
+            style={{
+              padding: "8px 16px",
+              backgroundColor: confirmText.toLowerCase().includes("reject") ? "#e74c3c" : "#28a745",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+              opacity: isLoading ? 0.7 : 1
+            }}
+          >
+            {isLoading ? "Processing..." : confirmText}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PasswordModal({ title, onConfirm, onCancel, password, setPassword, isLoading }) {
+  const inputRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
+  return (
+    <div style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: "rgba(0,0,0,0.5)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 1000
+    }}>
+      <div style={{
+        backgroundColor: "white",
+        padding: "20px",
+        borderRadius: "8px",
+        width: "400px",
+        maxWidth: "90%"
+      }}>
+        <h3>Confirm Password to {title}</h3>
+        <input
+          ref={inputRef}
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Enter admin password"
+          style={{
+            width: "100%",
+            padding: "10px",
+            margin: "10px 0",
+            borderRadius: "4px",
+            border: "1px solid #ddd",
+            outline: "none"
+          }}
+          autoFocus
+        />
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+          <button
+            onClick={onCancel}
+            style={{
+              padding: "8px 16px",
+              backgroundColor: "#6c757d",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer"
+            }}
+          >
+            Cancel
+          </button>
+          <button
+            onClick={onConfirm}
+            disabled={isLoading || !password}
+            style={{
+              padding: "8px 16px",
+              backgroundColor: "#28a745",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+              opacity: isLoading || !password ? 0.7 : 1
+            }}
+          >
+            {isLoading ? "Processing..." : "Confirm"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Admin_sip() {
   const [activeSection, setActiveSection] = useState("professors");
   const [file, setFile] = useState(null);
@@ -19,11 +160,27 @@ function Admin_sip() {
   const [showStopRegModal, setShowStopRegModal] = useState(false);
   const [showLockChoicesModal, setShowLockChoicesModal] = useState(false);
   const [password, setPassword] = useState("");
-  const [emailData, setEmailData] = useState({
-    subject: "",
-    body: "",
-    recipientType: "all"
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [modalConfig, setModalConfig] = useState({
+    title: "",
+    message: "",
+    confirmText: "",
+    onConfirm: () => { }
   });
+
+  // Function to show confirmation modal
+  const showConfirmation = (title, message, confirmText, onConfirmAction) => {
+    setModalConfig({
+      title,
+      message,
+      confirmText,
+      onConfirm: () => {
+        onConfirmAction();
+        setShowConfirmModal(false);
+      }
+    });
+    setShowConfirmModal(true);
+  };
 
   // Fetch departments for dropdown
   const fetchDepartments = async () => {
@@ -253,34 +410,41 @@ function Admin_sip() {
       return;
     }
 
-    setLoading(true);
-    setMessage("");
-    try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(`/api/admin/department_data/${selectedDept}`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ message: "confirmed" }),
-      });
+    showConfirmation(
+      "Confirm All Students",
+      "Are you sure you want to confirm all students in this department?",
+      "Confirm All",
+      async () => {
+        setLoading(true);
+        setMessage("");
+        try {
+          const token = localStorage.getItem("token");
+          const response = await fetch(`/api/admin/department_data/${selectedDept}`, {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ message: "confirmed" }),
+          });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || "Failed to confirm all students");
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.detail || "Failed to confirm all students");
+          }
+
+          const data = await response.json();
+          setMessage(data.message || "All students confirmed successfully!");
+
+          // Refresh students after confirmation
+          fetchDeptStudents(selectedDept);
+        } catch (error) {
+          setMessage(`An error occurred: ${error.message}`);
+        } finally {
+          setLoading(false);
+        }
       }
-
-      const data = await response.json();
-      setMessage(data.message || "All students confirmed successfully!");
-
-      // Refresh students after confirmation
-      fetchDeptStudents(selectedDept);
-    } catch (error) {
-      setMessage(`An error occurred: ${error.message}`);
-    } finally {
-      setLoading(false);
-    }
+    );
   };
 
   // Handle department selection change
@@ -338,37 +502,41 @@ function Admin_sip() {
       return;
     }
 
-    const confirmReject = window.confirm("Are you sure you want to reject new allotments for this department?");
-    if (!confirmReject) return;
+    showConfirmation(
+      "Reject All Students",
+      "Are you sure you want to reject all students in this department? This action cannot be undone.",
+      "Reject All",
+      async () => {
+        setLoading(true);
+        setMessage("");
+        try {
+          const token = localStorage.getItem("token");
+          const response = await fetch(`/api/admin/department_data/${selectedDept}`, {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ message: "rejected" }),
+          });
 
-    setLoading(true);
-    setMessage("");
-    try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(`/api/admin/department_data/${selectedDept}`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ message: "rejected" }),
-      });
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.detail || "Failed to reject all students");
+          }
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || "Failed to reject all students");
+          const data = await response.json();
+          setMessage(data.message || "All students rejected successfully!");
+
+          // Refresh students after rejection
+          fetchDeptStudents(selectedDept);
+        } catch (error) {
+          setMessage(`An error occurred: ${error.message}`);
+        } finally {
+          setLoading(false);
+        }
       }
-
-      const data = await response.json();
-      setMessage(data.message || "All students rejected successfully!");
-
-      // Refresh students after rejection
-      fetchDeptStudents(selectedDept);
-    } catch (error) {
-      setMessage(`An error occurred: ${error.message}`);
-    } finally {
-      setLoading(false);
-    }
+    );
   };
 
   // Download professors
@@ -405,64 +573,78 @@ function Admin_sip() {
 
   // Generate ID cards
   const handleGenerateIDCards = async () => {
-    setLoading(true);
-    setMessage("");
+    showConfirmation(
+      "Generate ID Cards",
+      "Are you sure you want to generate ID cards for all students?",
+      "Generate ID Cards",
+      async () => {
+        setLoading(true);
+        setMessage("");
 
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        alert("Authorization token is missing. Please log in.");
-        setLoading(false);
-        return;
+        try {
+          const token = localStorage.getItem("token");
+          if (!token) {
+            alert("Authorization token is missing. Please log in.");
+            setLoading(false);
+            return;
+          }
+
+          const response = await fetch("/api/admin/generate_id_card", {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.detail || "Failed to generate ID cards");
+          }
+
+          const data = await response.json();
+          setMessage(data.message || "ID cards generated successfully!");
+        } catch (error) {
+          setMessage(`An error occurred: ${error.message}`);
+        } finally {
+          setLoading(false);
+        }
       }
-
-      const response = await fetch("/api/admin/generate_id_card", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || "Failed to generate ID cards");
-      }
-
-      const data = await response.json();
-      setMessage(data.message || "ID cards generated successfully!");
-    } catch (error) {
-      setMessage(`An error occurred: ${error.message}`);
-    } finally {
-      setLoading(false);
-    }
+    );
   };
 
   // Handle email sending
   const handleSendEmail = async () => {
-    setLoading(true);
-    setMessage("");
-    try {
-      const token = localStorage.getItem("token");
-      const response = await fetch("/api/admin/send_professor_emails", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+    showConfirmation(
+      "Send Emails to Professors",
+      "Are you sure you want to send notification emails to all professors?",
+      "Send Emails",
+      async () => {
+        setLoading(true);
+        setMessage("");
+        try {
+          const token = localStorage.getItem("token");
+          const response = await fetch("/api/admin/send_professor_emails", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || "Failed to send emails");
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.detail || "Failed to send emails");
+          }
+
+          const data = await response.json();
+          setMessage(data.message || "Notification emails sent successfully!");
+        } catch (error) {
+          setMessage(`An error occurred: ${error.message}`);
+        } finally {
+          setLoading(false);
+        }
       }
-
-      const data = await response.json();
-      setMessage(data.message || "Notification emails sent successfully!");
-    } catch (error) {
-      setMessage(`An error occurred: ${error.message}`);
-    } finally {
-      setLoading(false);
-    }
+    );
   };
 
   // Fetch data when sections are opened
@@ -757,6 +939,7 @@ function Admin_sip() {
             )}
           </div>
         )}
+
         {activeSection === "rounds" && roundDetails.number < 4 && (
           <div className="rounds-section">
             <h1>Round Management</h1>
@@ -896,7 +1079,6 @@ function Admin_sip() {
                     )}
                 </div>
               )}
-
             </div>
 
             {/* Start Round Modal */}
@@ -959,89 +1141,18 @@ function Admin_sip() {
           </div>
         )}
       </div>
-    </div>
-  );
-}
 
-// Password Modal Component
-function PasswordModal({ title, onConfirm, onCancel, password, setPassword, isLoading }) {
-  const inputRef = React.useRef(null);
-
-  // Focus the input when modal opens
-  React.useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, []);
-
-  return (
-    <div style={{
-      position: "fixed",
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: "rgba(0,0,0,0.5)",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      zIndex: 1000
-    }}>
-      <div style={{
-        backgroundColor: "white",
-        padding: "20px",
-        borderRadius: "8px",
-        width: "400px",
-        maxWidth: "90%"
-      }}>
-        <h3>Confirm Password to {title}</h3>
-        <input
-          ref={inputRef}
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Enter admin password"
-          style={{
-            width: "100%",
-            padding: "10px",
-            margin: "10px 0",
-            borderRadius: "4px",
-            border: "1px solid #ddd",
-            outline: "none"
-          }}
-          autoFocus
+      {/* Confirmation Modal */}
+      {showConfirmModal && (
+        <ConfirmModal
+          title={modalConfig.title}
+          message={modalConfig.message}
+          confirmText={modalConfig.confirmText}
+          onConfirm={modalConfig.onConfirm}
+          onCancel={() => setShowConfirmModal(false)}
+          isLoading={loading}
         />
-        <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
-          <button
-            onClick={onCancel}
-            style={{
-              padding: "8px 16px",
-              backgroundColor: "#6c757d",
-              color: "white",
-              border: "none",
-              borderRadius: "4px",
-              cursor: "pointer"
-            }}
-          >
-            Cancel
-          </button>
-          <button
-            onClick={onConfirm}
-            disabled={isLoading || !password}
-            style={{
-              padding: "8px 16px",
-              backgroundColor: "#28a745",
-              color: "white",
-              border: "none",
-              borderRadius: "4px",
-              cursor: "pointer",
-              opacity: isLoading || !password ? 0.7 : 1
-            }}
-          >
-            {isLoading ? "Processing..." : "Confirm"}
-          </button>
-        </div>
-      </div>
+      )}
     </div>
   );
 }
