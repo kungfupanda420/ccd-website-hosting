@@ -50,12 +50,14 @@ class ShowStudent(BaseModel):
     admin_conf:bool
     start_date:Optional[date]
     end_date:Optional[date]
-    student_college_idcard_path: Optional[str]
     pref1: Optional[ShowProject]
     pref2: Optional[ShowProject]
     pref3: Optional[ShowProject]
 
     selected_project: Optional[ShowProject]
+    documents_path: Optional[str]
+    profilePhotoPath: Optional[str]
+    student_college_idcard_path: Optional[str]
 
     model_config = {
         "from_attributes": True

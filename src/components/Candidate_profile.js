@@ -3,7 +3,7 @@ import { authFetch } from "../utils/authFetch";
 import "../css/CandidateProfile.css";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faSignOutAlt, faHome, faEdit, faSave, faTimes,faList,faDownload } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faSignOutAlt, faHome, faEdit, faSave, faTimes, faList, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
@@ -41,7 +41,8 @@ function CandidateProfile() {
     // start_date: "",
     // end_date: "",
     // nitc_idcard_path: "",
-    student_college_idcard_path: ""
+    student_college_idcard_path: "",
+    documents_path: ""
   });
   const [regPaymentScreenshot, setRegPaymentScreenshot] = useState(null);
   const [profilePhoto, setProfilePhoto] = useState(null);
@@ -106,15 +107,57 @@ function CandidateProfile() {
     };
     fetchData();
   }, []);
-    const handleDownload = (filePath) => {
-    const link = document.createElement('a');
-    link.href = `/${filePath}`;
-    link.download = filePath.split('/').pop();
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+  const handleDownload = async (type) => {
+    try {
+      setError(""); // Clear previous errors
+      const token = localStorage.getItem("token");
+      let endpoint;
 
+      // Determine the endpoint based on the type
+      if (type === 'college_id') {
+        endpoint = "/api/students/me/my_clg_id";
+      } else if (type === 'documents') {
+        endpoint = "/api/students/me/my_docs";
+      } else {
+        throw new Error("Invalid download type");
+      }
+
+      const response = await fetch(endpoint, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.detail || "Failed to download file");
+      }
+
+      // Get filename from content-disposition header or use a default
+      const contentDisposition = response.headers.get('content-disposition');
+      let filename = type === 'college_id' ? 'college_id.pdf' : 'documents.zip';
+
+      if (contentDisposition) {
+        const filenameMatch = contentDisposition.match(/filename="?(.+)"?/);
+        if (filenameMatch && filenameMatch[1]) {
+          filename = filenameMatch[1];
+        }
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      setError(error.message || "Error downloading file");
+      console.error("Download error:", error);
+    }
+  };
   const handleEditChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -127,9 +170,10 @@ function CandidateProfile() {
       case "profilePhoto":
         setProfilePhoto(e.target.files[0]);
         break;
-      case "nitc_idcard":
-        setNitcIdCard(e.target.files[0]);
-        break;
+      // 
+      case "documents":
+      setForm({...form, documents: e.target.files[0]});
+      break;
       case "student_college_idcard":
         setCollegeIdCard(e.target.files[0]);
         break;
@@ -145,7 +189,7 @@ function CandidateProfile() {
     try {
       const token = localStorage.getItem("token");
       const formData = new FormData();
-      
+
       // Append all form fields
       Object.entries(form).forEach(([key, value]) => {
         if (value !== null && value !== undefined) {
@@ -156,8 +200,9 @@ function CandidateProfile() {
       // Append files
       if (regPaymentScreenshot) formData.append("regPaymentScreenshot", regPaymentScreenshot);
       if (profilePhoto) formData.append("profilePhoto", profilePhoto);
-      if (nitcIdCard) formData.append("nitc_idcard", nitcIdCard);
+      // if (nitcIdCard) formData.append("nitc_idcard", nitcIdCard);
       if (collegeIdCard) formData.append("student_college_idcard", collegeIdCard);
+      if (form.documents) formData.append("documents", form.documents); // Append documents
 
       const res = await authFetch("/api/students/me", {
         method: "PUT",
@@ -175,6 +220,7 @@ function CandidateProfile() {
         setProfilePhoto(null);
         setNitcIdCard(null);
         setCollegeIdCard(null);
+        setForm({ ...form, documents: null }); // Reset documents field
       } else {
         const err = await res.json();
         setError(err.detail || "Failed to update profile.");
@@ -184,7 +230,6 @@ function CandidateProfile() {
     }
     setLoading(false);
   };
-
   if (loading) return <div className="loading-spinner">Loading...</div>;
   if (error) return <div className="error-message">{error}</div>;
   if (!candidate) return null;
@@ -208,7 +253,7 @@ function CandidateProfile() {
               <FontAwesomeIcon icon={faHome} />
               <span>Dashboard</span>
             </button>
-              <button onClick={() => navigate("/candidatepreferences")}>
+            <button onClick={() => navigate("/candidatepreferences")}>
               <FontAwesomeIcon icon={faList} />
               <span>Preferences</span>
             </button>
@@ -216,7 +261,7 @@ function CandidateProfile() {
               <FontAwesomeIcon icon={faSignOutAlt} />
               <span>Logout</span>
             </button>
-          
+
           </nav>
         </aside>
 
@@ -296,38 +341,36 @@ function CandidateProfile() {
                     <div><strong>End Date:</strong> {candidate.end_date || "Not set"}</div>
                   </div>
                 </section>
-
                 <section className="profile-section">
                   <h2>Documents</h2>
                   <div className="profile-grid">
-                    {/* <div>
-                      <strong>NITC ID Card:</strong> 
-                      {candidate.nitc_idcard_path ? (
-                        <a href={`/${candidate.nitc_idcard_path}`} target="_blank" rel="noopener noreferrer">View Document</a>
-                      ) : "Not uploaded"}
-                    </div> */}
                     <div>
-                      <strong>College ID Card:</strong> 
-                      {candidate.student_college_idcard_path ? (
-                        <div className="document-actions">
-                          <span>{candidate.student_college_idcard_path.split('/').pop()}</span>
-                          <button 
-                            onClick={() => handleDownload(candidate.student_college_idcard_path)}
-                            className="download-btn"
-                          >
-                            <FontAwesomeIcon icon={faDownload} /> Download
-                          </button>
-                        </div>
-                      ) : "Not uploaded"}
+                      <strong>College ID Card:</strong>
+                      <button
+                        onClick={() => handleDownload('college_id')}
+                        className="download-btn"
+                        disabled={!candidate.student_college_idcard_path}
+                      >
+                        <FontAwesomeIcon icon={faDownload} /> Download
+                      </button>
+                      {!candidate.student_college_idcard_path && (
+                        <span className="file-missing">No file uploaded</span>
+                      )}
                     </div>
                     <div>
-                      <strong>Profile Photo:</strong> 
-                     {candidate.profilePhotoPath ? (
-                        <div className="document-actions">
-                          <span>{candidate.profilePhotoPath.split('/').pop()}</span>
-                         
-                        </div>
-                      ) : "Not uploaded"}
+                      <strong>Documents:</strong>
+                      <button
+                        onClick={() => handleDownload('documents')}
+                        className="download-btn"
+                        disabled={!candidate.documents_path}
+                      >
+                        <FontAwesomeIcon icon={faDownload} /> Download
+                      </button>
+                      {!candidate.documents_path ? (
+                        <span className="file-missing">No file uploaded</span>
+                      ) : error && (
+                        <span className="error-message">{error}</span>
+                      )}
                     </div>
                   </div>
                 </section>
@@ -456,7 +499,7 @@ function CandidateProfile() {
                       </div>
                     </div>
                   </section>
-{/* 
+                  {/* 
                   <section className="form-section">
                     <h2>Internship Dates</h2>
                     <div className="form-grid">
@@ -490,6 +533,10 @@ function CandidateProfile() {
                         <label>Payment Screenshot</label>
                         <input type="file" name="regPaymentScreenshot" onChange={handleFileChange} accept="image/*" />
                       </div> */}
+                    </div>
+                    <div className="form-group file-input">
+                      <label>Documents (PDF only)</label>
+                      <input type="file" name="documents" onChange={handleFileChange} accept=".pdf" />
                     </div>
                   </section>
                 </div>
