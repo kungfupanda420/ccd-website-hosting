@@ -675,14 +675,14 @@ function Admin_sip() {
           onClick={() => setActiveSection("generate")}
         >
           <i className="fas fa-id-card"></i>
-          <span>Generate ID Cards</span>
+          <span> ID Cards</span>
         </button>
         <button
           className={`cd-btn ${activeSection === "confirm" ? "active" : ""}`}
           onClick={() => setActiveSection("confirm")}
         >
           <i className="fas fa-check-circle"></i>
-          <span>Confirm Allotments</span>
+          <span> Allotments</span>
         </button>
         <button
           className={`cd-btn ${activeSection === "rounds" ? "active" : ""}`}
