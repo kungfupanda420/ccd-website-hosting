@@ -1,17 +1,17 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Response
 from sqlalchemy.orm import Session
 
-from ..schemas.token import Token
-from ..schemas.login import UserLogin, ForgotPasswordRequest, ChangePasswordRequest
-from ..models.users import User, Student
-from ..security.JWTtoken import create_access_token, create_refresh_token, verify_access_token
-from ..database import get_db
+from schemas.token import Token
+from schemas.login import UserLogin, ForgotPasswordRequest, ChangePasswordRequest
+from models.users import User, Student
+from security.JWTtoken import create_access_token, create_refresh_token, verify_access_token
+from database import get_db
 
 from passlib.context import CryptContext
 
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
-from ..security.oauth2 import get_current_user
+from security.oauth2 import get_current_user
 
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
 from pydantic import EmailStr, BaseModel

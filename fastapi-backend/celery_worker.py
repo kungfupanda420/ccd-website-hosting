@@ -14,5 +14,5 @@ celery_app.conf.task_routes={
     "fastapi-backend/tasks/professor_pwd_emails.send_prof_emails":{"queue":"default"},
 }
 
-from .tasks import generate_id_cards, make_professor, next_round, confirm_allotments,professor_pwd_emails
+from tasks import generate_id_cards, make_professor, next_round, confirm_allotments,professor_pwd_emails
 
