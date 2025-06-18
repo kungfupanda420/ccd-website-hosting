@@ -37,9 +37,8 @@ from celery_worker import celery_app
 @celery_app.task(name="fastapi-backend/tasks/generate_id_cards.generate_id_cards")
 def generate_id_cards():
     db=SessionLocal()
-    print("HI")
-    ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "", ""))
     
+    ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.join(os.path.abspath(__file__)))))
     IDS_DIR = os.path.join(ROOT_DIR, "IDS")
     TEMPLATE_PATH = os.path.join(ROOT_DIR, "templates", "id_card_template.png")
     FONT_PATH = os.path.join(ROOT_DIR, "templates", "Nexa-Heavy.ttf")
