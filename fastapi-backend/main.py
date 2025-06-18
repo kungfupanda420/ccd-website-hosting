@@ -1,7 +1,7 @@
 from fastapi import FastAPI
-from .database import engine
-from .routers import students,admin,login, professors,auth, departments
-from . import models
+from database import engine
+from routers import students,admin,login, professors,auth, departments
+import models
 
 from fastapi.middleware.cors import CORSMiddleware
 

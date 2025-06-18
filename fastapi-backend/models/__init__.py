@@ -1,3 +1,3 @@
-from ..database import Base
+from database import Base
 
 from .users import User

@@ -1,21 +1,21 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Response, UploadFile, File, Form, Request
 from sqlalchemy.orm import Session
 
-from ..schemas.token import Token
-from ..schemas.admin import DeptDataMessage
-from ..schemas.projects import ProjectStudents
-from ..schemas.rounds import RoundDetails, InputPassword
-from ..models.users import User,Admin, Professor, Department, Student
-from ..models.projects import Project
-from ..models.rounds import Round
-from ..security.JWTtoken import create_access_token
-from ..database import get_db
+from schemas.token import Token
+from schemas.admin import DeptDataMessage
+from schemas.projects import ProjectStudents
+from schemas.rounds import RoundDetails, InputPassword
+from models.users import User,Admin, Professor, Department, Student
+from models.projects import Project
+from models.rounds import Round
+from security.JWTtoken import create_access_token
+from database import get_db
 
 from passlib.context import CryptContext
 
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
-from ..security.oauth2 import get_current_user
+from security.oauth2 import get_current_user
 
 import pandas as pd
 import random
@@ -57,7 +57,7 @@ conf = ConnectionConfig(
     USE_CREDENTIALS=True
 )
 
-from ..tasks.make_professor import prof_from_csv
+from tasks.make_professor import prof_from_csv
 
 @router.post("/professors") #Working
 def make_professor(file: UploadFile= File(...),db: Session=Depends(get_db), current_user: User= Depends(get_current_user)):
@@ -95,7 +95,7 @@ def export_professors(db:Session=Depends(get_db),current_user: User=Depends(get_
 
     return StreamingResponse( stream, media_type='text/csv', headers={"Content-Disposition": "attachment; filename=professors.csv"})
 
-from ..tasks.professor_pwd_emails import send_prof_emails
+from tasks.professor_pwd_emails import send_prof_emails
 @router.post("/send_professor_emails")
 def send_professor_emails(db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
     if current_user.role != 'admin':
@@ -123,7 +123,7 @@ def round_details(db:Session=Depends(get_db), current_user: User=Depends(get_cur
 
 
 
-from ..tasks.next_round import send_round_emails
+from tasks.next_round import send_round_emails
 @router.post("/start_next_round", response_model= RoundDetails) # round 1 works, round 2 working, round 3 wokring
 def start_next_round(request:InputPassword,db:Session=Depends(get_db), current_user: User=Depends(get_current_user)):
     if current_user.role != 'admin':
@@ -239,7 +239,7 @@ def dept_data(id:int, db:Session=Depends(get_db),current_user: User=Depends(get_
 
     return projects
 
-from ..tasks.confirm_allotments import send_decision_emails
+from tasks.confirm_allotments import send_decision_emails
 
 @router.post("/department_data/{id}") #Working
 async def conf_dept_data(id:int,request:DeptDataMessage, db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
@@ -259,7 +259,7 @@ async def conf_dept_data(id:int,request:DeptDataMessage, db:Session=Depends(get_
 
 
 
-from ..tasks.generate_id_cards import generate_id_cards 
+from tasks.generate_id_cards import generate_id_cards 
 
 @router.get("/generate_id_card")
 def get_id_card(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):

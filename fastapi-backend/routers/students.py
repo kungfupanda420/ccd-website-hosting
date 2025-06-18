@@ -2,20 +2,20 @@ from fastapi import APIRouter, Depends, HTTPException, status, Response, UploadF
 from sqlalchemy.orm import Session
 from datetime import date
 
-from ..schemas.token import Token
-from ..schemas.students import  ShowStudent, StudentUpdate, VerifyEmail
-from ..schemas.projects import ShowProject, ProjectPreferencesId
-from ..models.users import User, Student, Professor, Department
-from ..models.projects import Project
-from ..models.rounds import Round
-from ..security.JWTtoken import create_access_token, create_refresh_token
-from ..database import get_db
+from schemas.token import Token
+from schemas.students import  ShowStudent, StudentUpdate, VerifyEmail
+from schemas.projects import ShowProject, ProjectPreferencesId
+from models.users import User, Student, Professor, Department
+from models.projects import Project
+from models.rounds import Round
+from security.JWTtoken import create_access_token, create_refresh_token
+from database import get_db
 
 from passlib.context import CryptContext
 
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
-from ..security.oauth2 import get_current_user
+from security.oauth2 import get_current_user
 import os
 import shutil
 
@@ -38,8 +38,10 @@ load_dotenv()
 
 get_db=get_db
 
-UPLOAD_DIR="uploads"
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+UPLOAD_DIR=os.path.join(BASE_DIR,'uploads')
+print(UPLOAD_DIR)
 def saveFile(file:UploadFile,folder:str,email:str):
     ext=file.filename.split(".")[-1]
 
@@ -92,7 +94,9 @@ async def verify_email(request:VerifyEmail,db:Session=Depends(get_db)):
     if user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Email already registered")
     frontend_url=os.getenv('FRONTEND_URL')
-    verify_link = f"{frontend_url}/verify_email?email={request.email}&password={request.password}"
+    password = pwd_context.hash(request.password)
+
+    verify_link = f"{frontend_url}/verify_email?email={request.email}&password={password}"
 
     message=MessageSchema(
         subject="Verify email on NITC SIP Portal",
@@ -116,11 +120,9 @@ def confirm_email(email: str=Query(...), password: str=Query(...), db: Session =
     if user:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
     
-    hashed_password=pwd_context.hash(password)
-
     new_user=User(
         email=email,
-        password=hashed_password,
+        password=password,
         role='Verified Email'
     )
     db.add(new_user)
@@ -180,7 +182,7 @@ def register(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-  
+
     if(current_user.student):
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Student already registered")
     

@@ -8,12 +8,12 @@ from jwt.exceptions import InvalidTokenError
 from passlib.context import CryptContext
 from pydantic import BaseModel
 
-from ..models.users import User
-from ..schemas.token import TokenData
+from models.users import User
+from schemas.token import TokenData
 from . import JWTtoken
 
 from sqlalchemy.orm import Session
-from ..database import get_db
+from database import get_db
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/login")
 
 
