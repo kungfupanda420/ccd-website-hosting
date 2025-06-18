@@ -164,6 +164,8 @@ def start_next_round(request:InputPassword,db:Session=Depends(get_db), current_u
         
         for student in students:
             student.selected_project = None
+            db.commit()
+            
         student_emails=[student.user.email for student in students]
         print(len(student_emails))
         user_emails=[]
@@ -177,13 +179,7 @@ def start_next_round(request:InputPassword,db:Session=Depends(get_db), current_u
         send_round_emails.delay(round.number,student_emails,user_emails)
 
         
-        students=db.query(Student).all()
-        for student in students:
-            student.pref1=None
-            student.pref2=None
-            student.pref3=None
-            
-        db.commit()
+        
 
     return round
 
