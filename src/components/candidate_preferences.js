@@ -391,10 +391,15 @@ useEffect(() => {
       {/* Sidebar */}
       <aside className="sidebar">
         <img
-          className="profile-pic"
-          src={candidate?.profilePhotoPath ? `/${candidate.profilePhotoPath}` : "/images/default.png"}
-          alt="Profile"
-        />
+  className="profile-pic"
+  src={profilePhotoPath}
+  alt="Profile"
+  onError={(e) => {
+    e.target.onerror = null;
+    e.target.src = "/images/default.png";
+  }}
+/>
+
         <nav>
           <button onClick={() => navigate("/candidatedashboard")}>
             <FontAwesomeIcon icon={faHome} />
