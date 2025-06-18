@@ -117,7 +117,7 @@ function Professor_dashboard() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
-    const token = localStorage.getItem("acces_token");
+    const token = localStorage.getItem("access_token");
     if (!token) {
       setMessage("You must be logged in as a professor to add a project.");
       return;
