@@ -27,7 +27,7 @@ app.add_middleware(
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  #getting the full absolute path of the directory where your main.py file is located
 UPLOAD_DIR = os.path.join(BASE_DIR, "uploads")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
-
+print(UPLOAD_DIR)
 # app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 

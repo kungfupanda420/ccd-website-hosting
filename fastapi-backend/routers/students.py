@@ -41,7 +41,6 @@ get_db=get_db
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 UPLOAD_DIR=os.path.join(BASE_DIR,'uploads')
-print(UPLOAD_DIR)
 def saveFile(file:UploadFile,folder:str,email:str):
     ext=file.filename.split(".")[-1]
 
@@ -283,7 +282,7 @@ def get_me(db: Session=Depends(get_db),current_user: User=Depends(get_current_us
 
 
 @router.get("/profile_photo") #Working
-async def get_profile_photo(
+def get_profile_photo(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
@@ -297,7 +296,9 @@ async def get_profile_photo(
     if not student.profilePhotoPath:
         raise HTTPException(status_code=404, detail="Profile photo not found")
     
-    return {"profile_photo_path": student.profilePhotoPath}
+    filename=os.path.basename(student.profilePhotoPath)
+    url = f"/uploads/profilePhotos/{filename}"
+    return {"profile_photo_path": url}
 
 
 from fastapi.responses import StreamingResponse, FileResponse
