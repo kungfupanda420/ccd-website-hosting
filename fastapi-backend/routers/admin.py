@@ -162,10 +162,14 @@ def start_next_round(request:InputPassword,db:Session=Depends(get_db), current_u
                     .all()
                     )
         
-        for student in students:
-            student.selected_project = None
+        try:
+            for student in students:
+                student.selected_project = None
             db.commit()
-            
+        except:
+            db.rollback()
+            raise HTTPException(status_code=500, detail="Internal Server Error")
+
         student_emails=[student.user.email for student in students]
         print(len(student_emails))
         user_emails=[]
