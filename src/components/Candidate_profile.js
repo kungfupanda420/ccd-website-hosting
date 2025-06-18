@@ -13,6 +13,9 @@ function CandidateProfile() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [editMode, setEditMode] = useState(false);
+  const [profilePhotoPath, setProfilePhotoPath] = useState("/images/default.png");
+const [isPhotoLoading, setIsPhotoLoading] = useState(false);
+
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -51,6 +54,41 @@ function CandidateProfile() {
   const navigate = useNavigate();
   const smootherRef = useRef();
   const contentRef = useRef();
+
+
+
+  useEffect(() => {
+  const fetchProfilePhoto = async () => {
+    setIsPhotoLoading(true);
+    try {
+      const token = localStorage.getItem("access_token");
+      if (!token) return;
+
+      const res = await authFetch("/api/students/profile_photo", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.profile_photo_path) {
+          const cleanedPath = data.profile_photo_path.startsWith("/")
+            ? data.profile_photo_path.substring(1)
+            : data.profile_photo_path;
+          const fullUrl = `${window.location.origin}/${cleanedPath}`;
+          setProfilePhotoPath(`${fullUrl}?${Date.now()}`);
+        }
+      } else if (res.status === 404) {
+        setProfilePhotoPath("/images/default.png");
+      }
+    } catch (error) {
+      setProfilePhotoPath("/images/default.png");
+    } finally {
+      setIsPhotoLoading(false);
+    }
+  };
+
+  fetchProfilePhoto();
+}, []);
 
   // Initialize smooth scrolling
   useEffect(() => {

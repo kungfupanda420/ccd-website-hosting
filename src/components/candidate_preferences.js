@@ -14,6 +14,10 @@ function CandidatePreferences() {
   const [modes, setModes] = useState([]);
   const [durations, setDurations] = useState([]);
   const [professors, setProfessors] = useState([]);
+  const [people_applied,setpeople_applied] = useState([]);
+  const [vacancies,setVacancies] = useState([]);
+  const [profilePhotoPath, setProfilePhotoPath] = useState("/images/default.png");
+  const [isPhotoLoading, setIsPhotoLoading] = useState(false);
   const [filters, setFilters] = useState({
     department: "",
     mode: "",
@@ -28,9 +32,74 @@ function CandidatePreferences() {
   const [adminConf, setAdminConf] = useState(false);
   const [allottedProject, setAllottedProject] = useState(null);
   const navigate = useNavigate();
+useEffect(() => {
+  const applyFilters = () => {
+    let filtered = projects;
 
+    if (filters.department) {
+      filtered = filtered.filter(
+        (project) => project.professor?.department?.name === filters.department
+      );
+    }
+
+    if (filters.mode) {
+      filtered = filtered.filter((project) => project.mode === filters.mode);
+    }
+
+    if (filters.duration) {
+      filtered = filtered.filter((project) => project.duration === filters.duration);
+    }
+
+    if (filters.professor) {
+      filtered = filtered.filter((project) => project.professor?.name === filters.professor);
+    }
+
+    if (filters.search) {
+      filtered = filtered.filter((project) =>
+        project.title.toLowerCase().includes(filters.search.toLowerCase())
+      );
+    }
+
+    setFilteredProjects(filtered);
+  };
+
+  applyFilters();
+}, [filters, projects]);
+
+  useEffect(() => {
+    const fetchProfilePhoto = async () => {
+      setIsPhotoLoading(true);
+      try {
+        const token = localStorage.getItem("access_token");
+        if (!token) return;
+
+        const res = await authFetch("/api/students/profile_photo", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data.profile_photo_path) {
+            const cleanedPath = data.profile_photo_path.startsWith("/")
+              ? data.profile_photo_path.substring(1)
+              : data.profile_photo_path;
+            const fullUrl = `${window.location.origin}/${cleanedPath}`;
+            setProfilePhotoPath(`${fullUrl}?${Date.now()}`);
+          }
+        } else if (res.status === 404) {
+          setProfilePhotoPath("/images/default.png");
+        }
+      } catch (error) {
+        setProfilePhotoPath("/images/default.png");
+      } finally {
+        setIsPhotoLoading(false);
+      }
+    };
+
+    fetchProfilePhoto();
+  }, []);
   // GSAP animations
- useEffect(() => {
+  useEffect(() => {
     if (selectedProjects.length > 0) {
       gsap.from('.selected-item', {
         y: 20,
@@ -53,7 +122,7 @@ function CandidatePreferences() {
         if (adminConfRes.ok) {
           const adminConfData = await adminConfRes.json();
           setAdminConf(adminConfData.admin_conf);
-          
+
           if (adminConfData.admin_conf) {
             // If admin confirmed, fetch allotted project
             const allottedRes = await authFetch("/api/students/me/allotted_project");
@@ -85,6 +154,8 @@ function CandidatePreferences() {
         setModes([...new Set(projectsData.map((p) => p.mode || "N/A"))]);
         setDurations([...new Set(projectsData.map((p) => p.duration || "N/A"))]);
         setProfessors([...new Set(projectsData.map((p) => p.professor?.name || "N/A"))]);
+        setVacancies([...new Set(projectsData.map((p) => p.vacancies || 0))]);
+        setpeople_applied([...new Set(projectsData.map((p) => p.people_applied || 0))]);
 
         const appliedRes = await authFetch("/api/students/preferences");
         if (appliedRes.ok) {
@@ -151,59 +222,59 @@ function CandidatePreferences() {
       return [...prev, project];
     });
   };
-const handleDragEnd = (result) => {
-  if (!result.destination) return;
+  const handleDragEnd = (result) => {
+    if (!result.destination) return;
 
-  // Get the current list
-  const items = Array.from(selectedProjects);
-  const [reorderedItem] = items.splice(result.source.index, 1);
-  items.splice(result.destination.index, 0, reorderedItem);
+    // Get the current list
+    const items = Array.from(selectedProjects);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
 
-  // Update state immediately
-  setSelectedProjects(items);
+    // Update state immediately
+    setSelectedProjects(items);
 
-  // Animate the movement
-  const listItems = Array.from(document.querySelectorAll('.selected-item'));
-  
-  // Calculate direction of movement
-  const movingUp = result.destination.index < result.source.index;
-  
-  listItems.forEach((item, index) => {
-    const itemId = item.dataset.id;
-    const itemNode = item;
-    
-    if (itemId === reorderedItem.id.toString()) {
-      // Animation for the moved item
-      gsap.fromTo(itemNode,
-        { 
-          y: movingUp ? -30 : 30,
-          backgroundColor: 'rgba(52, 152, 219, 0.2)',
-          scale: 1.02
-        },
-        { 
-          y: 0,
-          backgroundColor: 'white',
-          scale: 1,
-          duration: 0.3,
-          ease: "power2.out"
-        }
-      );
-    } else if (
-      (movingUp && index >= result.destination.index && index < result.source.index) ||
-      (!movingUp && index > result.source.index && index <= result.destination.index)
-    ) {
-      // Animation for items that need to move down/up to make space
-      gsap.fromTo(itemNode,
-        { y: movingUp ? 30 : -30 },
-        { 
-          y: 0,
-          duration: 0.3,
-          ease: "power2.out"
-        }
-      );
-    }
-  });
-};
+    // Animate the movement
+    const listItems = Array.from(document.querySelectorAll('.selected-item'));
+
+    // Calculate direction of movement
+    const movingUp = result.destination.index < result.source.index;
+
+    listItems.forEach((item, index) => {
+      const itemId = item.dataset.id;
+      const itemNode = item;
+
+      if (itemId === reorderedItem.id.toString()) {
+        // Animation for the moved item
+        gsap.fromTo(itemNode,
+          {
+            y: movingUp ? -30 : 30,
+            backgroundColor: 'rgba(52, 152, 219, 0.2)',
+            scale: 1.02
+          },
+          {
+            y: 0,
+            backgroundColor: 'white',
+            scale: 1,
+            duration: 0.3,
+            ease: "power2.out"
+          }
+        );
+      } else if (
+        (movingUp && index >= result.destination.index && index < result.source.index) ||
+        (!movingUp && index > result.source.index && index <= result.destination.index)
+      ) {
+        // Animation for items that need to move down/up to make space
+        gsap.fromTo(itemNode,
+          { y: movingUp ? 30 : -30 },
+          {
+            y: 0,
+            duration: 0.3,
+            ease: "power2.out"
+          }
+        );
+      }
+    });
+  };
 
   const submitPreferences = async () => {
     if (selectedProjects.length === 0) {
@@ -256,8 +327,12 @@ const handleDragEnd = (result) => {
         <aside className="sidebar">
           <img
             className="profile-pic"
-            src={candidate?.profilePhotoPath ? `/${candidate.profilePhotoPath}` : "/images/default.png"}
+            src={profilePhotoPath}
             alt="Profile"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "/images/default.png";
+            }}
           />
           <nav>
             <button onClick={() => navigate("/candidatedashboard")}>
@@ -280,10 +355,10 @@ const handleDragEnd = (result) => {
             </button>
           </nav>
         </aside>
-        
+
         <div className="preferences-container">
           <h1>Your Allotted Project</h1>
-          
+
           {isLoading ? (
             <div>Loading...</div>
           ) : allottedProject ? (
@@ -427,6 +502,8 @@ const handleDragEnd = (result) => {
                     <th>Professor</th>
                     <th>Mode</th>
                     <th>Duration</th>
+                    <th>people_applied</th>
+                    <th>vacancies</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -450,7 +527,7 @@ const handleDragEnd = (result) => {
                                 !selectedProjects.some((p) => p.id === project.id)) ||
                               (selectedProjects.length > 0 &&
                                 project.professor?.department?.name !==
-                                  selectedProjects[0].professor?.department?.name)
+                                selectedProjects[0].professor?.department?.name)
                             }
                           />
                         </td>
@@ -460,6 +537,8 @@ const handleDragEnd = (result) => {
                         <td>{project.professor?.name || "N/A"}</td>
                         <td>{project.mode || "N/A"}</td>
                         <td>{project.duration || "N/A"}</td>
+                        <td>{project.people_applied || 0}</td>
+                        <td>{project.vacancies || 0}</td>
                       </tr>
                     ))
                   )}
@@ -490,38 +569,38 @@ const handleDragEnd = (result) => {
                         className="draggable-list"
                       >
                         {selectedProjects.map((project, index) => (
-                           <Draggable
-    key={project.id}
-    draggableId={project.id.toString()}
-    index={index}
-  >
-    {(provided, snapshot) => (
-      <li
-        ref={provided.innerRef}
-        {...provided.draggableProps}
-        {...provided.dragHandleProps}
-        className={`selected-item ${snapshot.isDragging ? "dragging" : ""}`}
-        data-id={project.id.toString()}
-      >
-        <div className="drag-handle">
-          <FontAwesomeIcon icon={faList} />
-        </div>
-        <div className="selected-content">
-          <div className="selected-rank">Preference {index + 1}</div>
-          <div className="selected-title">{project.title || "N/A"}</div>
-          <div className="selected-prof">
-            {project.professor?.name || "N/A"}
-          </div>
-        </div>
-        <button
-          onClick={() => toggleProjectSelection(project)}
-          className="remove-btn"
-        >
-          Remove
-        </button>
-      </li>
-    )}
-  </Draggable>
+                          <Draggable
+                            key={project.id}
+                            draggableId={project.id.toString()}
+                            index={index}
+                          >
+                            {(provided, snapshot) => (
+                              <li
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                className={`selected-item ${snapshot.isDragging ? "dragging" : ""}`}
+                                data-id={project.id.toString()}
+                              >
+                                <div className="drag-handle">
+                                  <FontAwesomeIcon icon={faList} />
+                                </div>
+                                <div className="selected-content">
+                                  <div className="selected-rank">Preference {index + 1}</div>
+                                  <div className="selected-title">{project.title || "N/A"}</div>
+                                  <div className="selected-prof">
+                                    {project.professor?.name || "N/A"}
+                                  </div>
+                                </div>
+                                <button
+                                  onClick={() => toggleProjectSelection(project)}
+                                  className="remove-btn"
+                                >
+                                  Remove
+                                </button>
+                              </li>
+                            )}
+                          </Draggable>
                         ))}
                         {provided.placeholder}
                       </ol>
