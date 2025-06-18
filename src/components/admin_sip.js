@@ -694,7 +694,7 @@ function Admin_sip() {
         <button
           className="cd-btn"
           onClick={() => {
-            localStorage.removeItem("access_token");
+            localStorage.removeItem("token");
             window.location.href = "/login";
           }}
         >
@@ -1057,7 +1057,7 @@ function Admin_sip() {
 
                   {/* Next Round Button - Show when appropriate */}
                   {(roundDetails.number % 2 === 0 ||
-                    (roundDetails.number % 2 === 1 && !roundDetails.allow_reg && roundDetails.lock_choices && roundDetails.number < 3 && (roundDetails.number == 2 && roundDetails.lock_choices))) && (
+                    (roundDetails.number % 2 === 1 && !roundDetails.allow_reg && roundDetails.lock_choices || roundDetails.number < 3 && (roundDetails.number == 2 && roundDetails.lock_choices))) && !(roundDetails.number === 3 && roundDetails.lock_choices)&& (
                       <div style={{ marginTop: "20px", textAlign: "center" }}>
                         <button
                           onClick={() => setShowStartRoundModal(true)}
@@ -1075,6 +1075,23 @@ function Admin_sip() {
                         >
                           Start Round {roundDetails.number + 1}
                         </button>
+                      </div>
+                    )}
+                    {(roundDetails.number === 3 && roundDetails.lock_choices) && (
+                      <div style={{ marginTop: "20px", textAlign: "center" }}>
+                      <button
+                      onClick={() => setShowStartRoundModal(true)}
+                          disabled={isUpdatingRound}
+                          style={{
+                            padding: "10px 20px",
+                            backgroundColor: "#3498db",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "4px",
+                            cursor: "pointer",
+                            fontWeight: "bold",
+                            fontSize: "16px"
+                          }}>Finish rounds</button>
                       </div>
                     )}
                 </div>

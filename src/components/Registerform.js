@@ -68,8 +68,10 @@ function Registerform() {
       if (!formData.currentSemesterCgpa.trim()) newErrors.currentSemesterCgpa = "Current semester CGPA is required.";
       if (!formData.UG.trim()) newErrors.UG = "UG details are required.";
       if (!formData.cgpa12.trim()) newErrors.cgpa12 = "12th CGPA is required.";
+      if(!formDatacgpa12 || isNaN(formData.cgpa12) || formData.cgpa12 < 0 || formData.cgpa12 > 10) newErrors.cgpa12 = "Valid 12th CGPA (0-10) is required."; 
       if (!formData.board12.trim()) newErrors.board12 = "12th board is required.";
       if (!formData.cgpa10.trim()) newErrors.cgpa10 = "10th CGPA is required.";
+      if(!formDatacgpa10 || isNaN(formData.cgpa10) || formData.cgpa10 < 0 || formData.cgpa10 > 10) newErrors.cgpa10 = "Valid 10th CGPA (0-10) is required.";
       if (!formData.board10.trim()) newErrors.board10 = "10th board is required.";
     } else if (step === 4) {
       if (!formData.adhaar_id.trim()) newErrors.adhaar_id = "Aadhaar number is required.";
@@ -336,6 +338,7 @@ function Registerform() {
             <div className="form-group">
               <label>Other Documents (all marksheets in your UG and all the certificates)</label>
               <input type="file" name="documents_path" onChange={handleChange} accept="image/*,application/pdf" />
+              {errors.documents_path && <span className="error-text">{errors.documents_path}</span>}
 
             </div>
           </div>
