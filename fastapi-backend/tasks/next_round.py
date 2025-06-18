@@ -79,7 +79,7 @@ def send_round_emails(round_no:int,student_emails,user_emails):
                 body=body,
                 subtype="html"
             )
-            async_to_sync(fm.send_message(message))
+            async_to_sync(fm.send_message)(message)
         
     if round_no==3:
 
@@ -102,7 +102,7 @@ def send_round_emails(round_no:int,student_emails,user_emails):
                 subtype="html"
             )
             
-            async_to_sync(fm.send_message(message))
+            async_to_sync(fm.send_message)(message)
 
         subject_user="Registrations Open: NITC Summer Internship Programme"
         body_user="""
@@ -121,6 +121,6 @@ def send_round_emails(round_no:int,student_emails,user_emails):
                 subtype="html"
             )
 
-            async_to_sync(fm.send_message(message))
+            async_to_sync(fm.send_message)(message)
 
     return{"message": f"Emails sent for round {round_no}"}

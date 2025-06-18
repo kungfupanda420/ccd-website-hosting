@@ -114,7 +114,7 @@ def send_decision_emails(message:str,id:int):
                 subtype="html"
             )
 
-            async_to_sync(fm.send_message(messagedept))
+            async_to_sync(fm.send_message)(messagedept)
 
             return {"message":"The student have been allotted their projects and sent emails"}
 
@@ -130,7 +130,7 @@ def send_decision_emails(message:str,id:int):
                 """,
                 subtype="html"
             )
-            async_to_sync(fm.send_message(message))
+            async_to_sync(fm.send_message)(message)
             return {"message":"The Project intern allotments have been rejected and departments have been sent emails"}
     finally:
         db.close()            
