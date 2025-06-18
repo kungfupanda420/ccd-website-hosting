@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import '../css/Registerform.css';
+import { useEffect } from "react";
 
 function Registerform() {
   const [step, setStep] = useState(1);
+  const [registrationOpen, setRegistrationOpen] = useState(false);
+const [loadingStatus, setLoadingStatus] = useState(true);
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -44,7 +47,32 @@ function Registerform() {
       setErrors({ ...errors, [name]: null });
     }
   };
+useEffect(() => {
+    const checkRegistrationStatus = async () => {
+      try {
+        const response = await fetch("/api/students/allow_reg_status", {
+          headers: {
+            "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        });
+        
+        if (!response.ok) {
+          throw new Error("Failed to check registration status");
+        }
+        
+        const data = await response.json();
+        setRegistrationOpen(data.allow_reg);
+      } catch (error) {
+        console.error("Error checking registration status:", error);
+        // Default to false if there's an error
+        setRegistrationOpen(false);
+      } finally {
+        setLoadingStatus(false);
+      }
+    };
 
+    checkRegistrationStatus();
+  }, []);
   const validateStep = () => {
     const newErrors = {};
     if (step === 1) {
@@ -179,6 +207,18 @@ function Registerform() {
       setIsSubmitting(false);
     }
   };
+
+    if (!registrationOpen) {
+    return (
+      <div className="register-container">
+        <div className="registration-closed-message">
+          <h2>Registrations are currently closed</h2>
+          <p>We will notify you via email when registrations open.</p>
+         
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="register-container">
