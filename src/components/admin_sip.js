@@ -694,7 +694,7 @@ function Admin_sip() {
         <button
           className="cd-btn"
           onClick={() => {
-            localStorage.removeItem("token");
+            localStorage.removeItem("access_token");
             window.location.href = "/login";
           }}
         >

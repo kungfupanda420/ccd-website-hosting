@@ -313,7 +313,7 @@ function Professor_dashboard() {
 
   // Logout handler
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("access_token");
     setIsAuthenticated(false);
     navigate("/login");
   };
