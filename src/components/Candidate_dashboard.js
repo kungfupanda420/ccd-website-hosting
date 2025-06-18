@@ -133,7 +133,7 @@ function CandidateDashboard() {
         <button 
           className="cd-btn" 
           onClick={() => {
-            localStorage.removeItem("token");
+            localStorage.removeItem("access_token");
             navigate("/");
           }}
           disabled={isLoading}

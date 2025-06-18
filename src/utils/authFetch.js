@@ -30,14 +30,14 @@ export async function authFetch(url, options = {}) {
 
       // If the new access token is also invalid, redirect to home/root
       if (response.status === 401) {
-        localStorage.removeItem('token');
+        localStorage.removeItem('acces_token');
         localStorage.removeItem('refresh_token');
         window.location.href = "/";
         throw new Error("Session expired. Please login again.");
       }
     } else {
       // Refresh failed, clear tokens and redirect to login
-      localStorage.removeItem('token');
+      localStorage.removeItem('access_token');
       localStorage.removeItem('refresh_token');
       window.location.href = "/login";
       throw new Error("Session expired. Please login again.");
