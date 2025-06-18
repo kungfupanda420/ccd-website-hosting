@@ -84,7 +84,7 @@ def send_round_emails(round_no:int,student_emails,user_emails):
     if round_no==3:
 
         subject_stud="NITC Summer Internship Programme Round 3"
-        body_stud="""
+        body_stud=f"""
                 <h3>Dear Student</h3>
                 <p>The final round of the project selections have started.</p>
                 <p>Please add your preffered projects once again</p>
