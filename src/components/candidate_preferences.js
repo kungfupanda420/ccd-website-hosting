@@ -16,7 +16,7 @@ function CandidatePreferences() {
   const [professors, setProfessors] = useState([]);
   const [people_applied,setpeople_applied] = useState([]);
   const [vacancies,setVacancies] = useState([]);
-  const [profilePhotoPath, setProfilePhotoPath] = useState("/images/default.png");
+  const [profilePhotoPath, setProfilePhotoPath] = useState("");
   const [isPhotoLoading, setIsPhotoLoading] = useState(false);
   const [filters, setFilters] = useState({
     department: "",

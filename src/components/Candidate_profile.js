@@ -3,7 +3,16 @@ import { authFetch } from "../utils/authFetch";
 import "../css/CandidateProfile.css";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faSignOutAlt, faHome, faEdit, faSave, faTimes, faList, faDownload } from "@fortawesome/free-solid-svg-icons";
+import { 
+  faUser, 
+  faSignOutAlt, 
+  faHome, 
+  faEdit, 
+  faSave, 
+  faTimes, 
+  faList, 
+  faDownload 
+} from "@fortawesome/free-solid-svg-icons";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
@@ -14,7 +23,8 @@ function CandidateProfile() {
   const [error, setError] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [profilePhotoPath, setProfilePhotoPath] = useState("/images/default.png");
-const [isPhotoLoading, setIsPhotoLoading] = useState(false);
+  const [isPhotoLoading, setIsPhotoLoading] = useState(false);
+  const [profilePhoto, setProfilePhoto] = useState(null);
 
   const [form, setForm] = useState({
     name: "",
@@ -39,25 +49,17 @@ const [isPhotoLoading, setIsPhotoLoading] = useState(false);
     board10: "",
     adhaar_id: "",
     apaar_id: "",
-    // sip_id: "",
-    // professor: "",
-    // start_date: "",
-    // end_date: "",
-    // nitc_idcard_path: "",
     student_college_idcard_path: "",
     documents_path: ""
   });
+
   const [regPaymentScreenshot, setRegPaymentScreenshot] = useState(null);
-  const [profilePhoto, setProfilePhoto] = useState(null);
   const [nitcIdCard, setNitcIdCard] = useState(null);
   const [collegeIdCard, setCollegeIdCard] = useState(null);
   const navigate = useNavigate();
   const smootherRef = useRef();
   const contentRef = useRef();
 
-
-
-  useEffect(() => {
   const fetchProfilePhoto = async () => {
     setIsPhotoLoading(true);
     try {
@@ -87,10 +89,6 @@ const [isPhotoLoading, setIsPhotoLoading] = useState(false);
     }
   };
 
-  fetchProfilePhoto();
-}, []);
-
-  // Initialize smooth scrolling
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
@@ -109,7 +107,6 @@ const [isPhotoLoading, setIsPhotoLoading] = useState(false);
     };
   }, []);
 
-  // Fetch candidate data
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -134,6 +131,7 @@ const [isPhotoLoading, setIsPhotoLoading] = useState(false);
             start_date: candidateData.start_date || "",
             end_date: candidateData.end_date || ""
           });
+          await fetchProfilePhoto();
         } else {
           const err = await candidateRes.json();
           setError(err.detail || "Failed to fetch data.");
@@ -143,15 +141,26 @@ const [isPhotoLoading, setIsPhotoLoading] = useState(false);
       }
       setLoading(false);
     };
+
     fetchData();
+
+    const handleStorageChange = () => {
+      if (localStorage.getItem("profileUpdated")) {
+        fetchProfilePhoto();
+        localStorage.removeItem("profileUpdated");
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
+
   const handleDownload = async (type) => {
     try {
-      setError(""); // Clear previous errors
+      setError("");
       const token = localStorage.getItem("access_token");
       let endpoint;
 
-      // Determine the endpoint based on the type
       if (type === 'college_id') {
         endpoint = "/api/students/me/my_clg_id";
       } else if (type === 'documents') {
@@ -171,7 +180,6 @@ const [isPhotoLoading, setIsPhotoLoading] = useState(false);
         throw new Error(err.detail || "Failed to download file");
       }
 
-      // Get filename from content-disposition header or use a default
       const contentDisposition = response.headers.get('content-disposition');
       let filename = type === 'college_id' ? 'college_id.pdf' : 'documents.zip';
 
@@ -196,20 +204,19 @@ const [isPhotoLoading, setIsPhotoLoading] = useState(false);
       console.error("Download error:", error);
     }
   };
+
   const handleEditChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleFileChange = (e) => {
     switch (e.target.name) {
-     
       case "profilePhoto":
         setProfilePhoto(e.target.files[0]);
         break;
-      // 
       case "documents":
-      setForm({...form, documents: e.target.files[0]});
-      break;
+        setForm({...form, documents: e.target.files[0]});
+        break;
       case "student_college_idcard":
         setCollegeIdCard(e.target.files[0]);
         break;
@@ -226,19 +233,16 @@ const [isPhotoLoading, setIsPhotoLoading] = useState(false);
       const token = localStorage.getItem("access_token");
       const formData = new FormData();
 
-      // Append all form fields
       Object.entries(form).forEach(([key, value]) => {
         if (value !== null && value !== undefined) {
           formData.append(key, value);
         }
       });
 
-      // Append files
       if (regPaymentScreenshot) formData.append("regPaymentScreenshot", regPaymentScreenshot);
       if (profilePhoto) formData.append("profilePhoto", profilePhoto);
-      // if (nitcIdCard) formData.append("nitc_idcard", nitcIdCard);
       if (collegeIdCard) formData.append("student_college_idcard", collegeIdCard);
-      if (form.documents) formData.append("documents", form.documents); // Append documents
+      if (form.documents) formData.append("documents", form.documents);
 
       const res = await authFetch("/api/students/me", {
         method: "PUT",
@@ -256,7 +260,10 @@ const [isPhotoLoading, setIsPhotoLoading] = useState(false);
         setProfilePhoto(null);
         setNitcIdCard(null);
         setCollegeIdCard(null);
-        setForm({ ...form, documents: null }); // Reset documents field
+        setForm({ ...form, documents: null });
+        
+        await fetchProfilePhoto();
+        localStorage.setItem('profileUpdated', 'true');
       } else {
         const err = await res.json();
         setError(err.detail || "Failed to update profile.");
@@ -266,6 +273,7 @@ const [isPhotoLoading, setIsPhotoLoading] = useState(false);
     }
     setLoading(false);
   };
+
   if (loading) return <div className="loading-spinner">Loading...</div>;
   if (error) return <div className="error-message">{error}</div>;
   if (!candidate) return null;
@@ -273,11 +281,10 @@ const [isPhotoLoading, setIsPhotoLoading] = useState(false);
   return (
     <div id="smooth-wrapper">
       <div id="smooth-content" ref={contentRef}>
-        {/* Sidebar */}
         <aside className="sidebar">
           <img
             className="profile-pic"
-            src={candidate.profilePhotoPath ? `/${candidate.profilePhotoPath}?${Date.now()}` : "/images/default.png"}
+            src={profilePhotoPath}
             alt="Profile"
             onError={(e) => {
               e.target.onerror = null;
@@ -297,11 +304,9 @@ const [isPhotoLoading, setIsPhotoLoading] = useState(false);
               <FontAwesomeIcon icon={faSignOutAlt} />
               <span>Logout</span>
             </button>
-
           </nav>
         </aside>
 
-        {/* Main Profile Content */}
         <main className="candidate-profile-container">
           <div className="candidate-profile">
             <header className="profile-header">
@@ -377,6 +382,7 @@ const [isPhotoLoading, setIsPhotoLoading] = useState(false);
                     <div><strong>End Date:</strong> {candidate.end_date || "Not set"}</div>
                   </div>
                 </section>
+
                 <section className="profile-section">
                   <h2>Documents</h2>
                   <div className="profile-grid">
@@ -521,10 +527,6 @@ const [isPhotoLoading, setIsPhotoLoading] = useState(false);
                   <section className="form-section">
                     <h2>Identification</h2>
                     <div className="form-grid">
-                      {/* <div className="form-group">
-                        <label>SIP ID</label>
-                        <input type="text" name="sip_id" value={form.sip_id} onChange={handleEditChange} />
-                      </div> */}
                       <div className="form-group">
                         <label>Aadhaar ID</label>
                         <input type="text" name="adhaar_id" value={form.adhaar_id} onChange={handleEditChange} />
@@ -535,20 +537,6 @@ const [isPhotoLoading, setIsPhotoLoading] = useState(false);
                       </div>
                     </div>
                   </section>
-                  {/* 
-                  <section className="form-section">
-                    <h2>Internship Dates</h2>
-                    <div className="form-grid">
-                      <div className="form-group">
-                        <label>Start Date</label>
-                        <input type="date" name="start_date" value={form.start_date} onChange={handleEditChange} />
-                      </div>
-                      <div className="form-group">
-                        <label>End Date</label>
-                        <input type="date" name="end_date" value={form.end_date} onChange={handleEditChange} />
-                      </div>
-                    </div>
-                  </section> */}
 
                   <section className="form-section">
                     <h2>Upload Files</h2>
@@ -557,18 +545,10 @@ const [isPhotoLoading, setIsPhotoLoading] = useState(false);
                         <label>Profile Photo</label>
                         <input type="file" name="profilePhoto" onChange={handleFileChange} accept="image/*" />
                       </div>
-                      {/* <div className="form-group file-input">
-                        <label>NITC ID Card</label>
-                        <input type="file" name="nitc_idcard" onChange={handleFileChange} accept="image/*,.pdf" />
-                      </div> */}
                       <div className="form-group file-input">
                         <label>College ID Card</label>
                         <input type="file" name="student_college_idcard" onChange={handleFileChange} accept="image/*,.pdf" />
                       </div>
-                      {/* <div className="form-group file-input">
-                        <label>Payment Screenshot</label>
-                        <input type="file" name="regPaymentScreenshot" onChange={handleFileChange} accept="image/*" />
-                      </div> */}
                     </div>
                     <div className="form-group file-input">
                       <label>Documents (PDF only)</label>

@@ -45,6 +45,7 @@ function CandidateDashboard() {
               : data.profile_photo_path;
 
             const fullUrl = `${window.location.origin}/${cleanedPath}`;
+            console.log("Full URL for profile photo:", fullUrl);
             setProfilePhoto(`${fullUrl}?${Date.now()}`);
           }
           // Update user data if available
