@@ -137,7 +137,13 @@ def start_next_round(request:InputPassword,db:Session=Depends(get_db), current_u
         raise HTTPException(status_code=404, detail="Round not found")
     
     if round.number>=3:
-        raise HTTPException(status_code=403, detail="Cannot Proceed. Final Round has been completed")
+        round.lock_choices=1
+        round.allow_reg=0
+        round.number=0
+        db.commit()
+        db.refresh(round)
+        return round
+
 
     round.number+=1
     round.lock_choices=0
