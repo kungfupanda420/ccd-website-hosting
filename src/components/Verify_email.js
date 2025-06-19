@@ -57,7 +57,7 @@ function ConfirmEmail() {
          { console.log(localStorage.getItem("data.access_token"))}
         { console.log(localStorage.getItem("data.refresh_token"))}
 
-        console.log(localStorage)
+        {/* console.log(localStorage) */}
         {msg && <div className="text-green-600">{msg}</div>}
         {error && <div className="text-red-600">{error}</div>}
       </div>
