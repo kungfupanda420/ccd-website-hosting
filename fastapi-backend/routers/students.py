@@ -145,7 +145,7 @@ def confirm_email(email: str=Query(...), password: str=Query(...), db: Session =
         
 @router.get("/allow_reg_status")
 def allow_reg_status(db: Session=Depends(get_db),current_user: User=Depends(get_current_user)):
-    if current_user.role != 'student':
+    if not current_user:
         raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
     round=db.query(Round).filter(Round.id==1).first()
     
