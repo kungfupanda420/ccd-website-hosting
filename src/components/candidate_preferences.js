@@ -159,7 +159,7 @@ useEffect(() => {
         setVacancyRemaining([...new Set(projectsData.map((p) => p.vacancy_remaining || 0))]);
 setAppliedCounts([...new Set(projectsData.map((p) => p.applied_count || 0))]);
 
-        const appliedRes = await authFetch("/api/students/all_projects");
+        const appliedRes = await authFetch("/api/students/preferences");
         if (appliedRes.ok) {
           const appliedData = await appliedRes.json();
           if (appliedData.length > 0) {
