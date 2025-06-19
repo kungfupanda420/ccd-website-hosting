@@ -132,7 +132,7 @@ def dept_students(db: Session = Depends(get_db), current_user: User = Depends(ge
     
     students = (
         db.query(Student)
-        .join(Student.pref1)  # Join to Project (pref1)
+        .join(Student.selected_project)  # Join to Project (pref1)
         .join(Project.professor)  # Join to Professor
         .filter(Professor.dept_id == current_user.id)
         .filter(Student.admin_conf==True)

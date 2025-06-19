@@ -182,7 +182,16 @@ def start_next_round(request:InputPassword,db:Session=Depends(get_db), current_u
             user_emails=[user.email for user in users]
         send_round_emails.delay(round.number,student_emails,user_emails)
 
+        students=db.query(Student).all()
+        for student in students:
+            student.pref1=None
+            student.pref2=None
+            student.pref3=None
         
+        projects=db.query(Project).all()
+        for project in projects:
+            project.applied_count=0    
+        db.commit()
         
 
     return round
