@@ -14,9 +14,9 @@ function CandidatePreferences() {
   const [modes, setModes] = useState([]);
   const [durations, setDurations] = useState([]);
   const [professors, setProfessors] = useState([]);
-  const [people_applied,setpeople_applied] = useState([]);
-  const [vacancies,setVacancies] = useState([]);
   const [profilePhotoPath, setProfilePhotoPath] = useState("");
+  const [appliedCounts, setAppliedCounts] = useState([]);
+const [vacancyRemaining, setVacancyRemaining] = useState([]);
   const [isPhotoLoading, setIsPhotoLoading] = useState(false);
   const [filters, setFilters] = useState({
     department: "",
@@ -154,8 +154,10 @@ useEffect(() => {
         setModes([...new Set(projectsData.map((p) => p.mode || "N/A"))]);
         setDurations([...new Set(projectsData.map((p) => p.duration || "N/A"))]);
         setProfessors([...new Set(projectsData.map((p) => p.professor?.name || "N/A"))]);
-        setVacancies([...new Set(projectsData.map((p) => p.vacancies || 0))]);
-        setpeople_applied([...new Set(projectsData.map((p) => p.people_applied || 0))]);
+        // setVacancies([...new Set(projectsData.map((p) => p.vacancies || 0))]);
+        // setpeople_applied([...new Set(projectsData.map((p) => p.people_applied || 0))]);
+        setVacancyRemaining([...new Set(projectsData.map((p) => p.vacancy_remaining || 0))]);
+setAppliedCounts([...new Set(projectsData.map((p) => p.applied_count || 0))]);
 
         const appliedRes = await authFetch("/api/students/preferences");
         if (appliedRes.ok) {
@@ -542,8 +544,8 @@ useEffect(() => {
                         <td>{project.professor?.name || "N/A"}</td>
                         <td>{project.mode || "N/A"}</td>
                         <td>{project.duration || "N/A"}</td>
-                        <td>{project.people_applied || 0}</td>
-                        <td>{project.vacancies || 0}</td>
+                        <td>{project.applied_count || 0}</td>
+                        <td>{project.vacancy_remaining || 0}</td>
                       </tr>
                     ))
                   )}
