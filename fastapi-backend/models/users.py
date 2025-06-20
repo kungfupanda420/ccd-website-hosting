@@ -25,22 +25,24 @@ class Student(Base):
     sip_id= Column(String(255),unique=True, index=True)
     adhaar_id= Column(String(255), unique=True)
     apaar_id= Column(String(255), unique=True)
-    student_college_idcard_path = Column(String(1000))
+    
     name = Column(String(255))
     phone = Column(String(255))
     dob = Column(Date)
     address = Column(String(1000))
     state = Column(String(255))
+
     guardianName = Column(String(255))
     guardianRelation = Column(String(255))
     guardianPhone = Column(String(255))
-    profilePhotoPath = Column(String(1000))
+    
     institution = Column(String(255))
     program = Column(String(255))
     department = Column(String(255))
     year = Column(String(255))
     instituteLocation = Column(String(1000))
     instituteState = Column(String(255))
+
     currentSemesterCgpa = Column(Float)
     UG = Column(String(255))
     cgpa12 = Column(Float)
@@ -48,8 +50,9 @@ class Student(Base):
     cgpa10 = Column(Float)
     board10 = Column(String(255))
 
+    profilePhotoPath = Column(String(1000))
     documents_path = Column(String(1000))
-
+    student_college_idcard_path = Column(String(1000))
     nitc_idcard_path = Column(String(1000))
     
     reg_payment_conf=Column(Boolean,default=False)
@@ -73,7 +76,8 @@ class Student(Base):
     start_date=Column(Date,nullable=True)
     end_date=Column(Date,nullable=True)
     
-    
+    project_report_path= Column(String(1000))
+    project_report_approval=Column(Boolean,default=False)
     
     user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
     user = relationship("User", back_populates="student")

@@ -111,7 +111,12 @@ def delete_project(id:int,db:Session=Depends(get_db),current_user: User=Depends(
 def get_alloted_students(db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
     if(current_user.role != 'professor'):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to view this ")
-    students=db.query(Student).join(Student.selected_project).filter(Project.professor_id==current_user.id).all()
+    students=(db.query(Student)
+              .join(Student.selected_project)
+              .filter(Student.admin_conf==True)
+              .filter(Student.offer_payment_conf==True)
+              .filter(Project.professor_id==current_user.id)
+              .all())
     return [
         {
             "sip_id":student.sip_id,
@@ -128,11 +133,20 @@ def set_start_date(sip_id:str, request:SetDate, db:Session=Depends(get_db),curre
     if(current_user.role != 'professor'):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to delete project")
     
-    student=db.query(Student).filter(Student.sip_id==sip_id).first()
+    
+    student = (
+        db.query(Student)
+            .join(Student.user)
+            .filter(Student.sip_id==sip_id)  
+            .filter(Student.selected_project_id != None)  # project selected
+            .filter(Student.admin_conf==True)
+            .filter(Student.offer_payment_conf==True)         
+            .first()
+        )
     if not student:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Student not found")
     
-    if not student.selected_project or student.selected_project.professor_id != current_user.id:
+    if student.selected_project.professor_id != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="You are not authorized to update this student's internship dates."
@@ -149,11 +163,20 @@ def set_end_date(sip_id:str, request:SetDate, db:Session=Depends(get_db),current
     if(current_user.role != 'professor'):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to delete project")
     
-    student=db.query(Student).filter(Student.sip_id==sip_id).first()
+    student = (
+        db.query(Student)
+            .join(Student.user)
+            .filter(Student.sip_id==sip_id)  
+            .filter(Student.selected_project_id != None)  # project selected
+            .filter(Student.admin_conf==True)
+            .filter(Student.offer_payment_conf==True)         
+            .filter(Student.start_date.isnot(None))         
+            .first()
+        )
     if not student:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Project not found")
     
-    if not student.selected_project or student.selected_project.professor_id != current_user.id:
+    if student.selected_project.professor_id != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="You are not authorized to update this student's internship dates."
@@ -163,3 +186,70 @@ def set_end_date(sip_id:str, request:SetDate, db:Session=Depends(get_db),current
     db.commit()
     db.refresh(student)
     return {"message": f"Student has ended internship on {student.end_date}"}
+
+
+@router.post('/project_report/{sip_id}')
+def approve_report(sip_id:str, db:Session=Depends(get_db),current_user: User=Depends(get_current_user)):
+    if(current_user.role != 'professor'):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to delete project")
+    
+    student = (
+        db.query(Student)
+            .join(Student.user)
+            .filter(Student.sip_id==sip_id)  
+            .filter(Student.selected_project_id != None)  # project selected
+            .filter(Student.admin_conf==True)
+            .filter(Student.offer_payment_conf==True)
+            .filter(Student.end_date.isnot(None))
+            .filter(Student.project_report_path.isnot(None))
+            .first()
+        )
+    if not student:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Project not found")
+    
+    if student.selected_project.professor_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You are not authorized to approve this student's report."
+        )
+    if not student.project_report_path:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Student has not yet uploaded project report"
+        )
+    student.project_report_approval=True
+    db.commit()
+    db.refresh(student)
+    return {"message": f"Approved Project report of {student.name} {student.sip_id}"}
+
+import os
+from fastapi.responses import StreamingResponse, FileResponse
+
+
+@router.get("/project_report/{sip_id}",)
+def student_project_report(sip_id:str, db: Session=Depends(get_db),current_user: User=Depends(get_current_user)):
+    if current_user.role != 'professor':
+        raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
+    student = (
+        db.query(Student)
+            .join(Student.user)
+            .filter(Student.sip_id == sip_id)   # only current user
+            .filter(Student.selected_project_id != None)  # project selected
+            .filter(Student.admin_conf==True)
+            .filter(Student.offer_payment_conf==True)
+            .filter(Student.end_date.isnot(None))
+            .filter(Student.project_report_path.isnot(None))
+            .first()
+        )
+    if not student:   
+        raise HTTPException(status_code=404, detail="Student not found")
+    file_path=student.project_report_path
+
+    if not os.path.isfile(file_path):
+        raise HTTPException(status_code=404, detail="Project Report card not found")
+    
+    return FileResponse(
+        path=file_path,
+        filename=os.path.basename(file_path)
+    )
+    

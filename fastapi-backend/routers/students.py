@@ -663,6 +663,64 @@ def get_offer_letter(db: Session = Depends(get_db), current_user: User = Depends
     })
 
 
+@router.post('/project_report')
+def upload_project_report(project_report: UploadFile = File(...),db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    if current_user.role != 'student':
+        raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
+    student = (
+        db.query(Student)
+            .join(Student.user)
+            .filter(Student.user_id == current_user.id)   # only current user
+            .filter(Student.selected_project_id != None)  # project selected
+            .filter(Student.admin_conf==True)
+            .filter(Student.offer_payment_conf==True)
+            .filter(Student.end_date.isnot(None))
+            .first()
+        )
+    
+    if not student:
+        raise HTTPException(status_code=404, detail="Student not found")   
+    
+    if student.project_report_path and project_report:
+        # If a new profile photo is provided, delete the old one
+        old_path = student.project_report_path
+        if old_path and os.path.exists(old_path):
+            os.remove(old_path)
+
+    student.project_report_path = saveFile(project_report, "projectReports", current_user.email)
+    db.commit()
+    db.refresh(student)
+    return {"message":"Report Uploaded Successfully","status": 200}
+
+
+@router.get("/project_report",)
+def download_project_report(db: Session=Depends(get_db),current_user: User=Depends(get_current_user)):
+    if current_user.role != 'student':
+        raise HTTPException(status_code=403, detail="You are not authorized to access this resource")
+    student = (
+        db.query(Student)
+            .join(Student.user)
+            .filter(Student.user_id == current_user.id)   # only current user
+            .filter(Student.selected_project_id != None)  # project selected
+            .filter(Student.admin_conf==True)
+            .filter(Student.offer_payment_conf==True)
+            .filter(Student.end_date.isnot(None))
+            .filter(Student.project_report_path.isnot(None))
+            .first()
+        )
+    if not student:   
+        raise HTTPException(status_code=404, detail="Student not found")
+    file_path=student.project_report_path
+
+    if not os.path.isfile(file_path):
+        raise HTTPException(status_code=404, detail="Project Report card not found")
+    
+    return FileResponse(
+        path=file_path,
+        filename=os.path.basename(file_path)
+    )
+    
+
 @router.get("/completion_certificate")
 def get_completion_certificate(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if current_user.role != 'student':
@@ -679,6 +737,7 @@ def get_completion_certificate(db: Session = Depends(get_db), current_user: User
         .filter(Student.admin_conf==True)
         .filter(Student.offer_payment_conf==True)
         .filter(Student.end_date.isnot(None))
+        .filter(Student.project_report_approval==True)
         .options(
             joinedload(Student.selected_project)
             .joinedload(Project.professor)
