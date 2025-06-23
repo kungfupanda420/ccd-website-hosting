@@ -22,7 +22,8 @@ import Register from './components/Register.js';
 import VerifyEmail from './components/Verify_email.js';
 import GenerateID from './components/Generate_id.js';
 import DownloadDocuments from './components/Candidate_certificates.js';
-
+import GoogleSignin from './components/GoogleSignin.js';
+import CandidateProjectReport from './components/Candidate_projectreport.js';
 // Lazy-loaded components
 const SipTable = lazy(() => import('./components/SipTable.js'));
 const Footer = lazy(() => import('./components/Footer'));
@@ -160,6 +161,8 @@ function App() {
             <Route path='/confirm_email' element={<ConfirmEmail />} />
             <Route path='/department_sip' element={<DepartmentSIP />} />
             <Route path='/download_documents' element={<DownloadDocuments />} />
+            <Route path='/google_signin' element={<GoogleSignin />} />
+            <Route path='/candidate_projectreport' element={<CandidateProjectReport />} />
           </Routes>
         </Suspense>
       </ErrorBoundary>
