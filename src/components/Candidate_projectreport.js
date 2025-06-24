@@ -3,13 +3,15 @@ import "../css/Candidate_dashboard.css";
 import { useNavigate } from "react-router-dom";
 import { authFetch } from "../utils/authFetch";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { 
-  faUser, 
-  faList, 
+import {
+  faUser,
+  faList,
   faSignOutAlt,
-  faHome
+  faHome,
+  faFileUpload,
+  faUpload,
+  faSpinner
 } from "@fortawesome/free-solid-svg-icons";
-
 function CandidateProjectReport() {
   const [profilePhoto, setProfilePhoto] = useState("/images/default.png");
   const [isLoading, setIsLoading] = useState(false);
@@ -95,7 +97,7 @@ function CandidateProjectReport() {
       formData.append("project_report", file);
 
       const token = localStorage.getItem("access_token");
-      const res = await fetch("/api/project_report", {
+      const res = await fetch("/api/students/project_report", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -137,8 +139,8 @@ function CandidateProjectReport() {
           )}
         </div>
 
-        <button 
-          className="cd-btn" 
+        <button
+          className="cd-btn"
           onClick={() => navigate("/candidate_profile")}
           disabled={isLoading}
         >
@@ -146,8 +148,8 @@ function CandidateProjectReport() {
           <span>Profile Page</span>
         </button>
 
-        <button 
-          className="cd-btn" 
+        <button
+          className="cd-btn"
           onClick={() => navigate("/CandidatePreferences")}
           disabled={isLoading}
         >
@@ -155,8 +157,8 @@ function CandidateProjectReport() {
           <span>Project Preferences</span>
         </button>
 
-        <button 
-          className="cd-btn" 
+        <button
+          className="cd-btn"
           onClick={() => {
             localStorage.removeItem("access_token");
             navigate("/");
@@ -167,25 +169,46 @@ function CandidateProjectReport() {
           <span>Logout</span>
         </button>
       </div>
-      
+
       <div className="cd-main-content">
         <h1>Upload Project Report</h1>
-        <form onSubmit={handleUpload} style={{ maxWidth: 400, margin: "32px auto" }}>
-          <input
-            type="file"
-            accept=".pdf,.doc,.docx"
-            onChange={handleFileChange}
-            disabled={uploading}
-            style={{ marginBottom: 16 }}
-          />
+        <form onSubmit={handleUpload} className="upload-form">
+          <div className="form-group">
+            <label htmlFor="projectReport" className="file-upload-label">
+              <FontAwesomeIcon icon={faFileUpload} className="upload-icon" />
+              <span>{file ? file.name : "Choose Project Report (PDF, DOC, DOCX)"}</span>
+              <input
+                id="projectReport"
+                type="file"
+                accept=".pdf,.doc,.docx"
+                onChange={handleFileChange}
+                disabled={uploading}
+                className="file-input"
+                required
+              />
+            </label>
+          </div>
+
           <button
             type="submit"
-            className="cd-btn"
-            disabled={uploading}
-            style={{ width: "100%", marginTop: 8 }}
+            className="upload-btn"
+            disabled={uploading || !file}
           >
-            {uploading ? "Uploading..." : "Upload Report"}
+            {uploading ? (
+              <>
+                <FontAwesomeIcon icon={faSpinner} spin />
+                <span>Uploading...</span>
+              </>
+            ) : (
+              <>
+                <FontAwesomeIcon icon={faUpload} />
+                <span>Upload Report</span>
+              </>
+            )}
           </button>
+
+          {uploadMsg && <div className="success-message">{uploadMsg}</div>}
+          {error && <div className="error-message">{error}</div>}
         </form>
       </div>
     </div>

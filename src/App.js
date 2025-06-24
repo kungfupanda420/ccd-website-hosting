@@ -97,6 +97,7 @@ function App() {
     '/generate_id',
     '/admin_sip',
     "/download_documents",
+    "/candidate_projectreport",
   ];
   const hideNavFooter = noNavFooterRoutes.includes(pathname);
 
