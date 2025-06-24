@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from database import engine
-from routers import students,admin,login, professors,auth, departments
+from routers import students,admin,login, professors,auth, departments, admin_profs
 import models
 
 from fastapi.middleware.cors import CORSMiddleware
@@ -36,6 +36,7 @@ app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 app.include_router(auth.router)
 app.include_router(login.router)
 app.include_router(admin.router)
+app.include_router(admin_profs.router)
 app.include_router(students.router)
 app.include_router(professors.router)
 app.include_router(departments.router)
