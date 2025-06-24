@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Response, Request
 from sqlalchemy.orm import Session
-
+from fastapi.responses import RedirectResponse
 from schemas.token import Token
 from schemas.login import UserLogin, ForgotPasswordRequest, ChangePasswordRequest
 from models.users import User, Student
@@ -24,6 +24,7 @@ from datetime import timedelta
 from authlib.integrations.starlette_client import OAuth
 from starlette.config import Config
 
+from urllib.parse import urlencode
 
 import random
 import string
@@ -43,10 +44,12 @@ load_dotenv()
 
 GOOGLE_CLIENT_ID=os.getenv('GOOGLE_CLIENT_ID')
 GOOGLE_CLIENT_SECRET=os.getenv('GOOGLE_CLIENT_SECRET')
-
+SECRET_KEY= os.getenv("JWTSECRET")
+FRONTEND_URL=os.getenv('FRONTEND_URL')
 config_data={
     "GOOGLE_CLIENT_ID":GOOGLE_CLIENT_ID,
-    "GOOGLE_CLIENT_SECRET":GOOGLE_CLIENT_SECRET
+    "GOOGLE_CLIENT_SECRET":GOOGLE_CLIENT_SECRET,
+    "SECRET_KEY":SECRET_KEY
 }
 
 config=Config(environ=config_data)
@@ -59,12 +62,14 @@ oauth.register(
     client_secret=GOOGLE_CLIENT_SECRET,
     server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
     client_kwargs={
-        'scope': 'openid email'
+        'scope': 'openid email profile'
     }
 )
-
+print("HIHI")
+print("HIHI")
 @router.get('/auth/google/login')
 async def google_login(request:Request):
+    
     redirect_url=request.url_for('auth_callback')
     return await oauth.google.authorize_redirect(request,redirect_url)
 
@@ -100,14 +105,16 @@ async def auth_callback(request:Request,db:Session=Depends(get_db)):
         data={"sub":user.email}
     )
     print(access_token)
-    return Token(
-        access_token=access_token,
-        refresh_token=refresh_token,
-        token_type="bearer",
-        id=user.id,
-        email=user.email,
-        role=user.role
-    )
+    
+    
+    query_params = urlencode({
+        "access_token": access_token,
+        "refresh_token": refresh_token,
+        "role": user.role,
+        "email": user.email
+    })
+    redirect_url = f"{FRONTEND_URL}/auth/success?{query_params}"
+    return RedirectResponse(url=redirect_url)
 
 
 conf = ConnectionConfig(
