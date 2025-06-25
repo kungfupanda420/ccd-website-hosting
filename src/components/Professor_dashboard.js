@@ -18,6 +18,8 @@ function Professor_dashboard() {
   const [allottedStudents, setAllottedStudents] = useState([]);
   const [loadingStudents, setLoadingStudents] = useState(false);
   const [dateInputs, setDateInputs] = useState({});
+  const [projectReports, setProjectReports] = useState([]);
+  const [loadingReports, setLoadingReports] = useState(false);
 
   // For editing
   const [editingId, setEditingId] = useState(null);
@@ -105,11 +107,42 @@ function Professor_dashboard() {
     setLoadingStudents(false);
   };
 
+  // Fetch project reports
+  const fetchProjectReports = async () => {
+    setLoadingReports(true);
+    setMessage("");
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+      setMessage("You must be logged in as a professor to view reports.");
+      setLoadingReports(false);
+      return;
+    }
+    try {
+      const res = await authFetch("/api/professors/project_report", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setProjectReports(data);
+      } else {
+        const err = await res.json();
+        setMessage(err.detail || "Failed to fetch project reports.");
+      }
+    } catch (error) {
+      setMessage("Network error.");
+    }
+    setLoadingReports(false);
+  };
+
   useEffect(() => {
     if (activeTab === "view") {
       fetchProjects();
     } else if (activeTab === "students") {
       fetchAllottedStudents();
+    } else if (activeTab === "project_reports") {
+      fetchProjectReports();
     }
     // eslint-disable-next-line
   }, [activeTab]);
@@ -311,6 +344,75 @@ function Professor_dashboard() {
     }
   };
 
+  // Download project report handler
+  const handleDownloadReport = async (sip_id, studentName) => {
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+      setMessage("You must be logged in to download reports.");
+      return;
+    }
+    try {
+      const res = await fetch(`/api/project_report/${sip_id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        setMessage(err.detail || "Failed to download report.");
+        return;
+      }
+      // Get filename from Content-Disposition header if available
+      const disposition = res.headers.get("Content-Disposition");
+      let filename = "project_report.pdf";
+      if (disposition && disposition.indexOf("filename=") !== -1) {
+        filename = disposition
+          .split("filename=")[1]
+          .replace(/['"]/g, "")
+          .trim();
+      } else if (studentName) {
+        filename = `${studentName}_project_report.pdf`;
+      }
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      setMessage("Network error while downloading report.");
+    }
+  };
+
+  // Confirm project report
+  const handleConfirmReport = async (sip_id) => {
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+      setMessage("You must be logged in to confirm reports.");
+      return;
+    }
+    try {
+      const res = await fetch(`/api/project_report/${sip_id}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setMessage(data.message || "Project report confirmed!");
+        fetchProjectReports(); // Refresh the table
+      } else {
+        setMessage(data.detail || "Failed to confirm report.");
+      }
+    } catch (error) {
+      setMessage("Network error while confirming report.");
+    }
+  };
+
   // Logout handler
   const handleLogout = () => {
     localStorage.removeItem("access_token");
@@ -332,6 +434,9 @@ function Professor_dashboard() {
         <button className="sidebar-btn" onClick={() => setActiveTab("add")}>Add Project</button>
         <button className="sidebar-btn" onClick={() => setActiveTab("view")}>View Projects</button>
         <button className="sidebar-btn" onClick={() => setActiveTab("students")}>Allotted Students</button>
+        <button className="sidebar-btn" onClick={() => setActiveTab("project_reports")}>
+          Project Reports
+        </button>
         <button className="sidebar-btn" onClick={handleLogout}>Logout</button>
       </div>
 
@@ -610,6 +715,62 @@ function Professor_dashboard() {
                         </tr>
                       );
                     })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+            {message && <p className="message">{message}</p>}
+          </div>
+        )}
+
+        {activeTab === "project_reports" && (
+          <div className="project-reports">
+            <h2>All Project Reports</h2>
+            {loadingReports ? (
+              <p>Loading...</p>
+            ) : projectReports.length === 0 ? (
+              <p>No project reports submitted yet.</p>
+            ) : (
+              <div className="reports-table-container">
+                <table className="students-table">
+                  <thead>
+                    <tr>
+                      <th>Student Name</th>
+                      <th>SIP ID</th>
+                      <th>Project Title</th>
+                      <th>Download Report</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {projectReports.map((student) => (
+                      <tr key={student.sip_id}>
+                        <td>{student.name}</td>
+                        <td>{student.sip_id}</td>
+                        <td>{student.project_title}</td>
+                        <td>
+                          <button
+                            className="sidebar-btn"
+                            style={{ width: "120px", marginTop: 0, background: "#1976d2", color: "#fff" }}
+                            onClick={() => handleDownloadReport(student.sip_id, student.name)}
+                          >
+                            Download
+                          </button>
+                        </td>
+                        <td>
+                          {student.project_report_approval ? (
+                            <span style={{ color: "green" }}>Confirmed</span>
+                          ) : (
+                            <button
+                              className="sidebar-btn"
+                              style={{ width: "120px", marginTop: 0, background: "#388e3c", color: "#fff" }}
+                              onClick={() => handleConfirmReport(student.sip_id)}
+                            >
+                              Confirm
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>

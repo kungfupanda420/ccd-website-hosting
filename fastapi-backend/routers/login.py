@@ -15,7 +15,8 @@ from security.oauth2 import get_current_user
 
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
 from pydantic import EmailStr, BaseModel
-
+from google.oauth2 import id_token
+from google.auth.transport import requests as google_requests
 import os
 from dotenv import load_dotenv
 
@@ -127,6 +128,42 @@ conf = ConnectionConfig(
     MAIL_SSL_TLS= False,
     USE_CREDENTIALS=True
 )
+
+@router.post("/auth/google/login")
+async def google_login(request: Request, db: Session = Depends(get_db)):
+    data = await request.json()
+    token = data.get("token")
+    if not token:
+        raise HTTPException(status_code=400, detail="No token provided")
+
+    try:
+        idinfo = id_token.verify_oauth2_token(token, google_requests.Request(), GOOGLE_CLIENT_ID)
+        email = idinfo["email"]
+    except Exception as e:
+        print("Google token verification failed:", e)
+        raise HTTPException(status_code=401, detail="Invalid Google token")
+
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        password = "google_oauth"  
+        user = User(
+            email=email,
+            password=pwd_context.hash(password),
+            role="Verified Email"
+        )
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+
+    access_token = create_access_token(data={"sub": user.email})
+    refresh_token = create_refresh_token(data={"sub": user.email})
+
+    return {
+        "access_token": access_token,
+        "refresh_token": refresh_token,
+        "role": user.role,
+        "email": user.email
+    }
 
 @router.post('/login')  #Working
 def login(request: UserLogin, db: Session=Depends(get_db)):
