@@ -22,8 +22,6 @@ from dotenv import load_dotenv
 
 from datetime import timedelta
 
-from authlib.integrations.starlette_client import OAuth
-from starlette.config import Config
 
 from urllib.parse import urlencode
 
@@ -44,31 +42,6 @@ load_dotenv()
 
 
 GOOGLE_CLIENT_ID=os.getenv('GOOGLE_CLIENT_ID')
-GOOGLE_CLIENT_SECRET=os.getenv('GOOGLE_CLIENT_SECRET')
-SECRET_KEY= os.getenv("JWTSECRET")
-FRONTEND_URL=os.getenv('FRONTEND_URL')
-config_data={
-    "GOOGLE_CLIENT_ID":GOOGLE_CLIENT_ID,
-    "GOOGLE_CLIENT_SECRET":GOOGLE_CLIENT_SECRET,
-    "SECRET_KEY":SECRET_KEY
-}
-
-config=Config(environ=config_data)
-
-oauth=OAuth(config)
-
-oauth.register(
-    name='google',
-    client_id=GOOGLE_CLIENT_ID,
-    client_secret=GOOGLE_CLIENT_SECRET,
-    server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
-    client_kwargs={
-        'scope': 'openid email profile'
-    }
-)
-print("HIHI")
-print("HIHI")
-
 
 conf = ConnectionConfig(
     MAIL_USERNAME='sip@nitc.ac.in',
@@ -97,7 +70,7 @@ async def google_login(request: Request, db: Session = Depends(get_db)):
 
     user = db.query(User).filter(User.email == email).first()
     if not user:
-        password = "google_oauth"  
+        password =''.join(random.choices(string.ascii_letters + string.digits, k=6))    
         user = User(
             email=email,
             password=pwd_context.hash(password),
