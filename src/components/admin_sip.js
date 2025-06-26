@@ -855,88 +855,88 @@ function Admin_sip() {
               </select>
             </div>
             {selectedDept && (
-  <div>
-    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-      <h2>Allotted Students</h2>
-      <div>
-        <button
-          onClick={handleRejectAllStudents}
-          disabled={loading || deptStudents.length === 0}
-          style={{
-            padding: "8px 16px",
-            backgroundColor: "#e74c3c",
-            color: "white",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-            marginRight: "10px"
-          }}
-        >
-          {loading ? "Processing..." : "Reject All"}
-        </button>
-        <button
-          onClick={handleConfirmAllStudents}
-          disabled={loading || deptStudents.length === 0}
-          style={{
-            padding: "8px 16px",
-            backgroundColor: "#27ae60",
-            color: "white",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-          }}
-        >
-          {loading ? "Processing..." : "Confirm All Students"}
-        </button>
-      </div>
-    </div>
-    {deptStudents.length === 0 ? (
-      <p>No students found for this department.</p>
-    ) : (
-      <div style={{ overflowX: "auto" }}>
-        <table style={{ width: "100%", borderCollapse: "collapse", marginTop: "10px" }}>
-          <thead>
-            <tr style={{ backgroundColor: "#f2f2f2" }}>
-              <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>SIP ID</th>
-              <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Name</th>
-              <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Project</th>
-              <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Professor</th>
-              <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {deptStudents.map((project) =>
-              project.selected_students.map((student) => (
-                <tr key={student.sip_id}>
-                  <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                    {student.sip_id}
-                  </td>
-                  <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                    {student.name}
-                  </td>
-                  <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                    {project.title}
-                  </td>
-                  <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                    {project.professor.name}
-                  </td>
-                  <td style={{
-                    border: "1px solid #ddd",
-                    padding: "8px",
-                    textAlign: "center",
-                    color: student.admin_conf ? "green" : "red"
-                  }}>
-                    {student.admin_conf ? "Confirmed" : "Not Confirmed"}
-                  </td>
-                </tr>
-              ))
+              <div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <h2>Allotted Students</h2>
+                  <div>
+                    <button
+                      onClick={handleRejectAllStudents}
+                      disabled={loading || deptStudents.length === 0}
+                      style={{
+                        padding: "8px 16px",
+                        backgroundColor: "#e74c3c",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                        marginRight: "10px"
+                      }}
+                    >
+                      {loading ? "Processing..." : "Reject All"}
+                    </button>
+                    <button
+                      onClick={handleConfirmAllStudents}
+                      disabled={loading || deptStudents.length === 0}
+                      style={{
+                        padding: "8px 16px",
+                        backgroundColor: "#27ae60",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {loading ? "Processing..." : "Confirm All Students"}
+                    </button>
+                  </div>
+                </div>
+                {deptStudents.length === 0 ? (
+                  <p>No students found for this department.</p>
+                ) : (
+                  <div style={{ overflowX: "auto" }}>
+                    <table style={{ width: "100%", borderCollapse: "collapse", marginTop: "10px" }}>
+                      <thead>
+                        <tr style={{ backgroundColor: "#f2f2f2" }}>
+                          <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>SIP ID</th>
+                          <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Name</th>
+                          <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Project</th>
+                          <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Professor</th>
+                          <th style={{ border: "1px solid #ddd", padding: "12px", textAlign: "left" }}>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {deptStudents.map((project) =>
+                          project.selected_students.map((student) => (
+                            <tr key={student.sip_id}>
+                              <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                                {student.sip_id}
+                              </td>
+                              <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                                {student.name}
+                              </td>
+                              <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                                {project.title}
+                              </td>
+                              <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                                {project.professor.name}
+                              </td>
+                              <td style={{
+                                border: "1px solid #ddd",
+                                padding: "8px",
+                                textAlign: "center",
+                                color: student.admin_conf ? "green" : "red"
+                              }}>
+                                {student.admin_conf ? "Confirmed" : "Not Confirmed"}
+                              </td>
+                            </tr>
+                          ))
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
             )}
-          </tbody>
-        </table>
-      </div>
-    )}
-  </div>
-)}
           </div>
         )}
 
@@ -1057,7 +1057,7 @@ function Admin_sip() {
 
                   {/* Next Round Button - Show when appropriate */}
                   {(roundDetails.number % 2 === 0 ||
-                    (roundDetails.number % 2 === 1 && !roundDetails.allow_reg && roundDetails.lock_choices || roundDetails.number < 3 && (roundDetails.number == 2 && roundDetails.lock_choices))) && !(roundDetails.number === 3 && roundDetails.lock_choices)&& (
+                    (roundDetails.number % 2 === 1 && !roundDetails.allow_reg && roundDetails.lock_choices || roundDetails.number < 3 && (roundDetails.number == 2 && roundDetails.lock_choices))) && !(roundDetails.number === 3 && roundDetails.lock_choices) && (
                       <div style={{ marginTop: "20px", textAlign: "center" }}>
                         <button
                           onClick={() => setShowStartRoundModal(true)}
@@ -1077,23 +1077,23 @@ function Admin_sip() {
                         </button>
                       </div>
                     )}
-                    {(roundDetails.number === 3 && roundDetails.lock_choices) && (
-                      <div style={{ marginTop: "20px", textAlign: "center" }}>
+                  {(roundDetails.number === 3 && roundDetails.lock_choices) && (
+                    <div style={{ marginTop: "20px", textAlign: "center" }}>
                       <button
-                      onClick={() => setShowStartRoundModal(true)}
-                          disabled={isUpdatingRound}
-                          style={{
-                            padding: "10px 20px",
-                            backgroundColor: "#3498db",
-                            color: "white",
-                            border: "none",
-                            borderRadius: "4px",
-                            cursor: "pointer",
-                            fontWeight: "bold",
-                            fontSize: "16px"
-                          }}>Finish rounds</button>
-                      </div>
-                    )}
+                        onClick={() => setShowStartRoundModal(true)}
+                        disabled={isUpdatingRound}
+                        style={{
+                          padding: "10px 20px",
+                          backgroundColor: "#3498db",
+                          color: "white",
+                          border: "none",
+                          borderRadius: "4px",
+                          cursor: "pointer",
+                          fontWeight: "bold",
+                          fontSize: "16px"
+                        }}>Finish rounds</button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

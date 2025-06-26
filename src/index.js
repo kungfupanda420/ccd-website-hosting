@@ -4,7 +4,7 @@ import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
-const GOOGLE_CLIENT_ID = "596337372586-8nr0nkmb70k7ic6tgen2vtfndmpgbv40.apps.googleusercontent.com"; // Replace with your client ID
+const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -14,4 +14,3 @@ root.render(
     </BrowserRouter>
   </GoogleOAuthProvider>
 );
-
