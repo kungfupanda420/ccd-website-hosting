@@ -34,6 +34,15 @@ class ShowProject(BaseModel):
         "from_attributes": True
     }
 
+class ShowProjectAdmin(BaseModel):
+    id:int
+    title:str
+    professor:ProfessorNameDept
+
+    model_config = {
+        "from_attributes": True
+    }
+
 class ProjectCreation(BaseModel):
 
     title:str

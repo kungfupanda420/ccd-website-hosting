@@ -3,7 +3,7 @@
 from pydantic import BaseModel, EmailStr
 from datetime import date
 
-from .projects import ShowProject
+from .projects import ShowProject, ShowProjectAdmin
 from .users import ShowUser
 
 from typing import Optional
@@ -109,6 +109,53 @@ class StudentSIPNameProj(BaseModel):
 class SetDate(BaseModel):
     date:date
 
+    model_config = {
+        "from_attributes": True
+    }
+
+
+class ShowStudentBasic(BaseModel):
+    user: ShowUser
+    sip_id:str
+    name: str
+    model_config = {
+        "from_attributes": True
+    }
+
+class ShowStudentAdmin(BaseModel):
+    user: ShowUser
+    sip_id:str
+    name: str
+    adhaar_id:str
+    apaar_id:str
+    phone: str
+    dob: date
+    address: str
+    state: str
+    guardianName: str
+    guardianRelation: str
+    guardianPhone: str
+    
+    institution: str
+    program: str
+    department: str
+    year: str
+    instituteLocation: str
+    instituteState: str
+    currentSemesterCgpa: float
+    UG: str
+    cgpa12: float
+    board12: str
+    cgpa10: float
+    board10: str
+
+    
+    admin_conf:bool
+    start_date:Optional[date]
+    end_date:Optional[date]
+    
+
+    selected_project: Optional[ShowProjectAdmin]
     model_config = {
         "from_attributes": True
     }

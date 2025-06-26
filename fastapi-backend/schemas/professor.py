@@ -7,7 +7,7 @@ from .users import ShowUser
 class ShowProfessorDet(BaseModel):
     
     name:str
-    user_det:ShowUser
+    user:ShowUser
     department:DepartmentName
     model_config = {
         "from_attributes": True
@@ -16,7 +16,7 @@ class ShowProfessorDet(BaseModel):
 
 class ShowProfessorProj(BaseModel):
     name:str
-    user_det:ShowUser
+    user:ShowUser
     department:DepartmentName
     projects: Optional[List[ShowProject]] 
 
