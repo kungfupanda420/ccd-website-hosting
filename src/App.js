@@ -24,6 +24,9 @@ import GenerateID from './components/Generate_id.js';
 import DownloadDocuments from './components/Candidate_certificates.js';
 import GoogleSignin from './components/GoogleSignin.js';
 import CandidateProjectReport from './components/Candidate_projectreport.js';
+import Proffessor_admin from './components/Professor_admin.js';
+import TermsandCondition from './components/TermsandCondition.js';
+import Privacypolicy from './components/Privacypolicy.js';
 // import AuthSuccess from './components/AuthSuccess.js';
 // Lazy-loaded components
 const SipTable = lazy(() => import('./components/SipTable.js'));
@@ -165,6 +168,9 @@ function App() {
             <Route path='/download_documents' element={<DownloadDocuments />} />
             <Route path='/google_signin' element={<GoogleSignin />} />
             <Route path='/candidate_projectreport' element={<CandidateProjectReport />} />
+            <Route path='/professor_admin' element={<Proffessor_admin />} />
+            <Route path='/termsandcondition' element={<TermsandCondition />} />
+            <Route path='/privacypolicy' element={<Privacypolicy />} />
             {/* <Route path='/auth_success' element={<AuthSuccess />} /> */}
           </Routes>
         </Suspense>
