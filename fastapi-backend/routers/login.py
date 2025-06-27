@@ -22,8 +22,6 @@ from dotenv import load_dotenv
 
 from datetime import timedelta
 
-from authlib.integrations.starlette_client import OAuth
-from starlette.config import Config
 
 from urllib.parse import urlencode
 
@@ -44,79 +42,6 @@ load_dotenv()
 
 
 GOOGLE_CLIENT_ID=os.getenv('GOOGLE_CLIENT_ID')
-GOOGLE_CLIENT_SECRET=os.getenv('GOOGLE_CLIENT_SECRET')
-SECRET_KEY= os.getenv("JWTSECRET")
-FRONTEND_URL=os.getenv('FRONTEND_URL')
-config_data={
-    "GOOGLE_CLIENT_ID":GOOGLE_CLIENT_ID,
-    "GOOGLE_CLIENT_SECRET":GOOGLE_CLIENT_SECRET,
-    "SECRET_KEY":SECRET_KEY
-}
-
-config=Config(environ=config_data)
-
-oauth=OAuth(config)
-
-oauth.register(
-    name='google',
-    client_id=GOOGLE_CLIENT_ID,
-    client_secret=GOOGLE_CLIENT_SECRET,
-    server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
-    client_kwargs={
-        'scope': 'openid email profile'
-    }
-)
-print("HIHI")
-print("HIHI")
-@router.get('/auth/google/login')
-async def google_login(request:Request):
-    
-    redirect_url=request.url_for('auth_callback')
-    return await oauth.google.authorize_redirect(request,redirect_url)
-
-@router.get('/auth/google/callback',name='auth_callback')
-async def auth_callback(request:Request,db:Session=Depends(get_db)):
-    token=await oauth.google.authorize_access_token(request)
-    user_info= await oauth.google.userinfo(token=token)
-    if not user_info:
-        raise HTTPException(status_code=400, detail="Invalid authentication response")
-
-    email= user_info['email']
-    if not email:
-        raise HTTPException(status_code=400, detail="No email in response")
-
-    user=db.query(User).filter(User.email==email).first()
-
-    if not user:
-        password=''.join(random.choices(string.ascii_letters+string.digits,k=10))
-        user=User(
-            email=email,
-            password=pwd_context.hash(password),
-            role='Verified Email'
-        )
-        db.add(user)
-        db.commit()
-        db.refresh(user)
-        
-    
-    access_token= create_access_token(
-        data={"sub":user.email}
-    )
-    refresh_token= create_refresh_token(
-        data={"sub":user.email}
-    )
-    print(access_token)
-    
-    
-    query_params = urlencode({
-        "access_token": access_token,
-        "refresh_token": refresh_token,
-        "role": user.role,
-        "email": user.email
-    })
-    redirect_url = f"{FRONTEND_URL}/auth/success?{query_params}"
-    return RedirectResponse(url=redirect_url)
-
 
 conf = ConnectionConfig(
     MAIL_USERNAME='sip@nitc.ac.in',
@@ -145,7 +70,7 @@ async def google_login(request: Request, db: Session = Depends(get_db)):
 
     user = db.query(User).filter(User.email == email).first()
     if not user:
-        password = "google_oauth"  
+        password =''.join(random.choices(string.ascii_letters + string.digits, k=6))    
         user = User(
             email=email,
             password=pwd_context.hash(password),
