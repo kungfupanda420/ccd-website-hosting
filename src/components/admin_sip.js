@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../css/Candidate_dashboard.css";
+import Proffessor_admin from "./Professor_admin";
 
 function ConfirmModal({ title, message, confirmText, onConfirm, onCancel, isLoading }) {
   return (
@@ -611,7 +612,7 @@ function Admin_sip() {
       }
     );
   };
-
+  
   // Handle email sending
   const handleSendEmail = async () => {
     showConfirmation(
@@ -690,6 +691,12 @@ function Admin_sip() {
         >
           <i className="fas fa-sync-alt"></i>
           <span>Manage Rounds</span>
+        </button>
+        <button
+          className={`cd-btn ${activeSection === "admin_professors" ? "active" : ""}`}
+          onClick={() => setActiveSection("admin_professors")}
+        >
+          admin professors
         </button>
         <button
           className="cd-btn"
@@ -802,6 +809,7 @@ function Admin_sip() {
                 >
                   {loading ? "Sending..." : "Send Emails"}
                 </button>
+
               </div>
             </div>
           </div>
@@ -1157,20 +1165,24 @@ function Admin_sip() {
             )}
           </div>
         )}
+
+        {activeSection === "admin_professors" && <Proffessor_admin />}
       </div>
 
       {/* Confirmation Modal */}
-      {showConfirmModal && (
-        <ConfirmModal
-          title={modalConfig.title}
-          message={modalConfig.message}
-          confirmText={modalConfig.confirmText}
-          onConfirm={modalConfig.onConfirm}
-          onCancel={() => setShowConfirmModal(false)}
-          isLoading={loading}
-        />
-      )}
-    </div>
+      {
+        showConfirmModal && (
+          <ConfirmModal
+            title={modalConfig.title}
+            message={modalConfig.message}
+            confirmText={modalConfig.confirmText}
+            onConfirm={modalConfig.onConfirm}
+            onCancel={() => setShowConfirmModal(false)}
+            isLoading={loading}
+          />
+        )
+      }
+    </div >
   );
 }
 
