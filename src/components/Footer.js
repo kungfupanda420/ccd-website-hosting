@@ -4,19 +4,22 @@ import { FaPhoneAlt } from "react-icons/fa";
 import { IoIosMail } from "react-icons/io";
 import { IoLocationSharp } from "react-icons/io5";
 import { useEffect } from 'react';
+import TermsAndConditions from './TermsandCondition';
+import PrivacyPolicy from './Privacypolicy';
+import { useNavigate } from 'react-router-dom';
 
 function Footer() {
+    const navigate = useNavigate();
+    
     //useEffect(() => {
     //     AOS.init({duration: 1000});
-    //   }, []);
+    //   }, [])
     return (
-
         <>
             <div className="footer">
                 <div className="footerContent smallHeading">
                     <div className='footercontact'>
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3912.184009667951!2d75.9325446759246!3d11.321257248906157!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba643cc776435c3%3A0x8c2fc08ee720516f!2sCENTRE%20FOR%20CAREER%20DEVELOPMENT%20-%20NITC!5e0!3m2!1sen!2sin!4v1718787592552!5m2!1sen!2sin" width="300" height="300" style={{'border':'2px'}} allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"/>
-                    
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3912.184009667951!2d75.9325446759246!3d11.321257248906157!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba643cc776435c3%3A0x8c2fc08ee720516f!2sCENTRE%20FOR%20CAREER%20DEVELOPMENT%20-%20NITC!5e0!3m2!1sen!2sin!4v1718787592552!5m2!1sen!2sin" width="300" height="300" style={{'border':'2px'}} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade"/>
                     
                     </div>
 
@@ -38,24 +41,22 @@ function Footer() {
                         </ul>
                     </div>
 
-                    {/* <div className="footerSubContent">
+                    <div className="footerSubContent">
                      <p className='footerTitle'>Terms</p>
                     <ul className='footerLinks'>
-                        <li><NavLink>Privacy Policy</NavLink></li>
-                        <li><NavLink>Cookies</NavLink></li>
+                        <li onClick={() => navigate('/privacypolicy')}>Privacy Policy</li>
+                        <li onClick={() => navigate('/termsandconditions')}>Terms & Services</li>
                     </ul>
-                   </div> */}
+                   </div>
 
                     <div className="footerSubContent">
                         <p className='footerTitle'>Social</p>
                         <ul className='footerLinks '>
                             <li><a className='linkedin' href="https://www.linkedin.com/company/training-placement-cell-nit-calicut/?originalSubdomain=in" rel="noreferrer" target='_blank'>{<FaLinkedin />} LinkedIn</a></li>
                             <li><a className='insta' href="https://instagram.com/ccd.nitc?igshid=NTc4MTIwNjQ2YQ==" rel="noreferrer" target='_blank'>{<FaSquareInstagram />} Instagram</a></li>
-                            {/* <li><a href="!#">Facebook</a></li> */}
                         </ul>
                     </div>
                     </div>
-
                 </div>
             </div>
         </>
