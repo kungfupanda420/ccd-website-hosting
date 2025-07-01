@@ -34,7 +34,7 @@ const PlacementStatics = () => {
 
   const handleDownload = () => {
     const downloadLink = document.createElement('a');
-    downloadLink.href = '/documents/CCD 2023-2024  as on  09_10_24.pdf';
+    downloadLink.href = '/documents/Annual Report CCD 2023-2024 (2).pdf';
     downloadLink.download = 'Annual Report CCD 2023-2024.pdf';
     downloadLink.click();
   };
@@ -77,7 +77,7 @@ const PlacementStatics = () => {
   };
   const handleDownload8 = () => {
     const downloadLink = document.createElement('a');
-    downloadLink.href = '/documents/Annual Report CCD 2023-2024.pdf';
+    downloadLink.href = '/documents/Annual Report CCD 2023-2024 (2).pdf';
     downloadLink.download = 'Annual Report CCD 2023-2024.pdf';
     downloadLink.click();
   };
