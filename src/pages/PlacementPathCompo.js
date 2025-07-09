@@ -36,16 +36,16 @@ function PlacementPathCompo() {
           refer the following resources for familiarity and e-support. <br />
           Resource: <br />
           <div className="genskillButtons">
-          <a href=" https://genskill.com/" className="whiteButton" target="_blank" rel="noreferrer">
-           <span className="buttonText">GenSkill</span> 
-          </a>
-          <a
-            href="https://app.genskill.com/documentation/videos/"
-            target="_blank" className="whiteButton" 
-            rel="noreferrer"
-          >
-             <span className="buttonText">Demo Videos</span> 
-          </a>
+            <a href=" https://joinsuperset.com/" className="whiteButton" target="_blank" rel="noreferrer">
+              <span className="buttonText">Superset</span>
+            </a>
+            <a
+              href="https://joinsuperset.com/employer.html?wvideo=s3nfzakvuq"
+              target="_blank" className="whiteButton"
+              rel="noreferrer"
+            >
+              <span className="buttonText">Demo Videos</span>
+            </a>
           </div>
         </p>
 
@@ -82,10 +82,10 @@ function PlacementPathCompo() {
           </div>
           <div className="details">
             <p className="smallHeading">Step 01</p>
-            <p className="smallHeading">Company Registration</p>
+            <p className="smallHeading">Email Invitation to Recruiters</p>
             <p className="tinyTexts">
-              Click on the placement/internship drive invitation link and
-              register your company.
+              The Training and Placement Officer (TPO) sends an email invitation to recruiters.
+              The email includes the placement brochure and a Job Description (JD) form.
             </p>
           </div>
         </div>
@@ -109,17 +109,22 @@ function PlacementPathCompo() {
           </div>
           <div className="details">
             <p className="smallHeading">Step 02</p>
-            <p className="smallHeading">Create a Job</p>
+            <p className="smallHeading">Submission of Job Description by Companies</p>
             <p className="tinyTexts">
-              Create a full-time job or job for internships*
+              Companies fill out the JD form with details such as:
+
+              Eligible programmes.
+              CGPA criteria.
+              Compensation details
+            The completed form is sent back to the TPO.
             </p>
 
-            <div className="stepTwoInfo">
+            {/* <div className="stepTwoInfo">
               <p className="tinyTexts">
                 *Duration of internship : For B.Tech - 2 months/6 months and
                 M.Tech - 2 months/1 year{" "}
               </p>
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -141,10 +146,13 @@ function PlacementPathCompo() {
           </div>
           <div className="details">
             <p className="smallHeading">Step 03</p>
-            <p className="smallHeading">Post the created jobs</p>
+            <p className="smallHeading">Job Creation & Publishing (JNF/INF)</p>
             <p className="tinyTexts">
-              Your Job will be sent to the Placement Officer who will review and
-              verify the JNF/INF
+            The TPO adds the company to the recruiting platform.
+
+A job posting is created and published for eligible students.
+
+Students can view and apply for the job before the deadline.
             </p>
           </div>
         </div>
@@ -167,11 +175,9 @@ function PlacementPathCompo() {
           </div>
           <div className="details">
             <p className="smallHeading">Step 04</p>
-            <p className="smallHeading">Publishing JNF/INF</p>
+            <p className="smallHeading">Sharing Applicant Details</p>
             <p className="tinyTexts">
-              After verification, JNF/INF will be published online to the
-              eligible students, along with the information provided by the
-              company.
+             After the application deadline, the TPO shares the list of applied students and their resumes with the company.
             </p>
           </div>
         </div>
@@ -199,12 +205,13 @@ function PlacementPathCompo() {
           </div>
           <div className="details">
             <p className="smallHeading">Step 05</p>
-            <p className="smallHeading">Viewing jobs and applicants</p>
+            <p className="smallHeading">Shortlisting Candidates</p>
             <p className="tinyTexts">
-              Interested students apply for the job profile in order to be
-              considered for the recruitment process. The list of eligible
-              students, along with their resumes, will be made available to the
-              recruiter for downloading/viewing through their placement account.
+Recruiters shortlist candidates based on:
+
+Resume review.
+
+Online/offline tests (if conducted).
             </p>
           </div>
         </div>
@@ -239,16 +246,19 @@ function PlacementPathCompo() {
           </div>
           <div className="details">
             <p className="smallHeading">Step 06</p>
-            <p className="smallHeading">Shortlisting of candidates</p>
+            <p className="smallHeading">Conducting Interviews</p>
             <p className="tinyTexts">
-              Recruiters can shortlist students based on their resume or conduct
-              a test for the same, through online/offline mode.
+              Interviews are held online or offline in slots provided by the TPO.
+
+A Student Single Point of Contact (SPOC) is assigned to assist the recruiter.
+
+Recruiters communicate the final selection and waitlisted candidates to the SPOC at the end of the process.
             </p>
           </div>
         </div>
 
         {/* step 7 */}
-
+{/* 
         <div className="step" data-aos="fade-left">
           <div className="svgIcon">
             <svg
@@ -290,7 +300,7 @@ function PlacementPathCompo() {
               waitlist to the placement officer, at the end of the process.
             </p>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
