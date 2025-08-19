@@ -25,19 +25,19 @@ function OurTeam() {
       image: "/images/our_team/teachers/suchand.jpg",
       linkedin: "https://www.linkedin.com/in/suchand-sangeeth-c-s-440a301a/",
     },
-    
+
     {
       name: "Dr. Nujoom Sageer Karat",
       position: "Vice Chairperson",
       image: "/images/our_team/teachers/nujoom.jpg",
       linkedin: "https://www.linkedin.com/in/nujoom-sageer-k-845a4375/",
     },
-    {
-      name: "Dr. Manu Mohan",
-      position: "Placement & Career Development Officer",
-      image: "/images/our_team/teachers/manumohan2.jpg",
-      linkedin: "https://www.linkedin.com/in/dr-manumohanthundathil",
-    },
+    // {
+    //   name: "Dr. Manu Mohan",
+    //   position: "Placement & Career Development Officer",
+    //   image: "/images/our_team/teachers/manumohan2.jpg",
+    //   linkedin: "https://www.linkedin.com/in/dr-manumohanthundathil",
+    // },
   ];
 
   const studentData = [
@@ -56,11 +56,11 @@ function OurTeam() {
     //   position: "INTERN",
     //   image: "images/our_team/students/harigovind.png",
     // },
-    {
-      name: "Hari",
-      position: "SPOCS",
-      image: "images/our_team/students/hari.png",
-    },
+    // {
+    //   name: "Hari",
+    //   position: "SPOCS",
+    //   image: "images/our_team/students/hari.png",
+    // },
     // {
     //   name: "Talib",
     //   position: "INTERN",
@@ -76,41 +76,87 @@ function OurTeam() {
     //   position: "INTERN",
     //   image: "images/our_team/students/gethin.png",
     // },
+    // {
+    //   name: "Kedar Kamath",
+    //   position: "SPOCS",
+    //   image: "images/our_team/students/kedar.png",
+    // },
+    // {
+    //   name: "Mitali Jain",
+    //   position: "SPOCS",
+    //   image: "images/our_team/students/mithali.png",
+    // },
+    // {
+    //   name: "Niya",
+    //   position: "SPOCS",
+    //   image: "images/our_team/students/niya.png",
+    // },
+    // {
+    //   name: "Noor Muhammad",
+    //   position: "SPOCS",
+    //   image: "images/our_team/students/noor.png",
+    // },
+    // {
+    //   name: "Shivangi",
+    //   position: "SPOCS",
+    //   image: "images/our_team/students/shivangi.png",
+    // },
+    // {
+    //   name: "Alok Niranjan",
+    //   position: "SPOCS",
+    //   image: "images/our_team/students/alok.jpeg",
+    // },
+    // {
+    //   name: "Anuradha Gupta",
+    //   position: "SPOCS",
+    //   image: "images/our_team/students/anuradha.jpeg",
+    // },
+
     {
-      name: "Kedar Kamath",
+      name: "Suryakant Sahu",
       position: "SPOCS",
-      image: "images/our_team/students/kedar.png",
+      image: "images/our_team/students/suryakant.jpg",
     },
     {
-      name: "Mitali Jain",
+      name: "Gokulkrishna V",
       position: "SPOCS",
-      image: "images/our_team/students/mithali.png",
+      image: "images/our_team/students/gokul.jpeg",
     },
     {
-      name: "Niya",
+      name: "Anupama Mary Joseph",
       position: "SPOCS",
-      image: "images/our_team/students/niya.png",
+      image: "images/our_team/students/anupama.JPG",
     },
     {
-      name: "Noor Muhammad",
+      name: "Aswini Sivakumar",
       position: "SPOCS",
-      image: "images/our_team/students/noor.png",
+      image: "images/our_team/students/aswini.jpeg",
     },
     {
-      name: "Shivangi",
+      name: "Alfred Shaiju",
       position: "SPOCS",
-      image: "images/our_team/students/shivangi.png",
+      image: "images/our_team/students/alfred.JPG",
     },
     {
-      name: "Alok Niranjan",
+      name: "Sreelakshmi D",
       position: "SPOCS",
-      image: "images/our_team/students/alok.jpeg",
+      image: "images/our_team/students/sreelakshmi.jpg",
     },
     {
-      name: "Anuradha Gupta",
+      name: "Aditya Pandey",
       position: "SPOCS",
-      image: "images/our_team/students/anuradha.jpeg",
+      image: "images/our_team/students/aditya.JPEG",
     },
+    {
+      name: "Prarabdha Chatterjee",
+      position: "SPOCS",
+      image: "images/our_team/students/chatargee.jpg",
+    },
+    {
+      name:"Rukadikar Mahek Mahesh",
+      position: "SPOCS",
+      image: "images/our_team/students/Mehak.jpg",
+    }
   ];
 
   useEffect(() => {
