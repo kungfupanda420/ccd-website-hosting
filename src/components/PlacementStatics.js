@@ -41,7 +41,7 @@ const PlacementStatics = () => {
 
   const handleDownload2 = () => {
     const downloadLink = document.createElement('a');
-    downloadLink.href = '/documents/Annual Report CCD 2022-2023 (2).pdf';
+    downloadLink.href = 'public/documents/Annual Report CCD 2022-2023 as on 11_12_23.docx - Google Docs.pdf';
     downloadLink.download = 'Annual Report CCD 2022-2023.pdf';
     downloadLink.click();
   };
