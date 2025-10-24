@@ -41,7 +41,7 @@ const PlacementStatics = () => {
 
   const handleDownload2 = () => {
     const downloadLink = document.createElement('a');
-    downloadLink.href = 'public/documents/Annual Report CCD 2022-2023 as on 11_12_23.docx - Google Docs.pdf';
+    downloadLink.href = '/documents/anual_report_2022-2023.pdf';
     downloadLink.download = 'Annual Report CCD 2022-2023.pdf';
     downloadLink.click();
   };
@@ -59,7 +59,7 @@ const PlacementStatics = () => {
   };
   const handleDownload5 = () => {
     const downloadLink = document.createElement('a');
-    downloadLink.href = '/documents/Annual Report CCD 2019-2020.pdf';
+    downloadLink.href = '/documents/2019-20PlacementDetailsFINAL.pdf';
     downloadLink.download = 'Annual Report CCD 2019-2020.pdf';
     downloadLink.click();
   };
