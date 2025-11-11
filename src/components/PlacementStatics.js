@@ -81,6 +81,12 @@ const PlacementStatics = () => {
     downloadLink.download = 'Annual Report CCD 2023-2024.pdf';
     downloadLink.click();
   };
+  const handleDownload9 = () => {
+    const downloadLink = document.createElement('a');
+    downloadLink.href = '/documents/Annual Report CCD 2024-2025 as on 25_09_25.pdf';
+    downloadLink.download = 'Annual Report CCD 2024-2025.pdf';
+    downloadLink.click();
+  }
   const [endNumbers] = useState({
     Placements: 1080,
     companiesVisited: 208,
@@ -166,6 +172,23 @@ const PlacementStatics = () => {
          
           <h6 className='mainHeading'>Previous Year Placement Statistics</h6>
           <div className='Prev'>
+            <div className='whiteButton' onClick={handleDownload9}>
+              <h1 className='buttonText'>Report 2024-25</h1>
+              <svg
+                className='arrow'
+                width='10'
+                height='10'
+                viewBox='0 0 10 10'
+                fill='none'
+                xmlns='http://www.w3.org/2000/svg'
+              >
+                <path
+                  d='M0.272008 0.75735L8.75729 9.24263M8.75729 9.24263V0.75735M8.75729 9.24263H0.272008'
+                  strokeOpacity='1'
+                  strokeWidth='0.65'
+                />
+              </svg>
+            </div>
             <div className='whiteButton' onClick={handleDownload8}>
               <h1 className='buttonText'>Report 2023-24</h1>
               <svg
