@@ -104,8 +104,8 @@ const PlacementStatics = () => {
         <div className='placementStaticHolder' ref={ref}>
           {/* Title and button */}
           <div className='titleAndButtonContainer'>
-            <h1 className='mainHeading'>Placement Statistics 2024</h1>
-            <div className='whiteButton' onClick={handleDownload}>
+            <h1 className='mainHeading'>Placement Statistics 2025</h1>
+            <div className='whiteButton' onClick={handleDownload9}>
               <h1 className='buttonText'>Detailed Report</h1>
               <svg
                 className='arrow'
