@@ -133,7 +133,7 @@ const PlacementStatics = () => {
                 </h1>
                 <h2 className='statPlus'>+</h2>
               </div>
-              <p className='statText'>Placements</p>
+              <p className='statText'>Placements and Internships</p>
             </div>
             <div className='verticalLine'></div>
             {/* Companies Visited */}
@@ -146,9 +146,9 @@ const PlacementStatics = () => {
               </div>
               <p className='statText'>Companies Visited</p>
             </div>
-            <div className='verticalLine secondVerticalLine'></div>
+            {/* <div className='verticalLine secondVerticalLine'></div> */}
             {/* Total Offers */}
-            <div className='eachStatContainer'>
+            {/* <div className='eachStatContainer'>
               <div className='statValue'>
                 <h1 className='statNumber'>
                   <RunningNumbers endNumber={endNumbers.Internships} />
@@ -156,18 +156,8 @@ const PlacementStatics = () => {
                 <h2 className='statPlus'>+</h2>
               </div>
               <p className='statText'>Internships</p>
-            </div>
-            <div className='verticalLine thirdVerticalLine'></div>
-            {/* Highest Package */}
-            <div className='eachStatContainer'>
-              <div className='statValue'>
-                <h1 className='statNumber'>
-                  <RunningNumbers endNumber={endNumbers.highestPackage} />
-                </h1>
-                <h2 className='statLpa'>LPA</h2>
-              </div>
-              <p className='statText'>Highest Package</p>
-            </div>
+            </div> */}
+            
           </div>
          
           <h6 className='mainHeading'>Previous Year Placement Statistics</h6>
