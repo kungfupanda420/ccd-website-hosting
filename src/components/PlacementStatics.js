@@ -88,8 +88,8 @@ const PlacementStatics = () => {
     downloadLink.click();
   }
   const [endNumbers] = useState({
-    Placements: 1080,
-    companiesVisited: 208,
+    Placements: 1200,
+    companiesVisited: 200,
     Internships: 187,
     highestPackage: 50.64,
   });
