@@ -36,9 +36,9 @@ const Navbar = ({ isDarkMode, onToggleTheme }) => {
               <NavLink to="/about" className="navLink" onClick={closeMobileMenu}>
                 About Us
               </NavLink>
-              <NavLink to="/register" className="navLink" onClick={closeMobileMenu}>
-                Summer Internship
-              </NavLink>
+              {/* <NavLink to="/sipresults" className="navLink" onClick={closeMobileMenu}>
+                Summer Internshiphttps://github.com/CCD-NITC-Website/ccd-website-hosting/pull/73/conflict?name=src%252Fcomponents%252FNavbar.js&ancestor_oid=c4558a1f31e739b71892d6e44d0e6b6f80f0460a&base_oid=a0f19733208409863650309d6272ad68d52b5317&head_oid=359a13265ae265ff9c455fbbc3de727093519052
+              </NavLink> */}
               <NavLink to="/placement" className="navLink" onClick={closeMobileMenu}>
                 Placement Statistics
               </NavLink>

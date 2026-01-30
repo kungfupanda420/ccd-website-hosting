@@ -34,14 +34,14 @@ const PlacementStatics = () => {
 
   const handleDownload = () => {
     const downloadLink = document.createElement('a');
-    downloadLink.href = '/documents/CCD 2023-2024  as on  09_10_24.pdf';
+    downloadLink.href = '/documents/Annual Report CCD 2023-2024 (2).pdf';
     downloadLink.download = 'Annual Report CCD 2023-2024.pdf';
     downloadLink.click();
   };
 
   const handleDownload2 = () => {
     const downloadLink = document.createElement('a');
-    downloadLink.href = '/documents/Annual Report CCD 2022-2023 (2).pdf';
+    downloadLink.href = '/documents/anual_report_2022-2023.pdf';
     downloadLink.download = 'Annual Report CCD 2022-2023.pdf';
     downloadLink.click();
   };
@@ -59,7 +59,7 @@ const PlacementStatics = () => {
   };
   const handleDownload5 = () => {
     const downloadLink = document.createElement('a');
-    downloadLink.href = '/documents/Annual Report CCD 2019-2020.pdf';
+    downloadLink.href = '/documents/2019-20PlacementDetailsFINAL.pdf';
     downloadLink.download = 'Annual Report CCD 2019-2020.pdf';
     downloadLink.click();
   };
@@ -77,13 +77,19 @@ const PlacementStatics = () => {
   };
   const handleDownload8 = () => {
     const downloadLink = document.createElement('a');
-    downloadLink.href = '/documents/Annual Report CCD 2023-2024.pdf';
+    downloadLink.href = '/documents/Annual Report CCD 2023-2024 (2).pdf';
     downloadLink.download = 'Annual Report CCD 2023-2024.pdf';
     downloadLink.click();
   };
+  const handleDownload9 = () => {
+    const downloadLink = document.createElement('a');
+    downloadLink.href = '/documents/Annual Report CCD 2024-2025 as on 25_09_25.pdf';
+    downloadLink.download = 'Annual Report CCD 2024-2025.pdf';
+    downloadLink.click();
+  }
   const [endNumbers] = useState({
-    Placements: 1080,
-    companiesVisited: 208,
+    Placements: 1200,
+    companiesVisited: 200,
     Internships: 187,
     highestPackage: 50.64,
   });
@@ -98,8 +104,8 @@ const PlacementStatics = () => {
         <div className='placementStaticHolder' ref={ref}>
           {/* Title and button */}
           <div className='titleAndButtonContainer'>
-            <h1 className='mainHeading'>Placement Statistics 2024</h1>
-            <div className='whiteButton' onClick={handleDownload}>
+            <h1 className='mainHeading'>Placement Statistics 2025</h1>
+            <div className='whiteButton' onClick={handleDownload9}>
               <h1 className='buttonText'>Detailed Report</h1>
               <svg
                 className='arrow'
@@ -127,7 +133,7 @@ const PlacementStatics = () => {
                 </h1>
                 <h2 className='statPlus'>+</h2>
               </div>
-              <p className='statText'>Placements</p>
+              <p className='statText'>Placements and Internships</p>
             </div>
             <div className='verticalLine'></div>
             {/* Companies Visited */}
@@ -140,9 +146,9 @@ const PlacementStatics = () => {
               </div>
               <p className='statText'>Companies Visited</p>
             </div>
-            <div className='verticalLine secondVerticalLine'></div>
+            {/* <div className='verticalLine secondVerticalLine'></div> */}
             {/* Total Offers */}
-            <div className='eachStatContainer'>
+            {/* <div className='eachStatContainer'>
               <div className='statValue'>
                 <h1 className='statNumber'>
                   <RunningNumbers endNumber={endNumbers.Internships} />
@@ -150,22 +156,29 @@ const PlacementStatics = () => {
                 <h2 className='statPlus'>+</h2>
               </div>
               <p className='statText'>Internships</p>
-            </div>
-            <div className='verticalLine thirdVerticalLine'></div>
-            {/* Highest Package */}
-            <div className='eachStatContainer'>
-              <div className='statValue'>
-                <h1 className='statNumber'>
-                  <RunningNumbers endNumber={endNumbers.highestPackage} />
-                </h1>
-                <h2 className='statLpa'>LPA</h2>
-              </div>
-              <p className='statText'>Highest Package</p>
-            </div>
+            </div> */}
+            
           </div>
          
           <h6 className='mainHeading'>Previous Year Placement Statistics</h6>
           <div className='Prev'>
+            <div className='whiteButton' onClick={handleDownload9}>
+              <h1 className='buttonText'>Report 2024-25</h1>
+              <svg
+                className='arrow'
+                width='10'
+                height='10'
+                viewBox='0 0 10 10'
+                fill='none'
+                xmlns='http://www.w3.org/2000/svg'
+              >
+                <path
+                  d='M0.272008 0.75735L8.75729 9.24263M8.75729 9.24263V0.75735M8.75729 9.24263H0.272008'
+                  strokeOpacity='1'
+                  strokeWidth='0.65'
+                />
+              </svg>
+            </div>
             <div className='whiteButton' onClick={handleDownload8}>
               <h1 className='buttonText'>Report 2023-24</h1>
               <svg
